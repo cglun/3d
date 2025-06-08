@@ -1,0 +1,50 @@
+{
+  "name": "3d-116",
+  "author": "www.oklun.com",
+  "description": "3d场景编辑器",
+  "license": "Apache-2.0",
+  "version": "1.1.6",
+  "main": "main.tsx",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 105 --strictPort",
+    "build": "tsc -b && vite build ",
+    "build2OutsideProject": "tsc -b && vite build --emptyOutDir",
+    "lint": "eslint .",
+    "preview": "vite preview --port 116 --strictPort"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "@originjs/vite-plugin-federation": "^1.3.9",
+    "@tanstack/react-router": "^1.97.8",
+    "@types/crypto-js": "^4.2.2",
+    "axios": "^1.9.0",
+    "bootstrap": "^5.3.6",
+    "bootstrap-icons": "^1.13.1",
+    "crypto-js": "^4.2.0",
+    "monaco-editor": "^0.52.2",
+    "react": "^18.3.1",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^18.3.1",
+    "react-monaco-editor": "^0.58.0",
+    "three": "^0.176.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@tanstack/router-devtools": "^1.97.8",
+    "@tanstack/router-plugin": "^1.97.8",
+    "@types/babel__preset-env": "^7.10.0",
+    "@types/node": "^22.13.11",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@types/three": "^0.172.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.18.2",
+    "vite": "^6.0.5"
+  }
+}

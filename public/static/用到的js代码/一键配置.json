@@ -1,0 +1,190 @@
+{
+  "isSelected": false,
+  "fixedCameraPosition": {
+    "x": -48.94037042648795,
+    "y": 77.9269172635062,
+    "z": 2.6249407986423585
+  },
+  "config3d": {
+    "css2d": true,
+    "css3d": true,
+    "useTween": true,
+    "useShadow": true,
+    "useKeyframe": true,
+    "FPS": 30,
+    "useComposer": true
+  },
+  "projectId": 96,
+  "backgroundHDR": {
+    "name": "venice_sunset_1k.hdr",
+    "asBackground": true
+  },
+  "javascript": "const controller = context.labelInfoPanelController;\nif (controller) {\n  controller.setUserDataStyles()\n  // 设置面板显示状态\n  controller.isShow = true; \n  controller.setScene(context.getScene());\n  controller?.createLabelInfoPanelByModelGroupName(\"huojia\");\n  \n  //设置面板的控制器，在其他地方可能要用到\n  context.setPanelController && context.setPanelController(controller);\n}\n//点击按钮的回调函数，对按钮进行扩展\ndocument.getCurrentActionItemMap = function (item) {\n  if (controller) {\n    if (item.NAME_ID === \"全景\") {\n      controller.resetHighLightModel();\n      controller.hideLabel();\n\n      return;\n    }\n\n    const boxName = Array.isArray(item.showName)\n      ? item.showName[0].slice(2)\n      : item.showName.slice(2); \n   //controller.canBeShowLabelInfo=[]\n      \n    controller.setBoxName(boxName);\n    controller.resetHighLightModel();\n    controller.hideLabel();\n    controller.updateLabelInfoPanel();\n     \n  }\n};\n",
+  "customButtonList": {
+    "toggleButtonGroup": {
+      "name": "切换按钮组",
+      "type": "TOGGLE",
+      "userSetting": {
+        "cameraOffset": {
+          "x": 26,
+          "y": 0,
+          "z": 0
+        },
+        "modelOffset": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "animationTime": 300
+      },
+      "listGroup": [
+        {
+          "showName": "全景",
+          "NAME_ID": "MODEL_GROUP",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        },
+        {
+          "showName": "货架1",
+          "NAME_ID": "huojia",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        },
+        {
+          "showName": "货架2",
+          "NAME_ID": "huojia",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        },
+        {
+          "showName": "货架3",
+          "NAME_ID": "huojia",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        },
+        {
+          "showName": "货架4",
+          "NAME_ID": "huojia",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        },
+        {
+          "showName": "货架5",
+          "NAME_ID": "huojia",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        },
+        {
+          "showName": "货架6",
+          "NAME_ID": "huojia",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        },
+        {
+          "showName": "货架7",
+          "NAME_ID": "huojia",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        },
+        {
+          "showName": "货架8",
+          "NAME_ID": "huojia",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        },
+        {
+          "showName": "货架9",
+          "NAME_ID": "huojia",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        },
+        {
+          "showName": "货架10",
+          "NAME_ID": "huojia",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        },
+        {
+          "showName": "货架11",
+          "NAME_ID": "huojia",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        },
+        {
+          "showName": "货架12",
+          "NAME_ID": "huojia",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        }
+      ]
+    },
+    "roamButtonGroup": {
+      "name": "漫游按钮组",
+      "type": "ROAM",
+      "userSetting": {
+        "speed": 2
+      },
+      "listGroup": []
+    },
+    "panelControllerButtonGroup": {
+      "name": "面板按钮组",
+      "type": "PANEL_CONTROLLER",
+      "listGroup": [
+        {
+          "showName": "+",
+          "NAME_ID": "expandLabelInfo",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        },
+        {
+          "showName": "-",
+          "NAME_ID": "foldLabelInfo",
+          "showButton": true,
+          "isClick": false,
+          "groupCanBeRaycast": false
+        }
+      ]
+    }
+  },
+  "APP_THEME": {
+    "themeColor": "dark",
+    "iconFill": "",
+    "sceneCanSave": true
+  },
+  "userStyle": {
+    "cardWidth": 130,
+    "cardHeight": 150,
+    "cardRadius": 0.8,
+    "cardBackgroundColor": "#bfabab",
+    "cardBackgroundUrl": "/file/view/1929467550710243329.png",
+    "headerFontSize": 16,
+    "headerColor": "#7c2d7c",
+    "bodyFontSize": 12,
+    "bodyColor": "#fee1e1",
+    "modelHighlightColor": "#21c421",
+    "offsetX": 0,
+    "offsetY": 0,
+    "cardSize": 0.04,
+    "headerMarginTop": 31,
+    "headerMarginLeft": 20
+  },
+  "sceneName": "新场景",
+  "des": "Scene",
+  "projectName": "",
+  "canSave": true,
+  "selected3d": null
+}

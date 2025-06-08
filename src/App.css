@@ -1,0 +1,125 @@
+body {
+  scrollbar-width: "none" !important;
+}
+
+.container-fluid {
+  padding: 0;
+}
+
+.card-text {
+  font-size: 0.8rem;
+  margin-bottom: 0;
+}
+
+.card-body {
+  padding: 0 0.2rem 0.2rem 0;
+}
+
+.mt-2 .card-header,
+.card-pd-header {
+  padding: 0 0 0 0.4rem;
+}
+
+.mt-2 {
+  margin-top: 0.2rem !important;
+}
+
+.row {
+  padding: 0;
+}
+
+.card-header,
+.list-group .d-flex > div:first-child,
+.ellipsis-3d {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.outline-view .list-group .list-group-item {
+  padding: 0.1rem 0.1rem 0.1rem 1rem;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.my-card-body,
+.mantine-ScrollArea-viewport {
+  overflow: hidden !important;
+  scrollbar-width: thin;
+}
+
+.row {
+  --bs-gutter-x: 0;
+}
+
+h5 {
+  margin-bottom: 0;
+}
+
+.accordion-body {
+  padding: 0.5rem;
+}
+
+.da-gang .list-group-item {
+  cursor: pointer;
+}
+
+btn-group-sm > .btn,
+.btn-sm {
+  --bs-btn-padding-y: 0;
+  --bs-btn-font-size: 0.8rem;
+}
+
+.custom-file-upload {
+  cursor: pointer;
+  border: 1px dashed #ccc;
+  border-radius: 4px;
+}
+
+.custom-file-upload:hover {
+  color: var(--bs-primary-text-emphasis);
+  background-color: var(--bg-primary);
+}
+
+.mark-label {
+  font-size: 1.16rem;
+  padding: 0.2rem;
+  border-radius: 0.4rem;
+  background: var(--bs-gray-500);
+  color: var(--bs-primary-bg-subtle);
+  opacity: 0.6;
+}
+.mark-label-controller-panel {
+  background-color: #0f0404;
+  padding: 0.116rem 0.6rem;
+  border-radius: 0.4rem;
+  opacity: 0.9;
+}
+
+.mark-label-controller-panel .mark-label-header {
+  display: flex;
+}
+
+.mark-label-body p {
+  margin-bottom: 0;
+}
+.bi-image {
+  cursor: crosshair;
+}
+
+.input-group input {
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+
+#editor-canvas canvas {
+  width: 100% !important;
+}
+ 
+#editor-right .accordion-item {
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  height: 46vh;
+}
+ 
