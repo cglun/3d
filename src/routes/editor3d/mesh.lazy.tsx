@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import Button from "react-bootstrap/esm/Button";
 import {
@@ -11,7 +10,7 @@ import {
 } from "three";
 
 import { ButtonGroup, Card, Container } from "react-bootstrap";
-import { MyContext } from "../../app/MyContext";
+
 import { getThemeByScene, setClassName } from "../../app/utils";
 
 import { useUpdateScene } from "../../app/hooks";
@@ -29,7 +28,6 @@ export const Route = createLazyFileRoute("/editor3d/mesh")({
 });
 
 function RouteComponent() {
-  const { dispatchScene } = useContext(MyContext);
   const { scene, updateScene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
   function getScene() {

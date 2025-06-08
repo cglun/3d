@@ -25,7 +25,7 @@ export default defineConfig({
     minify: true,
     cssCodeSplit: false,
     outDir: "../ArgDataV.Designer.V2.Vite/editor3d",
-    // outDir: "dist/editor3d",
+    //outDir: "dist/editor3d",
     assetsDir: "assets",
     assetsInlineLimit: 4096000,
     chunkSizeWarningLimit: 4096000,

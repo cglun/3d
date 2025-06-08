@@ -32,7 +32,7 @@ import {
 import { extra3d as extra, parameters } from "./config3d";
 import { AnimateProps, commonAnimate } from "./common3d";
 
-import { SceneUserData } from "../app/type";
+import { SceneUserData } from "./Three3dConfig";
 
 let scene: Scene,
   camera: PerspectiveCamera,

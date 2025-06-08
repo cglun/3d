@@ -14,7 +14,7 @@ import Icon from "../../component/common/Icon";
 
 import { styleBody } from "../../component/Editor/OutlineView/fontColor";
 import { editorInstance } from "../../three/EditorInstance";
-import userData, { SceneUserData } from "../../three/Three3dConfig";
+import { SceneUserData } from "../../three/Three3dConfig";
 
 export const Route = createLazyFileRoute("/editor3d/config")({
   component: RouteComponent,

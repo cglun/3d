@@ -6,7 +6,8 @@ import { CSS3DSprite } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 
 import { getScene } from "../../three/init3dEditor";
 
-import { SceneUserData, UserStyles } from "../../app/type";
+import { UserStyles } from "../../app/type";
+import { SceneUserData } from "../../three/Three3dConfig";
 
 export class MarkLabel {
   div = document.createElement("div");
@@ -41,7 +42,7 @@ export class MarkLabel {
     this.dispatchTourWindow = dispatchTourWindow;
     const _userData = getScene().userData as SceneUserData;
 
-    this.userDataStyles = _userData.userCssStyleTopCardMark;
+    this.userDataStyles = _userData.userCssStyleMarkLabel;
     this.markName = markName;
     this.logo = logo;
     this.init();

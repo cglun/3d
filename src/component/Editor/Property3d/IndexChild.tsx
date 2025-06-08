@@ -1,18 +1,10 @@
 import { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
-import {
-  Color,
-  Fog,
-  Light,
-  OrthographicCamera,
-  Scene,
-  Texture,
-  Vector2,
-} from "three";
+import { Color, Fog, Light, OrthographicCamera, Texture, Vector2 } from "three";
 import Card from "react-bootstrap/esm/Card";
 import InputGroup from "react-bootstrap/esm/InputGroup";
-import { getScene } from "../../../three/init3dEditor";
+
 import { ButtonGroup, Container } from "react-bootstrap";
 import { useUpdateScene } from "../../../app/hooks";
 import { Input3d } from "./Input3d";
@@ -21,11 +13,12 @@ import { getButtonColor, getThemeByScene } from "../../../app/utils";
 import AlertBase from "../../common/AlertBase";
 import { setTextureBackground } from "../../../three/common3d";
 import { sceneUserData } from "../../../three/config3d";
-import { APP_COLOR, SceneUserData, SelectedObject } from "../../../app/type";
+import { APP_COLOR, SelectedObject } from "../../../app/type";
 import { InputAttrNumber } from "./InputAttrNumber";
 import Toast3d from "../../common/Toast3d";
 import { styleBody, styleHeader } from "../OutlineView/fontColor";
 import { editorInstance } from "../../../three/EditorInstance";
+import { SceneUserData } from "../../../three/Three3dConfig";
 
 const step = 0.1;
 function SceneProperty() {

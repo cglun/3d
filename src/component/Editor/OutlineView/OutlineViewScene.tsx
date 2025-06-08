@@ -1,12 +1,10 @@
 import ListGroup from "react-bootstrap/esm/ListGroup";
 
-import { getScene, setSelectedObject } from "../../../three/init3dEditor";
-
 import { useUpdateScene } from "../../../app/hooks";
 import Icon from "../../common/Icon";
 import { styleBody } from "./fontColor";
 import { editorInstance } from "../../../three/EditorInstance";
-import { SceneUserData } from "../../../app/type";
+import { SceneUserData } from "../../../three/Three3dConfig";
 
 export function OutlineViewScene() {
   const { scene, updateScene } = useUpdateScene();

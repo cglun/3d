@@ -3,14 +3,14 @@ import Modal from "react-bootstrap/Modal";
 import { createRoot } from "react-dom/client";
 import { useEffect, useState } from "react";
 import { ButtonGroup } from "react-bootstrap";
-import { getScene } from "../../three/init3dEditor";
+
 import { ConfirmButton } from "../../app/type";
 // 从新文件中引入常量
 import { _confirmButton } from "./ModalConfirmUtils";
 import { getButtonColor } from "../../app/utils";
 import Icon from "./Icon";
 import { styleBody } from "../Editor/OutlineView/fontColor";
-import { useUpdateScene } from "../../app/hooks";
+
 import { editorInstance } from "../../three/EditorInstance";
 
 let container = document.getElementById("toast");

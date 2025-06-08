@@ -118,7 +118,7 @@ export class Three3dEditor extends Three3d {
       modelsJsonString: JSON.stringify(modelList),
       type: "scene",
     };
-    debugger;
+
     return JSON.stringify(result);
   }
 

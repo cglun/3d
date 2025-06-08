@@ -30,6 +30,7 @@ function EditorViewer3d() {
     useRef<HTMLDivElement>(null);
   // 使用 useRef 替代 useState
   const isInitialized = useRef(false);
+  // const isLoaded = useRef(false);
 
   const { scene, updateScene } = useUpdateScene();
   const { updateCamera } = useUpdateCamera();
@@ -40,19 +41,11 @@ function EditorViewer3d() {
   const sceneId = searchParams.get("sceneId") ?? "-1";
 
   useEffect(() => {
-    const item: RecordItem = {
-      id: parseInt(sceneId),
-      name: "名字",
-      des: "",
-      cover: "",
-    };
-
     // let editor: Three3dEditor;
     if (editorCanvas.current && !isInitialized.current) {
       const editor = new Three3dEditor(editorCanvas.current);
-
+      isInitialized.current = true; // 标记为已初始化
       editorInstance.setEditor(editor);
-      console.log("初始化编辑器");
 
       editor.controls.enabled = true;
 
@@ -68,56 +61,65 @@ function EditorViewer3d() {
       window.addEventListener("resize", () => editor.onWindowResize());
     }
 
-    if (item.id !== -1 && !isInitialized.current) {
-      const editor = editorInstance.getEditor();
-      getProjectData(item.id).then((data) => {
-        // 假设 deserialize 是异步方法
-        editor.deserialize(data, item);
+    function initScene() {
+      const item: RecordItem = {
+        id: parseInt(sceneId),
+        name: "名字",
+        des: "",
+        cover: "",
+      };
 
-        // 在模型加载完成后更新场景
-        editor.loadedModelsEnd = () => {
-          editor.runJavascript();
-          editor.transformControl = editor.initTransformControl();
+      if (item.id !== -1) {
+        const editor = editorInstance.getEditor();
+        getProjectData(item.id).then((data) => {
+          // 假设 deserialize 是异步方法
+          editor.deserialize(data, item);
 
-          updateScene(editor.scene.clone());
-          updateCamera(editor.camera.clone());
-          setTimeout(() => {
+          // 在模型加载完成后更新场景
+          editor.loadedModelsEnd = () => {
+            editor.runJavascript();
+            editor.transformControl = editor.initTransformControl();
+
+            updateScene(editor.scene.clone());
+            updateCamera(editor.camera.clone());
+            setTimeout(() => {
+              ModalConfirm3d({
+                title: "提示",
+                body: <AlertBase text={"加载完成"} type={APP_COLOR.Success} />,
+                confirmButton: {
+                  show: true,
+                },
+              });
+            }, 1116);
+
+            setTimeout(() => {
+              ModalConfirm3d({
+                title: "提示",
+                body: <AlertBase text={"关闭窗口"} type={APP_COLOR.Success} />,
+                confirmButton: {
+                  show: false,
+                },
+              });
+            }, 2116);
+
+            document.title = `【id:${item.id}】`;
+          };
+          editor.onLoadProgress = (progress: number) => {
             ModalConfirm3d({
-              title: "提示",
-              body: <AlertBase text={"加载完成"} type={APP_COLOR.Success} />,
+              title: "加载……",
+              body: <ProgressBar now={progress} label={`${progress}%`} />,
               confirmButton: {
                 show: true,
               },
             });
-          }, 1116);
-
-          setTimeout(() => {
-            ModalConfirm3d({
-              title: "提示",
-              body: <AlertBase text={"关闭窗口"} type={APP_COLOR.Success} />,
-              confirmButton: {
-                show: false,
-              },
-            });
-          }, 2116);
-
-          document.title = `【id:${item.id}】`;
-        };
-        editor.onLoadProgress = (progress: number) => {
-          ModalConfirm3d({
-            title: "加载……",
-            body: <ProgressBar now={progress} label={`${progress}%`} />,
-            confirmButton: {
-              show: true,
-            },
-          });
-        };
-      });
+          };
+        });
+      }
     }
-    isInitialized.current = true; // 标记为已初始化
+    initScene();
+
     return () => {
       const editor = editorInstance.getEditor();
-
       if (editor) {
         window.removeEventListener("resize", editor.onWindowResize);
         editor.divElement.removeEventListener(

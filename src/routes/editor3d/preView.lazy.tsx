@@ -29,12 +29,7 @@ interface PageListResponse {
   code: number;
   message: string;
   data: {
-    records: {
-      id: number;
-      name: string;
-      des: string;
-      cover: string;
-    }[];
+    records: RecordItem[];
   };
 }
 
@@ -54,7 +49,12 @@ function RouteComponent() {
   const { scene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
   const buttonColor = getButtonColor(themeColor);
-  const [_item, _setItem] = useState<RecordItem>();
+  const [_item, _setItem] = useState<RecordItem>({
+    id: -1,
+    name: "",
+    des: "",
+    cover: "",
+  });
 
   useEffect(() => {
     setEnableScreenshot(true);
@@ -92,7 +92,7 @@ function RouteComponent() {
         }
       });
   }, []);
-
+  //@ts-ignore 忽略类型检查，暂时不清楚 Context116 完整类型定义
   function callBack(instance: Context116) {
     // 检查 getToggleButtonGroup 方法是否存在
     setToggleButtonList(instance.getToggleButtonGroup || []);
@@ -100,7 +100,7 @@ function RouteComponent() {
     setPanelControllerButtonList(instance.getPanelControllerButtonGroup || []);
     setController(instance.labelInfoPanelController);
   }
-
+  //@ts-ignore 忽略类型检查，暂时不清楚 Context116 完整类型定义
   function callBackError(error: unknown) {
     console.error("加载失败", error);
   }
@@ -115,6 +115,7 @@ function RouteComponent() {
   }
   const modalBody = useRef<HTMLDivElement>(null);
   const beishu = window.innerHeight / window.innerWidth; // 将 beishu 计算移到这里
+  //@ts-ignore 忽略类型检查，暂时不清楚 Context116 完整类型定义
   const [size3d, setSize3d] = useState({
     w: 1138,
     h: 1138 * beishu,
@@ -190,17 +191,16 @@ function RouteComponent() {
             </ButtonGroup>
           </Container>
           <Modal.Body ref={modalBody} style={{ padding: 0 }}>
-            {_item && (
+            {
               <Viewer3d
+                item={_item}
+                showProgress={false}
                 canvasStyle={{
                   width: size3d.w + "px",
                   height: size3d.h + "px",
                 }}
-                item={_item}
-                callBack={callBack}
-                callBackError={callBackError}
               />
-            )}
+            }
           </Modal.Body>
           <Modal.Footer>
             <ButtonGroup size="sm">

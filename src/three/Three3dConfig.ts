@@ -1,4 +1,4 @@
-import { Vector3 } from "three";
+import { Object3D, Object3DEventMap, Vector3 } from "three";
 import { APP_COLOR, CustomButtonType } from "../app/type";
 export const userCssStyle = {
   cardWidth: 130,
@@ -19,7 +19,60 @@ export const userCssStyle = {
   opacity: 1,
 };
 export type UserCssStyle = typeof userCssStyle;
-const userData = {
+export interface SceneUserData {
+  isSelected: boolean;
+  fixedCameraPosition: Vector3;
+  config3d: {
+    css2d: boolean;
+    css3d: boolean;
+    useTween: boolean;
+    useShadow: boolean;
+    useKeyframe: boolean;
+    FPS: number;
+    useComposer: boolean;
+  };
+  projectId: number;
+  backgroundHDR: {
+    name: string;
+    asBackground: boolean;
+  };
+  javascript: string;
+  customButtonList: {
+    toggleButtonGroup: {
+      name: string;
+      type: CustomButtonType;
+      listGroup: unknown[];
+      userSetting: {
+        modelOffset: {
+          x: number;
+          y: number;
+          z: number;
+        };
+      };
+    };
+    roamButtonGroup: {
+      name: string;
+      type: CustomButtonType;
+      userSetting: Record<string, unknown>;
+      listGroup: unknown[];
+    };
+    panelControllerButtonGroup: {
+      name: string;
+      type: CustomButtonType;
+      listGroup: unknown[];
+    };
+  };
+  APP_THEME: {
+    themeColor: APP_COLOR;
+    iconFill: string;
+    sceneCanSave: boolean;
+  };
+  userCssStyleTopCard: UserCssStyle;
+  userCssStyleMarkLabel: UserCssStyle;
+  selected3d: Object3D<Object3DEventMap> | null;
+}
+
+const userData: SceneUserData = {
   isSelected: false,
   fixedCameraPosition: new Vector3(5, 6, 7),
   config3d: {
@@ -69,6 +122,9 @@ const userData = {
   },
   userCssStyleTopCard: { ...userCssStyle }, // 若 UserStyles 有具体结构，需按需填充
   userCssStyleMarkLabel: { ...userCssStyle }, // 若 UserStyles 有具体结构，需按需填充
+  selected3d: null, // 若 Selected3d 有具体结构，需按需填充
 };
 export default userData;
-export type SceneUserData = typeof userData; // 定义 SceneUserData 类型为 userData 的类型
+/**
+ * 场景用户数据接口，定义了场景相关的用户数据结构
+ */

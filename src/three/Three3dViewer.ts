@@ -25,7 +25,7 @@ export class Three3dViewer extends Three3d {
   setUserDate(sceneUserData: SceneUserData) {
     this.scene.userData = sceneUserData;
   }
-  sceneSerialization(): string {
+  sceneSerialization_xx(): string {
     //const { scene } = editorInstance.getEditor();
     this.scene.userData.selected3d = undefined;
     const sceneCopy = this.scene.clone();
@@ -75,7 +75,7 @@ export class Three3dViewer extends Three3d {
       sceneCopy.background = background;
       sceneCopy.userData.backgroundHDR = undefined;
     }
-    debugger;
+
     const result = {
       sceneJsonString: JSON.stringify(sceneCopy.toJSON()),
       modelsJsonString: JSON.stringify(modelList),
@@ -83,5 +83,8 @@ export class Three3dViewer extends Three3d {
     };
 
     return JSON.stringify(result);
+  }
+  onPointerClick(e: Event) {
+    console.log(e);
   }
 }

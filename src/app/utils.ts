@@ -3,7 +3,7 @@
  */
 
 import { getScene } from "../three/init3dEditor";
-import { EditorScene } from "./MyContext";
+
 import { sceneUserData } from "../three/config3d";
 import { APP_COLOR } from "./type";
 import { Scene } from "three";

@@ -3,7 +3,6 @@ import {
   ActionItemMap,
   CustomButtonListType,
   CustomButtonType,
-  SceneUserData,
 } from "../../app/type";
 
 import { createGroupIfNotExist } from "../../three/utils";
@@ -30,6 +29,7 @@ import {
 
 import { hasValueString } from "./utils";
 import { LabelInfoPanelController } from "../label/LabelInfoPanelController";
+import { SceneUserData } from "../../three/Three3dConfig";
 
 function getActionItemByMap(
   item: ActionItemMap,

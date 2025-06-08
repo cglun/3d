@@ -1,4 +1,4 @@
-import React from "react";
+import { useReducer } from "react";
 import { createRootRoute } from "@tanstack/react-router";
 import {
   initEditorCamera,
@@ -19,18 +19,12 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  const [scene, dispatchScene] = React.useReducer(
-    reducerScene,
-    initEditorScene
-  );
-  const [tourWindow, dispatchTourWindow] = React.useReducer(
+  const [scene, dispatchScene] = useReducer(reducerScene, initEditorScene);
+  const [tourWindow, dispatchTourWindow] = useReducer(
     reducerTour,
     initTourWindow
   );
-  const [camera, dispatchCamera] = React.useReducer(
-    reducerCamera,
-    initEditorCamera
-  );
+  const [camera, dispatchCamera] = useReducer(reducerCamera, initEditorCamera);
 
   return (
     <MyContext.Provider

@@ -1,6 +1,6 @@
 import ListGroup from "react-bootstrap/esm/ListGroup";
 import Button from "react-bootstrap/esm/Button";
-import { APP_COLOR, SceneUserData } from "../../../app/type";
+import { APP_COLOR } from "../../../app/type";
 import Toast3d from "../../common/Toast3d";
 import { cameraTween } from "../../../three/animate";
 import { useUpdateCamera, useUpdateScene } from "../../../app/hooks";
@@ -8,6 +8,7 @@ import Icon from "../../common/Icon";
 import { styleBody } from "./fontColor";
 import { getButtonColor } from "../../../app/utils";
 import { editorInstance } from "../../../three/EditorInstance";
+import { SceneUserData } from "../../../three/Three3dConfig";
 
 export function OutlineViewCamera() {
   const { updateScene } = useUpdateScene();

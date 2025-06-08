@@ -3,8 +3,6 @@ import {
   WebGLRenderer,
   PerspectiveCamera,
   Controls,
-  BoxGeometry,
-  MeshBasicMaterial,
   Mesh,
   Object3D,
   EquirectangularReflectionMapping,
@@ -24,6 +22,7 @@ import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { runScript } from "./scriptDev";
 import { enableShadow } from "./common3d";
 import userData from "./Three3dConfig";
+import { createNewScene } from "./factory3d";
 
 export class Three3d extends ThreeObj {
   scene: Scene;
@@ -43,25 +42,13 @@ export class Three3d extends ThreeObj {
     this.renderer = this.initRenderer();
     this.controls = this.initControls();
 
-    const geometry = new BoxGeometry(1, 1, 1);
-    const material = new MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new Mesh(geometry, material);
-    this.scene.add(cube);
-
-    const geometry2 = new BoxGeometry(1, 1, 1);
-    const material2 = new MeshBasicMaterial({ color: 0x00ff00 });
-    const cube2 = new Mesh(geometry2, material2);
-    cube2.position.set(2, 0, 0);
-    this.scene.add(cube2);
-
     this.scene.userData = { ...userData };
     this.renderer.setAnimationLoop(() => this.animate());
     this.divElement.appendChild(this.renderer.domElement);
   }
 
   initScene(): Scene {
-    const scene = new Scene();
-    scene.name = "场景";
+    const scene = createNewScene();
     return scene;
   }
 
@@ -156,7 +143,7 @@ export class Three3d extends ThreeObj {
   // 添加 private 修饰符
   loadModelByUrl(model: GlbModel) {
     const loader = glbLoader();
-
+    //@ts-ignore
     const MODEL_GROUP = createGroupIfNotExist(
       this.scene,
       GLOBAL_CONSTANT.MODEL_GROUP

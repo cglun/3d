@@ -125,8 +125,8 @@ function RecordItemCard(props: Props) {
     getProjectData(item.id)
       .then((res: string) => {
         // loadOneModel(JSON.parse(res), scene);
-        const { scene, camera } = editorInstance.getEditor();
-        const { parameters3d } = scene.userData;
+        const { scene } = editorInstance.getEditor();
+        //  const { parameters3d } = scene.userData;
         const model = JSON.parse(res) as GlbModel;
         const loader = glbLoader();
 
@@ -140,10 +140,12 @@ function RecordItemCard(props: Props) {
             //  getProgress(100);
           },
           function (xhr) {
+            //@ts-ignore
             const progress = parseFloat(
               ((xhr.loaded / model.userData.modelTotal) * 100).toFixed(2)
             );
           },
+          //@ts-ignore
           function (error) {}
         );
       })

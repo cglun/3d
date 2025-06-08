@@ -16,7 +16,7 @@ import { clearOldLabel, createGroupIfNotExist } from "../../three/utils";
 import { getScene } from "../../three/init3dEditor";
 import { CSS2DObject, CSS3DSprite } from "three/examples/jsm/Addons.js";
 import Toast3d from "../../component/common/Toast3d";
-import { APP_COLOR, SceneUserData, TourItem } from "../../app/type";
+import { APP_COLOR, TourItem } from "../../app/type";
 import { useUpdateScene } from "../../app/hooks";
 import { ConfigCheck } from "../../component/common/ConfigCheck";
 import _axios from "../../app/http";
@@ -25,6 +25,7 @@ import { MyContext } from "../../app/MyContext";
 import { createCss3dLabel } from "../../three/factory3d";
 import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
 import { MarkLabel } from "../../viewer3d/label/MarkLabel";
+import { SceneUserData } from "../../three/Three3dConfig";
 
 export const Route = createLazyFileRoute("/editor3d/mark")({
   component: RouteComponent,

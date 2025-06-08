@@ -16,7 +16,8 @@ import {
   LineMaterial,
 } from "three/examples/jsm/Addons.js";
 
-import { SceneUserData, UserStyles } from "../../app/type";
+import { UserStyles } from "../../app/type";
+import { SceneUserData } from "../../three/Three3dConfig";
 
 export class LabelInfo {
   mesh;
