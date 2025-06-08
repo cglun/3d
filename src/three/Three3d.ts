@@ -14,11 +14,11 @@ import TWEEN from "three/addons/libs/tween.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import ThreeObj from "./ThreeObj";
 import { GlbModel, RecordItem } from "../app/type";
-import { createGroupIfNotExist, getG2, glbLoader, strToJson } from "./utils";
+import { getG2, getProjectData, glbLoader, strToJson } from "./utils";
 import venice_sunset_1k from "/static/file3d/hdr/venice_sunset_1k.hdr?url";
 import spruit_sunrise_1k from "/static/file3d/hdr/spruit_sunrise_1k.hdr?url";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
-import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
+
 import { runScript } from "./scriptDev";
 import { enableShadow } from "./common3d";
 import userData from "./Three3dConfig";
@@ -134,6 +134,12 @@ export class Three3d extends ThreeObj {
     this.camera = newCamera;
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.modelList = models;
+    //关闭掉进度，因为已经没模型可以加载了
+
+    if (models.length === 0) {
+      this.onLoadProgress(100);
+      return;
+    }
     models.forEach((model: GlbModel) => {
       this.modelSize += model.userData.modelTotal;
       this.loadModelByUrl(model);
@@ -141,22 +147,14 @@ export class Three3d extends ThreeObj {
   }
 
   // 添加 private 修饰符
-  loadModelByUrl(model: GlbModel) {
+  private loadModelByUrl(model: GlbModel) {
     const loader = glbLoader();
-    //@ts-ignore
-    const MODEL_GROUP = createGroupIfNotExist(
-      this.scene,
-      GLOBAL_CONSTANT.MODEL_GROUP
-    );
     loader.load(
       model.userData.modelUrl + "?url",
       (gltf) => {
         const group = getG2(model, gltf, this.scene);
         enableShadow(group, this.scene);
         this.scene.add(group);
-
-        //model.userData.modelLoaded = xhr.loaded;
-        // getProgress(100);
         this.loadedModel += model.userData.modelTotal;
 
         if (this.loadedModel === this.modelSize) {
@@ -181,10 +179,38 @@ export class Three3d extends ThreeObj {
         this.onLoadProgress(progress);
       },
       (error) => {
-        console.error("An error happened", error);
+        this.onLoadError(error);
       }
     );
   }
+
+  addOneModel(item: RecordItem) {
+    getProjectData(item.id).then((res: string) => {
+      const model = JSON.parse(res) as GlbModel;
+      const loader = glbLoader();
+      loader.load(
+        model.userData.modelUrl + "?url",
+        (gltf) => {
+          const group = getG2(model, gltf, this.scene);
+          enableShadow(group, this.scene);
+          this.scene.add(group);
+          this.onLoadProgress(100);
+        },
+        (xhr) => {
+          const progress = parseFloat(
+            ((xhr.loaded / model.userData.modelTotal) * 100).toFixed(2)
+          );
+
+          this.onLoadProgress(progress);
+        },
+        (error) => {
+          console.error("An error happened", error);
+          this.onLoadError(error);
+        }
+      );
+    });
+  }
+
   animate(): void {
     this.renderer.render(this.scene, this.camera);
     const delta = new Clock().getDelta();
@@ -211,6 +237,7 @@ export class Three3d extends ThreeObj {
     this.runJavascript();
   }
   onLoadProgress(_process: number) {}
+  onLoadError(_error: unknown) {}
 
   onWindowResize() {
     const { offsetWidth, offsetHeight } = this.divElement;

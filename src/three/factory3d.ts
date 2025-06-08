@@ -19,13 +19,14 @@ import {
 
 import { UserDataType } from "../app/type";
 import { clearOldLabel, createGroupIfNotExist, getTourSrc } from "./utils";
-import { sceneUserData } from "./config3d";
+
 import { setClassName } from "../app/utils";
 
 import { setTextureBackground } from "./common3d";
 import { TourWindow } from "../app/MyContext";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { UnrealBloomPass } from "three/examples/jsm/Addons.js";
+import sceneUserData from "./Three3dConfig";
 
 export function createPerspectiveCamera(
   node: HTMLElement,
@@ -115,10 +116,7 @@ export function createScene() {
 export function createNewScene() {
   clearOldLabel();
   const newScene = new Scene();
-  //const { themeColor } = userData.APP_THEME;
-  // newScene.background =
-  //   themeColor === APP_COLOR.Dark ? new Color("#000116") : new Color("#eee");
-
+  //newScene.name = "新场景";
   newScene.userData = sceneUserData;
   newScene.userData.APP_THEME.sceneCanSave = false;
   setTextureBackground(newScene);

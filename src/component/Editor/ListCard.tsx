@@ -2,23 +2,17 @@ import { memo } from "react";
 import { Button, ButtonGroup, Card, Container, Spinner } from "react-bootstrap";
 import AlertBase from "../common/AlertBase";
 import { getThemeByScene } from "../../app/utils";
-import { APP_COLOR, GlbModel, RecordItem } from "../../app/type";
+import { APP_COLOR, RecordItem } from "../../app/type";
 import ModalConfirm3d from "../common/ModalConfirm3d";
 import Toast3d from "../common/Toast3d";
 import EditorForm from "../common/EditorForm";
 import axios, { loadAssets } from "../../app/http";
-import { setScene, getScene } from "../../three/init3dEditor";
-
-import { getProjectData, glbLoader, getG2 } from "../../three/utils";
 import { useUpdateScene } from "../../app/hooks";
-
 import { createNewScene } from "../../three/factory3d";
 import Trigger3d from "../common/Trigger3d";
-
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import Icon from "../common/Icon";
 import { editorInstance } from "../../three/EditorInstance";
-import { enableShadow } from "../../three/common3d";
 
 interface Props {
   list: RecordItem[];
@@ -62,10 +56,12 @@ function RecordItemCard(props: Props) {
               const newList = list.filter((_, i) => i !== index);
               setList(newList);
               Toast3d(`【${item.name}】已删除`);
-              const { projectId } = getScene().userData;
+              const editor = editorInstance.getEditor();
+              const { projectId } = editor.scene.userData;
               if (item.id === projectId) {
                 const newScene = createNewScene();
-                setScene(newScene);
+                editor.setScene(newScene);
+
                 updateScene(newScene);
               }
             } else {
@@ -119,39 +115,6 @@ function RecordItemCard(props: Props) {
         Toast3d(`【${item.name}】已修改 `);
       }
     );
-  }
-
-  function loadMesh(item: RecordItem) {
-    getProjectData(item.id)
-      .then((res: string) => {
-        // loadOneModel(JSON.parse(res), scene);
-        const { scene } = editorInstance.getEditor();
-        //  const { parameters3d } = scene.userData;
-        const model = JSON.parse(res) as GlbModel;
-        const loader = glbLoader();
-
-        loader.load(
-          model.userData.modelUrl + "?url",
-          function (gltf) {
-            const group = getG2(model, gltf, scene);
-            enableShadow(group, scene);
-            scene.add(group);
-
-            //  getProgress(100);
-          },
-          function (xhr) {
-            //@ts-ignore
-            const progress = parseFloat(
-              ((xhr.loaded / model.userData.modelTotal) * 100).toFixed(2)
-            );
-          },
-          //@ts-ignore
-          function (error) {}
-        );
-      })
-      .catch((error) => {
-        Toast3d(error, "提示", APP_COLOR.Danger);
-      });
   }
 
   //默认图片
@@ -223,8 +186,8 @@ function RecordItemCard(props: Props) {
                     });
                     return;
                   }
-
-                  loadMesh(item);
+                  const editor = editorInstance.getEditor();
+                  editor.addOneModel(item);
                 }}
               >
                 {cardBody}

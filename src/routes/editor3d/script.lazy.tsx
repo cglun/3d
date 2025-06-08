@@ -7,9 +7,7 @@ import {
   ListGroup,
 } from "react-bootstrap";
 import { createLazyFileRoute } from "@tanstack/react-router";
-
 import CodeEditor from "../../component/common/routes/script/CodeEditor";
-import { getScene } from "../../three/init3dEditor";
 import { useUpdateScene } from "../../app/hooks";
 import AlertBase from "../../component/common/AlertBase";
 import {
@@ -18,11 +16,8 @@ import {
   CustomButtonType,
 } from "../../app/type";
 import { getButtonColor, getThemeByScene } from "../../app/utils";
-
 import Toast3d from "../../component/common/Toast3d";
-
 import ModalConfirm3d from "../../component/common/ModalConfirm3d";
-
 import { Vector3 } from "three";
 import {
   generatePanelControllerButtonGroup,
@@ -58,7 +53,7 @@ function RouteComponent() {
   if (scene.userData === undefined) {
     return;
   }
-
+  // 获取主题颜色
   const { themeColor } = getThemeByScene(scene);
   const buttonColor = getButtonColor(themeColor);
 
@@ -118,7 +113,10 @@ function RouteComponent() {
     updateScene(getScene());
     Toast3d("已生成按钮组");
   }
-
+  function getScene() {
+    const { scene } = editorInstance.getEditor();
+    return scene;
+  }
   return (
     <Container fluid>
       <ListGroup.Item>
@@ -173,8 +171,8 @@ function RouteComponent() {
               show={showJavaScript}
               setShow={setShowJavaScript}
               callback={function (value): void {
-                getScene().userData.javascript = value;
-                updateScene(getScene());
+                scene.userData.javascript = value;
+                updateScene(scene);
               }}
             />
             <CodeEditor
@@ -268,9 +266,8 @@ function RouteComponent() {
               show={showAllConfig}
               setShow={setShowAllConfig}
               callback={function (value): void {
-                const { scene } = editorInstance.getEditor();
-                scene.userData = JSON.parse(value);
-                scene.userData.projectId = projectId; // 防止项目id丢失
+                getScene().userData = JSON.parse(value);
+                getScene().userData.projectId = projectId; // 防止项目id丢失
                 updateScene(scene);
               }}
             />

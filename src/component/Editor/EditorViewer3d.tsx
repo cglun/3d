@@ -65,7 +65,7 @@ function EditorViewer3d() {
       const item: RecordItem = {
         id: parseInt(sceneId),
         name: "名字",
-        des: "",
+        des: "描述",
         cover: "",
       };
 
@@ -110,6 +110,20 @@ function EditorViewer3d() {
               body: <ProgressBar now={progress} label={`${progress}%`} />,
               confirmButton: {
                 show: true,
+              },
+            });
+          };
+
+          editor.onLoadError = (error: string) => {
+            console.error(error);
+            ModalConfirm3d({
+              title: "提示",
+              body: (
+                <AlertBase text={"有错，看控制台"} type={APP_COLOR.Danger} />
+              ),
+              confirmButton: {
+                show: true,
+                hasButton: true,
               },
             });
           };

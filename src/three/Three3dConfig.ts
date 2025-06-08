@@ -1,5 +1,5 @@
 import { Object3D, Object3DEventMap, Vector3 } from "three";
-import { APP_COLOR, CustomButtonType } from "../app/type";
+import { ActionItemMap, APP_COLOR, CustomButtonType } from "../app/type";
 export const userCssStyle = {
   cardWidth: 130,
   cardHeight: 130,
@@ -19,6 +19,12 @@ export const userCssStyle = {
   opacity: 1,
 };
 export type UserCssStyle = typeof userCssStyle;
+export interface CustomButtonListType {
+  name: string;
+  type: CustomButtonType;
+  userSetting: UserSetting;
+  listGroup: ActionItemMap[];
+}
 export interface SceneUserData {
   isSelected: boolean;
   fixedCameraPosition: Vector3;
@@ -38,29 +44,9 @@ export interface SceneUserData {
   };
   javascript: string;
   customButtonList: {
-    toggleButtonGroup: {
-      name: string;
-      type: CustomButtonType;
-      listGroup: unknown[];
-      userSetting: {
-        modelOffset: {
-          x: number;
-          y: number;
-          z: number;
-        };
-      };
-    };
-    roamButtonGroup: {
-      name: string;
-      type: CustomButtonType;
-      userSetting: Record<string, unknown>;
-      listGroup: unknown[];
-    };
-    panelControllerButtonGroup: {
-      name: string;
-      type: CustomButtonType;
-      listGroup: unknown[];
-    };
+    toggleButtonGroup: CustomButtonListType;
+    roamButtonGroup: CustomButtonListType;
+    panelControllerButtonGroup: CustomButtonListType;
   };
   APP_THEME: {
     themeColor: APP_COLOR;
@@ -71,8 +57,14 @@ export interface SceneUserData {
   userCssStyleMarkLabel: UserCssStyle;
   selected3d: Object3D<Object3DEventMap> | null;
 }
-
-const userData: SceneUserData = {
+type UserSetting = typeof userSettingInit;
+const userSettingInit = {
+  modelOffset: new Vector3(0, 0, 0),
+  cameraOffset: new Vector3(0, 0, 0),
+  animationTime: new Vector3(0, 0, 0),
+  speed: 1,
+};
+const sceneUserData: SceneUserData = {
   isSelected: false,
   fixedCameraPosition: new Vector3(5, 6, 7),
   config3d: {
@@ -86,8 +78,8 @@ const userData: SceneUserData = {
   },
   projectId: -1,
   backgroundHDR: {
-    name: "",
-    asBackground: false,
+    name: "venice_sunset_1k.hdr",
+    asBackground: true,
   },
   javascript: "",
   customButtonList: {
@@ -95,26 +87,21 @@ const userData: SceneUserData = {
       name: "切换",
       type: "TOGGLE" as CustomButtonType,
       listGroup: [],
-      userSetting: {
-        modelOffset: {
-          x: 0, // 模型的 x 偏移量
-          y: 0, // 模型的 y 偏移量
-          z: 0, // 模型的 z 偏移量
-        },
-      },
+      userSetting: { ...userSettingInit },
     },
     roamButtonGroup: {
       name: "漫游",
       type: "ROAM" as CustomButtonType,
-      userSetting: {},
       listGroup: [],
+      userSetting: { ...userSettingInit },
     },
     panelControllerButtonGroup: {
       name: "面板",
       type: "PANEL_CONTROLLER" as CustomButtonType,
       listGroup: [],
+      userSetting: { ...userSettingInit },
     },
-  }, // 若 CustomButtonListType 有具体结构，需按需填充
+  },
   APP_THEME: {
     themeColor: APP_COLOR.Dark, // 若 APP_COLOR 有具体结构，需按需填充
     iconFill: "",
@@ -124,7 +111,4 @@ const userData: SceneUserData = {
   userCssStyleMarkLabel: { ...userCssStyle }, // 若 UserStyles 有具体结构，需按需填充
   selected3d: null, // 若 Selected3d 有具体结构，需按需填充
 };
-export default userData;
-/**
- * 场景用户数据接口，定义了场景相关的用户数据结构
- */
+export default sceneUserData;

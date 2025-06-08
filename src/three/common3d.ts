@@ -11,11 +11,19 @@ import {
   Vector2,
   WebGLRenderer,
 } from "three";
-import { UserDataType } from "../app/type";
-import TWEEN from "three/addons/libs/tween.module.js";
-import { Config3d, enableScreenshot, Extra3d, Parameters3d } from "./config3d";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
+import TWEEN from "three/addons/libs/tween.module.js";
+import venice_sunset_1k from "/static/file3d/hdr/venice_sunset_1k.hdr?url";
+import spruit_sunrise_1k from "/static/file3d/hdr/spruit_sunrise_1k.hdr?url";
+import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { manyou } from "../viewer3d/buttonList/animateByButton";
+
+import { UserDataType } from "../app/type";
+
+import { Config3d, enableScreenshot, Extra3d, Parameters3d } from "./config3d";
+
 import { createGroupIfNotExist } from "./utils";
 
 export function enableShadow(group: Scene | Group | Object3D, context: Scene) {
@@ -147,11 +155,6 @@ export function commonAnimate(animateProps: AnimateProps) {
     parameters3d.timeS = 0;
   }
 }
-import venice_sunset_1k from "/static/file3d/hdr/venice_sunset_1k.hdr?url";
-import spruit_sunrise_1k from "/static/file3d/hdr/spruit_sunrise_1k.hdr?url";
-import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
-import { manyou } from "../viewer3d/buttonList/animateByButton";
 
 //环境贴图设置
 export function setTextureBackground(scene: Scene) {

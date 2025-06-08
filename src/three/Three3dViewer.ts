@@ -87,4 +87,16 @@ export class Three3dViewer extends Three3d {
   onPointerClick(e: Event) {
     console.log(e);
   }
+  // 截图,返回图片的base64
+  /**
+   * 截取当前场景的屏幕截图。
+   * @param width - 截图的宽度。
+   * @param height - 截图的高度。*/
+  takeScreenshot(width: number, height: number): string {
+    this.renderer.setSize(width, height);
+    this.camera.aspect = 1;
+    this.renderer.render(this.scene, this.camera);
+    const screenshot = this.renderer.domElement.toDataURL("image/png");
+    return screenshot;
+  }
 }

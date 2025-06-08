@@ -202,12 +202,3 @@ export function getRenderer() {
 export function getDivElement() {
   return divElement;
 }
-
-// 截图,返回图片的base64
-export function takeScreenshot(width: number, height: number): string {
-  renderer.setSize(width, height);
-  camera.aspect = 1;
-  renderer.render(scene, camera);
-  const screenshot = renderer.domElement.toDataURL("image/png");
-  return screenshot;
-}

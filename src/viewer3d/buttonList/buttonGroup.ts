@@ -30,6 +30,7 @@ import {
 import { hasValueString } from "./utils";
 import { LabelInfoPanelController } from "../label/LabelInfoPanelController";
 import { SceneUserData } from "../../three/Three3dConfig";
+import { editorInstance } from "../../three/EditorInstance";
 
 function getActionItemByMap(
   item: ActionItemMap,
@@ -145,7 +146,8 @@ export function resetListGroupIsClick(listGroup: ActionItemMap[]) {
 
 // 获取切换按钮组
 export function getToggleButtonGroup(): ActionItemMap[] {
-  const customButtonList = getScene().userData
+  const { scene } = editorInstance.getEditor();
+  const customButtonList = scene.userData
     .customButtonList as CustomButtonListType;
 
   if (!customButtonList.toggleButtonGroup) {
@@ -178,7 +180,8 @@ export function getToggleButtonGroup(): ActionItemMap[] {
 export function generateRoamButtonGroup() {
   // const { actionMixerList } = editorGetAll().parameters3d;
   const roamButtonGroup: ActionItemMap[] = [];
-  const roam = createGroupIfNotExist(editorScene(), "_ROAM_", false);
+  const { scene } = editorInstance.getEditor();
+  const roam = createGroupIfNotExist(scene, "_ROAM_", false);
   if (roam) {
     roam.children.forEach((item) => {
       const { name } = item;
@@ -196,7 +199,8 @@ export function generateRoamButtonGroup() {
 }
 //获取漫游动画按钮组
 export function getRoamListByRoamButtonMap(): ActionItemMap[] {
-  const data = getScene().userData as SceneUserData;
+  const { scene } = editorInstance.getEditor();
+  const data = scene.userData as SceneUserData;
 
   const { roamButtonGroup } = data.customButtonList as {
     roamButtonGroup?: CustomButtonListType["roamButtonGroup"];

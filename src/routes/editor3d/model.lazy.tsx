@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import React, { useEffect } from "react";
 import ListGroup from "react-bootstrap/esm/ListGroup";
-import { Serch3d } from "../../component/Editor/Serch3d";
+import { Search3d } from "../../component/Editor/Search3d";
 import { UploadModel } from "../../component/Editor/UploadModel";
 import ListCard from "../../component/Editor/ListCard";
 import _axios from "../../app/http";
@@ -80,7 +80,7 @@ function ModelList() {
     <Container fluid className="d-flex mt-2">
       <ListGroup>
         {/* 修改部分：使用 handleFilterList 替代 setFilterList */}
-        <Serch3d list={list} setFilterList={handleFilterList} type="模型" />
+        <Search3d list={list} setFilterList={handleFilterList} type="模型" />
         {/* 修改部分：使用 noArgUpdateList 替代 updateList */}
         <UploadModel updateList={noArgUpdateList} />
       </ListGroup>

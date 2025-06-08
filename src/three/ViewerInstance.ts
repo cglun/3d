@@ -17,12 +17,12 @@ export class ViewerInstance {
   }
 
   // 获取 Three3dViewer 实例
-  getEditor() {
+  getViewer() {
     return this.three3dViewer;
   }
 
   // 设置 Three3dViewer 实例
-  setEditor(three3dViewer: Three3dViewer) {
+  setViewer(three3dViewer: Three3dViewer) {
     this.three3dViewer = three3dViewer;
   }
 }

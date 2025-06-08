@@ -26,7 +26,7 @@ import {
 } from "./config3d";
 import { runScript } from "./scriptDev";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
-import { initPostProcessing } from "./init3dViewer";
+
 import { MarkLabel } from "../viewer3d/label/MarkLabel";
 import { SceneUserData } from "./Three3dConfig";
 
@@ -448,7 +448,7 @@ export function finishLoadExecute(
   }
   const { useComposer } = config3d;
   if (useComposer) {
-    initPostProcessing();
+    // initPostProcessing();
   }
   if (javascript) {
     // 使用类型正确的 context 调用方法

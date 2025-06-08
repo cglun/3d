@@ -6,6 +6,7 @@ import {
   APP_COLOR,
   Context116,
   CustomButtonListType,
+  GlbModel,
   RecordItem,
 } from "../app/type";
 import { Object3D, Vector2 } from "three";
@@ -31,9 +32,8 @@ import {
 import { LabelInfoPanelController } from "./label/LabelInfoPanelController";
 import { viewerInstance } from "../three/ViewerInstance";
 
-import ModalConfirm3d from "../component/common/ModalConfirm3d";
-import AlertBase from "../component/common/AlertBase";
 import { Three3dViewer } from "../three/Three3dViewer";
+import { If } from "three/tsl";
 
 /**
  * 其他应用可以调用此组件，
@@ -46,13 +46,13 @@ export default function Viewer3d({
   showProgress = true,
 }: {
   item: RecordItem;
-  showProgress: boolean;
+  showProgress?: boolean;
   canvasStyle?: { height: string; width: string } & React.CSSProperties;
 }) {
   // 修改为明确指定 HTMLDivElement 类型
-  const canvas3d: RefObject<HTMLDivElement> = useRef(null);
+  const canvas3d = useRef(null);
   const isInitialized = useRef(false);
-
+  const [progress, setProgress] = useState(0);
   const [scene, dispatchScene] = useReducer(reducerScene, initEditorScene);
   const [tourWindow, dispatchTourWindow] = useReducer(
     reducerTour,
@@ -62,8 +62,9 @@ export default function Viewer3d({
 
   useEffect(() => {
     if (canvas3d.current && !isInitialized.current) {
+      console.log("Viewer3d", item.id);
       const viewer = new Three3dViewer(canvas3d.current);
-      viewerInstance.setEditor(viewer);
+      viewerInstance.setViewer(viewer);
       console.log("初始化编辑器");
 
       viewer.controls.enabled = true;
@@ -73,9 +74,15 @@ export default function Viewer3d({
       );
       window.addEventListener("resize", () => viewer.onWindowResize());
     }
-    loadScene();
+    if (item.des === "Scene") {
+      loadScene();
+    }
+    if (item.des === "Mesh") {
+      loadMesh();
+    }
+
     return () => {
-      const viewer = viewerInstance.getEditor();
+      const viewer = viewerInstance.getViewer();
 
       if (viewer) {
         window.removeEventListener("resize", viewer.onWindowResize);
@@ -84,54 +91,45 @@ export default function Viewer3d({
       }
     };
   }, [item]);
+
   function loadScene() {
-    if (item.id !== -1) {
-      isInitialized.current = true; // 标记为已初始化
-      const viewer = viewerInstance.getEditor();
-      console.log("初始化编辑器完成", item.name);
+    isInitialized.current = true; // 标记为已初始化
+    const viewer = viewerInstance.getViewer();
+    getProjectData(item.id).then((data) => {
+      viewer.deserialize(data, item);
+      setLoadProgress(viewer);
+    });
+  }
+  // 加载模型
+  function loadMesh() {
+    isInitialized.current = true; // 标记为已初始化
+    const viewer = viewerInstance.getViewer();
+    viewer.addOneModel(item);
+    setLoadProgress(viewer);
+  }
 
-      getProjectData(item.id).then((data) => {
-        // 假设 deserialize 是异步方法
-        viewer.deserialize(data, item);
+  function setLoadProgress(viewer: Three3dViewer) {
+    // 在模型加载完成后更新场景
+    viewer.loadedModelsEnd = () => {
+      if (item.des === "Scene") {
+        viewer.runJavascript();
+      }
 
-        // 在模型加载完成后更新场景
-        viewer.loadedModelsEnd = () => {
-          viewer.runJavascript();
-          //关了进度条
-          if (showProgress) {
-            setTimeout(() => {
-              ModalConfirm3d({
-                title: "提示",
-                body: <AlertBase text={"加载完成"} type={APP_COLOR.Success} />,
-                confirmButton: {
-                  show: true,
-                },
-              });
-            }, 1116);
+      //关了进度条
+      if (showProgress) {
+        setProgress(100);
+      }
+    };
+    viewer.onLoadError = (error: string) => {
+      Toast3d("有错误,看控制台", "提示", APP_COLOR.Danger);
+      console.error(error);
+    };
 
-            setTimeout(() => {
-              ModalConfirm3d({
-                title: "提示",
-                body: <AlertBase text={"关闭窗口"} type={APP_COLOR.Success} />,
-                confirmButton: {
-                  show: false,
-                },
-              });
-            }, 2116);
-          }
-        };
-        if (showProgress) {
-          viewer.onLoadProgress = (progress: number) => {
-            ModalConfirm3d({
-              title: "加载……",
-              body: <ProgressBar now={progress} label={`${progress}%`} />,
-              confirmButton: {
-                show: true,
-              },
-            });
-          };
-        }
-      });
+    if (showProgress) {
+      viewer.onLoadProgress = (progress: number) => {
+        debugger;
+        setProgress(progress);
+      };
     }
   }
 
@@ -147,6 +145,11 @@ export default function Viewer3d({
       }}
     >
       <Container fluid className="position-relative">
+        {showProgress && progress < 100 && (
+          <div className="mb-1 mx-auto" style={{ width: "300px" }}>
+            <ProgressBar now={progress} label={`${progress}%`} />
+          </div>
+        )}
         <div style={canvasStyle} ref={canvas3d}></div>
         <ModalTour />
       </Container>

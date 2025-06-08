@@ -17,7 +17,7 @@ interface SearchableItem {
   name: string;
 }
 
-export function Serch3d({
+export function Search3d({
   list,
   setFilterList,
   type = "模型",

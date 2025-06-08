@@ -191,16 +191,15 @@ function RouteComponent() {
             </ButtonGroup>
           </Container>
           <Modal.Body ref={modalBody} style={{ padding: 0 }}>
-            {
+            {_item.id !== -1 && (
               <Viewer3d
                 item={_item}
-                showProgress={false}
                 canvasStyle={{
                   width: size3d.w + "px",
                   height: size3d.h + "px",
                 }}
               />
-            }
+            )}
           </Modal.Body>
           <Modal.Footer>
             <ButtonGroup size="sm">

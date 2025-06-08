@@ -33,7 +33,7 @@ export default function Index() {
 
       inputList.forEach((input) => {
         input.addEventListener("focus", focusHandler);
-
+        input.addEventListener("click", focusHandler);
         input.addEventListener("mouseleave", mouseLeaveHandler);
       });
     }
@@ -41,8 +41,7 @@ export default function Index() {
       if (refAccordion.current) {
         inputList?.forEach((input) => {
           input.removeEventListener("focus", focusHandler);
-        });
-        inputList?.forEach((input) => {
+          input.removeEventListener("click", focusHandler);
           input.removeEventListener("mouseleave", mouseLeaveHandler);
         });
       }

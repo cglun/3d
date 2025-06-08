@@ -19,7 +19,7 @@ import { APP_COLOR, RecordItem } from "../../app/type";
 import axios from "../../app/http";
 import InputBase from "../common/InputBase";
 import { useUpdateScene } from "../../app/hooks";
-import { Serch3d } from "./Serch3d";
+import { Search3d } from "./Search3d";
 
 import { createNewScene } from "../../three/factory3d";
 import { useLocation, useNavigate } from "@tanstack/react-router";
@@ -198,7 +198,7 @@ export default function EditorTop() {
                 document.title = "3d新场景";
                 const newScene = createNewScene();
                 const editor = editorInstance.getEditor();
-                editor.scene = newScene;
+                editor.setScene(newScene);
                 updateScene(editor.scene);
                 Toast3d("场景已新建");
               }}
@@ -223,6 +223,7 @@ export default function EditorTop() {
               <Icon iconName="floppy2" title="场景另存" placement="left" />
             </Button>
             <Button
+              as="div"
               variant={themeColor}
               style={{ paddingLeft: "0", paddingRight: "0" }}
             >
@@ -328,7 +329,7 @@ export default function EditorTop() {
               当前：【id:
               {scene.userData.projectId}】{scene.userData.sceneName}
             </Badge>
-            <Serch3d list={list} setFilterList={setFilterList} type="场景" />
+            <Search3d list={list} setFilterList={setFilterList} type="场景" />
             <ListCard
               list={filterList}
               setList={setFilterList}

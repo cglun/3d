@@ -6,14 +6,15 @@ import { Button, ButtonGroup, Card, Container } from "react-bootstrap";
 import Viewer3d from "../../viewer3d/Viewer3d";
 import Toast3d from "./Toast3d";
 import { base64ToBlob, blobToFile, getButtonColor } from "../../app/utils";
-import { takeScreenshot } from "../../three/init3dViewer";
+
 import axios, { loadAssets } from "../../app/http";
 import { APP_COLOR, RecordItem } from "../../app/type";
 
-import { getScene } from "../../three/init3dEditor";
-
 import { setEnableScreenshot } from "../../three/config3d";
 import Icon from "./Icon";
+import { editorInstance } from "../../three/EditorInstance";
+
+import { viewerInstance } from "../../three/ViewerInstance";
 
 export default function EditorForm({
   item,
@@ -24,9 +25,11 @@ export default function EditorForm({
 }) {
   const [_item, _setItem] = useState<RecordItem>({ ...item });
   const [imgBase64, setImgBase64] = useState("");
-  const scene = getScene();
-  //const { themeColor } = getThemeByScene(scene);
+  const { scene } = editorInstance.getEditor();
+  // const { themeColor } = getThemeByScene(scene);
+
   const { themeColor } = scene.userData.APP_THEME;
+  //sceneUserData.APP_THEME.themeColor = themeColor;
   const buttonColor = getButtonColor(themeColor);
   const [loadScene, setLoadScene] = useState<boolean>(false);
   useEffect(() => {
@@ -124,7 +127,6 @@ export default function EditorForm({
             variant={buttonColor}
             onClick={() => {
               setLoadScene(true);
-              setEnableScreenshot(true);
             }}
           >
             <Icon iconName="bi bi-boxes" title="使用场景" />
@@ -134,7 +136,8 @@ export default function EditorForm({
             variant={buttonColor}
             disabled={!loadScene}
             onClick={() => {
-              const imgBase64 = takeScreenshot(300, 300);
+              const viewer = viewerInstance.getViewer();
+              const imgBase64 = viewer.takeScreenshot(300, 300);
               setImgBase64(imgBase64);
               Toast3d("截图成功");
             }}

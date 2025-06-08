@@ -1,16 +1,15 @@
 import Editor from "@monaco-editor/react";
 import React, { useState, useEffect } from "react";
 import { Button, ButtonGroup, Modal, Tab, Tabs } from "react-bootstrap";
+import { monaco } from "react-monaco-editor";
 import ModalConfirm3d from "../../ModalConfirm3d";
 import { useUpdateScene } from "../../../../app/hooks";
 import { getThemeByScene } from "../../../../app/utils";
 import { APP_COLOR, CustomButtonListType } from "../../../../app/type";
 import UiButtonEditor from "./UiButtonEditor";
-
-import { monaco } from "react-monaco-editor";
-import { getScene } from "../../../../three/init3dEditor";
 import Toast3d from "../../Toast3d";
 import Icon from "../../Icon";
+import { editorInstance } from "../../../../three/EditorInstance";
 
 interface CodeEditorProps {
   language?: string;
@@ -82,14 +81,14 @@ const CodeEditor = (props: CodeEditorProps) => {
       setValue(value);
     }
   }
-  const [editorInstance, setEditorInstance] =
+  const [monacoEditor, setMonacoEditor] =
     useState<monaco.editor.IStandaloneCodeEditor | null>(null);
 
   // 格式化代码函数
   const formatCode = async () => {
-    if (editorInstance) {
+    if (monacoEditor) {
       // 获取格式化操作实例
-      const formatAction = editorInstance.getAction(
+      const formatAction = monacoEditor.getAction(
         "editor.action.formatDocument"
       );
       // 检查操作实例是否存在
@@ -98,11 +97,8 @@ const CodeEditor = (props: CodeEditorProps) => {
         await formatAction.run();
         // 滚动到代码开头
         const position = { lineNumber: 1, column: 1 };
-        editorInstance.revealPosition(
-          position,
-          monaco.editor.ScrollType.Smooth
-        );
-        editorInstance.setPosition(position);
+        monacoEditor.revealPosition(position, monaco.editor.ScrollType.Smooth);
+        monacoEditor.setPosition(position);
       }
     }
   };
@@ -119,7 +115,7 @@ const CodeEditor = (props: CodeEditorProps) => {
           setError(e.length > 0);
         }}
         onMount={(editor) => {
-          setEditorInstance(editor);
+          setMonacoEditor(editor);
         }}
         options={{
           minimap: { enabled: false },
@@ -156,7 +152,8 @@ const CodeEditor = (props: CodeEditorProps) => {
             }
 
             formatCode();
-            getScene().userData.customButtonList = JSON.parse(value);
+            const { scene } = editorInstance.getEditor();
+            scene.userData.customButtonList = JSON.parse(value);
           }}
         >
           <Tab eventKey="home" title="UI编辑">

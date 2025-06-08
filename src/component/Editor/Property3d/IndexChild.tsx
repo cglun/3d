@@ -12,13 +12,13 @@ import { InputAttrText } from "./InputAttrText";
 import { getButtonColor, getThemeByScene } from "../../../app/utils";
 import AlertBase from "../../common/AlertBase";
 import { setTextureBackground } from "../../../three/common3d";
-import { sceneUserData } from "../../../three/config3d";
+
 import { APP_COLOR, SelectedObject } from "../../../app/type";
 import { InputAttrNumber } from "./InputAttrNumber";
 import Toast3d from "../../common/Toast3d";
 import { styleBody, styleHeader } from "../OutlineView/fontColor";
 import { editorInstance } from "../../../three/EditorInstance";
-import { SceneUserData } from "../../../three/Three3dConfig";
+import sceneUserData, { SceneUserData } from "../../../three/Three3dConfig";
 
 const step = 0.1;
 function SceneProperty() {
@@ -205,25 +205,6 @@ function SceneProperty() {
 }
 
 function CommonProperty({ selected3d }: { selected3d: SelectedObject }) {
-  // const { type } = selected3d.parent;
-  // let canSetShadow = true;
-  // // if (type && type === "Scene") {
-  // //   canSetShadow = true;
-  // // }
-
-  // function findTopLevelParent(object) {
-
-  //   canSetShadow =
-  //     object.userData.type === UserDataType.GlbModel ? true : false;
-  //   if (object.parent) {
-  //     return findTopLevelParent(object.parent);
-  //   } else {
-  //     return object; // 如果没有父对象，返回当前对象，即顶层父对象
-  //   }
-  // }
-  // findTopLevelParent(selected3d);
-  // debugger;
-
   function LightProperty() {
     if (!(selected3d instanceof Light)) {
       return;

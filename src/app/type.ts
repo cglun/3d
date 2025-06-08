@@ -9,7 +9,7 @@ import {
   WebGLRenderer,
 } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { Config3d, Extra3d, Parameters3d } from "../three/config3d";
+import { Extra3d, Parameters3d } from "../three/config3d";
 import { LabelInfoPanelController } from "../viewer3d/label/LabelInfoPanelController";
 import { TourWindow } from "./MyContext";
 
@@ -122,7 +122,7 @@ export type CustomButtonType =
   | "STRETCH"
   | "ROAM"
   | "PANEL_CONTROLLER";
-interface UserSetting {
+interface UserSetting_feiqile {
   modelOffset?: {
     x: number;
     y: number;
@@ -137,22 +137,21 @@ interface UserSetting {
   speed?: number;
 }
 
-export type CustomButtonListType = {
+export type CustomButtonListType_feiqile = {
   toggleButtonGroup: {
     name: string;
     type: CustomButtonType;
     listGroup: ActionItemMap[];
-    userSetting: UserSetting;
   };
   roamButtonGroup: {
     name: string;
-    type: "ROAM";
-    userSetting?: UserSetting;
+    type: CustomButtonType;
+
     listGroup: ActionItemMap[];
   };
   panelControllerButtonGroup: {
     name: string;
-    type: "PANEL_CONTROLLER";
+    type: CustomButtonType;
     listGroup: ActionItemMap[];
   };
 };
@@ -218,25 +217,4 @@ export interface UserStyles {
   offsetX: number;
   offsetY: number;
   opacity: number;
-}
-
-export interface SceneUserData1111 {
-  isSelected: boolean;
-  fixedCameraPosition: Vector3;
-  config3d: Config3d;
-  projectId: number;
-  backgroundHDR: {
-    name: string;
-    asBackground: boolean;
-  };
-  javascript: string;
-  customButtonList: CustomButtonListType;
-  APP_THEME: {
-    themeColor: APP_COLOR;
-    iconFill: string;
-    sceneCanSave: boolean;
-  };
-  userCssStyleTopCard: UserStyles;
-  userCssStyleTopCardMark: UserStyles;
-  selected3d: Object3D;
 }

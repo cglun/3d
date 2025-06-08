@@ -3,8 +3,8 @@
  */
 
 import { getScene } from "../three/init3dEditor";
+import sceneUserData from "../three/Three3dConfig";
 
-import { sceneUserData } from "../three/config3d";
 import { APP_COLOR } from "./type";
 import { Scene } from "three";
 

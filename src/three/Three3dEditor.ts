@@ -1,4 +1,4 @@
-import { Color, DataTexture, Raycaster, Vector2, Vector3 } from "three";
+import { Color, DataTexture, Raycaster, Scene, Vector2, Vector3 } from "three";
 import { GlbModel, UserDataType } from "../app/type";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { Three3d } from "./Three3d";
@@ -59,6 +59,9 @@ export class Three3dEditor extends Three3d {
   }
   setUserDate(sceneUserData: SceneUserData) {
     this.scene.userData = sceneUserData;
+  }
+  setScene(scene: Scene) {
+    this.scene = scene;
   }
   // 场景序列化
   sceneSerialization(): string {

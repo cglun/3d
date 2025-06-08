@@ -15,13 +15,6 @@ import { ActionItemMap, CustomButtonListType } from "../../app/type";
 
 import { createGroupIfNotExist } from "../../three/utils";
 import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
-import {
-  getScene,
-  getCamera,
-  getControls,
-  getUserData,
-  getAll,
-} from "../../three/init3dViewer";
 
 import { cameraTween, meshTween } from "../../three/animate";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -29,7 +22,17 @@ import { getObjectWorldPosition, getUserSetting } from "../viewer3dUtils";
 import { roamAnimation } from "./buttonGroup";
 
 import { RoamLine } from "../../three/config3d";
+import { editorInstance } from "../../three/EditorInstance";
+function getScene() {
+  return editorInstance.getEditor().scene;
+}
 
+function getCamera() {
+  return editorInstance.getEditor().camera;
+}
+function getControls() {
+  return editorInstance.getEditor().controls;
+}
 // 显示模型-显示和隐藏
 export function showModelByNameId(NAME_ID: string) {
   const MODEL_GROUP = createGroupIfNotExist(
