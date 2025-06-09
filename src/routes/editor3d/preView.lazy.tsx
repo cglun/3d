@@ -14,15 +14,12 @@ import _axios from "../../app/http";
 
 import { useUpdateScene } from "../../app/hooks";
 import { getButtonColor, getThemeByScene } from "../../app/utils";
-import {
-  ActionItemMap,
-  APP_COLOR,
-  Context116,
-  RecordItem,
-} from "../../app/type";
+import { ActionItemMap, APP_COLOR, RecordItem } from "../../app/type";
 
 import { resetListGroupIsClick } from "../../viewer3d/buttonList/buttonGroup";
 import { LabelInfoPanelController } from "../../viewer3d/label/LabelInfoPanelController";
+import { viewerInstance } from "../../three/ViewerInstance";
+import { SceneUserData } from "../../three/Three3dConfig";
 
 // 定义响应数据的类型
 interface PageListResponse {
@@ -93,12 +90,15 @@ function RouteComponent() {
       });
   }, []);
   //@ts-ignore 忽略类型检查，暂时不清楚 Context116 完整类型定义
-  function callBack(instance: Context116) {
-    // 检查 getToggleButtonGroup 方法是否存在
-    setToggleButtonList(instance.getToggleButtonGroup || []);
-    setRoamButtonList(instance.getRoamListByRoamButtonMap || []);
-    setPanelControllerButtonList(instance.getPanelControllerButtonGroup || []);
-    setController(instance.labelInfoPanelController);
+  function callBack() {
+    // const viewer = viewerInstance.getViewer();
+    // const instance1 = viewer.scene.userData as SceneUserData;
+    // const instance = instance1.customButtonList;
+    // // 检查 getToggleButtonGroup 方法是否存在
+    // setToggleButtonList(instance.getToggleButtonGroup);
+    // setRoamButtonList(instance.getRoamListByRoamButtonMap || []);
+    // setPanelControllerButtonList(instance.getPanelControllerButtonGroup || []);
+    // setController(instance.labelInfoPanelController);
   }
   //@ts-ignore 忽略类型检查，暂时不清楚 Context116 完整类型定义
   function callBackError(error: unknown) {

@@ -10,11 +10,7 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import CodeEditor from "../../component/common/routes/script/CodeEditor";
 import { useUpdateScene } from "../../app/hooks";
 import AlertBase from "../../component/common/AlertBase";
-import {
-  APP_COLOR,
-  CustomButtonListType,
-  CustomButtonType,
-} from "../../app/type";
+import { APP_COLOR, CustomButtonType } from "../../app/type";
 import { getButtonColor, getThemeByScene } from "../../app/utils";
 import Toast3d from "../../component/common/Toast3d";
 import ModalConfirm3d from "../../component/common/ModalConfirm3d";
@@ -26,7 +22,11 @@ import {
 } from "../../viewer3d/buttonList/buttonGroup";
 import Icon from "../../component/common/Icon";
 import { styleBody } from "../../component/Editor/OutlineView/fontColor";
-import { SceneUserData } from "../../three/Three3dConfig";
+import {
+  CustomButtonList,
+  customButtonListInit,
+  SceneUserData,
+} from "../../three/Three3dConfig";
 import { editorInstance } from "../../three/EditorInstance";
 
 export const Route = createLazyFileRoute("/editor3d/script")({
@@ -38,6 +38,7 @@ function RouteComponent() {
   const [showJavaScript, setShowJavaScript] = useState(false); // 是否为调试场景[调试场景不允许修改代码]
   const [show, setShow] = useState(false); // 使用可选属性和类型断言
   const [showAllConfig, setShowAllConfig] = useState(false); // 使用可选属性和类型断言
+  const [isSet, setIsSet] = useState(false);
 
   const ud = scene.userData as SceneUserData;
   const userData = JSON.stringify(ud, null, 3);
@@ -59,10 +60,11 @@ function RouteComponent() {
 
   // 生成按钮组
   function generateButton() {
+    setIsSet(false);
     const { toggleButtonGroup } = JSON.parse(buttonList);
 
     const gerToggleButtonGroup = generateToggleButtonGroup(
-      toggleButtonGroup || [],
+      toggleButtonGroup.listGroup,
       getScene(),
       buttonType
     );
@@ -83,29 +85,25 @@ function RouteComponent() {
       ROAM: new Vector3(0, 0, 0),
       PANEL_CONTROLLER: new Vector3(0, 0, 0),
     };
-
-    const buttonGroup: CustomButtonListType = {
+    //customButtonListInit.toggleButtonGroup.userSetting
+    const buttonGroup: CustomButtonList = {
       toggleButtonGroup: {
-        name: "切换按钮组",
+        ...customButtonListInit.toggleButtonGroup,
         type: buttonType,
         userSetting: {
           cameraOffset: cameraPositionOffset[buttonType],
           modelOffset: modelPositionOffset[buttonType],
           animationTime: 300,
+          speed: 0,
         },
         listGroup: gerToggleButtonGroup,
       },
       roamButtonGroup: {
-        name: "漫游按钮组",
-        type: "ROAM",
-        userSetting: {
-          speed: 2,
-        },
+        ...customButtonListInit.roamButtonGroup,
         listGroup: generateRoamButtonGroup(),
       },
       panelControllerButtonGroup: {
-        name: "面板按钮组",
-        type: "PANEL_CONTROLLER",
+        ...customButtonListInit.panelControllerButtonGroup,
         listGroup: generatePanelControllerButtonGroup(),
       },
     };
@@ -202,19 +200,7 @@ function RouteComponent() {
               }}
             >
               <ButtonGroup size="sm">
-                {Object.keys(customButtonList).length !== 0 ? (
-                  <Button
-                    variant={buttonColor}
-                    onClick={() => {
-                      getScene().userData.customButtonList = {};
-                      updateScene(getScene());
-                      setButtonType(buttonType);
-                      Toast3d("已重置按钮组");
-                    }}
-                  >
-                    <Icon iconName="recycle" /> 重置
-                  </Button>
-                ) : (
+                {isSet ? (
                   <>
                     <Form key={"inline-radio-2"}>
                       <Form.Check
@@ -255,6 +241,20 @@ function RouteComponent() {
                       生成按钮
                     </Button>
                   </>
+                ) : (
+                  <Button
+                    variant={buttonColor}
+                    onClick={() => {
+                      getScene().userData.customButtonList =
+                        customButtonListInit;
+                      updateScene(getScene());
+                      setButtonType(buttonType);
+                      setIsSet(true);
+                      Toast3d("已重置按钮组");
+                    }}
+                  >
+                    <Icon iconName="recycle" /> 重置
+                  </Button>
                 )}
               </ButtonGroup>
             </CodeEditor>

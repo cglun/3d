@@ -2,8 +2,6 @@ import {
   Scene,
   WebGLRenderer,
   PerspectiveCamera,
-  Controls,
-  Mesh,
   Object3D,
   EquirectangularReflectionMapping,
   Object3DEventMap,
@@ -21,18 +19,24 @@ import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 
 import { runScript } from "./scriptDev";
 import { enableShadow } from "./common3d";
-import userData from "./Three3dConfig";
+import userData, { ExtraParams } from "./Three3dConfig";
 import { createNewScene } from "./factory3d";
 
 export class Three3d extends ThreeObj {
   scene: Scene;
   camera: PerspectiveCamera;
   renderer: WebGLRenderer;
-  controls: Controls<OrbitControls>;
-  selectedMesh: Mesh[] = [];
-  modelList: GlbModel[] = [];
-  modelSize: number = 0;
-  loadedModel: number = 0;
+  controls: OrbitControls;
+  clock = new Clock();
+  timeS = 0;
+  extraParams: ExtraParams = {
+    actionMixerList: [],
+    mixer: [],
+    selectedMesh: [],
+    modelList: [],
+    modelSize: 0,
+    loadedModel: 0,
+  };
 
   constructor(divElement: HTMLDivElement) {
     super(divElement);
@@ -79,7 +83,7 @@ export class Three3d extends ThreeObj {
     return renderer;
   }
 
-  initControls(): Controls<OrbitControls> {
+  initControls(): OrbitControls {
     return new OrbitControls(this.camera, this.renderer.domElement);
   }
 
@@ -133,7 +137,8 @@ export class Three3d extends ThreeObj {
 
     this.camera = newCamera;
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.modelList = models;
+
+    this.extraParams.modelList = models;
     //关闭掉进度，因为已经没模型可以加载了
 
     if (models.length === 0) {
@@ -141,7 +146,7 @@ export class Three3d extends ThreeObj {
       return;
     }
     models.forEach((model: GlbModel) => {
-      this.modelSize += model.userData.modelTotal;
+      this.extraParams.modelSize += model.userData.modelTotal;
       this.loadModelByUrl(model);
     });
   }
@@ -155,9 +160,9 @@ export class Three3d extends ThreeObj {
         const group = getG2(model, gltf, this.scene);
         enableShadow(group, this.scene);
         this.scene.add(group);
-        this.loadedModel += model.userData.modelTotal;
+        this.extraParams.loadedModel += model.userData.modelTotal;
 
-        if (this.loadedModel === this.modelSize) {
+        if (this.extraParams.loadedModel === this.extraParams.modelSize) {
           this.loadedModelsEnd();
           this.onLoadProgress(100);
         }
@@ -166,17 +171,20 @@ export class Three3d extends ThreeObj {
         model.userData.modelLoaded = xhr.loaded;
         let _loadedModel = 0,
           progress = 0;
-        this.modelList.forEach((model: GlbModel) => {
+        this.extraParams.modelList.forEach((model: GlbModel) => {
           const { modelLoaded } = model.userData;
           _loadedModel += modelLoaded;
 
           progress = parseFloat(
-            ((_loadedModel / this.modelSize) * 100).toFixed(2)
+            ((_loadedModel / this.extraParams.modelSize) * 100).toFixed(2)
           );
         });
         //console.log("progress", progress);
 
         this.onLoadProgress(progress);
+        if (progress >= 100) {
+          this.loadedModelsEnd();
+        }
       },
       (error) => {
         this.onLoadError(error);
@@ -233,9 +241,7 @@ export class Three3d extends ThreeObj {
     }
   }
 
-  loadedModelsEnd(): void {
-    this.runJavascript();
-  }
+  loadedModelsEnd(): void {}
   onLoadProgress(_process: number) {}
   onLoadError(_error: unknown) {}
 

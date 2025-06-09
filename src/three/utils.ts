@@ -11,7 +11,7 @@ import {
   VectorKeyframeTrack,
   WebGLRenderer,
 } from "three";
-import { Context116, GlbModel, RecordItem, UserDataType } from "../app/type";
+import { GlbModel, RecordItem, UserDataType } from "../app/type";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import { GLTF, GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
@@ -19,12 +19,8 @@ import axios from "../app/http";
 import { createCss2dLabel, createCss3dLabel } from "./factory3d";
 import { enableShadow, setTextureBackground } from "./common3d";
 import { TourWindow } from "../app/MyContext";
-import {
-  enableScreenshot,
-  Parameters3d,
-  setEnableScreenshot,
-} from "./config3d";
-import { runScript } from "./scriptDev";
+import { Parameters3d } from "./config3d";
+
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 
 import { MarkLabel } from "../viewer3d/label/MarkLabel";
@@ -435,38 +431,6 @@ export function loadModelByUrl(
       getError(error);
     }
   );
-}
-
-export function finishLoadExecute(
-  context: Context116,
-
-  callBack?: (context: Context116) => void
-) {
-  const { javascript, config3d } = context.getScene().userData as SceneUserData;
-  if (enableScreenshot.enable) {
-    setEnableScreenshot(true);
-  }
-  const { useComposer } = config3d;
-  if (useComposer) {
-    // initPostProcessing();
-  }
-  if (javascript) {
-    // 使用类型正确的 context 调用方法
-    // 这里的 context 需要根据实际情况修改类型为 Context116 或正确的类型定义;
-    const { getScene, getControls, getCamera } = context;
-
-    getScene();
-    getControls();
-    getCamera();
-
-    if (callBack) {
-      callBack(context);
-    }
-    eval(javascript);
-  }
-  if (import.meta.env.MODE === "development") {
-    runScript(context);
-  }
 }
 
 export function getCardBackgroundUrl(cardBackgroundUrl: string) {

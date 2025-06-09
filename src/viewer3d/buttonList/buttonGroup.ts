@@ -1,9 +1,5 @@
-import { Scene } from "three";
-import {
-  ActionItemMap,
-  CustomButtonListType,
-  CustomButtonType,
-} from "../../app/type";
+import { Scene, Vector3 } from "three";
+import { ActionItemMap, CustomButtonType } from "../../app/type";
 
 import { createGroupIfNotExist } from "../../three/utils";
 import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
@@ -14,7 +10,6 @@ import {
   getAll,
 } from "../../three/init3dViewer";
 
-import { getScene as editorScene } from "../../three/init3dEditor";
 import {
   _roamIsRunning,
   animateDRAWER,
@@ -29,7 +24,7 @@ import {
 
 import { hasValueString } from "./utils";
 import { LabelInfoPanelController } from "../label/LabelInfoPanelController";
-import { SceneUserData } from "../../three/Three3dConfig";
+import { CustomButtonList, SceneUserData } from "../../three/Three3dConfig";
 import { editorInstance } from "../../three/EditorInstance";
 
 function getActionItemByMap(
@@ -40,6 +35,7 @@ function getActionItemByMap(
     item.data = {
       isSelected: false,
       isRunning: false,
+      cameraPosition: new Vector3(0, 0, 0),
     };
   }
   return item;
@@ -67,6 +63,11 @@ export function generateToggleButtonGroup(
           showButton: true,
           isClick: false,
           groupCanBeRaycast: false,
+          data: {
+            isSelected: false,
+            isRunning: false,
+            cameraPosition: new Vector3(0, 0, 0),
+          },
         },
         customButtonType
       )
@@ -85,6 +86,11 @@ export function generateToggleButtonGroup(
                 showButton: true,
                 isClick: false,
                 groupCanBeRaycast: false,
+                data: {
+                  isSelected: false,
+                  isRunning: false,
+                  cameraPosition: new Vector3(0, 0, 0),
+                },
               },
               customButtonType
             )
@@ -116,6 +122,11 @@ export function generateToggleButtonGroup(
                   showButton: true,
                   isClick: false,
                   groupCanBeRaycast: false,
+                  data: {
+                    isSelected: false,
+                    isRunning: false,
+                    cameraPosition: new Vector3(0, 0, 0),
+                  },
                 },
                 customButtonType
               )
@@ -147,21 +158,10 @@ export function resetListGroupIsClick(listGroup: ActionItemMap[]) {
 // 获取切换按钮组
 export function getToggleButtonGroup(): ActionItemMap[] {
   const { scene } = editorInstance.getEditor();
-  const customButtonList = scene.userData
-    .customButtonList as CustomButtonListType;
-
-  if (!customButtonList.toggleButtonGroup) {
-    return [];
-  }
+  const customButtonList = scene.userData.customButtonList as CustomButtonList;
   const { listGroup, type } = customButtonList.toggleButtonGroup;
   return listGroup
     .map((item: ActionItemMap) => {
-      const { showButton } = item;
-
-      if (!showButton) {
-        return undefined;
-      }
-
       if (type === "TOGGLE") {
         return animateTOGGLE(item, customButtonList);
       }
@@ -173,7 +173,7 @@ export function getToggleButtonGroup(): ActionItemMap[] {
         return animateDRAWER(item, customButtonList);
       }
     })
-    .filter((item) => item !== undefined);
+    .filter((item) => item !== undefined) as ActionItemMap[];
 }
 
 //生成漫游动画按钮组
@@ -191,6 +191,11 @@ export function generateRoamButtonGroup() {
         showButton: true,
         isClick: false,
         groupCanBeRaycast: false,
+        data: {
+          isSelected: false,
+          isRunning: false,
+          cameraPosition: new Vector3(0, 0, 0),
+        },
       });
     });
   }
@@ -203,7 +208,7 @@ export function getRoamListByRoamButtonMap(): ActionItemMap[] {
   const data = scene.userData as SceneUserData;
 
   const { roamButtonGroup } = data.customButtonList as {
-    roamButtonGroup?: CustomButtonListType["roamButtonGroup"];
+    roamButtonGroup?: CustomButtonList["roamButtonGroup"];
   };
   if (!roamButtonGroup) {
     return [];
@@ -211,34 +216,28 @@ export function getRoamListByRoamButtonMap(): ActionItemMap[] {
 
   const { listGroup } = roamButtonGroup;
 
-  return listGroup
-    .map((item: ActionItemMap) => {
-      const { NAME_ID, showName, showButton } = item;
-      if (!showButton) {
-        return undefined;
-      }
+  return listGroup.map((item: ActionItemMap) => {
+    const { NAME_ID, showName } = item;
 
-      return {
-        showName: showName,
-        NAME_ID: NAME_ID,
-        handler: (state: string) => {
-          if (state.includes("_START")) {
-            roamAnimation(true);
-          }
-          if (state.includes("_STOP")) {
-            roamAnimation(false);
-            cameraBackHome(getCamera(), getControls(), 1000);
-          }
-          const customButtonListType =
-            data.customButtonList as CustomButtonListType;
+    return {
+      showName: showName,
+      NAME_ID: NAME_ID,
+      handler: (state: string) => {
+        if (state.includes("_START")) {
+          roamAnimation(true);
+        }
+        if (state.includes("_STOP")) {
+          roamAnimation(false);
+          cameraBackHome(getCamera(), getControls(), 1000);
+        }
+        const customButtonListType = data.customButtonList as CustomButtonList;
 
-          showModelBackHome(customButtonListType);
-          stretchModelBackHome(customButtonListType);
-          drawerBackHome(customButtonListType);
-        },
-      } as ActionItemMap;
-    })
-    .filter((item): item is ActionItemMap => item !== undefined); // 过滤掉 undefined 值，并做类型保护
+        showModelBackHome(customButtonListType);
+        stretchModelBackHome(customButtonListType);
+        drawerBackHome(customButtonListType);
+      },
+    } as ActionItemMap;
+  });
 }
 
 export function roamAnimation(isRunning: boolean) {
@@ -247,7 +246,7 @@ export function roamAnimation(isRunning: boolean) {
   // 获取用户数据并进行类型断言
 
   const { customButtonList } = scene.userData as {
-    customButtonList?: CustomButtonListType;
+    customButtonList?: CustomButtonList;
   };
 
   // 进行空值检查
@@ -271,6 +270,11 @@ export function generatePanelControllerButtonGroup() {
     showButton: true,
     isClick: false,
     groupCanBeRaycast: false,
+    data: {
+      isSelected: false,
+      isRunning: false,
+      cameraPosition: new Vector3(0, 0, 0),
+    },
   });
   panelControllerButtonGroup.push({
     showName: "收起",
@@ -278,6 +282,11 @@ export function generatePanelControllerButtonGroup() {
     showButton: true,
     isClick: false,
     groupCanBeRaycast: false,
+    data: {
+      isSelected: false,
+      isRunning: false,
+      cameraPosition: new Vector3(0, 0, 0),
+    },
   });
   return panelControllerButtonGroup;
 }
@@ -294,30 +303,25 @@ export function getPanelControllerButtonGroup(): ActionItemMap[] {
   const data = getScene().userData as SceneUserData;
 
   const { panelControllerButtonGroup } =
-    data.customButtonList as CustomButtonListType;
+    data.customButtonList as CustomButtonList;
   if (!panelControllerButtonGroup) {
     return [];
   }
   const { listGroup } = panelControllerButtonGroup;
 
-  return listGroup
-    .map((item: ActionItemMap) => {
-      const { NAME_ID, showButton } = item;
-      if (!showButton) {
-        return undefined;
-      }
+  return listGroup.map((item: ActionItemMap) => {
+    const { NAME_ID } = item;
 
-      return {
-        ...item, // 保留原有的属性
-        handler: () => {
-          if (NAME_ID === "expandLabelInfo") {
-            panelController?.expandLabelInfo(); // 调用 expandLabelInfo 方法
-          }
-          if (NAME_ID === "foldLabelInfo") {
-            panelController?.foldLabelInfo(); // 调用 foldLabelInfo 方法
-          }
-        },
-      } as ActionItemMap; // 显式类型断言
-    })
-    .filter((item): item is ActionItemMap => item !== undefined);
+    return {
+      ...item, // 保留原有的属性
+      handler: () => {
+        if (NAME_ID === "expandLabelInfo") {
+          panelController?.expandLabelInfo(); // 调用 expandLabelInfo 方法
+        }
+        if (NAME_ID === "foldLabelInfo") {
+          panelController?.foldLabelInfo(); // 调用 foldLabelInfo 方法
+        }
+      },
+    } as ActionItemMap; // 显式类型断言
+  });
 }

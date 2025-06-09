@@ -10,10 +10,13 @@ import {
 import {
   ActionItemMap,
   APP_COLOR,
-  CustomButtonListType,
   CustomButtonType,
 } from "../../../../app/type";
 import Icon from "../../Icon";
+import {
+  CustomButtonList,
+  customButtonListInit,
+} from "../../../../three/Three3dConfig";
 
 export default function UiButtonEditor({
   value,
@@ -22,20 +25,19 @@ export default function UiButtonEditor({
   value: string;
   setValue: (value: string) => void;
 }) {
-  let customButtonList: CustomButtonListType | null = null;
+  let customButtonList: CustomButtonList = customButtonListInit;
   try {
     // 尝试解析 JSON 字符串
     customButtonList = JSON.parse(value);
+    console.log("解析JSON 字符串", customButtonList);
   } catch (error) {
     console.error("解析JSON 字符串", error);
   }
-  if (customButtonList === null) {
-    return null; // 返回 null 避免潜在警告
-  }
-  const toggleButtonGroup = customButtonList.toggleButtonGroup?.listGroup;
-  const roamButtonGroup = customButtonList.roamButtonGroup?.listGroup;
+
+  const toggleButtonGroup = customButtonList.toggleButtonGroup.listGroup;
+  const roamButtonGroup = customButtonList.roamButtonGroup.listGroup;
   const panelControllerButtonGroup =
-    customButtonList.panelControllerButtonGroup?.listGroup;
+    customButtonList.panelControllerButtonGroup.listGroup;
 
   // 更新按钮组数据的通用函数
   function updateButtonGroup(
@@ -67,10 +69,10 @@ export default function UiButtonEditor({
   ) {
     return (
       <>
-        {buttonGroup?.length > 0 &&
-          getBadgeByType(customButtonList?.[buttonGroupKey]?.type || "TOGGLE")}
+        {buttonGroup.length > 0 &&
+          getBadgeByType(customButtonList[buttonGroupKey].type || "TOGGLE")}
         <ListGroup horizontal className="mt-2 d-flex flex-wrap">
-          {buttonGroup?.map((item, index) => {
+          {buttonGroup.map((item, index) => {
             return (
               <ListGroupItem key={index} style={{ padding: 0, border: 0 }}>
                 <InputGroup>
@@ -199,11 +201,11 @@ export default function UiButtonEditor({
   }
 
   return (
-    <>
+    <div style={{ minHeight: "60vh" }}>
       {/* {canBeSelectedDiv(canBeSelectedGroup)} */}
       {buttonGroupDiv(toggleButtonGroup, "toggleButtonGroup")}
       {buttonGroupDiv(roamButtonGroup, "roamButtonGroup")}
       {buttonGroupDiv(panelControllerButtonGroup, "panelControllerButtonGroup")}
-    </>
+    </div>
   );
 }

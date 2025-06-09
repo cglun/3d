@@ -5,11 +5,15 @@ import { monaco } from "react-monaco-editor";
 import ModalConfirm3d from "../../ModalConfirm3d";
 import { useUpdateScene } from "../../../../app/hooks";
 import { getThemeByScene } from "../../../../app/utils";
-import { APP_COLOR, CustomButtonListType } from "../../../../app/type";
+import { APP_COLOR } from "../../../../app/type";
 import UiButtonEditor from "./UiButtonEditor";
 import Toast3d from "../../Toast3d";
 import Icon from "../../Icon";
 import { editorInstance } from "../../../../three/EditorInstance";
+import {
+  CustomButtonList,
+  customButtonListInit,
+} from "../../../../three/Three3dConfig";
 
 interface CodeEditorProps {
   language?: string;
@@ -138,17 +142,14 @@ const CodeEditor = (props: CodeEditorProps) => {
           defaultActiveKey="home"
           id="uncontrolled-tab-example"
           onSelect={() => {
-            let customButtonList: CustomButtonListType | null = null;
+            let customButtonList: CustomButtonList = customButtonListInit;
             try {
               // 尝试解析 JSON 字符串
-              customButtonList = JSON.parse(value) as CustomButtonListType;
+              customButtonList = JSON.parse(value) as CustomButtonList;
             } catch (error) {
               // 解析失败，打印错误信息
               console.error("JSON 解析失败:", error);
               Toast3d("JSON 解析失败", "错误", APP_COLOR.Danger);
-            }
-            if (customButtonList === null) {
-              return;
             }
 
             formatCode();

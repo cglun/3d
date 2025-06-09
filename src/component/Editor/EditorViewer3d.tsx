@@ -9,9 +9,7 @@ import {
   ProgressBar,
   Row,
 } from "react-bootstrap";
-
 import { TransformControlsMode } from "three/addons/controls/TransformControls.js";
-
 import { Object3D, Vector3 } from "three";
 import { getThemeByScene } from "../../app/utils";
 import { getProjectData } from "../../three/utils";
@@ -77,9 +75,8 @@ function EditorViewer3d() {
 
           // 在模型加载完成后更新场景
           editor.loadedModelsEnd = () => {
-            editor.runJavascript();
             editor.transformControl = editor.initTransformControl();
-
+            editor.runJavascript();
             updateScene(editor.scene.clone());
             updateCamera(editor.camera.clone());
             setTimeout(() => {
@@ -100,7 +97,7 @@ function EditorViewer3d() {
                   show: false,
                 },
               });
-            }, 2116);
+            }, 1998);
 
             document.title = `【id:${item.id}】`;
           };
@@ -112,6 +109,17 @@ function EditorViewer3d() {
                 show: true,
               },
             });
+            if (progress === 100) {
+              ModalConfirm3d({
+                title: "提示",
+                body: <AlertBase text={"加载完成"} type={APP_COLOR.Success} />,
+                confirmButton: {
+                  show: false,
+                },
+              });
+              updateScene(editor.scene.clone());
+              updateCamera(editor.camera.clone());
+            }
           };
 
           editor.onLoadError = (error: string) => {

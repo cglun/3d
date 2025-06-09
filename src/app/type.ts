@@ -105,14 +105,10 @@ export interface ActionItemMap {
   isClick: boolean; //是否点击, 改变选中状态
   groupCanBeRaycast: boolean; //射线检测是否选中组的children
   handler?: (nameId?: string) => void;
-  data?: {
+  data: {
     isSelected: boolean;
-    isRunning?: boolean;
-    cameraPosition?: {
-      x: number;
-      y: number;
-      z: number;
-    };
+    isRunning: boolean;
+    cameraPosition: Vector3;
   };
 }
 // 使用 = 定义类型，并且明确成员类型为字符串字面量类型
@@ -122,39 +118,6 @@ export type CustomButtonType =
   | "STRETCH"
   | "ROAM"
   | "PANEL_CONTROLLER";
-interface UserSetting_feiqile {
-  modelOffset?: {
-    x: number;
-    y: number;
-    z: number;
-  };
-  cameraOffset?: {
-    x: number;
-    y: number;
-    z: number;
-  };
-  animationTime?: number;
-  speed?: number;
-}
-
-export type CustomButtonListType_feiqile = {
-  toggleButtonGroup: {
-    name: string;
-    type: CustomButtonType;
-    listGroup: ActionItemMap[];
-  };
-  roamButtonGroup: {
-    name: string;
-    type: CustomButtonType;
-
-    listGroup: ActionItemMap[];
-  };
-  panelControllerButtonGroup: {
-    name: string;
-    type: CustomButtonType;
-    listGroup: ActionItemMap[];
-  };
-};
 
 // 定义 item 的类型
 export type TourItem = {
@@ -169,7 +132,7 @@ export interface ConfirmButton {
 }
 
 // 定义 context 的类型
-export interface Context116 {
+export interface Context116_XX {
   getScene: () => Scene; // 返回 Scene 类型
   getControls: () => OrbitControls; // 返回 OrbitControls 类型
   getCamera: () => PerspectiveCamera | OrthographicCamera; // 返回 PerspectiveCamera 类型

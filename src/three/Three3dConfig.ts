@@ -1,5 +1,10 @@
-import { Object3D, Object3DEventMap, Vector3 } from "three";
-import { ActionItemMap, APP_COLOR, CustomButtonType } from "../app/type";
+import { Mesh, Object3D, Object3DEventMap, TubeGeometry, Vector3 } from "three";
+import {
+  ActionItemMap,
+  APP_COLOR,
+  CustomButtonType,
+  GlbModel,
+} from "../app/type";
 export const userCssStyle = {
   cardWidth: 130,
   cardHeight: 130,
@@ -19,7 +24,12 @@ export const userCssStyle = {
   opacity: 1,
 };
 export type UserCssStyle = typeof userCssStyle;
-export interface CustomButtonListType {
+export interface CustomButtonList {
+  toggleButtonGroup: CustomButtonItem;
+  roamButtonGroup: CustomButtonItem;
+  panelControllerButtonGroup: CustomButtonItem;
+}
+export interface CustomButtonItem {
   name: string;
   type: CustomButtonType;
   userSetting: UserSetting;
@@ -44,9 +54,9 @@ export interface SceneUserData {
   };
   javascript: string;
   customButtonList: {
-    toggleButtonGroup: CustomButtonListType;
-    roamButtonGroup: CustomButtonListType;
-    panelControllerButtonGroup: CustomButtonListType;
+    toggleButtonGroup: CustomButtonItem;
+    roamButtonGroup: CustomButtonItem;
+    panelControllerButtonGroup: CustomButtonItem;
   };
   APP_THEME: {
     themeColor: APP_COLOR;
@@ -61,9 +71,47 @@ type UserSetting = typeof userSettingInit;
 const userSettingInit = {
   modelOffset: new Vector3(0, 0, 0),
   cameraOffset: new Vector3(0, 0, 0),
-  animationTime: new Vector3(0, 0, 0),
+  animationTime: 100,
   speed: 1,
 };
+export const customButtonListInit = {
+  toggleButtonGroup: {
+    name: "切换",
+    type: "TOGGLE" as CustomButtonType,
+    listGroup: [],
+    userSetting: { ...userSettingInit },
+  },
+  roamButtonGroup: {
+    name: "漫游",
+    type: "ROAM" as CustomButtonType,
+    listGroup: [],
+    userSetting: { ...userSettingInit },
+  },
+  panelControllerButtonGroup: {
+    name: "面板",
+    type: "PANEL_CONTROLLER" as CustomButtonType,
+    listGroup: [],
+    userSetting: { ...userSettingInit },
+  },
+};
+export interface ExtraParams {
+  actionMixerList: [];
+  mixer: [];
+  selectedMesh: Mesh[];
+  modelList: GlbModel[];
+  modelSize: number;
+  loadedModel: number;
+}
+export interface RoamLine {
+  roamIsRunning: boolean;
+  direction: Vector3;
+  biNormal: Vector3;
+  normal: Vector3;
+  position: Vector3;
+  lookAt: Vector3;
+  tubeGeometry: TubeGeometry;
+  speed: number;
+}
 const sceneUserData: SceneUserData = {
   isSelected: false,
   fixedCameraPosition: new Vector3(5, 6, 7),
@@ -82,26 +130,7 @@ const sceneUserData: SceneUserData = {
     asBackground: true,
   },
   javascript: "",
-  customButtonList: {
-    toggleButtonGroup: {
-      name: "切换",
-      type: "TOGGLE" as CustomButtonType,
-      listGroup: [],
-      userSetting: { ...userSettingInit },
-    },
-    roamButtonGroup: {
-      name: "漫游",
-      type: "ROAM" as CustomButtonType,
-      listGroup: [],
-      userSetting: { ...userSettingInit },
-    },
-    panelControllerButtonGroup: {
-      name: "面板",
-      type: "PANEL_CONTROLLER" as CustomButtonType,
-      listGroup: [],
-      userSetting: { ...userSettingInit },
-    },
-  },
+  customButtonList: { ...customButtonListInit },
   APP_THEME: {
     themeColor: APP_COLOR.Dark, // 若 APP_COLOR 有具体结构，需按需填充
     iconFill: "",

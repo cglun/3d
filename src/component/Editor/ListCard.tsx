@@ -188,6 +188,8 @@ function RecordItemCard(props: Props) {
                   }
                   const editor = editorInstance.getEditor();
                   editor.addOneModel(item);
+                  editor.loadedModelsEnd();
+                  updateScene(editor.scene);
                 }}
               >
                 {cardBody}

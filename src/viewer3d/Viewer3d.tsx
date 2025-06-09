@@ -1,15 +1,8 @@
-import { RefObject, useReducer } from "react";
+import { useReducer } from "react";
 import { useEffect, useRef, useState } from "react";
 import { Container, ProgressBar } from "react-bootstrap";
-import {
-  ActionItemMap,
-  APP_COLOR,
-  Context116,
-  CustomButtonListType,
-  GlbModel,
-  RecordItem,
-} from "../app/type";
-import { Object3D, Vector2 } from "three";
+import { APP_COLOR, RecordItem } from "../app/type";
+
 import Toast3d from "../component/common/Toast3d";
 import {
   initEditorCamera,
@@ -19,21 +12,9 @@ import {
 } from "../app/MyContext";
 import ModalTour from "../component/common/ModalTour";
 import { reducerCamera, reducerScene, reducerTour } from "../app/reducer";
-import { getCamera, getScene, getDivElement } from "../three/init3dViewer";
 import { getProjectData } from "../three/utils";
-
-import InfoPanel from "./InfoPanel";
-import {
-  getPanelControllerButtonGroup,
-  getRoamListByRoamButtonMap,
-  getToggleButtonGroup,
-  setPanelController,
-} from "./buttonList/buttonGroup";
-import { LabelInfoPanelController } from "./label/LabelInfoPanelController";
 import { viewerInstance } from "../three/ViewerInstance";
-
 import { Three3dViewer } from "../three/Three3dViewer";
-import { If } from "three/tsl";
 
 /**
  * 其他应用可以调用此组件，
@@ -109,8 +90,11 @@ export default function Viewer3d({
   }
 
   function setLoadProgress(viewer: Three3dViewer) {
+    debugger;
     // 在模型加载完成后更新场景
     viewer.loadedModelsEnd = () => {
+      console.log("模型加载完成==========");
+
       if (item.des === "Scene") {
         viewer.runJavascript();
       }
@@ -127,7 +111,8 @@ export default function Viewer3d({
 
     if (showProgress) {
       viewer.onLoadProgress = (progress: number) => {
-        debugger;
+        console.log("模型加载完成==========");
+
         setProgress(progress);
       };
     }
