@@ -7,6 +7,8 @@ import {
   Object3DEventMap,
   Clock,
   PCFSoftShadowMap,
+  Vector3,
+  TubeGeometry,
 } from "three";
 import TWEEN from "three/addons/libs/tween.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -19,8 +21,9 @@ import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 
 import { runScript } from "./scriptDev";
 import { enableShadow } from "./common3d";
-import userData, { ExtraParams } from "./Three3dConfig";
+import userData, { ExtraParams, SceneUserData } from "./Three3dConfig";
 import { createNewScene } from "./factory3d";
+import { Curves } from "three/examples/jsm/Addons.js";
 
 export class Three3d extends ThreeObj {
   scene: Scene;
@@ -36,6 +39,16 @@ export class Three3d extends ThreeObj {
     modelList: [],
     modelSize: 0,
     loadedModel: 0,
+    roamLine: {
+      roamIsRunning: false,
+      direction: new Vector3(),
+      biNormal: new Vector3(),
+      normal: new Vector3(),
+      position: new Vector3(),
+      lookAt: new Vector3(),
+      speed: 1,
+      tubeGeometry: new TubeGeometry(new Curves.GrannyKnot(), 100, 2, 3, true),
+    },
   };
 
   constructor(divElement: HTMLDivElement) {
@@ -220,10 +233,49 @@ export class Three3d extends ThreeObj {
   }
 
   animate(): void {
-    this.renderer.render(this.scene, this.camera);
-    const delta = new Clock().getDelta();
-    this.controls.update(delta);
-    TWEEN.update();
+    // this.renderer.render(this.scene, this.camera);
+    // const delta = new Clock().getDelta();
+    // this.controls.update(delta);
+    // TWEEN.update();
+
+    const userData = this.scene.userData as SceneUserData;
+    const { css2d, css3d, useTween, FPS, useKeyframe, useComposer } =
+      userData.config3d;
+
+    const { mixer, roamLine } = this.extraParams;
+    const T = this.clock.getDelta();
+    this.timeS = this.timeS + T;
+    let renderT = 1 / FPS;
+    // 如果截图,帧率拉满
+
+    if (this.timeS >= renderT) {
+      if (css2d) {
+        //this.renderer.render(this.scene, this.camera);
+      }
+      if (css3d) {
+        //extra3d.labelRenderer3d.render(scene, camera);
+      }
+      if (useTween) {
+        TWEEN.update();
+      }
+      // if (useKeyframe) {
+      //   mixer.forEach((_mixer) => {
+      //     _mixer.update(T);
+      //   });
+      // }
+
+      this.controls.update();
+      // if (roamLine) {
+      //   manyou(roamLine, camera);
+      // }
+
+      this.renderer.render(this.scene, this.camera);
+
+      // if (this.composer && useComposer) {
+      //   composer.render(); // 使用 composer 进行渲染
+      // }
+      this.timeS = 0;
+    }
   }
   runJavascript(): void {
     //阴影的设置

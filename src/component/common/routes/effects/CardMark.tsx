@@ -2,10 +2,9 @@ import ListGroup from "react-bootstrap/esm/ListGroup";
 import { CardNumber } from "./CardNumber";
 import { CardText } from "./CardText";
 import { UserStyles } from "../../../../app/type";
-import { getScene } from "../../../../three/init3dEditor";
 import { useUpdateScene } from "../../../../app/hooks";
 import { getCardBackgroundUrl } from "../../../../three/utils";
-import { SceneUserData } from "../../../../three/Three3dConfig";
+import { editorInstance } from "../../../../three/EditorInstance";
 
 export default function CardMark({
   userDataStyles,
@@ -14,12 +13,13 @@ export default function CardMark({
 }) {
   const { updateScene } = useUpdateScene();
   function updateValue(key: keyof UserStyles, val: number | string) {
-    const _userData = getScene().userData as SceneUserData;
+    const { scene } = editorInstance.getEditor();
+    const { userData } = scene;
     if (key === "cardBackgroundColor") {
-      _userData.userCssStyleTopCard.cardBackgroundUrl = "";
+      userData.userCssStyle.markLabel.cardBackgroundUrl = "";
     }
-    (_userData.userCssStyleTopCard as any)[key] = val;
-    updateScene(getScene());
+    userData.userCssStyle.markLabel[key] = val;
+    updateScene(scene);
   }
 
   const {

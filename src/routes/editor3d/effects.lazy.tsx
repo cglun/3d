@@ -16,7 +16,10 @@ import { getButtonColor, getThemeByScene } from "../../app/utils";
 
 import CardTop from "../../component/common/routes/effects/CardTop";
 import CardMark from "../../component/common/routes/effects/CardMark";
-import { SceneUserData } from "../../three/Three3dConfig";
+import sceneUserData, {
+  SceneUserData,
+  userSettingInit,
+} from "../../three/Three3dConfig";
 
 export const Route = createLazyFileRoute("/editor3d/effects")({
   component: RouteComponent,
@@ -29,8 +32,10 @@ function RouteComponent() {
   const [show, setShow] = useState(false);
 
   const userData = scene.userData as SceneUserData;
-  const userDataStylesTopCard = userData.userCssStyleTopCard;
-  const userDataStylesMark = userData.userCssStyleMarkLabel;
+
+  const { topCard, markLabel } =
+    userData.userCssStyle || sceneUserData.userCssStyle;
+
   useEffect(() => {
     setShow(true);
   }, []);
@@ -42,13 +47,10 @@ function RouteComponent() {
   if (!userData.config3d?.useComposer) {
     return <AlertBase text={"请到设置中开启合成"} />;
   }
-  if (userDataStylesTopCard === undefined || userDataStylesMark === undefined) {
-    return;
-  }
 
   function handleClose() {
     // const _userData = getScene().userData as SceneUserData;
-    // _userData.userCssStyleTopCard = userDataStylesTopCard;
+    // _userData.userCssStyleTopCard = topCard;
     setShow(false);
   }
 
@@ -74,10 +76,10 @@ function RouteComponent() {
           <Modal.Body style={{ padding: 0, minHeight: "30px" }}>
             <Tabs defaultActiveKey="home" id="uncontrolled-tab-example">
               <Tab eventKey="home" title="顶牌设置">
-                <CardTop userDataStyles={userDataStylesTopCard} />
+                <CardTop userDataStyles={topCard} />
               </Tab>
               <Tab eventKey="profile" title="标签设置">
-                <CardMark userDataStyles={userDataStylesMark} />
+                <CardMark userDataStyles={markLabel} />
               </Tab>
             </Tabs>
           </Modal.Body>

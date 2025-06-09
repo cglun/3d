@@ -36,6 +36,7 @@ export interface CustomButtonItem {
   listGroup: ActionItemMap[];
 }
 export interface SceneUserData {
+  projectId: number;
   isSelected: boolean;
   fixedCameraPosition: Vector3;
   config3d: {
@@ -47,7 +48,7 @@ export interface SceneUserData {
     FPS: number;
     useComposer: boolean;
   };
-  projectId: number;
+
   backgroundHDR: {
     name: string;
     asBackground: boolean;
@@ -63,12 +64,15 @@ export interface SceneUserData {
     iconFill: string;
     sceneCanSave: boolean;
   };
-  userCssStyleTopCard: UserCssStyle;
-  userCssStyleMarkLabel: UserCssStyle;
+
+  userCssStyle: {
+    topCard: UserCssStyle;
+    markLabel: UserCssStyle;
+  };
   selected3d: Object3D<Object3DEventMap> | null;
 }
 type UserSetting = typeof userSettingInit;
-const userSettingInit = {
+export const userSettingInit = {
   modelOffset: new Vector3(0, 0, 0),
   cameraOffset: new Vector3(0, 0, 0),
   animationTime: 100,
@@ -101,6 +105,7 @@ export interface ExtraParams {
   modelList: GlbModel[];
   modelSize: number;
   loadedModel: number;
+  roamLine?: RoamLine;
 }
 export interface RoamLine {
   roamIsRunning: boolean;
@@ -113,6 +118,7 @@ export interface RoamLine {
   speed: number;
 }
 const sceneUserData: SceneUserData = {
+  projectId: -1,
   isSelected: false,
   fixedCameraPosition: new Vector3(5, 6, 7),
   config3d: {
@@ -124,7 +130,7 @@ const sceneUserData: SceneUserData = {
     FPS: 30, //帧率
     useComposer: true,
   },
-  projectId: -1,
+
   backgroundHDR: {
     name: "venice_sunset_1k.hdr",
     asBackground: true,
@@ -136,8 +142,10 @@ const sceneUserData: SceneUserData = {
     iconFill: "",
     sceneCanSave: false,
   },
-  userCssStyleTopCard: { ...userCssStyle }, // 若 UserStyles 有具体结构，需按需填充
-  userCssStyleMarkLabel: { ...userCssStyle }, // 若 UserStyles 有具体结构，需按需填充
+  userCssStyle: {
+    topCard: { ...userCssStyle },
+    markLabel: { ...userCssStyle },
+  }, // 若 UserStyles 有具体结构，需按需填充
   selected3d: null, // 若 Selected3d 有具体结构，需按需填充
 };
 export default sceneUserData;

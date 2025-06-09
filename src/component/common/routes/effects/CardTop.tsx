@@ -6,7 +6,7 @@ import { CardText } from "./CardText";
 import { useUpdateScene } from "../../../../app/hooks";
 import { getCardBackgroundUrl } from "../../../../three/utils";
 import { editorInstance } from "../../../../three/EditorInstance";
-import { SceneUserData, UserCssStyle } from "../../../../three/Three3dConfig";
+import { UserCssStyle } from "../../../../three/Three3dConfig";
 
 export default function CardTop({
   userDataStyles,
@@ -14,17 +14,15 @@ export default function CardTop({
   userDataStyles: UserCssStyle;
 }) {
   const { updateScene } = useUpdateScene();
-  function getScene() {
-    return editorInstance.getEditor().scene;
-  }
+
   function updateValue(key: keyof UserCssStyle, val: number | string) {
-    const _userData = editorInstance.getEditor().scene
-      .userData as SceneUserData;
+    const { scene } = editorInstance.getEditor();
+    const { userData } = scene;
     if (key === "cardBackgroundColor") {
-      _userData.userCssStyleTopCard.cardBackgroundUrl = "";
+      userData.userCssStyle.topCard.cardBackgroundUrl = "";
     }
-    (_userData.userCssStyleTopCard as any)[key] = val;
-    updateScene(getScene());
+    (userData.userCssStyle.topCard as any)[key] = val;
+    updateScene(scene);
   }
   const defaultImage3dUrl = new URL(
     "/public/static/images/box.png",
