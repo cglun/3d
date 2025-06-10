@@ -20,6 +20,7 @@ import { resetListGroupIsClick } from "../../viewer3d/buttonList/buttonGroup";
 import { LabelInfoPanelController } from "../../viewer3d/label/LabelInfoPanelController";
 import { viewerInstance } from "../../three/ViewerInstance";
 import { SceneUserData } from "../../three/Three3dConfig";
+import { createGroupIfNotExist } from "../../three/utils";
 
 // 定义响应数据的类型
 interface PageListResponse {
@@ -41,7 +42,7 @@ function RouteComponent() {
   const [panelControllerButtonList, setPanelControllerButtonList] = useState<
     ActionItemMap[]
   >([]);
-  const [controller, setController] = useState<LabelInfoPanelController>();
+  const [controller] = useState<LabelInfoPanelController>();
   const [showControllerButton, setShowControllerButton] = useState(false);
   const { scene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
@@ -54,7 +55,6 @@ function RouteComponent() {
   });
 
   useEffect(() => {
-    setEnableScreenshot(true);
     // 指定响应数据的类型
     _axios
       .post<PageListResponse>("/project/pageList/", { size: 1000 })
@@ -342,6 +342,15 @@ function RouteComponent() {
                     );
                   }
                 )}
+              <Button
+                onClick={() => {
+                  const viewer = viewerInstance.getViewer();
+                  const box = createGroupIfNotExist(viewer.scene, "A", false);
+                  viewer.outlinePass.selectedObjects = [box!];
+                }}
+              >
+                gaoliangceshi
+              </Button>
             </ButtonGroup>
           </Modal.Footer>
         </Modal>

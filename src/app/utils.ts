@@ -2,7 +2,7 @@
  * 工具类
  */
 
-import { getScene } from "../three/init3dEditor";
+import { editorInstance } from "../three/EditorInstance";
 import sceneUserData from "../three/Three3dConfig";
 
 import { APP_COLOR } from "./type";
@@ -14,10 +14,10 @@ export function getButtonColor(theme: APP_COLOR) {
 }
 
 export function setClassName(className: string): string {
-  const scene = getScene();
+  const editor = editorInstance.getEditor();
   let iconFill = "";
-  if (scene) {
-    iconFill = scene.userData.APP_THEME.iconFill;
+  if (editor) {
+    iconFill = editor.scene.userData.APP_THEME.iconFill;
   }
   return `bi bi-${className}${iconFill}`;
 }

@@ -10,7 +10,6 @@ import { base64ToBlob, blobToFile, getButtonColor } from "../../app/utils";
 import axios, { loadAssets } from "../../app/http";
 import { APP_COLOR, RecordItem } from "../../app/type";
 
-import { setEnableScreenshot } from "../../three/config3d";
 import Icon from "./Icon";
 import { editorInstance } from "../../three/EditorInstance";
 
@@ -34,9 +33,6 @@ export default function EditorForm({
   const [loadScene, setLoadScene] = useState<boolean>(false);
   useEffect(() => {
     getNewItem(_item);
-    return () => {
-      setEnableScreenshot(false);
-    };
   }, [_item, getNewItem]); // 添加 getNewItem 到依赖项数组
 
   function uploadScreenshot() {

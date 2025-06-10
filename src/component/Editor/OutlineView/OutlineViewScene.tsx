@@ -15,7 +15,6 @@ export function OutlineViewScene() {
         className={"d-flex justify-content-between"}
         style={styleBody}
         onClick={() => {
-          // object3D.userData.isSelected = !object3D.userData.isSelected;
           const { scene } = editorInstance.getEditor();
           const userData = scene.userData as SceneUserData;
           userData.selected3d = scene;

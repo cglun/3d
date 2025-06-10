@@ -8,7 +8,7 @@ import Toast3d from "../common/Toast3d";
 import EditorForm from "../common/EditorForm";
 import axios, { loadAssets } from "../../app/http";
 import { useUpdateScene } from "../../app/hooks";
-import { createNewScene } from "../../three/factory3d";
+
 import Trigger3d from "../common/Trigger3d";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import Icon from "../common/Icon";
@@ -59,10 +59,11 @@ function RecordItemCard(props: Props) {
               const editor = editorInstance.getEditor();
               const { projectId } = editor.scene.userData;
               if (item.id === projectId) {
-                const newScene = createNewScene();
-                editor.setScene(newScene);
+                // const newScene = createNewScene();
+                // editor.setScene(newScene);
+                editor.resetScene();
 
-                updateScene(newScene);
+                updateScene(editor.scene);
               }
             } else {
               Toast3d(res.data, "提示", APP_COLOR.Warning);
@@ -178,15 +179,16 @@ function RecordItemCard(props: Props) {
               <div
                 onClick={() => {
                   const pathname = location.pathname;
-
+                  const editor = editorInstance.getEditor();
                   if (item.des === "Scene") {
                     const url = `${pathname}?sceneId=${item.id}`;
+                    editor.resetScene();
                     navigate({
                       to: url,
                     });
                     return;
                   }
-                  const editor = editorInstance.getEditor();
+
                   editor.addOneModel(item);
                   editor.loadedModelsEnd();
                   updateScene(editor.scene);

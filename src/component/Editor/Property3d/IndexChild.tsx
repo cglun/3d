@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
-import { Color, Fog, Light, OrthographicCamera, Texture, Vector2 } from "three";
+import { Color, Fog, Light, OrthographicCamera, Vector2 } from "three";
 import Card from "react-bootstrap/esm/Card";
 import InputGroup from "react-bootstrap/esm/InputGroup";
 
@@ -11,7 +11,6 @@ import { Input3d } from "./Input3d";
 import { InputAttrText } from "./InputAttrText";
 import { getButtonColor, getThemeByScene } from "../../../app/utils";
 import AlertBase from "../../common/AlertBase";
-import { setTextureBackground } from "../../../three/common3d";
 
 import { APP_COLOR, SelectedObject } from "../../../app/type";
 import { InputAttrNumber } from "./InputAttrNumber";
@@ -23,12 +22,11 @@ import sceneUserData, { SceneUserData } from "../../../three/Three3dConfig";
 const step = 0.1;
 function SceneProperty() {
   const { scene, updateScene } = useUpdateScene();
-
   const { themeColor } = getThemeByScene(scene);
 
-  const _scene = editorInstance.getEditor().scene;
+  const editor = editorInstance.getEditor();
   let bgColor = "#000116";
-  const background = _scene.background as Color | Texture;
+  const background = scene.background;
   const [enableColor, setEnableColor] = useState(background instanceof Color);
 
   if (background !== null) {
@@ -37,8 +35,8 @@ function SceneProperty() {
     }
   }
   let fogColor = "#000116";
-  if (_scene.fog !== null) {
-    const fog = _scene.fog;
+  if (scene.fog !== null) {
+    const fog = scene.fog;
     fogColor = "#" + fog.color.getHexString();
   }
   function setBgColorColor() {
@@ -51,16 +49,17 @@ function SceneProperty() {
           type="color"
           value={bgColor}
           onChange={(e) => {
-            _scene.background = new Color(e.target.value);
-            _scene.environment = null;
-            updateScene(_scene);
+            editor.scene.background = new Color(e.target.value);
+            editor.scene.environment = null;
+
+            updateScene(editor.scene);
           }}
         />
       </InputGroup>
     );
   }
   function setBgColorTexture() {
-    const enableTexture = _scene.userData.backgroundHDR.asBackground;
+    const enableTexture = scene.userData.backgroundHDR.asBackground;
     return (
       <>
         <Form className="border px-2">
@@ -71,10 +70,10 @@ function SceneProperty() {
             id="custom-switch-hdr"
             checked={enableTexture}
             onChange={() => {
-              const { backgroundHDR } = _scene.userData;
+              const { backgroundHDR } = editor.scene.userData;
               backgroundHDR.asBackground = !backgroundHDR.asBackground;
-              setTextureBackground(_scene);
-              updateScene(_scene);
+              editor.setTextureBackground();
+              updateScene(editor.scene);
             }}
           />
         </Form>
@@ -85,11 +84,11 @@ function SceneProperty() {
           <Form.Select
             aria-label="Default select example"
             disabled={!enableTexture}
-            value={_scene.userData.backgroundHDR.name}
+            value={scene.userData.backgroundHDR.color}
             onChange={(e) => {
-              _scene.userData.backgroundHDR.name = e.target.value;
-              setTextureBackground(_scene);
-              updateScene(_scene);
+              editor.scene.userData.backgroundHDR.color = e.target.value;
+              editor.setTextureBackground();
+              updateScene(editor.scene);
             }}
           >
             <option value="venice_sunset_1k.hdr">环境贴图一</option>
@@ -101,7 +100,7 @@ function SceneProperty() {
           min={0}
           max={1}
           disabled={!enableTexture}
-          selected3d={_scene}
+          selected3d={editor.scene}
           attr={"backgroundBlurriness"}
           step={step}
         />
@@ -110,7 +109,7 @@ function SceneProperty() {
           min={0}
           max={1}
           disabled={!enableTexture}
-          selected3d={_scene}
+          selected3d={editor.scene}
           attr={"backgroundIntensity"}
           step={step}
         />
@@ -118,7 +117,7 @@ function SceneProperty() {
           title={"光强度"}
           min={0}
           disabled={!enableTexture}
-          selected3d={_scene}
+          selected3d={editor.scene}
           attr={"environmentIntensity"}
           step={step}
         />
@@ -137,18 +136,18 @@ function SceneProperty() {
           variant={getButtonColor(themeColor)}
           onClick={() => {
             setEnableColor(!enableColor);
-            _scene.userData.backgroundHDR = sceneUserData.backgroundHDR;
-            const { backgroundHDR } = _scene.userData;
+            editor.scene.userData.backgroundHDR = sceneUserData.backgroundHDR;
+            const { backgroundHDR } = editor.scene.userData;
             backgroundHDR.asBackground = !backgroundHDR.asBackground;
             if (!backgroundHDR.asBackground) {
-              _scene.background = new Color(bgColor);
-              _scene.environment = null;
+              editor.scene.background = new Color(bgColor);
+              editor.scene.environment = null;
             }
             if (backgroundHDR.asBackground) {
-              _scene.userData.backgroundHDR.asBackground = true;
-              setTextureBackground(_scene);
+              editor.scene.userData.backgroundHDR.asBackground = true;
+              editor.setTextureBackground();
             }
-            updateScene(_scene);
+            updateScene(editor.scene);
           }}
         >
           {enableColor ? "使用贴图" : "使用颜色"}
@@ -157,10 +156,10 @@ function SceneProperty() {
           style={{ color: styleBody.color, borderColor: styleBody.color }}
           variant={getButtonColor(themeColor)}
           onClick={() => {
-            // _scene.background = new Color("#000");
-            _scene.fog = null;
+            // scene.background = new Color("#000");
+            editor.scene.fog = null;
             Toast3d("雾气已重置");
-            updateScene(_scene);
+            updateScene(editor.scene);
           }}
         >
           重置雾气
@@ -177,26 +176,26 @@ function SceneProperty() {
           type="color"
           value={fogColor}
           onChange={(e) => {
-            if (_scene.fog === null) {
-              _scene.fog = new Fog(bgColor, 0, 116);
+            if (editor.scene.fog === null) {
+              editor.scene.fog = new Fog(bgColor, 0, 116);
             }
-            _scene.fog.color = new Color(e.target.value);
+            editor.scene.fog.color = new Color(e.target.value);
 
-            updateScene(_scene);
+            updateScene(editor.scene);
           }}
         />
       </InputGroup>
       <InputAttrNumber
         title={"雾气近端"}
         min={0}
-        selected3d={_scene.fog as Fog}
+        selected3d={editor.scene.fog as Fog}
         attr={"near"}
         step={step}
       />
       <InputAttrNumber
         title={"雾气远端"}
         min={0}
-        selected3d={_scene.fog as Fog}
+        selected3d={editor.scene.fog as Fog}
         attr={"far"}
         step={step}
       />
@@ -308,12 +307,13 @@ function CommonProperty({ selected3d }: { selected3d: SelectedObject }) {
 // 移除 typeof 关键字，并添加类型注解，这里假设使用 SelectedObject 类型
 
 export default function IndexChild() {
-  const { scene } = useUpdateScene();
-  const { selected3d } = scene.userData as SceneUserData;
+  const { selected3d } = editorInstance.getEditor().scene
+    .userData as SceneUserData;
 
-  if (selected3d === null || selected3d === undefined) {
-    return;
+  if (selected3d === null) {
+    return <AlertBase text={"空的"} type={APP_COLOR.Warning} />;
   }
+
   if (selected3d.type === "Scene") {
     return <SceneProperty />;
   }

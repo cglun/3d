@@ -1,5 +1,5 @@
 import { Object3D, Vector3 } from "three";
-import { CustomButtonListType } from "../app/type";
+import { CustomButtonList } from "../three/Three3dConfig";
 
 // 得到物体的世界坐标
 export function getObjectWorldPosition(model: Object3D) {
@@ -8,7 +8,7 @@ export function getObjectWorldPosition(model: Object3D) {
   return worldPosition;
 }
 export function getUserSetting(
-  customButtonList: CustomButtonListType,
+  customButtonList: CustomButtonList,
   type: "toggleButtonGroup" | "roamButtonGroup" = "toggleButtonGroup"
 ) {
   const userSetting = customButtonList[type].userSetting;

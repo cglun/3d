@@ -1,17 +1,25 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { Button, ButtonGroup } from "react-bootstrap";
-import { getCamera, getControls } from "../../three/init3dEditor";
-import { Mesh, MeshBasicMaterial, PerspectiveCamera, Scene } from "three";
+
+import {
+  CatmullRomCurve3,
+  Mesh,
+  MeshBasicMaterial,
+  MeshLambertMaterial,
+  Scene,
+  TubeGeometry,
+  Vector3,
+} from "three";
 import { cameraTween } from "../../three/animate";
 import Toast3d from "../../component/common/Toast3d";
 import { getButtonColor, getThemeByScene } from "../../app/utils";
 import { useUpdateScene } from "../../app/hooks";
 import { styleBody } from "../../component/Editor/OutlineView/fontColor";
 
-import { cameraBackHome } from "../../viewer3d/buttonList/animateByButton";
-
-import { getAll } from "../../three/init3dViewer";
 import { editorInstance } from "../../three/EditorInstance";
+import { SceneUserData } from "../../three/Three3dConfig";
+import { drawROAMLine } from "../../viewer3d/buttonList/animateByButton";
+import { Curves } from "three/examples/jsm/Addons.js";
 
 export const Route = createLazyFileRoute("/editor3d/test")({
   component: RouteComponent,
@@ -26,9 +34,6 @@ function RouteComponent() {
   const { useTween } = userData.config3d;
   const { themeColor } = getThemeByScene(scene);
   const btnColor = getButtonColor(themeColor);
-  function getScene() {
-    return editorInstance.getEditor().scene;
-  }
 
   return (
     <>
@@ -43,11 +48,12 @@ function RouteComponent() {
           variant={btnColor}
           disabled={!useTween}
           onClick={() => {
-            const { fixedCameraPosition } = getScene().userData;
-            const camera = editorInstance.getEditor().camera;
+            const { camera, scene } = editorInstance.getEditor();
+            const { fixedCameraPosition } = scene.userData;
+            // const camera = editorInstance.getEditor().camera;
             camera.position.set(8, 8, 8);
             cameraTween(camera, fixedCameraPosition).start();
-            console.log(getScene().userData);
+            console.log(scene.userData);
           }}
         >
           相机动画
@@ -60,17 +66,53 @@ function RouteComponent() {
           }}
           variant={btnColor}
           onClick={() => {
+            //drawROAMLine(getScene(), "漫游动画1");
             // drawROAMLine(getScene(), "漫游动画1");
-            // drawROAMLine(getScene(), "漫游动画1");
-            const a = getAll().parameters3d.roamLine.tubeGeometry;
-            getAll().parameters3d.roamLine.roamIsRunning = true;
+            //@ts-expect-error
+            const { extraParams, scene } = editorInstance.getEditor();
+            const curvePath = editorInstance
+              .getEditor()
+              .getCurveByEmptyMesh("漫游动画1");
+            const { roamLine } = extraParams;
 
-            const material = new MeshBasicMaterial({ color: 0x00ff00 });
-            // 创建网格对象
-            const tubeMesh = new Mesh(a, material);
-            // 将网格添加到场景中
-            getScene().add(tubeMesh);
-            console.log(getCamera());
+            const sampleClosedSpline = new CatmullRomCurve3([
+              new Vector3(-40, 0, -40),
+              new Vector3(40, 0, -40),
+              new Vector3(140, 0, -40),
+              new Vector3(40, 0, 40),
+              new Vector3(-40, 0, 40),
+            ]);
+
+            sampleClosedSpline.curveType = "catmullrom";
+            sampleClosedSpline.closed = true;
+
+            if (roamLine) {
+              roamLine.roamIsRunning = true;
+
+              roamLine.tubeGeometry = new TubeGeometry(
+                sampleClosedSpline, //一个路径对象。
+                600, //数值越大，线越平滑
+                1, //默认值是 1，代表管的半径。数值越大，管就越粗。在你的代码里设置为 2，说明管的半径是 2 个单位
+                3, //默认值是 8,横截面的分段数量。数值越大，管的横截面就越接近圆形
+                closed //路径是否闭合
+              );
+            }
+            const material = new MeshLambertMaterial({ color: 0xff00ff });
+            const wireframeMaterial = new MeshBasicMaterial({
+              color: 0x000000,
+              opacity: 0.3,
+              wireframe: true,
+              transparent: true,
+            });
+
+            const mesh = new Mesh(roamLine!!.tubeGeometry, material);
+            const wireframe = new Mesh(
+              roamLine!!.tubeGeometry,
+              wireframeMaterial
+            );
+            mesh.add(wireframe);
+
+            scene.add(mesh);
 
             //          const controls = getControls();
             // const { animationTime } = getUserSetting(scene.userData.customButtonList);
@@ -87,21 +129,22 @@ function RouteComponent() {
           onClick={() => {
             // drawROAMLine(getScene(), "漫游动画1");
             // drawROAMLine(getScene(), "漫游动画1");
-            const a = getAll().parameters3d.roamLine.tubeGeometry;
-            getAll().parameters3d.roamLine.roamIsRunning = false;
+            const { extraParams, camera, controls, scene } =
+              editorInstance.getEditor();
+            const { roamLine } = extraParams;
 
-            const material = new MeshBasicMaterial({ color: 0x00ff00 });
-            // 创建网格对象
-            const tubeMesh = new Mesh(a, material);
-            // 将网格添加到场景中
-            getScene().add(tubeMesh);
-            const camera = getCamera();
-
-            const controls = getControls();
-            // const { animationTime } = getUserSetting(
-            //   getScene().userData.customButtonList
-            // );
-            cameraBackHome(camera as PerspectiveCamera, controls, 1000);
+            if (roamLine) {
+              roamLine.roamIsRunning = false;
+              const _userData = scene.userData as SceneUserData;
+              const { animationTime } =
+                _userData.customButtonList.panelControllerButtonGroup
+                  .userSetting;
+              cameraTween(camera, userData.fixedCameraPosition, animationTime)
+                .start()
+                .onComplete(() => {
+                  controls.target.set(0, 0, 0);
+                });
+            }
           }}
         >
           停止漫游线

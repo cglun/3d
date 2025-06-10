@@ -1,20 +1,25 @@
-import { Color, DataTexture, Raycaster, Scene, Vector2, Vector3 } from "three";
+import {
+  Color,
+  DataTexture,
+  OrthographicCamera,
+  PerspectiveCamera,
+  Raycaster,
+  Vector2,
+  Vector3,
+} from "three";
 import { GlbModel, UserDataType } from "../app/type";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { Three3d } from "./Three3d";
 import { createGroupIfNotExist } from "./utils";
 import { TransformControls } from "three/addons/controls/TransformControls.js";
-import { SceneUserData } from "./Three3dConfig";
+import { BackgroundHDR, SceneUserData } from "./Three3dConfig";
 
 export class Three3dEditor extends Three3d {
   static divElement: HTMLDivElement;
-  static getDivElement() {
-    return this.divElement;
-  }
+
   transformControl = this.initTransformControl();
   //  divElement: HTMLDivElement;
   point = new Vector3();
-
   raycaster = new Raycaster();
   pointer = new Vector2(0, 0);
   onUpPosition = new Vector2(0, 0);
@@ -60,9 +65,7 @@ export class Three3dEditor extends Three3d {
   setUserDate(sceneUserData: SceneUserData) {
     this.scene.userData = sceneUserData;
   }
-  setScene(scene: Scene) {
-    this.scene = scene;
-  }
+
   // 场景序列化
   sceneSerialization(): string {
     this.scene.userData.selected3d = undefined;
@@ -109,13 +112,22 @@ export class Three3dEditor extends Three3d {
     // 处理背景
     const background = sceneCopy.background as Color | DataTexture;
     const isColor = background !== null && background instanceof Color;
+
+    if (isColor) {
+      //  sceneCopy.userData.backgroundHDR.color = "#" + background.getHexString();
+      sceneCopy.userData.backgroundHDR = {
+        ...sceneCopy.userData.backgroundHDR,
+        isColor: true,
+        color: "#" + background.getHexString(),
+      } as BackgroundHDR;
+    } else {
+      sceneCopy.userData.backgroundHDR = {
+        ...sceneCopy.userData.backgroundHDR,
+        isColor: false,
+      } as BackgroundHDR;
+    }
     sceneCopy.background = null;
     sceneCopy.environment = null;
-    if (isColor) {
-      sceneCopy.background = background;
-      sceneCopy.userData.backgroundHDR = undefined;
-    }
-
     const result = {
       sceneJsonString: JSON.stringify(sceneCopy.toJSON()),
       modelsJsonString: JSON.stringify(modelList),
@@ -167,5 +179,13 @@ export class Three3dEditor extends Three3d {
       this.transformControl.detach();
       this.animate();
     }
+  }
+
+  //设置相机的类型
+  setCameraType(
+    camera: PerspectiveCamera | OrthographicCamera,
+    vector3: Vector3
+  ) {
+    console.log("设置相机的类型", camera, vector3);
   }
 }

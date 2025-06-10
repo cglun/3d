@@ -18,11 +18,10 @@ import {
 } from "three/addons/renderers/CSS3DRenderer.js";
 
 import { UserDataType } from "../app/type";
-import { clearOldLabel, createGroupIfNotExist, getTourSrc } from "./utils";
+import { createGroupIfNotExist, getTourSrc } from "./utils";
 
 import { setClassName } from "../app/utils";
 
-import { setTextureBackground } from "./common3d";
 import { TourWindow } from "../app/MyContext";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { UnrealBloomPass } from "three/examples/jsm/Addons.js";
@@ -110,16 +109,15 @@ export function createScene() {
   const scene = new Scene();
   scene.userData = sceneUserData;
   //scene.background = new Color("#000116");
-  setTextureBackground(scene);
+
   return scene;
 }
-export function createNewScene() {
-  clearOldLabel();
+export function createNewScene_xx() {
+  //clearOldLabel();
   const newScene = new Scene();
   //newScene.name = "新场景";
   newScene.userData = sceneUserData;
-  newScene.userData.APP_THEME.sceneCanSave = false;
-  setTextureBackground(newScene);
+
   const HELPER_GROUP = createGroupIfNotExist(
     newScene,
     GLOBAL_CONSTANT.HELPER_GROUP

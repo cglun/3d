@@ -3,12 +3,6 @@ import { ActionItemMap, CustomButtonType } from "../../app/type";
 
 import { createGroupIfNotExist } from "../../three/utils";
 import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
-import {
-  getScene,
-  getCamera,
-  getControls,
-  getAll,
-} from "../../three/init3dViewer";
 
 import {
   _roamIsRunning,
@@ -25,6 +19,7 @@ import {
 import { hasValueString } from "./utils";
 import { LabelInfoPanelController } from "../label/LabelInfoPanelController";
 import { CustomButtonList, SceneUserData } from "../../three/Three3dConfig";
+import { viewerInstance } from "../../three/ViewerInstance";
 import { editorInstance } from "../../three/EditorInstance";
 
 function getActionItemByMap(
@@ -157,7 +152,7 @@ export function resetListGroupIsClick(listGroup: ActionItemMap[]) {
 
 // 获取切换按钮组
 export function getToggleButtonGroup(): ActionItemMap[] {
-  const { scene } = editorInstance.getEditor();
+  const { scene } = viewerInstance.getViewer();
   const customButtonList = scene.userData.customButtonList as CustomButtonList;
   const { listGroup, type } = customButtonList.toggleButtonGroup;
   return listGroup
@@ -204,7 +199,7 @@ export function generateRoamButtonGroup() {
 }
 //获取漫游动画按钮组
 export function getRoamListByRoamButtonMap(): ActionItemMap[] {
-  const { scene } = editorInstance.getEditor();
+  const { scene } = viewerInstance.getViewer();
   const data = scene.userData as SceneUserData;
 
   const { roamButtonGroup } = data.customButtonList as {
@@ -228,7 +223,8 @@ export function getRoamListByRoamButtonMap(): ActionItemMap[] {
         }
         if (state.includes("_STOP")) {
           roamAnimation(false);
-          cameraBackHome(getCamera(), getControls(), 1000);
+          const { camera, controls } = viewerInstance.getViewer();
+          cameraBackHome(camera, controls, 1000);
         }
         const customButtonListType = data.customButtonList as CustomButtonList;
 
@@ -241,7 +237,7 @@ export function getRoamListByRoamButtonMap(): ActionItemMap[] {
 }
 
 export function roamAnimation(isRunning: boolean) {
-  const { scene, controls } = getAll();
+  const { scene, controls } = viewerInstance.getViewer();
   const listGroup = getRoamListByRoamButtonMap();
   // 获取用户数据并进行类型断言
 
@@ -300,10 +296,10 @@ export function getPanelController() {
 }
 
 export function getPanelControllerButtonGroup(): ActionItemMap[] {
-  const data = getScene().userData as SceneUserData;
-
+  // const data = getScene().userData as SceneUserData;
+  const { userData } = viewerInstance.getViewer().scene;
   const { panelControllerButtonGroup } =
-    data.customButtonList as CustomButtonList;
+    userData.customButtonList as CustomButtonList;
   if (!panelControllerButtonGroup) {
     return [];
   }

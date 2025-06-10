@@ -40,23 +40,23 @@ function RouteComponent() {
   const [showAllConfig, setShowAllConfig] = useState(false); // 使用可选属性和类型断言
   const [isSet, setIsSet] = useState(false);
 
-  const ud = scene.userData as SceneUserData;
-  const userData = JSON.stringify(ud, null, 3);
+  //const  = scene.userData as SceneUserData;
+  //const userData = JSON.stringify(ud, null, 3);
 
-  const { javascript, projectId, customButtonList } = ud;
+  const { javascript, projectId, customButtonList } =
+    scene.userData as SceneUserData;
   const buttonList = JSON.stringify(customButtonList, null, 5);
 
   const [buttonType, setButtonType] = useState<CustomButtonType>("TOGGLE");
-  // const [buttonType, setButtonType] = useState<CustomButtonType>(
-  //   customButtonList.toggleButtonGroup.type as CustomButtonType
-  // );
 
-  if (scene.userData === undefined) {
-    return;
-  }
   // 获取主题颜色
   const { themeColor } = getThemeByScene(scene);
   const buttonColor = getButtonColor(themeColor);
+
+  //复制一份数据，然后去掉对象的selected3d属性，不然要序列化会报错，要报废
+  const _sceneUserData = { ...scene.userData };
+  _sceneUserData.selected3d = null;
+  const userDataString = JSON.stringify(_sceneUserData, null, 3);
 
   // 生成按钮组
   function generateButton() {
@@ -261,14 +261,14 @@ function RouteComponent() {
             <CodeEditor
               tipsTitle="一键配置"
               language="json"
-              code={userData}
+              code={userDataString}
               isValidate={true}
               show={showAllConfig}
               setShow={setShowAllConfig}
               callback={function (value): void {
                 getScene().userData = JSON.parse(value);
                 getScene().userData.projectId = projectId; // 防止项目id丢失
-                updateScene(scene);
+                updateScene(getScene());
               }}
             />
           </ListGroup.Item>

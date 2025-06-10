@@ -16,10 +16,7 @@ import { getButtonColor, getThemeByScene } from "../../app/utils";
 
 import CardTop from "../../component/common/routes/effects/CardTop";
 import CardMark from "../../component/common/routes/effects/CardMark";
-import sceneUserData, {
-  SceneUserData,
-  userSettingInit,
-} from "../../three/Three3dConfig";
+import sceneUserData, { SceneUserData } from "../../three/Three3dConfig";
 
 export const Route = createLazyFileRoute("/editor3d/effects")({
   component: RouteComponent,

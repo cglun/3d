@@ -13,7 +13,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { getButtonColor, getThemeByScene, setClassName } from "../../app/utils";
 import { clearOldLabel, createGroupIfNotExist } from "../../three/utils";
-import { getScene } from "../../three/init3dEditor";
+
 import { CSS2DObject, CSS3DSprite } from "three/examples/jsm/Addons.js";
 import Toast3d from "../../component/common/Toast3d";
 import { APP_COLOR, TourItem } from "../../app/type";
@@ -26,6 +26,7 @@ import { createCss3dLabel } from "../../three/factory3d";
 import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
 import { MarkLabel } from "../../viewer3d/label/MarkLabel";
 import { SceneUserData } from "../../three/Three3dConfig";
+import { editorInstance } from "../../three/EditorInstance";
 
 export const Route = createLazyFileRoute("/editor3d/mark")({
   component: RouteComponent,
@@ -55,7 +56,7 @@ function RouteComponent() {
   if (!config3d) return;
 
   function addMark(label: CSS3DSprite | CSS2DObject) {
-    const scene = getScene();
+    const { scene } = editorInstance.getEditor();
     const MARK_LABEL_GROUP = createGroupIfNotExist(
       scene,
       GLOBAL_CONSTANT.MARK_LABEL_GROUP
@@ -149,8 +150,8 @@ function RouteComponent() {
                     logo
                   );
                   addMark(label.css3DSprite);
-
-                  updateScene(getScene());
+                  const { scene } = editorInstance.getEditor();
+                  updateScene(scene);
                 }}
               >
                 添加3d标记
@@ -196,7 +197,8 @@ function RouteComponent() {
                           dispatchTourWindow
                         )
                       );
-                      updateScene(getScene());
+                      const { scene } = editorInstance.getEditor();
+                      updateScene(scene);
                     }}
                   ></Card.Img>
                 </Card>

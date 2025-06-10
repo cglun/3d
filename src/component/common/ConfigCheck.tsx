@@ -1,13 +1,12 @@
 import Form from "react-bootstrap/esm/Form";
 import { useUpdateScene } from "../../app/hooks";
 
-import { config3d } from "../../three/config3d";
-
 import InputGroup from "react-bootstrap/esm/InputGroup";
 
 import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
 import Tooltip from "react-bootstrap/esm/Tooltip";
 import { editorInstance } from "../../three/EditorInstance";
+import { Config3d } from "../../three/Three3dConfig";
 export function ConfigCheck({
   label = "label",
   configKey = "css2d",
@@ -16,22 +15,21 @@ export function ConfigCheck({
   callBack,
 }: {
   label: string;
-  configKey: keyof typeof config3d;
+  configKey: keyof Config3d;
   toolTip?: string;
   disabled?: boolean;
   callBack?: () => void;
 }) {
   const { scene, updateScene } = useUpdateScene();
 
-  const _configKey = configKey as keyof typeof config3d;
-  let checked = scene.userData.config3d[_configKey];
+  let checked = scene.userData.config3d[configKey];
 
   //后期加配置项目，如果保存的场景配置项目为undefined，默认加上，防止报错
-  if (checked === undefined) {
-    checked = true;
-    const { scene } = editorInstance.getEditor();
-    scene.userData.config3d[_configKey] = true;
-  }
+  // if (checked === undefined) {
+  //   checked = true;
+  //   const { scene } = editorInstance.getEditor();
+  //   scene.userData.config3d[configKey] = true;
+  // }
   return (
     <InputGroup size="sm">
       <InputGroup.Text>{label}</InputGroup.Text>
@@ -48,7 +46,7 @@ export function ConfigCheck({
               onChange={() => {
                 const { scene } = editorInstance.getEditor();
                 const _config3d = scene.userData.config3d;
-                _config3d[_configKey] = !_config3d[_configKey];
+                _config3d[configKey] = !_config3d[configKey];
                 if (callBack) {
                   callBack();
                 }

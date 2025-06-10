@@ -5,7 +5,6 @@ import {
   LineBasicMaterial,
   Object3D,
   Object3DEventMap,
-  OrthographicCamera,
   PerspectiveCamera,
   Scene,
   TubeGeometry,
@@ -20,8 +19,6 @@ import { cameraTween, meshTween } from "../../three/animate";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { getObjectWorldPosition, getUserSetting } from "../viewer3dUtils";
 import { roamAnimation } from "./buttonGroup";
-
-import { RoamLine } from "../../three/config3d";
 
 import { CustomButtonList } from "../../three/Three3dConfig";
 import { viewerInstance } from "../../three/ViewerInstance";
@@ -452,11 +449,12 @@ export function animateROAM(
   const { speed } = getUserSetting(customButtonList, "roamButtonGroup");
   const curve = new CatmullRomCurve3(vector, true);
 
-  const { roamLine } = viewerInstance.getViewer();
-
-  roamLine.roamIsRunning = isRunning;
-  roamLine.speed = speed;
-  roamLine.tubeGeometry = new TubeGeometry(curve, 100, 2, 3, true);
+  const { roamLine } = viewerInstance.getViewer().extraParams;
+  if (roamLine) {
+    roamLine.roamIsRunning = isRunning;
+    roamLine.speed = speed;
+    roamLine.tubeGeometry = new TubeGeometry(curve, 100, 2, 3, true);
+  }
 }
 export function animateROAM_bf(
   scene: Scene,
@@ -516,96 +514,6 @@ export function animateROAM_bf(
     moveModelAlongCurve();
   }
 }
-export function manyou(
-  roamLine: RoamLine,
-  camera: PerspectiveCamera | OrthographicCamera
-) {
-  //设置焦距为84
-
-  const params = {
-    spline: "GrannyKnot",
-    scale: 1,
-    extrusionSegments: 100,
-    radiusSegments: 8,
-    closed: true,
-    animationView: false,
-    lookAhead: true,
-    cameraHelper: false,
-  };
-
-  const {
-    tubeGeometry,
-    position,
-    biNormal,
-    lookAt,
-    direction,
-    normal,
-    roamIsRunning,
-    speed,
-  } = roamLine;
-  if (!roamIsRunning) {
-    return;
-  }
-
-  // if (tubeGeometry === undefined) {
-  //   const pipeSpline = new CatmullRomCurve3(
-  //     [
-  //       new Vector3(0, -40, -40),
-  //       new Vector3(0, 40, -40),
-  //       new Vector3(0, 140, -40),
-  //       new Vector3(0, 40, 40),
-  //       new Vector3(0, -40, 40),
-  //     ],
-  //     true
-  //   );
-
-  //   roamLine.tubeGeometry = new TubeGeometry(pipeSpline, 100, 2, 3, true);
-
-  //   return;
-  // }
-  const time = Date.now();
-  const loopTime = 20 * 1000 * speed;
-  const t = (time % loopTime) / loopTime;
-
-  tubeGeometry.parameters.path.getPointAt(t, position);
-  position.multiplyScalar(params.scale);
-
-  // interpolation
-
-  const segments = tubeGeometry.tangents.length;
-  const pickt = t * segments;
-  const pick = Math.floor(pickt);
-  const pickNext = (pick + 1) % segments;
-
-  biNormal.subVectors(
-    tubeGeometry.binormals[pickNext],
-    tubeGeometry.binormals[pick]
-  );
-  biNormal.multiplyScalar(pickt - pick).add(tubeGeometry.binormals[pick]);
-
-  tubeGeometry.parameters.path.getTangentAt(t, direction);
-  const offset = 15;
-
-  normal.copy(biNormal).cross(direction);
-
-  // we move on a offset on its  biNormal
-
-  position.add(normal.clone().multiplyScalar(offset));
-
-  camera.position.copy(position);
-
-  tubeGeometry.parameters.path.getPointAt(
-    (t + 30 / tubeGeometry.parameters.path.getLength()) % 1,
-    lookAt
-  );
-  lookAt.multiplyScalar(params.scale);
-
-  // camera orientation 2 - up orientation via normal
-
-  if (!params.lookAhead) lookAt.copy(position).add(direction);
-  camera.matrix.lookAt(camera.position, lookAt, normal);
-  camera.quaternion.setFromRotationMatrix(camera.matrix);
-}
 
 export function drawROAMLine2(scene: Scene, roamName: string) {
   const vector: Vector3[] = [];
@@ -632,7 +540,7 @@ export function drawROAMLine2(scene: Scene, roamName: string) {
   //将线条添加到场景中
   scene.add(line);
 }
-export function drawROAMLine(scene: Scene, roamName: string) {
+export function drawROAMLine_xx(scene: Scene, roamName: string) {
   const vector: Vector3[] = [];
   const _curve = createGroupIfNotExist(scene, roamName, false);
   if (!_curve) {

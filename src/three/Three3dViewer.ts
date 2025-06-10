@@ -1,8 +1,8 @@
-import { Color, DataTexture, TubeGeometry, Vector3 } from "three";
+import { Color, DataTexture } from "three";
 import { GlbModel } from "../app/type";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { Three3d } from "./Three3d";
-import { RoamLine, SceneUserData } from "./Three3dConfig";
+import { SceneUserData } from "./Three3dConfig";
 import { createGroupIfNotExist } from "./utils";
 
 /**
@@ -15,17 +15,6 @@ export class Three3dViewer extends Three3d {
    * @param divElement - 用于渲染 3D 场景的 HTML div 元素。
    */
 
-  roamLine: RoamLine = {
-    roamIsRunning: false,
-    direction: new Vector3(),
-    biNormal: new Vector3(),
-    normal: new Vector3(),
-    position: new Vector3(),
-    lookAt: new Vector3(),
-    tubeGeometry: new TubeGeometry(),
-    speed:
-      this.scene.userData.customButtonList.roamButtonGroup.userSetting.speed,
-  };
   constructor(divElement: HTMLDivElement) {
     super(divElement);
   }

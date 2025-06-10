@@ -1,10 +1,20 @@
-import { Mesh, Object3D, Object3DEventMap, TubeGeometry, Vector3 } from "three";
+import {
+  AnimationAction,
+  AnimationMixer,
+  Mesh,
+  Object3D,
+  Object3DEventMap,
+  TubeGeometry,
+  Vector3,
+} from "three";
 import {
   ActionItemMap,
   APP_COLOR,
   CustomButtonType,
   GlbModel,
 } from "../app/type";
+import venice_sunset_1k from "/static/file3d/hdr/venice_sunset_1k.hdr?url";
+import spruit_sunrise_1k from "/static/file3d/hdr/spruit_sunrise_1k.hdr?url";
 export const userCssStyle = {
   cardWidth: 130,
   cardHeight: 130,
@@ -35,24 +45,23 @@ export interface CustomButtonItem {
   userSetting: UserSetting;
   listGroup: ActionItemMap[];
 }
+export interface Config3d {
+  css2d: boolean;
+  css3d: boolean;
+  useTween: boolean;
+  useShadow: boolean;
+  useKeyframe: boolean;
+  FPS: number;
+  useComposer: boolean;
+}
+
 export interface SceneUserData {
   projectId: number;
+  selected3d: Object3D<Object3DEventMap> | null;
   isSelected: boolean;
   fixedCameraPosition: Vector3;
-  config3d: {
-    css2d: boolean;
-    css3d: boolean;
-    useTween: boolean;
-    useShadow: boolean;
-    useKeyframe: boolean;
-    FPS: number;
-    useComposer: boolean;
-  };
-
-  backgroundHDR: {
-    name: string;
-    asBackground: boolean;
-  };
+  config3d: Config3d;
+  backgroundHDR: BackgroundHDR;
   javascript: string;
   customButtonList: {
     toggleButtonGroup: CustomButtonItem;
@@ -69,14 +78,13 @@ export interface SceneUserData {
     topCard: UserCssStyle;
     markLabel: UserCssStyle;
   };
-  selected3d: Object3D<Object3DEventMap> | null;
 }
 type UserSetting = typeof userSettingInit;
 export const userSettingInit = {
   modelOffset: new Vector3(0, 0, 0),
   cameraOffset: new Vector3(0, 0, 0),
-  animationTime: 100,
-  speed: 1,
+  animationTime: 1160,
+  speed: 1.16,
 };
 export const customButtonListInit = {
   toggleButtonGroup: {
@@ -99,8 +107,8 @@ export const customButtonListInit = {
   },
 };
 export interface ExtraParams {
-  actionMixerList: [];
-  mixer: [];
+  actionMixerList: AnimationAction[];
+  mixer: AnimationMixer[];
   selectedMesh: Mesh[];
   modelList: GlbModel[];
   modelSize: number;
@@ -117,8 +125,22 @@ export interface RoamLine {
   tubeGeometry: TubeGeometry;
   speed: number;
 }
+
+export interface BackgroundHDR {
+  color: string | HdrKey;
+  asBackground: boolean;
+  isColor: boolean;
+}
+
+// 定义 hdr 对象键的联合类型
+export type HdrKey = keyof typeof hdr;
+export const hdr = {
+  "venice_sunset_1k.hdr": venice_sunset_1k,
+  "spruit_sunrise_1k.hdr": spruit_sunrise_1k,
+};
 const sceneUserData: SceneUserData = {
   projectId: -1,
+  selected3d: null,
   isSelected: false,
   fixedCameraPosition: new Vector3(5, 6, 7),
   config3d: {
@@ -132,9 +154,10 @@ const sceneUserData: SceneUserData = {
   },
 
   backgroundHDR: {
-    name: "venice_sunset_1k.hdr",
+    color: "venice_sunset_1k.hdr",
     asBackground: true,
-  },
+    isColor: false,
+  } as BackgroundHDR,
   javascript: "",
   customButtonList: { ...customButtonListInit },
   APP_THEME: {
@@ -146,6 +169,5 @@ const sceneUserData: SceneUserData = {
     topCard: { ...userCssStyle },
     markLabel: { ...userCssStyle },
   }, // 若 UserStyles 有具体结构，需按需填充
-  selected3d: null, // 若 Selected3d 有具体结构，需按需填充
 };
 export default sceneUserData;

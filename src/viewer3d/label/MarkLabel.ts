@@ -4,10 +4,9 @@ import { setClassName } from "../../app/utils";
 import { getCardBackgroundUrl } from "../../three/utils";
 import { CSS3DSprite } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 
-import { getScene } from "../../three/init3dEditor";
-
 import { UserStyles } from "../../app/type";
 import { SceneUserData } from "../../three/Three3dConfig";
+import { editorInstance } from "../../three/EditorInstance";
 
 export class MarkLabel {
   div = document.createElement("div");
@@ -40,9 +39,11 @@ export class MarkLabel {
     logo: string
   ) {
     this.dispatchTourWindow = dispatchTourWindow;
-    const _userData = getScene().userData as SceneUserData;
+    const { scene } = editorInstance.getEditor();
 
-    this.userDataStyles = _userData.userCssStyleMarkLabel;
+    const _userData = scene.userData as SceneUserData;
+
+    this.userDataStyles = _userData.userCssStyle.markLabel;
     this.markName = markName;
     this.logo = logo;
     this.init();

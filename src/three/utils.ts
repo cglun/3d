@@ -8,6 +8,7 @@ import {
   OrthographicCamera,
   PerspectiveCamera,
   Scene,
+  Vector2,
   VectorKeyframeTrack,
   WebGLRenderer,
 } from "three";
@@ -17,14 +18,14 @@ import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import { GLTF, GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import axios from "../app/http";
 import { createCss2dLabel, createCss3dLabel } from "./factory3d";
-import { enableShadow, setTextureBackground } from "./common3d";
+import { enableShadow } from "./common3d";
 import { TourWindow } from "../app/MyContext";
 import { Parameters3d } from "./config3d";
-
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
-
 import { MarkLabel } from "../viewer3d/label/MarkLabel";
-import { SceneUserData } from "./Three3dConfig";
+import { RoamLine, SceneUserData } from "./Three3dConfig";
+import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 
 export function getObjectNameByName(object3D: Object3D): string {
   return object3D.name.trim() === "" ? object3D.type : object3D.name;
@@ -208,7 +209,6 @@ export function sceneDeserialize(data: string, item: RecordItem) {
 
     const backgroundHDR = object.userData.backgroundHDR;
     if (backgroundHDR) {
-      setTextureBackground(newScene);
     }
   });
 
@@ -439,4 +439,89 @@ export function getCardBackgroundUrl(cardBackgroundUrl: string) {
   }
 
   return `url(${cardBackgroundUrl})`;
+}
+
+export function manyou(
+  roamLine: RoamLine,
+  camera: PerspectiveCamera | OrthographicCamera,
+  speed: number
+) {
+  //设置焦距为84
+
+  const params = {
+    scale: 1,
+    lookAhead: true,
+  };
+
+  const {
+    tubeGeometry,
+    position,
+    biNormal,
+    lookAt,
+    direction,
+    normal,
+    roamIsRunning,
+  } = roamLine;
+  if (!roamIsRunning) {
+    return;
+  }
+  const time = Date.now();
+  const loopTime = (20 * 1000) / speed;
+  const t = (time % loopTime) / loopTime;
+
+  tubeGeometry.parameters.path.getPointAt(t, position);
+  position.multiplyScalar(params.scale);
+  const segments = tubeGeometry.tangents.length;
+  const pickt = t * segments;
+  const pick = Math.floor(pickt);
+  const pickNext = (pick + 1) % segments;
+
+  biNormal.subVectors(
+    tubeGeometry.binormals[pickNext],
+    tubeGeometry.binormals[pick]
+  );
+  biNormal.multiplyScalar(pickt - pick).add(tubeGeometry.binormals[pick]);
+
+  tubeGeometry.parameters.path.getTangentAt(t, direction);
+  const offset = 15;
+
+  normal.copy(biNormal).cross(direction);
+
+  // we move on a offset on its  biNormal
+
+  position.add(normal.clone().multiplyScalar(offset));
+
+  camera.position.copy(position);
+
+  tubeGeometry.parameters.path.getPointAt(
+    (t + 30 / tubeGeometry.parameters.path.getLength()) % 1,
+    lookAt
+  );
+  lookAt.multiplyScalar(params.scale);
+
+  // camera orientation 2 - up orientation via normal
+
+  if (!params.lookAhead) lookAt.copy(position).add(direction);
+  camera.matrix.lookAt(camera.position, lookAt, normal);
+  camera.quaternion.setFromRotationMatrix(camera.matrix);
+  camera.updateMatrixWorld();
+  //renderer.render(scene, camera);
+}
+export function setOutLinePassColor(color: string, outlinePass: OutlinePass) {
+  outlinePass.visibleEdgeColor.set(color); // 可见边缘颜色
+  outlinePass.hiddenEdgeColor.set(color); // 不可见边缘颜色
+}
+//创建辉光效果
+export function createUnrealBloomPass(node: HTMLElement) {
+  const { offsetWidth, offsetHeight } = node;
+  const bloomPass = new UnrealBloomPass(
+    new Vector2(offsetWidth, offsetHeight),
+    1.5,
+    4.4,
+    0.85
+  );
+  bloomPass.threshold = 1.4;
+  bloomPass.strength = 0.4;
+  bloomPass.radius = 0.4;
+  return bloomPass;
 }

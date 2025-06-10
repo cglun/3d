@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useRef } from "react";
 import { useLocation } from "@tanstack/react-router";
-import { setCameraType } from "../../three/init3dEditor"; // 初始化
+
 import {
   Button,
   ButtonGroup,
@@ -77,8 +77,9 @@ function EditorViewer3d() {
           editor.loadedModelsEnd = () => {
             editor.transformControl = editor.initTransformControl();
             editor.runJavascript();
-            updateScene(editor.scene.clone());
-            updateCamera(editor.camera.clone());
+
+            // editor.initPostProcessing();
+
             setTimeout(() => {
               ModalConfirm3d({
                 title: "提示",
@@ -98,7 +99,8 @@ function EditorViewer3d() {
                 },
               });
             }, 1998);
-
+            updateScene(editor.scene);
+            updateCamera(editor.camera);
             document.title = `【id:${item.id}】`;
           };
           editor.onLoadProgress = (progress: number) => {
@@ -117,8 +119,8 @@ function EditorViewer3d() {
                   show: false,
                 },
               });
-              updateScene(editor.scene.clone());
-              updateCamera(editor.camera.clone());
+              updateScene(editor.scene);
+              updateCamera(editor.camera);
             }
           };
 
@@ -196,7 +198,8 @@ function EditorViewer3d() {
             <Button
               variant={themeColor}
               onClick={() => {
-                setCameraType("OrthographicCamera", new Vector3(0, 1, 0));
+                const editor = editorInstance.getEditor();
+                editor.setCameraType(editor.camera, new Vector3(0, 1, 0));
               }}
             >
               <Icon iconName="bi bi-align-top" title="顶视" />
@@ -204,7 +207,8 @@ function EditorViewer3d() {
             <Button
               variant={themeColor}
               onClick={() => {
-                setCameraType("OrthographicCamera", new Vector3(0, 0, 1));
+                const editor = editorInstance.getEditor();
+                editor.setCameraType(editor.camera, new Vector3(0, 0, 1));
               }}
             >
               <Icon iconName="bi bi-align-middle" title="前视" />
@@ -212,7 +216,8 @@ function EditorViewer3d() {
             <Button
               variant={themeColor}
               onClick={() => {
-                setCameraType("OrthographicCamera", new Vector3(1, 0, 0));
+                const editor = editorInstance.getEditor();
+                editor.setCameraType(editor.camera, new Vector3(1, 0, 0));
               }}
             >
               <Icon iconName="bi bi-align-start" title="左视" />
@@ -220,7 +225,8 @@ function EditorViewer3d() {
             <Button
               variant={themeColor}
               onClick={() => {
-                setCameraType("PerspectiveCamera", Object3D.DEFAULT_UP);
+                const editor = editorInstance.getEditor();
+                editor.setCameraType(editor.camera, Object3D.DEFAULT_UP);
               }}
             >
               <Icon iconName="box" title="透视" />

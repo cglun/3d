@@ -21,7 +21,6 @@ import InputBase from "../common/InputBase";
 import { useUpdateScene } from "../../app/hooks";
 import { Search3d } from "./Search3d";
 
-import { createNewScene } from "../../three/factory3d";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import Icon from "../common/Icon";
 import { editorInstance } from "../../three/EditorInstance";
@@ -196,9 +195,10 @@ export default function EditorTop() {
                   to: location.pathname,
                 });
                 document.title = "3d新场景";
-                const newScene = createNewScene();
+                // const newScene = createNewScene();
                 const editor = editorInstance.getEditor();
-                editor.setScene(newScene);
+                editor.resetScene();
+                editor.initTransformControl();
                 updateScene(editor.scene);
                 Toast3d("场景已新建");
               }}

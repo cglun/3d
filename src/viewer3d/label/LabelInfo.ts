@@ -9,7 +9,7 @@ import {
 import { CSS3DSprite } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 
 import { getObjectWorldPosition } from "../viewer3dUtils";
-import { getScene } from "../../three/init3dViewer";
+
 import {
   Line2,
   LineGeometry,
@@ -18,6 +18,7 @@ import {
 
 import { UserStyles } from "../../app/type";
 import { SceneUserData } from "../../three/Three3dConfig";
+import { editorInstance } from "../../three/EditorInstance";
 
 export class LabelInfo {
   mesh;
@@ -55,9 +56,10 @@ export class LabelInfo {
   ) {
     this.mesh = mesh;
     this.dispatchTourWindow = dispatchTourWindow;
+    const { scene } = editorInstance.getEditor();
 
-    const _userData = getScene().userData as SceneUserData;
-    this.userDataStyles = _userData.userCssStyleTopCard;
+    const _userData = scene.userData as SceneUserData;
+    this.userDataStyles = _userData.userCssStyle.topCard;
     // this.size = _userData.userCssStyleTopCard.cardSize;
     this.init();
   }

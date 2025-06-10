@@ -43,10 +43,10 @@ export default function Viewer3d({
 
   useEffect(() => {
     if (canvas3d.current && !isInitialized.current) {
+      isInitialized.current = true; // 标记为已初始化
       console.log("Viewer3d", item.id);
       const viewer = new Three3dViewer(canvas3d.current);
       viewerInstance.setViewer(viewer);
-      console.log("初始化编辑器");
 
       viewer.controls.enabled = true;
 
@@ -55,6 +55,7 @@ export default function Viewer3d({
       );
       window.addEventListener("resize", () => viewer.onWindowResize());
     }
+
     if (item.des === "Scene") {
       loadScene();
     }
@@ -70,31 +71,30 @@ export default function Viewer3d({
 
         viewer.divElement.removeEventListener("click", viewer.onPointerClick);
       }
+      canvas3d.current = null;
     };
   }, [item]);
 
   function loadScene() {
-    isInitialized.current = true; // 标记为已初始化
     const viewer = viewerInstance.getViewer();
     getProjectData(item.id).then((data) => {
+      // console.log("loadScene,要清空原来的哦");
+      viewer.resetScene();
       viewer.deserialize(data, item);
+
       setLoadProgress(viewer);
     });
   }
   // 加载模型
   function loadMesh() {
-    isInitialized.current = true; // 标记为已初始化
     const viewer = viewerInstance.getViewer();
     viewer.addOneModel(item);
     setLoadProgress(viewer);
   }
 
   function setLoadProgress(viewer: Three3dViewer) {
-    debugger;
     // 在模型加载完成后更新场景
     viewer.loadedModelsEnd = () => {
-      console.log("模型加载完成==========");
-
       if (item.des === "Scene") {
         viewer.runJavascript();
       }
@@ -111,8 +111,6 @@ export default function Viewer3d({
 
     if (showProgress) {
       viewer.onLoadProgress = (progress: number) => {
-        console.log("模型加载完成==========");
-
         setProgress(progress);
       };
     }

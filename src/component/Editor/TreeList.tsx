@@ -38,7 +38,6 @@ function TreeNode({
     setIsSelected(!isSelected);
     const { scene } = editorInstance.getEditor();
     scene.userData.selected3d = node;
-
     updateScene(scene);
     //setTransformControls(node);
     onToggle(node.uuid, !isExpanded);
