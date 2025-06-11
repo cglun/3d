@@ -9,17 +9,13 @@ import {
 import { createLazyFileRoute } from "@tanstack/react-router";
 import Viewer3d from "../../viewer3d/Viewer3d";
 import { useEffect, useRef, useState } from "react";
-import { setEnableScreenshot } from "../../three/config3d";
 import _axios from "../../app/http";
-
 import { useUpdateScene } from "../../app/hooks";
 import { getButtonColor, getThemeByScene } from "../../app/utils";
 import { ActionItemMap, APP_COLOR, RecordItem } from "../../app/type";
-
 import { resetListGroupIsClick } from "../../viewer3d/buttonList/buttonGroup";
 import { LabelInfoPanelController } from "../../viewer3d/label/LabelInfoPanelController";
 import { viewerInstance } from "../../three/ViewerInstance";
-import { SceneUserData } from "../../three/Three3dConfig";
 import { createGroupIfNotExist } from "../../three/utils";
 
 // 定义响应数据的类型
@@ -295,7 +291,11 @@ function RouteComponent() {
                 onClick={() => {
                   //  const controller = getPanelController();
                   if (controller) {
-                    let modelNameList = ["2-001-001", "2-001-002", "2-001-003"];
+                    const modelNameList = [
+                      "2-001-001",
+                      "2-001-002",
+                      "2-001-003",
+                    ];
                     controller.findLabelInfoByModelBoxName(modelNameList);
                     const isShow = controller.canBeShowLabelInfo.length > 0;
                     setShowControllerButton(isShow);

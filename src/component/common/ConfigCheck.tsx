@@ -22,7 +22,7 @@ export function ConfigCheck({
 }) {
   const { scene, updateScene } = useUpdateScene();
 
-  let checked = scene.userData.config3d[configKey];
+  const checked = scene.userData.config3d[configKey];
 
   //后期加配置项目，如果保存的场景配置项目为undefined，默认加上，防止报错
   // if (checked === undefined) {

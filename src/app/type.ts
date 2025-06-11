@@ -1,7 +1,5 @@
 import {
   Euler,
-  Mesh,
-  Object3D,
   OrthographicCamera,
   PerspectiveCamera,
   Scene,
@@ -78,8 +76,6 @@ export enum UserDataType {
   CSS3DObject = "CSS3DObject",
 }
 
-export type SelectedObject = Scene | PerspectiveCamera | Mesh | Object3D;
-
 export interface RecordItem {
   id: number;
   name: string;
@@ -93,11 +89,7 @@ export interface ProjectListResponse {
     records: RecordItem[];
   };
 }
-// export interface ActionItem {
-//   showName: string;
-//   NAME_ID: string;
-//   handler: (obj?: {}) => void;
-// }
+
 export interface ActionItemMap {
   showName: string | string[];
   NAME_ID: string;

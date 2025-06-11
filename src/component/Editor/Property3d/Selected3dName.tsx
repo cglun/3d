@@ -1,30 +1,14 @@
-import { useEffect, useState } from "react";
-import { Object3D } from "three";
 import InputGroup from "react-bootstrap/esm/InputGroup";
 import Form from "react-bootstrap/esm/Form";
-import { SelectedObject } from "../../../app/type";
 import { GLOBAL_CONSTANT } from "../../../three/GLOBAL_CONSTANT";
 import { styleBody } from "../OutlineView/fontColor";
+import { useUpdateScene } from "../../../app/hooks";
+import { SceneUserData } from "../../../three/Three3dConfig";
+import { editorInstance } from "../../../three/EditorInstance";
 
-export function InputAttrText({
-  title,
-  selected3d,
-  attr,
-}: {
-  title: string;
-  selected3d: SelectedObject;
-  attr: keyof typeof Object3D.prototype;
-}) {
-  const [value, setValue] = useState("");
-  useEffect(() => {
-    // 先检查 selected3d 是否为 null 或 undefined
-    if (
-      selected3d != null &&
-      Object.prototype.hasOwnProperty.call(selected3d, attr)
-    ) {
-      setValue(selected3d[attr] as string);
-    }
-  }, [selected3d, attr]); // 添加 'attr' 到依赖项数组
+export function Selected3dName() {
+  const { scene, updateScene } = useUpdateScene();
+  const { selected3d } = scene.userData as SceneUserData;
 
   /**
    * 判断 GLOBAL_CONSTANT 是否包含指定的值
@@ -48,21 +32,24 @@ export function InputAttrText({
     selected3d && (
       <InputGroup size="sm">
         <InputGroup.Text style={{ color: styleBody.color }}>
-          {title}
+          名字
         </InputGroup.Text>
         <Form.Control
           aria-label="Small"
           aria-describedby="inputGroup-sizing-sm"
           type="text"
-          disabled={hasValueInGlobalConstant(value)}
-          placeholder={value}
-          value={value}
-          title={value}
+          disabled={hasValueInGlobalConstant(selected3d.name)}
+          placeholder={"请输入名字"}
+          value={selected3d.name}
+          title={selected3d.name}
           onChange={(e) => {
             const _value = e.target.value;
-            //@ts-expect-error
-            selected3d[attr] = _value;
-            setValue(_value);
+            const { scene } = editorInstance.getEditor();
+            const { selected3d } = scene.userData as SceneUserData;
+            if (!hasValueInGlobalConstant(_value) && selected3d !== null) {
+              selected3d.name = _value;
+              updateScene(scene);
+            }
           }}
         />
       </InputGroup>

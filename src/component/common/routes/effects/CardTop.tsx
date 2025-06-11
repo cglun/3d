@@ -21,7 +21,7 @@ export default function CardTop({
     if (key === "cardBackgroundColor") {
       userData.userCssStyle.topCard.cardBackgroundUrl = "";
     }
-    (userData.userCssStyle.topCard as any)[key] = val;
+    userData.userCssStyle.topCard[key] = val;
     updateScene(scene);
   }
   const defaultImage3dUrl = new URL(
@@ -42,7 +42,6 @@ export default function CardTop({
     modelHighlightColor,
     offsetX,
     offsetY,
-
     opacity,
     headerMarginTop,
     headerMarginLeft,

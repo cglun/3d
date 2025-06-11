@@ -1,18 +1,26 @@
 import { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
-import { Color, Fog, Light, OrthographicCamera, Vector2 } from "three";
+import {
+  Color,
+  Fog,
+  Light,
+  Object3D,
+  Object3DEventMap,
+  OrthographicCamera,
+  Vector2,
+} from "three";
 import Card from "react-bootstrap/esm/Card";
 import InputGroup from "react-bootstrap/esm/InputGroup";
 
 import { ButtonGroup, Container } from "react-bootstrap";
 import { useUpdateScene } from "../../../app/hooks";
 import { Input3d } from "./Input3d";
-import { InputAttrText } from "./InputAttrText";
+import { Selected3dName } from "./Selected3dName";
 import { getButtonColor, getThemeByScene } from "../../../app/utils";
 import AlertBase from "../../common/AlertBase";
 
-import { APP_COLOR, SelectedObject } from "../../../app/type";
+import { APP_COLOR } from "../../../app/type";
 import { InputAttrNumber } from "./InputAttrNumber";
 import Toast3d from "../../common/Toast3d";
 import { styleBody, styleHeader } from "../OutlineView/fontColor";
@@ -203,7 +211,11 @@ function SceneProperty() {
   );
 }
 
-function CommonProperty({ selected3d }: { selected3d: SelectedObject }) {
+function CommonProperty({
+  selected3d,
+}: {
+  selected3d: Object3D<Object3DEventMap> | null;
+}) {
   function LightProperty() {
     if (!(selected3d instanceof Light)) {
       return;
@@ -290,12 +302,7 @@ function CommonProperty({ selected3d }: { selected3d: SelectedObject }) {
             其他属性
           </Card.Header>
           <Card.Body>
-            <InputAttrText
-              title={"名称"}
-              selected3d={selected3d}
-              attr={"name"}
-            />
-
+            <Selected3dName />
             <LightProperty />
           </Card.Body>
         </Card>

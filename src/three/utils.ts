@@ -96,7 +96,7 @@ export function setLabel(
       item.name,
       item.userData.labelLogo
     );
-    let label = mark.css3DSprite;
+    const label = mark.css3DSprite;
 
     const { x, y, z } = item.position;
     label.position.set(x, y, z);
@@ -184,7 +184,7 @@ export function strToJson(str: string) {
 }
 
 //反序列化
-export function sceneDeserialize(data: string, item: RecordItem) {
+export function sceneDeserialize_xx(data: string, item: RecordItem) {
   const { scene, models, loader } = strToJson(data);
 
   let newScene = new Scene();
@@ -206,10 +206,6 @@ export function sceneDeserialize(data: string, item: RecordItem) {
     } else {
       console.error("The parsed object is not a Scene type.");
     }
-
-    const backgroundHDR = object.userData.backgroundHDR;
-    if (backgroundHDR) {
-    }
   });
 
   const newCamera = new PerspectiveCamera();
@@ -218,7 +214,7 @@ export function sceneDeserialize(data: string, item: RecordItem) {
     const { x, y, z } = fixedCameraPosition;
     newCamera.position.set(x, y, z);
   }
-  debugger;
+
   return {
     scene: newScene,
     camera: newCamera,

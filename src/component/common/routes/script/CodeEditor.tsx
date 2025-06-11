@@ -154,7 +154,8 @@ const CodeEditor = (props: CodeEditorProps) => {
 
             formatCode();
             const { scene } = editorInstance.getEditor();
-            scene.userData.customButtonList = JSON.parse(value);
+            // 使用解析好的 customButtonList 变量
+            scene.userData.customButtonList = customButtonList;
           }}
         >
           <Tab eventKey="home" title="UI编辑">

@@ -245,12 +245,12 @@ export class Three3d extends ThreeObj {
   deserialize(data: string, item: RecordItem) {
     const { scene, models, loader } = strToJson(data);
 
-    // this.scene.children = [];
     const editor = this;
 
     loader.parse(scene, function (object: Object3D<Object3DEventMap>) {
       if (object instanceof Scene) {
         //  const { userData } = object;
+        //editor.scene.children = [];
         const _scene = editor.scene;
         _scene.userData = {
           ...(object.userData as SceneUserData),
@@ -409,7 +409,7 @@ export class Three3d extends ThreeObj {
     const { mixer, roamLine } = this.extraParams;
     const T = this.clock.getDelta();
     this.timeS = this.timeS + T;
-    let renderT = 1 / FPS;
+    const renderT = 1 / FPS;
 
     if (this.timeS >= renderT) {
       if (css2d) {
@@ -475,7 +475,9 @@ export class Three3d extends ThreeObj {
   loadedModelsEnd(): void {
     console.log("loadedModelsEnd");
   }
+  //@ts-ignore    忽略类型检查,加载进度 0-100
   onLoadProgress(_process: number) {}
+  //@ts-ignore    忽略类型检查,加载错误,错误信息自行处理
   onLoadError(_error: unknown) {}
 
   onWindowResize() {

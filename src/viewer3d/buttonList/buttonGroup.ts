@@ -5,7 +5,6 @@ import { createGroupIfNotExist } from "../../three/utils";
 import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
 
 import {
-  _roamIsRunning,
   animateDRAWER,
   animateROAM,
   animateSTRETCH,

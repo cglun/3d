@@ -15,12 +15,8 @@ import Toast3d from "../../component/common/Toast3d";
 import { getButtonColor, getThemeByScene } from "../../app/utils";
 import { useUpdateScene } from "../../app/hooks";
 import { styleBody } from "../../component/Editor/OutlineView/fontColor";
-
 import { editorInstance } from "../../three/EditorInstance";
 import { SceneUserData } from "../../three/Three3dConfig";
-import { drawROAMLine } from "../../viewer3d/buttonList/animateByButton";
-import { Curves } from "three/examples/jsm/Addons.js";
-
 export const Route = createLazyFileRoute("/editor3d/test")({
   component: RouteComponent,
 });
@@ -68,8 +64,9 @@ function RouteComponent() {
           onClick={() => {
             //drawROAMLine(getScene(), "漫游动画1");
             // drawROAMLine(getScene(), "漫游动画1");
-            //@ts-expect-error
+
             const { extraParams, scene } = editorInstance.getEditor();
+            //@ts-expect-error
             const curvePath = editorInstance
               .getEditor()
               .getCurveByEmptyMesh("漫游动画1");
