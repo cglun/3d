@@ -8,7 +8,6 @@ import {
   Nav,
   Badge,
 } from "react-bootstrap";
-import { getThemeByScene } from "../../app/utils";
 
 import ListCard from "./ListCard";
 import Toast3d from "../common/Toast3d";
@@ -24,6 +23,8 @@ import { Search3d } from "./Search3d";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import Icon from "../common/Icon";
 import { editorInstance } from "../../three/EditorInstance";
+import { getThemeByScene } from "../../threeUtils/util4UI";
+// 若 getThemeByScene 确实在该文件且正确导出，使用此导入语句
 
 export default function EditorTop() {
   //打开场景列表

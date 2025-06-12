@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import federation from "@originjs/vite-plugin-federation";
+import { resolve } from "path";
 export default defineConfig({
   plugins: [
     react(),
@@ -57,5 +58,8 @@ export default defineConfig({
   },
   resolve: {
     conditions: ["browser", "import"],
+    alias: {
+      "@": resolve(__dirname, "./src"), // 新增别名配置
+    },
   },
 });

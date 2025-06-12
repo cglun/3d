@@ -2,7 +2,7 @@
  * 工具类
  */
 
-import { Scene } from "three";
+import { Object3D, Scene } from "three";
 import { APP_COLOR } from "../app/type";
 import { editorInstance } from "../three/EditorInstance";
 import sceneUserData from "../three/Three3dConfig";
@@ -66,4 +66,14 @@ export function fixedEditorLeft(fixed = true) {
     editorLeft?.classList.add("position-fixed");
     editorRight!.style.overflowY = "hidden";
   }
+}
+export function getObjectNameByName(object3D: Object3D): string {
+  return object3D.name.trim() === "" ? object3D.type : object3D.name;
+}
+export function getCardBackgroundUrl(cardBackgroundUrl: string) {
+  if (cardBackgroundUrl.includes("/file/view/")) {
+    return `url(${cardBackgroundUrl.includes("/file/view/") && location.origin + cardBackgroundUrl})`;
+  }
+
+  return `url(${cardBackgroundUrl})`;
 }

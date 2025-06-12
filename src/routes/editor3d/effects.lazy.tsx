@@ -12,7 +12,7 @@ import {
   Tabs,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { getButtonColor, getThemeByScene } from "../../app/utils";
+import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
 
 import CardTop from "../../component/common/routes/effects/CardTop";
 import CardMark from "../../component/common/routes/effects/CardMark";

@@ -6,10 +6,11 @@ import Toast3d from "../../common/Toast3d";
 import { useUpdateCamera, useUpdateScene } from "../../../app/hooks";
 import Icon from "../../common/Icon";
 import { styleBody } from "./fontColor";
-import { getButtonColor } from "../../../app/utils";
+
 import { editorInstance } from "../../../three/EditorInstance";
 import { SceneUserData } from "../../../three/Three3dConfig";
-import { cameraEnterAnimation } from "../../../three/util4Camera";
+import { getButtonColor } from "../../../threeUtils/util4UI";
+import { cameraEnterAnimation } from "../../../threeUtils/util4Camera";
 
 export function OutlineViewCamera() {
   const { updateScene } = useUpdateScene();

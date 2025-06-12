@@ -7,11 +7,12 @@ import { ButtonGroup } from "react-bootstrap";
 import { ConfirmButton } from "../../app/type";
 // 从新文件中引入常量
 import { _confirmButton } from "./ModalConfirmUtils";
-import { getButtonColor } from "../../app/utils";
+
 import Icon from "./Icon";
 import { styleBody } from "../Editor/OutlineView/fontColor";
 
 import { editorInstance } from "../../three/EditorInstance";
+import { getButtonColor } from "../../threeUtils/util4UI";
 
 let container = document.getElementById("toast");
 if (container === null) {

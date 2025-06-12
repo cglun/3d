@@ -1,11 +1,6 @@
 import { CatmullRomCurve3, Object3D, Object3DEventMap, Vector3 } from "three";
 import { TourWindow } from "../../app/MyContext";
-import { setClassName } from "../../app/utils";
-import {
-  getCardBackgroundUrl,
-  getObjectNameByName,
-  getTourSrc,
-} from "../../three/utils";
+
 import { CSS3DSprite } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 
 import { getObjectWorldPosition } from "../viewer3dUtils";
@@ -19,6 +14,12 @@ import {
 import { UserStyles } from "../../app/type";
 import { SceneUserData } from "../../three/Three3dConfig";
 import { editorInstance } from "../../three/EditorInstance";
+import {
+  getCardBackgroundUrl,
+  getObjectNameByName,
+  setClassName,
+} from "../../threeUtils/util4UI";
+import { getTourSrc } from "../../threeUtils/util4Scene";
 
 export class LabelInfo {
   mesh;

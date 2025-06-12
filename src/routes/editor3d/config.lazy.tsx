@@ -9,7 +9,7 @@ import Toast3d from "../../component/common/Toast3d";
 
 import { APP_COLOR, DELAY } from "../../app/type";
 import { useState } from "react";
-import { getButtonColor, getThemeByScene } from "../../app/utils";
+import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
 import Icon from "../../component/common/Icon";
 
 import { styleBody } from "../../component/Editor/OutlineView/fontColor";

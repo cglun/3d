@@ -1,12 +1,12 @@
 import { Vector3 } from "three";
 import { TourWindow } from "../../app/MyContext";
-import { setClassName } from "../../app/utils";
-import { getCardBackgroundUrl } from "../../three/utils";
+
 import { CSS3DSprite } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 
 import { UserStyles } from "../../app/type";
 import { SceneUserData } from "../../three/Three3dConfig";
 import { editorInstance } from "../../three/EditorInstance";
+import { getCardBackgroundUrl, setClassName } from "../../threeUtils/util4UI";
 
 export class MarkLabel {
   div = document.createElement("div");

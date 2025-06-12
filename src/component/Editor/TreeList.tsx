@@ -1,8 +1,6 @@
 import React, { memo } from "react";
 import { Button, Container, ListGroupItem } from "react-bootstrap";
 
-import { getObjectNameByName } from "../../three/utils";
-
 import { APP_COLOR, UserDataType } from "../../app/type";
 import { Group, Light, Mesh, Object3D, Object3DEventMap } from "three";
 import ModalConfirm3d from "../common/ModalConfirm3d";
@@ -13,6 +11,7 @@ import { useUpdateScene } from "../../app/hooks";
 import Icon from "../common/Icon";
 import { styleBody } from "./OutlineView/fontColor";
 import { editorInstance } from "../../three/EditorInstance";
+import { getObjectNameByName } from "../../threeUtils/util4UI";
 
 function TreeNode({
   node,

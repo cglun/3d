@@ -11,8 +11,7 @@ import {
 } from "react-bootstrap";
 import { TransformControlsMode } from "three/addons/controls/TransformControls.js";
 import { Object3D, Vector3 } from "three";
-import { getThemeByScene } from "../../app/utils";
-import { getProjectData } from "../../three/utils";
+
 import { useUpdateCamera, useUpdateScene } from "../../app/hooks";
 import ModalTour from "../common/ModalTour";
 
@@ -22,6 +21,8 @@ import { editorInstance, EditorInstance } from "../../three/EditorInstance";
 import ModalConfirm3d from "../common/ModalConfirm3d";
 import AlertBase from "../common/AlertBase";
 import { APP_COLOR, RecordItem } from "../../app/type";
+import { getThemeByScene } from "../../threeUtils/util4UI";
+import { getProjectData } from "../../threeUtils/util4Scene";
 
 function EditorViewer3d() {
   const editorCanvas: React.RefObject<HTMLDivElement> =
@@ -69,7 +70,7 @@ function EditorViewer3d() {
 
       if (item.id !== -1) {
         const editor = editorInstance.getEditor();
-        getProjectData(item.id).then((data) => {
+        getProjectData(item.id).then((data: string) => {
           // 假设 deserialize 是异步方法
           editor.deserialize(data, item);
 

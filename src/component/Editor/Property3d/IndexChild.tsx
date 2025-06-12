@@ -17,7 +17,7 @@ import { ButtonGroup, Container } from "react-bootstrap";
 import { useUpdateScene } from "../../../app/hooks";
 import { Input3d } from "./Input3d";
 import { Selected3dName } from "./Selected3dName";
-import { getButtonColor, getThemeByScene } from "../../../app/utils";
+import { getButtonColor, getThemeByScene } from "../../../threeUtils/util4UI";
 import AlertBase from "../../common/AlertBase";
 
 import { APP_COLOR } from "../../../app/type";

@@ -1,7 +1,6 @@
 import { Scene, Vector3 } from "three";
 import { ActionItemMap, CustomButtonType } from "../../app/type";
 
-import { createGroupIfNotExist } from "../../three/utils";
 import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
 
 import {
@@ -20,6 +19,7 @@ import { LabelInfoPanelController } from "../label/LabelInfoPanelController";
 import { CustomButtonList, SceneUserData } from "../../three/Three3dConfig";
 import { viewerInstance } from "../../three/ViewerInstance";
 import { editorInstance } from "../../three/EditorInstance";
+import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
 
 function getActionItemByMap(
   item: ActionItemMap,

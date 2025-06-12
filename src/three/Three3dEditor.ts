@@ -10,9 +10,10 @@ import {
 import { GlbModel, UserDataType } from "../app/type";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { Three3d } from "./Three3d";
-import { createGroupIfNotExist } from "./utils";
+
 import { TransformControls } from "three/addons/controls/TransformControls.js";
 import { BackgroundHDR, SceneUserData } from "./Three3dConfig";
+import { createGroupIfNotExist } from "../threeUtils/util4Scene";
 
 export class Three3dEditor extends Three3d {
   static divElement: HTMLDivElement;

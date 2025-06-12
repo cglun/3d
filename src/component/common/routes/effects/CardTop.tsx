@@ -4,9 +4,10 @@ import CardImg from "react-bootstrap/esm/CardImg";
 import { CardText } from "./CardText";
 
 import { useUpdateScene } from "../../../../app/hooks";
-import { getCardBackgroundUrl } from "../../../../three/utils";
+
 import { editorInstance } from "../../../../three/EditorInstance";
 import { UserCssStyle } from "../../../../three/Three3dConfig";
+import { getCardBackgroundUrl } from "../../../../threeUtils/util4UI";
 
 export default function CardTop({
   userDataStyles,

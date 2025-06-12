@@ -3,7 +3,7 @@ import { GlbModel } from "../app/type";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { Three3d } from "./Three3d";
 import { SceneUserData } from "./Three3dConfig";
-import { createGroupIfNotExist } from "./utils";
+import { createGroupIfNotExist } from "../threeUtils/util4Scene";
 
 /**
  * Three3dViewer 类，继承自 Three3d 类，用于创建一个 3D 视图器。

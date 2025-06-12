@@ -11,7 +11,7 @@ import CodeEditor from "../../component/common/routes/script/CodeEditor";
 import { useUpdateScene } from "../../app/hooks";
 import AlertBase from "../../component/common/AlertBase";
 import { APP_COLOR, CustomButtonType } from "../../app/type";
-import { getButtonColor, getThemeByScene } from "../../app/utils";
+import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
 import Toast3d from "../../component/common/Toast3d";
 import ModalConfirm3d from "../../component/common/ModalConfirm3d";
 import { Vector3 } from "three";

@@ -4,7 +4,7 @@ import { Button, ButtonGroup, Modal, Tab, Tabs } from "react-bootstrap";
 import { monaco } from "react-monaco-editor";
 import ModalConfirm3d from "../../ModalConfirm3d";
 import { useUpdateScene } from "../../../../app/hooks";
-import { getThemeByScene } from "../../../../app/utils";
+
 import { APP_COLOR } from "../../../../app/type";
 import UiButtonEditor from "./UiButtonEditor";
 import Toast3d from "../../Toast3d";
@@ -14,6 +14,7 @@ import {
   CustomButtonList,
   customButtonListInit,
 } from "../../../../three/Three3dConfig";
+import { getThemeByScene } from "../../../../threeUtils/util4UI";
 
 interface CodeEditorProps {
   language?: string;

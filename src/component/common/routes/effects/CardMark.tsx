@@ -3,8 +3,9 @@ import { CardNumber } from "./CardNumber";
 import { CardText } from "./CardText";
 import { UserStyles } from "../../../../app/type";
 import { useUpdateScene } from "../../../../app/hooks";
-import { getCardBackgroundUrl } from "../../../../three/utils";
+
 import { editorInstance } from "../../../../three/EditorInstance";
+import { getCardBackgroundUrl } from "../../../../threeUtils/util4UI";
 
 export default function CardMark({
   userDataStyles,

@@ -5,7 +5,7 @@ import { Euler, Vector3 } from "three";
 
 import { useRef, useState } from "react";
 import Toast3d from "../common/Toast3d";
-import { getButtonColor, getThemeByScene } from "../../app/utils";
+import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
 import axios from "../../app/http";
 import { APP_COLOR, GlbModel } from "../../app/type";
 import { useUpdateScene } from "../../app/hooks";

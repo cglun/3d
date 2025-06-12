@@ -15,8 +15,8 @@ import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 
 import { UserDataType } from "../app/type";
 
-import { createGroupIfNotExist } from "./utils";
 import { hdr, HdrKey } from "./Three3dConfig";
+import { createGroupIfNotExist } from "../threeUtils/util4Scene";
 
 export function enableShadow(group: Scene | Group | Object3D, context: Scene) {
   const { useShadow } = context.userData.config3d;

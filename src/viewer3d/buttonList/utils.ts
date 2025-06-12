@@ -5,8 +5,9 @@ import {
   Scene,
   Vector3,
 } from "three";
-import { createGroupIfNotExist } from "../../three/utils";
+
 import { getObjectWorldPosition } from "../viewer3dUtils";
+import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
 export function hasValueString(
   item: Object3D<Object3DEventMap>,
   value: string

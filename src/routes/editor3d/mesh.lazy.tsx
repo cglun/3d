@@ -11,17 +11,18 @@ import {
 
 import { ButtonGroup, Card, Container } from "react-bootstrap";
 
-import { getThemeByScene, setClassName } from "../../app/utils";
-
 import { useUpdateScene } from "../../app/hooks";
+
+import { enableShadow } from "../../three/common3d";
+
+import Icon from "../../component/common/Icon";
+import { editorInstance } from "../../three/EditorInstance";
+import { getThemeByScene, setClassName } from "../../threeUtils/util4UI";
+import { glbLoader } from "../../threeUtils/util4Scene";
 import {
   createDirectionalLight,
   createGridHelper,
-} from "../../three/factory3d";
-import { enableShadow } from "../../three/common3d";
-import { glbLoader } from "../../three/utils";
-import Icon from "../../component/common/Icon";
-import { editorInstance } from "../../three/EditorInstance";
+} from "../../threeUtils/factory3d";
 
 export const Route = createLazyFileRoute("/editor3d/mesh")({
   component: RouteComponent,

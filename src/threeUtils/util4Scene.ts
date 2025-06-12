@@ -67,10 +67,6 @@ export function createGroupIfNotExist(
   return undefined;
 }
 
-export function getObjectNameByName(object3D: Object3D): string {
-  return object3D.name.trim() === "" ? object3D.type : object3D.name;
-}
-
 //base64转码
 export function base64(file: File) {
   const reader = new FileReader();
@@ -183,14 +179,6 @@ export function removeCanvasChild(canvas3d: React.RefObject<HTMLDivElement>) {
       children[i].remove();
     }
   }
-}
-
-export function getCardBackgroundUrl(cardBackgroundUrl: string) {
-  if (cardBackgroundUrl.includes("/file/view/")) {
-    return `url(${cardBackgroundUrl.includes("/file/view/") && location.origin + cardBackgroundUrl})`;
-  }
-
-  return `url(${cardBackgroundUrl})`;
 }
 
 export function manyou(

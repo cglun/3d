@@ -5,7 +5,6 @@ import Form from "react-bootstrap/esm/Form";
 import { Button, ButtonGroup, Card, Container } from "react-bootstrap";
 import Viewer3d from "../../viewer3d/Viewer3d";
 import Toast3d from "./Toast3d";
-import { base64ToBlob, blobToFile, getButtonColor } from "../../app/utils";
 
 import axios, { loadAssets } from "../../app/http";
 import { APP_COLOR, RecordItem } from "../../app/type";
@@ -14,6 +13,11 @@ import Icon from "./Icon";
 import { editorInstance } from "../../three/EditorInstance";
 
 import { viewerInstance } from "../../three/ViewerInstance";
+import {
+  base64ToBlob,
+  blobToFile,
+  getButtonColor,
+} from "../../threeUtils/util4UI";
 
 export default function EditorForm({
   item,

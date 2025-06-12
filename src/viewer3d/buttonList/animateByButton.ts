@@ -12,7 +12,6 @@ import {
 } from "three";
 import { ActionItemMap } from "../../app/type";
 
-import { createGroupIfNotExist } from "../../three/utils";
 import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
 
 import { cameraTween, meshTween } from "../../three/animate";
@@ -22,6 +21,7 @@ import { roamAnimation } from "./buttonGroup";
 
 import { CustomButtonList } from "../../three/Three3dConfig";
 import { viewerInstance } from "../../three/ViewerInstance";
+import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
 
 function getScene() {
   return viewerInstance.getViewer().scene;
