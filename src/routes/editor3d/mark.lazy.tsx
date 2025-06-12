@@ -40,17 +40,23 @@ function RouteComponent() {
   const { scene, updateScene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
   const userData = scene.userData as SceneUserData;
-
   const { config3d } = userData as SceneUserData;
   useEffect(() => {
-    _axios.get("/pano/page?size=1000").then((res) => {
-      if (res.data.code === 200) {
-        const { records } = res.data.result;
-        setListTour(records);
-      } else {
-        Toast3d(res.data.message, "提示", APP_COLOR.Danger);
-      }
-    });
+    _axios
+      .get("/pano/page?size=1000")
+      .then((res) => {
+        if (res.data.code === 200) {
+          const { records } = res.data.result;
+          setListTour(records);
+        } else {
+          Toast3d(res.data.message, "提示", APP_COLOR.Danger);
+          console.error(res.data);
+        }
+      })
+      .catch((err) => {
+        Toast3d("看控制台", "提示", APP_COLOR.Danger);
+        console.error(err);
+      });
   }, []);
 
   if (!config3d) return;

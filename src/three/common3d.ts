@@ -4,23 +4,16 @@ import {
   EquirectangularReflectionMapping,
   Group,
   Object3D,
-  OrthographicCamera,
-  PerspectiveCamera,
   Raycaster,
   Scene,
   Vector2,
-  WebGLRenderer,
 } from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
-import TWEEN from "three/addons/libs/tween.module.js";
 
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 
 import { UserDataType } from "../app/type";
-
-import { enableScreenshot, Extra3d, Parameters3d } from "./config3d";
 
 import { createGroupIfNotExist } from "./utils";
 import { hdr, HdrKey } from "./Three3dConfig";
@@ -46,7 +39,7 @@ export function enableShadow(group: Scene | Group | Object3D, context: Scene) {
 }
 
 //射线 拾取物体
-export function raycasterSelect(
+export function raycasterSelect_xx(
   event: MouseEvent,
   camera: Camera,
   scene: Scene,
@@ -99,56 +92,6 @@ export function hideBoxHelper(scene: Scene) {
   const boxHelper = scene.getObjectByName(GLOBAL_CONSTANT.BOX_HELPER);
   if (boxHelper) {
     boxHelper.visible = false;
-  }
-}
-export interface AnimateProps {
-  scene: Scene;
-  camera: PerspectiveCamera | OrthographicCamera;
-  controls: OrbitControls;
-  renderer: WebGLRenderer;
-  extra3d: Extra3d;
-  parameters3d: Parameters3d;
-  composer?: EffectComposer;
-}
-export function commonAnimate(animateProps: AnimateProps) {
-  const { scene, camera, controls, renderer, extra3d, parameters3d, composer } =
-    animateProps;
-
-  const { css2d, css3d, useTween, FPS, useKeyframe, useComposer } =
-    animateProps.scene.userData.config3d;
-
-  const { clock, mixer } = parameters3d;
-  const T = clock.getDelta();
-  parameters3d.timeS = parameters3d.timeS + T;
-  let renderT = 1 / FPS;
-  // 如果截图,帧率拉满
-  if (enableScreenshot.enable) {
-    renderT = enableScreenshot.renderTime;
-  }
-  if (parameters3d.timeS >= renderT) {
-    if (extra3d.labelRenderer2d && css2d) {
-      extra3d.labelRenderer2d.render(scene, camera);
-    }
-    if (extra3d.labelRenderer3d && css3d) {
-      extra3d.labelRenderer3d.render(scene, camera);
-    }
-    if (useTween) {
-      TWEEN.update();
-    }
-    if (useKeyframe) {
-      mixer.forEach((_mixer) => {
-        _mixer.update(T);
-      });
-    }
-
-    controls.update();
-
-    renderer.render(scene, camera);
-
-    if (composer && useComposer) {
-      composer.render(); // 使用 composer 进行渲染
-    }
-    parameters3d.timeS = 0;
   }
 }
 

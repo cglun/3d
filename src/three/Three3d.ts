@@ -23,16 +23,6 @@ import TWEEN from "three/addons/libs/tween.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import ThreeObj from "./ThreeObj";
 import { GlbModel, RecordItem } from "../app/type";
-import {
-  createGroupIfNotExist,
-  createUnrealBloomPass,
-  getG2,
-  getProjectData,
-  glbLoader,
-  manyou,
-  setOutLinePassColor,
-  strToJson,
-} from "./utils";
 
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 
@@ -45,17 +35,39 @@ import {
   HdrKey,
   SceneUserData,
 } from "./Three3dConfig";
-import { createDirectionalLight, createGridHelper } from "./factory3d";
+
 import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
-import { FXAAShader } from "three/addons/shaders/FXAAShader.js"; // 取消注释
-
-import { Curves, ShaderPass } from "three/addons/Addons.js";
+import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
+import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
+import { CSS3DRenderer } from "three/addons/renderers/CSS3DRenderer.js";
+import { Curves, GLTF, ShaderPass } from "three/addons/Addons.js";
 import sceneUserData from "./Three3dConfig";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { getObjectWorldPosition } from "../viewer3d/viewer3dUtils";
+import { TourWindow } from "../app/MyContext";
+import { MarkLabel } from "../viewer3d/label/MarkLabel";
+import {
+  createDirectionalLight,
+  createGridHelper,
+  createLabelRenderer,
+  createUnrealBloomPass,
+} from "../threeUtils/factory3d";
+import {
+  clearOldLabel,
+  createGroupIfNotExist,
+  getProjectData,
+  glbLoader,
+  manyou,
+  setAnimateClip,
+  setGLTFTransform,
+  setOutLinePassColor,
+  strToJson,
+} from "../threeUtils/util4Scene";
+import { cameraEnterAnimation } from "../threeUtils/util4Camera";
+
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;
   private _outlinePass: OutlinePass;
@@ -65,6 +77,46 @@ export class Three3d extends ThreeObj {
   private _controls: OrbitControls;
   private _clock = new Clock();
   private _timeS = 0;
+  private _labelRenderer2d: CSS2DRenderer;
+  private _labelRenderer3d: CSS3DRenderer;
+  private _extraParams: ExtraParams = {
+    mixer: [],
+    selectedMesh: [],
+    modelList: [],
+    modelSize: 0,
+    loadedModel: 0,
+    roamLine: {
+      roamIsRunning: false,
+      direction: new Vector3(),
+      biNormal: new Vector3(),
+      normal: new Vector3(),
+      position: new Vector3(),
+      lookAt: new Vector3(),
+      speed: sceneUserData.customButtonList.roamButtonGroup.userSetting.speed,
+      tubeGeometry: new TubeGeometry(new Curves.GrannyKnot(), 100, 2, 3, true),
+    },
+  };
+
+  get extraParams() {
+    return this._extraParams;
+  }
+  set extraParams(value) {
+    this._extraParams = value;
+  }
+
+  get labelRenderer2d() {
+    return this._labelRenderer2d;
+  }
+  set labelRenderer2d(value) {
+    this._labelRenderer2d = value;
+  }
+  get labelRenderer3d() {
+    return this._labelRenderer3d;
+  }
+  set labelRenderer3d(value) {
+    this._labelRenderer3d = value;
+  }
+
   get camera() {
     return this._camera;
   }
@@ -73,6 +125,9 @@ export class Three3d extends ThreeObj {
   }
   get renderer() {
     return this._renderer;
+  }
+  set renderer(value) {
+    this._renderer = value;
   }
   get controls() {
     return this._controls;
@@ -93,24 +148,6 @@ export class Three3d extends ThreeObj {
   get clock() {
     return this._clock;
   }
-  extraParams: ExtraParams = {
-    actionMixerList: [],
-    mixer: [],
-    selectedMesh: [],
-    modelList: [],
-    modelSize: 0,
-    loadedModel: 0,
-    roamLine: {
-      roamIsRunning: false,
-      direction: new Vector3(),
-      biNormal: new Vector3(),
-      normal: new Vector3(),
-      position: new Vector3(),
-      lookAt: new Vector3(),
-      speed: sceneUserData.customButtonList.roamButtonGroup.userSetting.speed,
-      tubeGeometry: new TubeGeometry(new Curves.GrannyKnot(), 100, 2, 3, true),
-    },
-  };
 
   constructor(divElement: HTMLDivElement) {
     super(divElement);
@@ -121,12 +158,15 @@ export class Three3d extends ThreeObj {
     this._renderer = this.initRenderer();
     this._controls = this.initControls();
 
+    this._labelRenderer2d = createLabelRenderer(divElement, "2d");
+    this._labelRenderer3d = createLabelRenderer(divElement, "3d");
+
     const { composer, outlinePass } = this.initPostProcessing();
     this._composer = composer;
     this._outlinePass = outlinePass;
 
     this.divElement.appendChild(this.renderer.domElement);
-    this._renderer.setAnimationLoop(() => this.animate());
+    this.renderer.setAnimationLoop(() => this.animate());
     this.addCube();
   }
   addCube() {
@@ -147,9 +187,11 @@ export class Three3d extends ThreeObj {
     scene.name = "场景";
     return scene;
   }
-
+  //重置场景
   resetScene() {
     this.scene.userData = { ...sceneUserData };
+
+    this.extraParams.mixer = [];
     this.scene.children = [];
 
     this.setTextureBackground();
@@ -244,14 +286,9 @@ export class Three3d extends ThreeObj {
   //反序列化
   deserialize(data: string, item: RecordItem) {
     const { scene, models, loader } = strToJson(data);
-
-    const editor = this;
-
-    loader.parse(scene, function (object: Object3D<Object3DEventMap>) {
+    loader.parse(scene, (object: Object3D<Object3DEventMap>) => {
       if (object instanceof Scene) {
-        //  const { userData } = object;
-        //editor.scene.children = [];
-        const _scene = editor.scene;
+        const _scene = this.scene;
         _scene.userData = {
           ...(object.userData as SceneUserData),
           projectName: item.name,
@@ -259,16 +296,15 @@ export class Three3d extends ThreeObj {
           canSave: true,
         };
 
-        const s = _scene.userData as SceneUserData;
+        const { backgroundHDR } = _scene.userData as SceneUserData;
         //是背景色
-        if (s.backgroundHDR.isColor) {
-          const bgColor = s.backgroundHDR as BackgroundHDR;
-          _scene.background = new Color(bgColor.color);
+        if (backgroundHDR.isColor) {
+          _scene.background = new Color(backgroundHDR.color);
         }
         //背景图HDR
-        if (!s.backgroundHDR.isColor) {
+        if (!backgroundHDR.isColor) {
           const rgbeLoader = new RGBELoader();
-          const { backgroundHDR } = object.userData as SceneUserData;
+          //const { backgroundHDR } = object.userData as SceneUserData;
 
           const { color, asBackground } = backgroundHDR;
           rgbeLoader.load(hdr[color as HdrKey], (texture) => {
@@ -289,11 +325,6 @@ export class Three3d extends ThreeObj {
           });
         }
         //const newCamera = this.initCamera();
-        const { fixedCameraPosition } = object.userData as SceneUserData;
-        if (fixedCameraPosition) {
-          const { x, y, z } = fixedCameraPosition;
-          editor.camera.position.set(x, y, z);
-        }
       }
     });
 
@@ -333,15 +364,56 @@ export class Three3d extends ThreeObj {
     }
   }
 
+  //加载模型后，要设置标签
+  setLabel(dispatchTourWindow: React.Dispatch<TourWindow>) {
+    clearOldLabel();
+
+    const MARK_LABEL_GROUP = createGroupIfNotExist(
+      this.scene,
+      GLOBAL_CONSTANT.MARK_LABEL_GROUP
+    );
+    if (!MARK_LABEL_GROUP) {
+      return;
+    }
+
+    const children = MARK_LABEL_GROUP.children;
+    children.forEach((item: Object3D<Object3DEventMap>) => {
+      const mark = new MarkLabel(
+        dispatchTourWindow,
+        item.name,
+        item.userData.labelLogo
+      );
+      const label = mark.css3DSprite;
+
+      const { x, y, z } = item.position;
+      label.position.set(x, y, z);
+      item.userData.needDelete = true;
+      MARK_LABEL_GROUP.add(label);
+    });
+
+    const labelList = children.filter((item: Object3D<Object3DEventMap>) => {
+      if (!item.userData.needDelete) {
+        return item;
+      }
+    });
+
+    MARK_LABEL_GROUP.children = labelList;
+  }
+
   // 添加 private 修饰符
   private loadModelByUrl(model: GlbModel) {
     const loader = glbLoader();
     loader.load(
       model.userData.modelUrl + "?url",
-      (gltf) => {
-        const group = getG2(model, gltf, this.scene);
-        enableShadow(group, this.scene);
+      (gltf: GLTF) => {
+        //设置动画，设置模型组的位置，旋转和缩放
+        const group = setGLTFTransform(model, gltf, this.scene);
         this.scene.add(group);
+
+        //设置动画
+        setAnimateClip(gltf, this.scene, group, this.extraParams);
+        enableShadow(group, this.scene);
+
         this.extraParams.loadedModel += model.userData.modelTotal;
 
         if (this.extraParams.loadedModel === this.extraParams.modelSize) {
@@ -349,7 +421,7 @@ export class Three3d extends ThreeObj {
           this.onLoadProgress(100);
         }
       },
-      (xhr) => {
+      (xhr: { loaded: number }) => {
         model.userData.modelLoaded = xhr.loaded;
         let _loadedModel = 0,
           progress = 0;
@@ -368,7 +440,7 @@ export class Three3d extends ThreeObj {
           this.loadEndRun();
         }
       },
-      (error) => {
+      (error: unknown) => {
         this.onLoadError(error);
       }
     );
@@ -380,20 +452,20 @@ export class Three3d extends ThreeObj {
       const loader = glbLoader();
       loader.load(
         model.userData.modelUrl + "?url",
-        (gltf) => {
-          const group = getG2(model, gltf, this.scene);
+        (gltf: GLTF) => {
+          const group = setGLTFTransform(model, gltf, this.scene);
           enableShadow(group, this.scene);
           this.scene.add(group);
           this.onLoadProgress(100);
         },
-        (xhr) => {
+        (xhr: { loaded: number }) => {
           const progress = parseFloat(
             ((xhr.loaded / model.userData.modelTotal) * 100).toFixed(2)
           );
 
           this.onLoadProgress(progress);
         },
-        (error) => {
+        (error: unknown) => {
           console.error("An error happened", error);
           this.onLoadError(error);
         }
@@ -402,38 +474,37 @@ export class Three3d extends ThreeObj {
   }
 
   animate(): void {
-    const userData = this.scene.userData;
+    const userData = this.scene.userData as SceneUserData;
     const { css2d, css3d, useTween, FPS, useKeyframe, useComposer } =
       userData.config3d;
 
     const { mixer, roamLine } = this.extraParams;
-    const T = this.clock.getDelta();
-    this.timeS = this.timeS + T;
+    const delta = this.clock.getDelta();
+    this.timeS = this.timeS + delta;
     const renderT = 1 / FPS;
 
     if (this.timeS >= renderT) {
       if (css2d) {
-        //this.renderer.render(this.scene, this.camera);
+        this.labelRenderer2d.render(this.scene, this.camera);
       }
       if (css3d) {
-        //extra3d.labelRenderer3d.render(scene, camera);
+        this.labelRenderer3d.render(this.scene, this.camera);
       }
       if (useTween) {
         TWEEN.update();
       }
       if (useKeyframe) {
         mixer.forEach((_mixer) => {
-          _mixer.update(T);
+          _mixer.update(delta);
         });
       }
 
-      this.controls.update();
       if (roamLine) {
         const { speed } = userData.customButtonList.roamButtonGroup.userSetting;
         manyou(roamLine, this.camera, speed);
       }
+      this.controls.update();
 
-      // 移除多余的渲染调用
       if (useComposer) {
         this.composer.render(); // 使用 composer 进行渲染
       } else {
@@ -444,18 +515,10 @@ export class Three3d extends ThreeObj {
   }
   //加载完后统一执行
   private loadEndRun(): void {
+    cameraEnterAnimation(this);
     this.setTextureBackground();
-    this.setCameraPosition();
   }
-  private setCameraPosition() {
-    return;
-    const { fixedCameraPosition } = this.scene.userData.config3d;
 
-    if (fixedCameraPosition) {
-      const { x, y, z } = fixedCameraPosition;
-      this.camera.position.set(x, y, z);
-    }
-  }
   runJavascript(): void {
     //阴影的设置
     const { useShadow } = this.scene.userData.config3d;
@@ -475,9 +538,9 @@ export class Three3d extends ThreeObj {
   loadedModelsEnd(): void {
     console.log("loadedModelsEnd");
   }
-  //@ts-ignore    忽略类型检查,加载进度 0-100
+  //移除未使用的 @ts-expect-error 注释
   onLoadProgress(_process: number) {}
-  //@ts-ignore    忽略类型检查,加载错误,错误信息自行处理
+  // 移除未使用的 @ts-expect-error 注释
   onLoadError(_error: unknown) {}
 
   onWindowResize() {
@@ -500,7 +563,7 @@ export class Three3d extends ThreeObj {
     );
     if (_curve) {
       vector = [];
-      _curve.children.forEach((child) => {
+      _curve.children.forEach((child: Object3D<Object3DEventMap>) => {
         const position = getObjectWorldPosition(child);
         vector.push(position);
       });

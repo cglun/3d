@@ -11,12 +11,13 @@ import Viewer3d from "../../viewer3d/Viewer3d";
 import { useEffect, useRef, useState } from "react";
 import _axios from "../../app/http";
 import { useUpdateScene } from "../../app/hooks";
-import { getButtonColor, getThemeByScene } from "../../app/utils";
+
 import { ActionItemMap, APP_COLOR, RecordItem } from "../../app/type";
 import { resetListGroupIsClick } from "../../viewer3d/buttonList/buttonGroup";
 import { LabelInfoPanelController } from "../../viewer3d/label/LabelInfoPanelController";
 import { viewerInstance } from "../../three/ViewerInstance";
-import { createGroupIfNotExist } from "../../three/utils";
+import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
+import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
 
 // 定义响应数据的类型
 interface PageListResponse {

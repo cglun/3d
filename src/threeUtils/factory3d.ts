@@ -18,14 +18,14 @@ import {
 } from "three/addons/renderers/CSS3DRenderer.js";
 
 import { UserDataType } from "../app/type";
-import { createGroupIfNotExist, getTourSrc } from "./utils";
-
-import { setClassName } from "../app/utils";
 
 import { TourWindow } from "../app/MyContext";
-import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
+
 import { UnrealBloomPass } from "three/examples/jsm/Addons.js";
-import sceneUserData from "./Three3dConfig";
+import sceneUserData from "../three/Three3dConfig";
+import { createGroupIfNotExist, getTourSrc } from "./util4Scene";
+import { GLOBAL_CONSTANT } from "../three/GLOBAL_CONSTANT";
+import { setClassName } from "./util4UI";
 
 export function createPerspectiveCamera(
   node: HTMLElement,
@@ -38,7 +38,7 @@ export function createPerspectiveCamera(
     1000
   );
   camera.name = cameraName;
-  const { x, y, z } = sceneUserData.fixedCameraPosition;
+  const { x, y, z } = sceneUserData.cameraPosition.end;
   camera.position.set(x, y, z);
   camera.userData.isSelected = false;
 
@@ -88,23 +88,6 @@ export function createRenderer(node: HTMLElement) {
   return renderer;
 }
 
-export function createConfigRenderer(scene: Scene, node: HTMLElement) {
-  const { config3d } = scene.userData;
-  let labelRenderer2d, labelRenderer3d;
-  if (config3d.css2d) {
-    const labelRenderer = new CSS2DRenderer();
-    labelRenderer.domElement.style.top = "0px";
-    labelRenderer2d = createLabelRenderer(node, labelRenderer);
-    // new OrbitControls(perspectiveCamera, labelRenderer2d.domElement);
-  }
-  if (config3d.css3d) {
-    const labelRenderer = new CSS3DRenderer();
-    labelRenderer.domElement.style.top = "0px";
-    labelRenderer3d = createLabelRenderer(node, labelRenderer);
-  }
-  return { labelRenderer2d, labelRenderer3d };
-}
-
 export function createScene() {
   const scene = new Scene();
   scene.userData = sceneUserData;
@@ -149,10 +132,12 @@ export function createCss2dLabel(name: string, logo: string) {
 
 export function createLabelRenderer(
   node: HTMLElement,
-  renderer: CSS2DRenderer | CSS3DRenderer
+  renderer: "2d" | "3d" = "2d"
 ) {
-  const labelRenderer = renderer;
+  const labelRenderer =
+    renderer === "2d" ? new CSS2DRenderer() : new CSS3DRenderer();
   labelRenderer.setSize(node.offsetWidth, node.offsetHeight);
+
   const renderDom = labelRenderer.domElement;
   renderDom.style.position = "absolute";
   renderDom.style.pointerEvents = "none";

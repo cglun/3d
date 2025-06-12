@@ -10,6 +10,7 @@ import { editorInstance } from "../../three/EditorInstance";
 
 export class MarkLabel {
   div = document.createElement("div");
+
   userDataStyles = {
     cardWidth: 116,
     cardHeight: 116,
@@ -46,6 +47,7 @@ export class MarkLabel {
     this.userDataStyles = _userData.userCssStyle.markLabel;
     this.markName = markName;
     this.logo = logo;
+
     this.init();
   }
   init() {
@@ -103,7 +105,7 @@ export class MarkLabel {
 
     const eye = document.createElement("i");
 
-    eye.className = setClassName("eye");
+    eye.className = setClassName(this.logo);
 
     header.appendChild(eye);
 

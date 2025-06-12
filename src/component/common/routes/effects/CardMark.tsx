@@ -29,8 +29,6 @@ export default function CardMark({
     cardBackgroundColor,
     cardBackgroundUrl,
     headerFontSize,
-    headerColor,
-    bodyFontSize,
     bodyColor,
     offsetX,
     offsetY,
@@ -143,22 +141,14 @@ export default function CardMark({
             backgroundPosition: "center center",
             backgroundSize: "cover",
             padding: `${headerMarginTop}px ${headerMarginLeft}px  `,
-            fontSize: bodyFontSize + "px",
+            fontSize: headerFontSize + "px",
             color: bodyColor,
           }}
         >
-          <div
-            className="mark-label-header"
-            style={{
-              fontSize: headerFontSize + "px",
-              color: headerColor,
-            }}
-          >
-            <i className="bi bi-eye"></i>
-            <span className="ms-1" title="字体信息">
-              字体信息
-            </span>
-          </div>
+          <i className="bi bi-eye"></i>
+          <span className="ms-1" title="字体信息">
+            字体信息
+          </span>
         </div>
       </div>
     </>

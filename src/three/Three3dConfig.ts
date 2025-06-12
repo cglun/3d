@@ -1,5 +1,4 @@
 import {
-  AnimationAction,
   AnimationMixer,
   Mesh,
   Object3D,
@@ -58,8 +57,11 @@ export interface Config3d {
 export interface SceneUserData {
   projectId: number;
   selected3d: Object3D<Object3DEventMap> | null;
+  cameraPosition: {
+    start: Vector3;
+    end: Vector3;
+  };
   isSelected: boolean;
-  fixedCameraPosition: Vector3;
   config3d: Config3d;
   backgroundHDR: BackgroundHDR;
   javascript: string;
@@ -107,7 +109,6 @@ export const customButtonListInit = {
   },
 };
 export interface ExtraParams {
-  actionMixerList: AnimationAction[];
   mixer: AnimationMixer[];
   selectedMesh: Mesh[];
   modelList: GlbModel[];
@@ -142,7 +143,10 @@ const sceneUserData: SceneUserData = {
   projectId: -1,
   selected3d: null,
   isSelected: false,
-  fixedCameraPosition: new Vector3(5, 6, 7),
+  cameraPosition: {
+    start: new Vector3(15, 16, 17),
+    end: new Vector3(5, 6, 7),
+  },
   config3d: {
     css2d: true, //是否开启2d标签
     css3d: true, //是否开启3d标签
@@ -166,8 +170,15 @@ const sceneUserData: SceneUserData = {
     sceneCanSave: false,
   },
   userCssStyle: {
-    topCard: { ...userCssStyle },
-    markLabel: { ...userCssStyle },
-  }, // 若 UserStyles 有具体结构，需按需填充
+    topCard: {
+      ...userCssStyle,
+    },
+    markLabel: {
+      ...userCssStyle,
+      cardHeight: 18,
+      cardWidth: 140,
+      bodyFontSize: 16,
+    },
+  },
 };
 export default sceneUserData;

@@ -28,31 +28,36 @@ export function Selected3dName() {
     return false;
   }
 
+  if (selected3d === null) {
+    return;
+  }
+
+  let showName = selected3d.name;
+  if (selected3d.name.trim() === "") {
+    showName = selected3d.type;
+  }
+
   return (
-    selected3d && (
-      <InputGroup size="sm">
-        <InputGroup.Text style={{ color: styleBody.color }}>
-          名字
-        </InputGroup.Text>
-        <Form.Control
-          aria-label="Small"
-          aria-describedby="inputGroup-sizing-sm"
-          type="text"
-          disabled={hasValueInGlobalConstant(selected3d.name)}
-          placeholder={"请输入名字"}
-          value={selected3d.name}
-          title={selected3d.name}
-          onChange={(e) => {
-            const _value = e.target.value;
-            const { scene } = editorInstance.getEditor();
-            const { selected3d } = scene.userData as SceneUserData;
-            if (!hasValueInGlobalConstant(_value) && selected3d !== null) {
-              selected3d.name = _value;
-              updateScene(scene);
-            }
-          }}
-        />
-      </InputGroup>
-    )
+    <InputGroup size="sm">
+      <InputGroup.Text style={{ color: styleBody.color }}>名字</InputGroup.Text>
+      <Form.Control
+        aria-label="Small"
+        aria-describedby="inputGroup-sizing-sm"
+        type="text"
+        disabled={hasValueInGlobalConstant(selected3d.name)}
+        placeholder={"请输入名字"}
+        value={showName}
+        title={showName}
+        onChange={(e) => {
+          const _value = e.target.value;
+          const { scene } = editorInstance.getEditor();
+          const { selected3d } = scene.userData as SceneUserData;
+          if (!hasValueInGlobalConstant(_value) && selected3d) {
+            selected3d.name = _value;
+            updateScene(scene);
+          }
+        }}
+      />
+    </InputGroup>
   );
 }

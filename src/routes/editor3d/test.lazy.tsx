@@ -12,11 +12,14 @@ import {
 } from "three";
 import { cameraTween } from "../../three/animate";
 import Toast3d from "../../component/common/Toast3d";
-import { getButtonColor, getThemeByScene } from "../../app/utils";
+
 import { useUpdateScene } from "../../app/hooks";
 import { styleBody } from "../../component/Editor/OutlineView/fontColor";
 import { editorInstance } from "../../three/EditorInstance";
 import { SceneUserData } from "../../three/Three3dConfig";
+import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
+import { cameraEnterAnimation } from "../../threeUtils/util4Camera";
+
 export const Route = createLazyFileRoute("/editor3d/test")({
   component: RouteComponent,
 });
@@ -44,12 +47,7 @@ function RouteComponent() {
           variant={btnColor}
           disabled={!useTween}
           onClick={() => {
-            const { camera, scene } = editorInstance.getEditor();
-            const { fixedCameraPosition } = scene.userData;
-            // const camera = editorInstance.getEditor().camera;
-            camera.position.set(8, 8, 8);
-            cameraTween(camera, fixedCameraPosition).start();
-            console.log(scene.userData);
+            cameraEnterAnimation(editorInstance.getEditor());
           }}
         >
           相机动画
@@ -136,7 +134,7 @@ function RouteComponent() {
               const { animationTime } =
                 _userData.customButtonList.panelControllerButtonGroup
                   .userSetting;
-              cameraTween(camera, userData.fixedCameraPosition, animationTime)
+              cameraTween(camera, _userData.cameraPosition.end, animationTime)
                 .start()
                 .onComplete(() => {
                   controls.target.set(0, 0, 0);

@@ -12,9 +12,10 @@ import {
 } from "../app/MyContext";
 import ModalTour from "../component/common/ModalTour";
 import { reducerCamera, reducerScene, reducerTour } from "../app/reducer";
-import { getProjectData } from "../three/utils";
+
 import { viewerInstance } from "../three/ViewerInstance";
 import { Three3dViewer } from "../three/Three3dViewer";
+import { getProjectData } from "../threeUtils/util4Scene";
 
 /**
  * 其他应用可以调用此组件，
@@ -77,7 +78,7 @@ export default function Viewer3d({
 
   function loadScene() {
     const viewer = viewerInstance.getViewer();
-    getProjectData(item.id).then((data) => {
+    getProjectData(item.id).then((data: string) => {
       // console.log("loadScene,要清空原来的哦");
       viewer.resetScene();
       viewer.deserialize(data, item);
