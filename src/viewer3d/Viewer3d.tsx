@@ -46,7 +46,7 @@ export default function Viewer3d({
     if (canvas3d.current && !isInitialized.current) {
       isInitialized.current = true; // 标记为已初始化
       console.log("Viewer3d", item.id);
-      const viewer = new Three3dViewer(canvas3d.current);
+      const viewer = new Three3dViewer(canvas3d.current, dispatchTourWindow);
       viewerInstance.setViewer(viewer);
 
       viewer.controls.enabled = true;

@@ -5,7 +5,10 @@ import { UserStyles } from "../../../../app/type";
 import { useUpdateScene } from "../../../../app/hooks";
 
 import { editorInstance } from "../../../../three/EditorInstance";
-import { getCardBackgroundUrl } from "../../../../threeUtils/util4UI";
+import {
+  getCardBackgroundUrl,
+  setClassName,
+} from "../../../../threeUtils/util4UI";
 
 export default function CardMark({
   userDataStyles,
@@ -144,12 +147,16 @@ export default function CardMark({
             padding: `${headerMarginTop}px ${headerMarginLeft}px  `,
             fontSize: headerFontSize + "px",
             color: bodyColor,
+            display: "flex",
+
+            alignItems: "center",
           }}
         >
-          <i className="bi bi-eye"></i>
+          <i className={setClassName("geo")}></i>
           <span className="ms-1" title="字体信息">
             字体信息
           </span>
+          <i className={setClassName("eye")} style={{ marginLeft: "auto" }}></i>
         </div>
       </div>
     </>

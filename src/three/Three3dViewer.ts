@@ -1,9 +1,10 @@
-import { Color, DataTexture } from "three";
+import { Color, DataTexture, Object3D } from "three";
 import { GlbModel } from "../app/type";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { Three3d } from "./Three3d";
 import { SceneUserData } from "./Three3dConfig";
 import { createGroupIfNotExist } from "../threeUtils/util4Scene";
+import { TourWindow } from "../app/MyContext";
 
 /**
  * Three3dViewer 类，继承自 Three3d 类，用于创建一个 3D 视图器。
@@ -15,8 +16,11 @@ export class Three3dViewer extends Three3d {
    * @param divElement - 用于渲染 3D 场景的 HTML div 元素。
    */
 
-  constructor(divElement: HTMLDivElement) {
-    super(divElement);
+  constructor(
+    divElement: HTMLDivElement,
+    dispatchTourWindow: React.Dispatch<TourWindow>
+  ) {
+    super(divElement, dispatchTourWindow);
   }
 
   /**
@@ -99,5 +103,9 @@ export class Three3dViewer extends Three3d {
     this.renderer.render(this.scene, this.camera);
     const screenshot = this.renderer.domElement.toDataURL("image/png");
     return screenshot;
+  }
+  getSelectedObjects(): Object3D[] {
+    const selectedObjects = this.scene.userData.selected3d;
+    return selectedObjects;
   }
 }

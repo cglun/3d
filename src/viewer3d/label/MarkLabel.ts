@@ -7,9 +7,24 @@ import { UserStyles } from "../../app/type";
 import { SceneUserData } from "../../three/Three3dConfig";
 import { editorInstance } from "../../three/EditorInstance";
 import { getCardBackgroundUrl, setClassName } from "../../threeUtils/util4UI";
+import { getTourSrc } from "../../threeUtils/util4Scene";
+
+export interface MarkLabelProps {
+  markName: string;
+  logo: string;
+  showEye: boolean;
+  tourObject: { id: string; title: string };
+}
 
 export class MarkLabel {
   div = document.createElement("div");
+
+  markLabelProps: MarkLabelProps = {
+    markName: "标注名称",
+    logo: "geo-alt",
+    showEye: false,
+    tourObject: { id: "", title: "" },
+  };
 
   userDataStyles = {
     cardWidth: 116,
@@ -28,35 +43,28 @@ export class MarkLabel {
     headerMarginLeft: 0,
     cardSize: 0.04,
   } as UserStyles;
-  markName = "标注名称";
-  logo = "geo-alt";
 
   css3DSprite = new CSS3DSprite(this.div);
   dispatchTourWindow: React.Dispatch<TourWindow>;
 
   constructor(
     dispatchTourWindow: React.Dispatch<TourWindow>,
-    markName: string,
-    logo: string
+    markLabelProps: MarkLabelProps
   ) {
     this.dispatchTourWindow = dispatchTourWindow;
+    this.markLabelProps = markLabelProps;
     const { scene } = editorInstance.getEditor();
-
     const _userData = scene.userData as SceneUserData;
-
     this.userDataStyles = _userData.userCssStyle.markLabel;
-    this.markName = markName;
-    this.logo = logo;
-
-    this.init();
-  }
-  init() {
     this.createDiv();
     this.createCss3dLabel();
   }
+
   private createCss3dLabel(position = { x: 0, y: 0, z: 0 } as Vector3) {
     const css3DSprite = new CSS3DSprite(this.div);
-    css3DSprite.name = "MARK_" + this.markName;
+    css3DSprite.name = this.markLabelProps.markName;
+
+    css3DSprite.userData = this.markLabelProps;
     const { x, y, z } = position;
     css3DSprite.position.set(x, y, z);
     const { cardSize } = this.userDataStyles;
@@ -103,18 +111,43 @@ export class MarkLabel {
     header.style.fontSize = headerFontSize + "px";
     header.style.color = headerColor;
 
-    const eye = document.createElement("i");
-
-    eye.className = setClassName(this.logo);
-
-    header.appendChild(eye);
+    const logo = document.createElement("i");
+    logo.className = setClassName(this.markLabelProps.logo);
+    header.appendChild(logo);
 
     const title = document.createElement("span");
     title.style.fontSize = this.userDataStyles.headerColor + "px";
     title.style.color = this.userDataStyles.headerColor;
     title.className = "ms-1";
-    title.textContent = this.markName;
+    title.textContent = this.markLabelProps.markName;
     header.appendChild(title);
+
+    // 修改 header 样式
+    header.style.display = "flex";
+    header.style.alignItems = "center";
+
+    if (this.markLabelProps.showEye) {
+      const eye = document.createElement("i");
+      eye.className = setClassName("eye");
+      eye.style.cursor = "pointer";
+      // 使用 margin-left: auto 实现右对齐
+      eye.style.marginLeft = "auto";
+      eye.addEventListener("click", () => {
+        // 使用箭头函数保证 this 指向实例
+        if (this.dispatchTourWindow) {
+          const { id, title } = this.markLabelProps.tourObject;
+          this.dispatchTourWindow({
+            type: "tourWindow",
+            payload: {
+              show: true,
+              title: title,
+              tourSrc: getTourSrc(id),
+            },
+          });
+        }
+      });
+      header.appendChild(eye);
+    }
 
     this.div.appendChild(header);
   }

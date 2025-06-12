@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef } from "react";
+import React, { memo, useContext, useEffect, useRef } from "react";
 import { useLocation } from "@tanstack/react-router";
 
 import {
@@ -9,12 +9,10 @@ import {
   ProgressBar,
   Row,
 } from "react-bootstrap";
-import { TransformControlsMode } from "three/addons/controls/TransformControls.js";
 import { Object3D, Vector3 } from "three";
-
+import { TransformControlsMode } from "three/addons/controls/TransformControls.js";
 import { useUpdateCamera, useUpdateScene } from "../../app/hooks";
 import ModalTour from "../common/ModalTour";
-
 import Icon from "../common/Icon";
 import { Three3dEditor } from "../../three/Three3dEditor";
 import { editorInstance, EditorInstance } from "../../three/EditorInstance";
@@ -23,6 +21,7 @@ import AlertBase from "../common/AlertBase";
 import { APP_COLOR, RecordItem } from "../../app/type";
 import { getThemeByScene } from "../../threeUtils/util4UI";
 import { getProjectData } from "../../threeUtils/util4Scene";
+import { MyContext } from "../../app/MyContext";
 
 function EditorViewer3d() {
   const editorCanvas: React.RefObject<HTMLDivElement> =
@@ -34,7 +33,7 @@ function EditorViewer3d() {
   const { scene, updateScene } = useUpdateScene();
   const { updateCamera } = useUpdateCamera();
   const { themeColor } = getThemeByScene(scene);
-
+  const { dispatchTourWindow } = useContext(MyContext);
   const location = useLocation().search; // 获取 sceneId 参数
   const searchParams = new URLSearchParams(location);
   const sceneId = searchParams.get("sceneId") ?? "-1";
@@ -42,7 +41,10 @@ function EditorViewer3d() {
   useEffect(() => {
     // let editor: Three3dEditor;
     if (editorCanvas.current && !isInitialized.current) {
-      const editor = new Three3dEditor(editorCanvas.current);
+      const editor = new Three3dEditor(
+        editorCanvas.current,
+        dispatchTourWindow
+      );
       isInitialized.current = true; // 标记为已初始化
       editorInstance.setEditor(editor);
 

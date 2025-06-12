@@ -67,6 +67,7 @@ import {
   strToJson,
 } from "../threeUtils/util4Scene";
 import { cameraEnterAnimation } from "../threeUtils/util4Camera";
+import { Dispatch } from "react";
 
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;
@@ -79,12 +80,14 @@ export class Three3d extends ThreeObj {
   private _timeS = 0;
   private _labelRenderer2d: CSS2DRenderer;
   private _labelRenderer3d: CSS3DRenderer;
+  private _dispatchTourWindow: Dispatch<TourWindow>;
   private _extraParams: ExtraParams = {
     mixer: [],
     selectedMesh: [],
     modelList: [],
     modelSize: 0,
     loadedModel: 0,
+
     roamLine: {
       roamIsRunning: false,
       direction: new Vector3(),
@@ -103,7 +106,12 @@ export class Three3d extends ThreeObj {
   set extraParams(value) {
     this._extraParams = value;
   }
-
+  set dispatchTourWindow(value: Dispatch<TourWindow>) {
+    this._dispatchTourWindow = value;
+  }
+  get dispatchTourWindow() {
+    return this._dispatchTourWindow;
+  }
   get labelRenderer2d() {
     return this._labelRenderer2d;
   }
@@ -149,7 +157,10 @@ export class Three3d extends ThreeObj {
     return this._clock;
   }
 
-  constructor(divElement: HTMLDivElement) {
+  constructor(
+    divElement: HTMLDivElement,
+    dispatchTourWindow: Dispatch<TourWindow>
+  ) {
     super(divElement);
     this.divElement = divElement;
     this._scene = this.initScene();
@@ -157,7 +168,7 @@ export class Three3d extends ThreeObj {
     this._camera = this.initCamera();
     this._renderer = this.initRenderer();
     this._controls = this.initControls();
-
+    this._dispatchTourWindow = dispatchTourWindow;
     this._labelRenderer2d = createLabelRenderer(divElement, "2d");
     this._labelRenderer3d = createLabelRenderer(divElement, "3d");
 
@@ -190,10 +201,10 @@ export class Three3d extends ThreeObj {
   //重置场景
   resetScene() {
     this.scene.userData = { ...sceneUserData };
-
     this.extraParams.mixer = [];
     this.scene.children = [];
 
+    clearOldLabel();
     this.setTextureBackground();
     const HELPER_GROUP = createGroupIfNotExist(
       this.scene,
@@ -289,12 +300,21 @@ export class Three3d extends ThreeObj {
     loader.parse(scene, (object: Object3D<Object3DEventMap>) => {
       if (object instanceof Scene) {
         const _scene = this.scene;
+
         _scene.userData = {
           ...(object.userData as SceneUserData),
           projectName: item.name,
           projectId: item.id,
           canSave: true,
         };
+
+        const labelGroup = createGroupIfNotExist(
+          object,
+          GLOBAL_CONSTANT.MARK_LABEL_GROUP,
+          false
+        );
+
+        if (labelGroup) _scene.add(labelGroup);
 
         const { backgroundHDR } = _scene.userData as SceneUserData;
         //是背景色
@@ -335,6 +355,7 @@ export class Three3d extends ThreeObj {
 
     if (models.length === 0) {
       this.onLoadProgress(100);
+      this.loadEndRun();
       return;
     }
     models.forEach((model: GlbModel) => {
@@ -365,39 +386,26 @@ export class Three3d extends ThreeObj {
   }
 
   //加载模型后，要设置标签
-  setLabel(dispatchTourWindow: React.Dispatch<TourWindow>) {
-    clearOldLabel();
-
-    const MARK_LABEL_GROUP = createGroupIfNotExist(
-      this.scene,
-      GLOBAL_CONSTANT.MARK_LABEL_GROUP
-    );
-    if (!MARK_LABEL_GROUP) {
-      return;
-    }
-
-    const children = MARK_LABEL_GROUP.children;
-    children.forEach((item: Object3D<Object3DEventMap>) => {
-      const mark = new MarkLabel(
-        dispatchTourWindow,
-        item.name,
-        item.userData.labelLogo
-      );
+  private setLabelGroup(
+    labelGroup: Object3D<Object3DEventMap>
+  ): Object3D<Object3DEventMap>[] {
+    const group: Object3D<Object3DEventMap>[] = [];
+    labelGroup.children.forEach((item: Object3D<Object3DEventMap>) => {
+      debugger;
+      const mark = new MarkLabel(this.dispatchTourWindow, {
+        markName: item.name,
+        logo: item.userData.logo,
+        showEye: item.userData.showEye,
+        tourObject: item.userData.tourObject,
+      });
       const label = mark.css3DSprite;
 
       const { x, y, z } = item.position;
       label.position.set(x, y, z);
-      item.userData.needDelete = true;
-      MARK_LABEL_GROUP.add(label);
+      // item.userData.needDelete = true;
+      group.push(label);
     });
-
-    const labelList = children.filter((item: Object3D<Object3DEventMap>) => {
-      if (!item.userData.needDelete) {
-        return item;
-      }
-    });
-
-    MARK_LABEL_GROUP.children = labelList;
+    return group;
   }
 
   // 添加 private 修饰符
@@ -517,6 +525,17 @@ export class Three3d extends ThreeObj {
   private loadEndRun(): void {
     cameraEnterAnimation(this);
     this.setTextureBackground();
+    let labelGroup = createGroupIfNotExist(
+      this.scene,
+      GLOBAL_CONSTANT.MARK_LABEL_GROUP,
+      false
+    );
+
+    if (labelGroup) {
+      const xx = this.setLabelGroup(labelGroup);
+
+      labelGroup.children = xx;
+    }
   }
 
   runJavascript(): void {

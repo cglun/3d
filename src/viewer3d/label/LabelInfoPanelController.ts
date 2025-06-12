@@ -1,12 +1,13 @@
 import React from "react";
 import { TourWindow } from "../../app/MyContext";
 import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
-import { getScene, getSelectedObjects } from "../../three/init3dViewer";
-import { createGroupIfNotExist } from "../../three/utils";
+
 import { LabelInfo } from "./LabelInfo";
 
 import { Scene } from "three";
 import { UserStyles } from "../../app/type";
+import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
+import { viewerInstance } from "../../three/ViewerInstance";
 
 // 标签信息面板控制器
 export class LabelInfoPanelController {
@@ -14,7 +15,7 @@ export class LabelInfoPanelController {
   canBeShowLabelInfo: LabelInfo[] = []; //全部可以显示的标签信息
   isShow = false;
   panelStatus = 0;
-  scene = getScene();
+  scene: Scene;
   boxName = "";
   modelName = "";
   showPanelTest1 = ["C_F1"];
@@ -33,9 +34,9 @@ export class LabelInfoPanelController {
   constructor(dispatchTourWindow: React.Dispatch<TourWindow>) {
     // scene: Scene,
     // dispatchTourWindow: React.Dispatch<TourWindow>
-    // this.scene = scene;
+    this.scene = viewerInstance.getViewer().scene;
     this.dispatchTourWindow = dispatchTourWindow;
-    this.userDataStyles = getScene().userData.userCssStyleTopCard as UserStyles;
+    this.userDataStyles = this.scene.userData.userCssStyleTopCard as UserStyles;
     // this.createLabelInfoPanelByModelGroupName(modelName);
   }
   setScene(scene: Scene) {
@@ -46,7 +47,7 @@ export class LabelInfoPanelController {
   }
   //加载完成后初始化
   setUserDataStyles() {
-    this.userDataStyles = getScene().userData.userCssStyleTopCard as UserStyles;
+    this.userDataStyles = this.scene.userData.userCssStyleTopCard as UserStyles;
   }
   setIsShow(isShow: boolean) {
     this.isShow = isShow;
@@ -172,8 +173,9 @@ export class LabelInfoPanelController {
   }
   //根据模型名称查找标签信息面板
   findLabelInfoByModelBoxName(modelNameList: string[]) {
+    const viewer = viewerInstance.getViewer();
     this.canBeShowLabelInfo = [];
-    getSelectedObjects().length = 0;
+    viewer.getSelectedObjects().length = 0;
     this.allLabelInfo.filter((_item) => {
       return modelNameList.some((item) => {
         const css3DSprite = _item.css3DSprite.name.replace("SPRITE-", "");
@@ -188,7 +190,7 @@ export class LabelInfoPanelController {
   //高亮标签信息面板
   highlightLabelInfoPanel() {
     // getSelectedObjects().length = 0;
-
+    const viewer = viewerInstance.getViewer();
     this.canBeShowLabelInfo.forEach((item) => {
       const model = createGroupIfNotExist(
         this.scene,
@@ -196,12 +198,13 @@ export class LabelInfoPanelController {
         false
       );
       if (model) {
-        getSelectedObjects().push(model);
+        viewer.getSelectedObjects().push(model);
       }
     });
   }
   //重置高亮标签信息面板
   resetHighLightModel() {
-    getSelectedObjects().length = 0;
+    const viewer = viewerInstance.getViewer();
+    viewer.getSelectedObjects().length = 0;
   }
 }

@@ -14,6 +14,8 @@ import { Three3d } from "./Three3d";
 import { TransformControls } from "three/addons/controls/TransformControls.js";
 import { BackgroundHDR, SceneUserData } from "./Three3dConfig";
 import { createGroupIfNotExist } from "../threeUtils/util4Scene";
+import { Dispatch } from "react";
+import { TourWindow } from "../app/MyContext";
 
 export class Three3dEditor extends Three3d {
   static divElement: HTMLDivElement;
@@ -26,8 +28,11 @@ export class Three3dEditor extends Three3d {
   onUpPosition = new Vector2(0, 0);
   onDownPosition = new Vector2(0, 0);
 
-  constructor(divElement: HTMLDivElement) {
-    super(divElement);
+  constructor(
+    divElement: HTMLDivElement,
+    dispatchTourWindow: Dispatch<TourWindow>
+  ) {
+    super(divElement, dispatchTourWindow);
   }
   initTransformControl() {
     const transformControl = new TransformControls(

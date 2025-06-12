@@ -34,7 +34,6 @@ import {
   clearOldLabel,
   createGroupIfNotExist,
 } from "../../threeUtils/util4Scene";
-import { createCss3dLabel } from "../../threeUtils/factory3d";
 
 export const Route = createLazyFileRoute("/editor3d/mark")({
   component: RouteComponent,
@@ -158,11 +157,16 @@ function RouteComponent() {
                 disabled={!config3d.css3d}
                 onClick={() => {
                   //addMark(createCss3dLabel(markName, logo));
-                  const label = new MarkLabel(
-                    dispatchTourWindow,
+                  const label = new MarkLabel(dispatchTourWindow, {
                     markName,
-                    logo
-                  );
+                    logo,
+                    showEye: false,
+                    tourObject: {
+                      id: "id",
+                      title: "title",
+                    },
+                  });
+
                   addMark(label.css3DSprite);
                   const { scene } = editorInstance.getEditor();
                   updateScene(scene);
@@ -200,17 +204,16 @@ function RouteComponent() {
                     variant="top"
                     style={{ cursor: "crosshair" }}
                     onClick={() => {
-                      addMark(
-                        createCss3dLabel(
-                          item.title,
-                          "geo-alt",
-                          {
-                            id: item.id.toString(),
-                            title: item.title,
-                          },
-                          dispatchTourWindow
-                        )
-                      );
+                      const label = new MarkLabel(dispatchTourWindow, {
+                        markName: item.title,
+                        logo,
+                        showEye: true,
+                        tourObject: {
+                          id: item.id.toString(),
+                          title: item.title,
+                        },
+                      });
+                      addMark(label.css3DSprite);
                       const { scene } = editorInstance.getEditor();
                       updateScene(scene);
                     }}

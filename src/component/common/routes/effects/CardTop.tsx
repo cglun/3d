@@ -7,7 +7,10 @@ import { useUpdateScene } from "../../../../app/hooks";
 
 import { editorInstance } from "../../../../three/EditorInstance";
 import { UserCssStyle } from "../../../../three/Three3dConfig";
-import { getCardBackgroundUrl } from "../../../../threeUtils/util4UI";
+import {
+  getCardBackgroundUrl,
+  setClassName,
+} from "../../../../threeUtils/util4UI";
 
 export default function CardTop({
   userDataStyles,
@@ -227,7 +230,7 @@ export default function CardTop({
               color: headerColor,
             }}
           >
-            <i className="bi bi-eye"></i>
+            <i className={setClassName("eye")}></i>
             <span className="ms-1">标题信息</span>
           </div>
           <div
