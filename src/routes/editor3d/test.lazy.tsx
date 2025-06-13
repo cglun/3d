@@ -8,12 +8,24 @@ import { styleBody } from "../../component/Editor/OutlineView/fontColor";
 import { editorInstance } from "../../three/EditorInstance";
 import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
 import { cameraEnterAnimation } from "../../threeUtils/util4Camera";
+import { useEffect } from "react";
+import { config3dInit } from "../../three/Three3dConfig";
 export const Route = createLazyFileRoute("/editor3d/test")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { scene } = useUpdateScene();
+  const { scene, updateScene } = useUpdateScene();
+
+  useEffect(() => {
+    // 确保在组件加载时，scene.userData.config3d 已经存在
+    if (scene.userData.config3d === undefined) {
+      const _scene = scene.clone();
+      _scene.userData.config3d = { ...config3dInit };
+      updateScene(_scene);
+    }
+  }, []);
+
   if (scene.userData.config3d === undefined) {
     return;
   }

@@ -21,15 +21,8 @@ export function ConfigCheck({
   callBack?: () => void;
 }) {
   const { scene, updateScene } = useUpdateScene();
-
   const checked = scene.userData.config3d[configKey];
 
-  //后期加配置项目，如果保存的场景配置项目为undefined，默认加上，防止报错
-  // if (checked === undefined) {
-  //   checked = true;
-  //   const { scene } = editorInstance.getEditor();
-  //   scene.userData.config3d[configKey] = true;
-  // }
   return (
     <InputGroup size="sm">
       <InputGroup.Text>{label}</InputGroup.Text>

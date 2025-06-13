@@ -75,7 +75,6 @@ function RouteComponent() {
         <ButtonGroup size="sm">
           {!show && (
             <>
-              {" "}
               <Button
                 variant={buttonColor}
                 onClick={() => {

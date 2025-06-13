@@ -69,15 +69,18 @@ export interface RoamButtonGroup {
 export interface PanelControllerButtonGroup {
   customButtonItem: CustomButtonItem;
 }
-export interface Config3d {
-  css2d: boolean;
-  css3d: boolean;
-  useTween: boolean;
-  useShadow: boolean;
-  useKeyframe: boolean;
-  FPS: number;
-  useComposer: boolean;
-}
+
+export type Config3dKey = keyof Config3d;
+export type Config3d = typeof config3dInit;
+export const config3dInit = {
+  css2d: true, //是否开启2d标签
+  css3d: true, //是否开启3d标签
+  useTween: true, //是否开启动画
+  useShadow: true, //是否开启阴影
+  useKeyframe: true, //是否开启关键帧动画
+  FPS: 30, //帧率
+  useComposer: true,
+};
 
 export interface SceneUserData {
   projectId: number;
@@ -96,7 +99,6 @@ export interface SceneUserData {
     iconFill: string;
     sceneCanSave: boolean;
   };
-
   userCssStyle: {
     topCard: UserCssStyle;
     markLabel: UserCssStyle;
@@ -179,15 +181,7 @@ const sceneUserData: SceneUserData = {
     start: new Vector3(15, 16, 17),
     end: new Vector3(5, 6, 7),
   },
-  config3d: {
-    css2d: true, //是否开启2d标签
-    css3d: true, //是否开启3d标签
-    useTween: true, //是否开启动画
-    useShadow: true, //是否开启阴影
-    useKeyframe: true, //是否开启关键帧动画
-    FPS: 30, //帧率
-    useComposer: true,
-  },
+  config3d: { ...config3dInit },
 
   backgroundHDR: {
     color: "venice_sunset_1k.hdr",
@@ -195,7 +189,7 @@ const sceneUserData: SceneUserData = {
     isColor: false,
   } as BackgroundHDR,
   javascript: "",
-  customButtonList: { ...customButtonListInit },
+  customButtonList: { ...customButtonListInit } as CustomButtonList,
   APP_THEME: {
     themeColor: APP_COLOR.Dark, // 若 APP_COLOR 有具体结构，需按需填充
     iconFill: "",

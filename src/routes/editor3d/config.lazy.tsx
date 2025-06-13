@@ -8,13 +8,13 @@ import { useUpdateScene } from "../../app/hooks";
 import Toast3d from "../../component/common/Toast3d";
 
 import { APP_COLOR, DELAY } from "../../app/type";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
 import Icon from "../../component/common/Icon";
 
 import { styleBody } from "../../component/Editor/OutlineView/fontColor";
 import { editorInstance } from "../../three/EditorInstance";
-import { SceneUserData } from "../../three/Three3dConfig";
+import { config3dInit, SceneUserData } from "../../three/Three3dConfig";
 
 export const Route = createLazyFileRoute("/editor3d/config")({
   component: RouteComponent,
@@ -27,14 +27,17 @@ function RouteComponent() {
   const { themeColor } = getThemeByScene(scene);
   const btnColor = getButtonColor(themeColor);
 
+  useEffect(() => {
+    // 确保在组件加载时，scene.userData.config3d 已经存在
+    if (scene.userData.config3d === undefined) {
+      const _scene = scene.clone();
+      _scene.userData.config3d = { ...config3dInit };
+      updateScene(_scene);
+    }
+  }, []);
+
   if (scene.userData.config3d === undefined) {
-    // const ud = editorInstance.getEditor().scene;
-    //ud.userData = { ...userData };
-    // const newScene = scene.clone();
-    // newScene.userData = { ...userData };
-    // updateScene(newScene);
-    //updateScene(ud);
-    return configToken();
+    return;
   }
   const { FPS } = scene.userData.config3d || 0;
 

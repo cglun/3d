@@ -546,7 +546,7 @@ export class Three3d extends ThreeObj {
     cameraEnterAnimation(this);
     this.setTextureBackground();
     this.loadedModelsEnd();
-    let labelGroup = createGroupIfNotExist(
+    const labelGroup = createGroupIfNotExist(
       this.scene,
       GLOBAL_CONSTANT.MARK_LABEL_GROUP,
       false

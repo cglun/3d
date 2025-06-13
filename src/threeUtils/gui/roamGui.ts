@@ -138,6 +138,6 @@ function addTube(params: RoamButtonUserSetting) {
 
   editorInstance.getEditor().tubeMesh = mesh;
 }
-function setScale(mesh: Mesh, params: any) {
+function setScale(mesh: Mesh, params: RoamButtonUserSetting) {
   mesh.scale.set(params.scale, params.scale, params.scale);
 }

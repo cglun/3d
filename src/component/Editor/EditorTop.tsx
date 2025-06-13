@@ -48,7 +48,7 @@ export default function EditorTop() {
   function saveScene() {
     const editor = editorInstance.getEditor();
     const dataJson = editor.sceneSerialization();
-    debugger;
+
     const { scene } = editor;
     axios
       .post("/project/update/", {

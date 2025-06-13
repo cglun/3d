@@ -81,7 +81,7 @@ export function drawerOutByNameId(
   item.data = {
     isSelected: true,
     isRunning: true,
-    cameraPosition: new Vector3(0, 0, 0),
+    cameraOffsetStretch: new Vector3(0, 0, 0),
   };
   if (MODEL_GROUP) {
     const { x, y, z } = MODEL_GROUP.position;
@@ -97,7 +97,7 @@ export function drawerOutByNameId(
         item.data = {
           isSelected: true,
           isRunning: false,
-          cameraPosition: new Vector3(0, 0, 0),
+          cameraOffsetStretch: new Vector3(0, 0, 0),
         };
       });
   }
@@ -115,7 +115,7 @@ export function drawerBackHome(toggleButtonGroup: ToggleButtonGroup) {
         _item.data = {
           isRunning: true,
           isSelected: true,
-          cameraPosition: new Vector3(0, 0, 0),
+          cameraOffsetStretch: new Vector3(0, 0, 0),
         };
 
         if (model) {
@@ -131,7 +131,7 @@ export function drawerBackHome(toggleButtonGroup: ToggleButtonGroup) {
               _item.data = {
                 isRunning: false,
                 isSelected: false,
-                cameraPosition: new Vector3(0, 0, 0),
+                cameraOffsetStretch: new Vector3(0, 0, 0),
               };
             });
         }
@@ -270,13 +270,9 @@ export function moveCameraSTRETCH(
     if (isMoveCamera) {
       cameraBackHome(camera, controls, animationTime);
     } else {
-      const fixedPosition = item.data.cameraPosition;
+      const { cameraOffsetStretch } = item.data;
 
-      cameraTween(
-        camera,
-        new Vector3(fixedPosition.x, fixedPosition.y, fixedPosition.z),
-        animationTime
-      ).start();
+      cameraTween(camera, cameraOffsetStretch, animationTime).start();
       const { x, y, z } = MODEL_GROUP.position;
       controls.target.set(x, y, z);
       controls.update();
@@ -431,7 +427,7 @@ export function animateSTRETCH(
   };
 }
 
-export let _roamIsRunning = false;
+export const _roamIsRunning = false;
 //ROAM动画
 export function animateROAM(
   scene: Scene,

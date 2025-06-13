@@ -1,16 +1,5 @@
 import { Euler, Vector3 } from "three";
 
-export interface CanvasNode {
-  width: number;
-  height: number;
-}
-export interface SceneItem {
-  id: number;
-  description: string;
-  name: string;
-  projectId: number;
-  type: string;
-}
 export enum APP_COLOR {
   Primary = "primary",
   Secondary = "secondary",
@@ -26,21 +15,6 @@ export enum DELAY {
   SHORT = 1000,
   MIDDLE = 2000,
   LONG = 3000,
-}
-
-export interface ToastBody {
-  title: string;
-  content: string;
-  type: APP_COLOR;
-  delay: DELAY;
-  show: boolean;
-}
-
-export enum HTTP_TYPE {
-  GET = "GET",
-  POST = "POST",
-  DELETE = "DELETE",
-  UPDATE = "UPDATE",
 }
 
 export interface GlbModel {
@@ -89,7 +63,7 @@ export interface ActionItemMap {
   data: {
     isSelected: boolean;
     isRunning: boolean;
-    cameraPosition: Vector3;
+    cameraOffsetStretch: Vector3; // 拉伸时的相机偏移
   };
 }
 // 使用 = 定义类型，并且明确成员类型为字符串字面量类型

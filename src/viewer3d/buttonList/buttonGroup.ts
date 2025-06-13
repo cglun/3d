@@ -29,7 +29,7 @@ function getActionItemByMap(
     item.data = {
       isSelected: false,
       isRunning: false,
-      cameraPosition: new Vector3(0, 0, 0),
+      cameraOffsetStretch: new Vector3(0, 0, 0),
     };
   }
   return item;
@@ -61,7 +61,7 @@ export function generateToggleButtonGroup(
           data: {
             isSelected: false,
             isRunning: false,
-            cameraPosition: new Vector3(0, 0, 0),
+            cameraOffsetStretch: new Vector3(0, 0, 0),
           },
         },
         customButtonType
@@ -84,7 +84,7 @@ export function generateToggleButtonGroup(
                 data: {
                   isSelected: false,
                   isRunning: false,
-                  cameraPosition: new Vector3(0, 0, 0),
+                  cameraOffsetStretch: new Vector3(0, 0, 0),
                 },
               },
               customButtonType
@@ -120,7 +120,7 @@ export function generateToggleButtonGroup(
                   data: {
                     isSelected: false,
                     isRunning: false,
-                    cameraPosition: new Vector3(0, 0, 0),
+                    cameraOffsetStretch: new Vector3(0, 0, 0),
                   },
                 },
                 customButtonType
@@ -190,7 +190,7 @@ export function generateRoamButtonGroup() {
         data: {
           isSelected: false,
           isRunning: false,
-          cameraPosition: new Vector3(0, 0, 0),
+          cameraOffsetStretch: new Vector3(0, 0, 0),
         },
       });
     });
@@ -261,7 +261,7 @@ export function generatePanelControllerButtonGroup() {
     data: {
       isSelected: false,
       isRunning: false,
-      cameraPosition: new Vector3(0, 0, 0),
+      cameraOffsetStretch: new Vector3(0, 0, 0),
     },
   });
   panelControllerButtonGroup.push({
@@ -273,7 +273,7 @@ export function generatePanelControllerButtonGroup() {
     data: {
       isSelected: false,
       isRunning: false,
-      cameraPosition: new Vector3(0, 0, 0),
+      cameraOffsetStretch: new Vector3(0, 0, 0),
     },
   });
   return panelControllerButtonGroup;
