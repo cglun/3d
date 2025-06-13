@@ -572,9 +572,9 @@ export class Three3d extends ThreeObj {
 
     if (javascript) {
       //@ts-ignore注意：在执行代码时，确保 this 指向正确的 ,对象在这里执行 javascript 代码
-      const editorIns = editorInstance.getEditor();
+      const editorIns = editorInstance?.getEditor();
       //@ts-ignore注意：在执行代码时，确保 this 指向正确的 ,对象在这里执行 javascript 代码
-      const viewerIns = viewerInstance.getViewer();
+      const viewerIns = viewerInstance?.getViewer();
       eval(javascript);
     }
   }

@@ -42,6 +42,7 @@ function RouteComponent() {
 
   const { javascript, projectId, customButtonList } =
     scene.userData as SceneUserData;
+  debugger;
   const buttonList = JSON.stringify(customButtonList, null, 5);
 
   const [buttonType, setButtonType] = useState<CustomButtonType>("TOGGLE");
