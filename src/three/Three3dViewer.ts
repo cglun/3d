@@ -5,6 +5,11 @@ import { Three3d } from "./Three3d";
 import { SceneUserData } from "./Three3dConfig";
 import { createGroupIfNotExist } from "../threeUtils/util4Scene";
 import { TourWindow } from "../app/MyContext";
+import {
+  getPanelControllerButtonGroup,
+  getRoamListByRoamButtonMap,
+  getToggleButtonGroup,
+} from "../viewer3d/buttonList/buttonGroup";
 
 /**
  * Three3dViewer 类，继承自 Three3d 类，用于创建一个 3D 视图器。
@@ -107,5 +112,15 @@ export class Three3dViewer extends Three3d {
   getSelectedObjects(): Object3D[] {
     const selectedObjects = this.scene.userData.selected3d;
     return selectedObjects;
+  }
+
+  getToggleButtonGroup() {
+    return getToggleButtonGroup(this.scene);
+  }
+  getRoamListByRoamButtonMap() {
+    return getRoamListByRoamButtonMap(this.scene);
+  }
+  getPanelControllerButtonGroup() {
+    return getPanelControllerButtonGroup(this.scene);
   }
 }

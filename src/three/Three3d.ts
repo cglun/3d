@@ -19,6 +19,7 @@ import {
   BufferGeometry,
   Line,
 } from "three";
+
 import TWEEN from "three/addons/libs/tween.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import ThreeObj from "./ThreeObj";
@@ -53,6 +54,7 @@ import {
   createDirectionalLight,
   createGridHelper,
   createLabelRenderer,
+  createPerspectiveCamera,
   createUnrealBloomPass,
 } from "../threeUtils/factory3d";
 import {
@@ -68,6 +70,7 @@ import {
 } from "../threeUtils/util4Scene";
 import { cameraEnterAnimation } from "../threeUtils/util4Camera";
 import { Dispatch } from "react";
+import { LabelInfoPanelController } from "../viewer3d/label/LabelInfoPanelController";
 
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;
@@ -81,6 +84,19 @@ export class Three3d extends ThreeObj {
   private _labelRenderer2d: CSS2DRenderer;
   private _labelRenderer3d: CSS3DRenderer;
   private _dispatchTourWindow: Dispatch<TourWindow>;
+  private _labelInfoPanelController: LabelInfoPanelController | null = null;
+  get labelInfoPanelController() {
+    if (this._labelInfoPanelController === null) {
+      this._labelInfoPanelController = new LabelInfoPanelController(
+        this.dispatchTourWindow
+      );
+    }
+    return this.labelInfoPanelController;
+  }
+  set labelInfoPanelController(value: LabelInfoPanelController) {
+    this._labelInfoPanelController = value;
+  }
+
   private _extraParams: ExtraParams = {
     mixer: [],
     selectedMesh: [],
@@ -95,10 +111,16 @@ export class Three3d extends ThreeObj {
       normal: new Vector3(),
       position: new Vector3(),
       lookAt: new Vector3(),
-      speed: sceneUserData.customButtonList.roamButtonGroup.userSetting.speed,
       tubeGeometry: new TubeGeometry(new Curves.GrannyKnot(), 100, 2, 3, true),
     },
   };
+  private _tubeMesh: Mesh | null;
+  get tubeMesh() {
+    return this._tubeMesh;
+  }
+  set tubeMesh(value) {
+    this._tubeMesh = value;
+  }
 
   get extraParams() {
     return this._extraParams;
@@ -178,6 +200,7 @@ export class Three3d extends ThreeObj {
 
     this.divElement.appendChild(this.renderer.domElement);
     this.renderer.setAnimationLoop(() => this.animate());
+    this._tubeMesh = null;
     this.addCube();
   }
   addCube() {
@@ -222,17 +245,7 @@ export class Three3d extends ThreeObj {
   }
 
   private initCamera(): PerspectiveCamera {
-    const camera = new PerspectiveCamera(
-      50,
-      this.divElement.offsetWidth / this.divElement.offsetHeight,
-      0.1,
-      1000
-    );
-    camera.aspect = this.divElement.offsetWidth / this.divElement.offsetHeight;
-    camera.name = "透视相机";
-    camera.lookAt(0, 0, 0);
-    camera.position.set(3, 4, 5);
-
+    const camera = createPerspectiveCamera(this.divElement);
     return camera;
   }
 
@@ -356,6 +369,7 @@ export class Three3d extends ThreeObj {
     if (models.length === 0) {
       this.onLoadProgress(100);
       this.loadEndRun();
+
       return;
     }
     models.forEach((model: GlbModel) => {
@@ -480,11 +494,15 @@ export class Three3d extends ThreeObj {
       );
     });
   }
-
+  splineCamera = new PerspectiveCamera(
+    85,
+    this.divElement.offsetWidth / this.divElement.offsetHeight,
+    0.1,
+    1000
+  );
   animate(): void {
-    const userData = this.scene.userData as SceneUserData;
-    const { css2d, css3d, useTween, FPS, useKeyframe, useComposer } =
-      userData.config3d;
+    const { config3d, customButtonList } = this.scene.userData as SceneUserData;
+    const { css2d, css3d, useTween, FPS, useKeyframe, useComposer } = config3d;
 
     const { mixer, roamLine } = this.extraParams;
     const delta = this.clock.getDelta();
@@ -506,18 +524,18 @@ export class Three3d extends ThreeObj {
           _mixer.update(delta);
         });
       }
-
-      if (roamLine) {
-        const { speed } = userData.customButtonList.roamButtonGroup.userSetting;
-        manyou(roamLine, this.camera, speed);
-      }
       this.controls.update();
+      if (roamLine) {
+        const { userSetting } = customButtonList.roamButtonGroup;
+        manyou(roamLine, this.camera, userSetting);
+      }
 
       if (useComposer) {
         this.composer.render(); // 使用 composer 进行渲染
       } else {
         this.renderer.render(this.scene, this.camera);
       }
+
       this.timeS = 0;
     }
   }
@@ -525,6 +543,7 @@ export class Three3d extends ThreeObj {
   private loadEndRun(): void {
     cameraEnterAnimation(this);
     this.setTextureBackground();
+    this.loadedModelsEnd();
     let labelGroup = createGroupIfNotExist(
       this.scene,
       GLOBAL_CONSTANT.MARK_LABEL_GROUP,
@@ -532,9 +551,8 @@ export class Three3d extends ThreeObj {
     );
 
     if (labelGroup) {
-      const xx = this.setLabelGroup(labelGroup);
-
-      labelGroup.children = xx;
+      const _labelGroup = this.setLabelGroup(labelGroup);
+      labelGroup.children = _labelGroup;
     }
   }
 
@@ -571,9 +589,11 @@ export class Three3d extends ThreeObj {
   }
   getCurveByEmptyMesh(curveEmptyGroupName: string): CatmullRomCurve3 {
     let vector: Vector3[] = [
-      new Vector3(0, 0, 0),
-      new Vector3(0, 0, 1),
-      new Vector3(0, 0, 2),
+      new Vector3(-40, 0, -40),
+      new Vector3(40, 0, -40),
+      new Vector3(140, 0, -40),
+      new Vector3(40, 0, 40),
+      new Vector3(-40, 0, 40),
     ];
     const _curve = createGroupIfNotExist(
       this.scene,
@@ -587,7 +607,7 @@ export class Three3d extends ThreeObj {
         vector.push(position);
       });
 
-      const curve = new CatmullRomCurve3(vector, true, "centripetal"); //"centripetal" | "chordal" | "catmullrom"
+      const curve = new CatmullRomCurve3(vector, true, "catmullrom"); //"centripetal" | "chordal" | "catmullrom"
       const points = curve.getPoints(150); // 创建线条材质
       const material = new LineBasicMaterial({ color: 0xff0000 });
       // 创建 BufferGeometry 并设置顶点
@@ -598,6 +618,7 @@ export class Three3d extends ThreeObj {
       this.scene.add(line);
       return curve;
     }
-    return new CatmullRomCurve3(vector, true, "centripetal");
+    return new CatmullRomCurve3(vector, true, "catmullrom");
   }
+  getCC() {}
 }

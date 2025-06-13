@@ -2,13 +2,13 @@ import React from "react";
 import {
   AnimationMixer,
   ObjectLoader,
-  OrthographicCamera,
   PerspectiveCamera,
   WebGLRenderer,
   Group,
   Object3D,
   Object3DEventMap,
   Scene,
+  Vector3,
 } from "three";
 import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
 import { GLTF } from "three/addons/loaders/GLTFLoader.js";
@@ -16,7 +16,11 @@ import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import axios from "../app/http";
-import { ExtraParams, RoamLine, SceneUserData } from "../three/Three3dConfig";
+import sceneUserData, {
+  ExtraParams,
+  RoamLine,
+  SceneUserData,
+} from "../three/Three3dConfig";
 import { GLOBAL_CONSTANT } from "../three/GLOBAL_CONSTANT";
 import { GlbModel, UserDataType } from "../app/type";
 
@@ -183,16 +187,9 @@ export function removeCanvasChild(canvas3d: React.RefObject<HTMLDivElement>) {
 
 export function manyou(
   roamLine: RoamLine,
-  camera: PerspectiveCamera | OrthographicCamera,
-  speed: number
+  camera: PerspectiveCamera,
+  params: typeof sceneUserData.customButtonList.roamButtonGroup.userSetting
 ) {
-  //设置焦距为84
-
-  const params = {
-    scale: 1,
-    lookAhead: true,
-  };
-
   const {
     tubeGeometry,
     position,
@@ -206,7 +203,7 @@ export function manyou(
     return;
   }
   const time = Date.now();
-  const loopTime = (20 * 1000) / speed;
+  const loopTime = (20 * 1000) / params.speed;
   const t = (time % loopTime) / loopTime;
 
   tubeGeometry.parameters.path.getPointAt(t, position);
@@ -223,13 +220,10 @@ export function manyou(
   biNormal.multiplyScalar(pickt - pick).add(tubeGeometry.binormals[pick]);
 
   tubeGeometry.parameters.path.getTangentAt(t, direction);
-  const offset = 15;
 
   normal.copy(biNormal).cross(direction);
 
-  // we move on a offset on its  biNormal
-
-  position.add(normal.clone().multiplyScalar(offset));
+  position.add(normal.clone().multiplyScalar(params.offset));
 
   camera.position.copy(position);
 
@@ -242,10 +236,12 @@ export function manyou(
   // camera orientation 2 - up orientation via normal
 
   if (!params.lookAhead) lookAt.copy(position).add(direction);
-  camera.matrix.lookAt(camera.position, lookAt, normal);
+  const upVector = new Vector3(0, 1, 0);
+  camera.matrix.lookAt(camera.position, lookAt, upVector);
+  //camera.matrix.lookAt(camera.position, lookAt, normal);
+  camera.matrixWorldNeedsUpdate = true;
   camera.quaternion.setFromRotationMatrix(camera.matrix);
-  camera.updateMatrixWorld();
-  //renderer.render(scene, camera);
+  // camera.updateMatrixWorld();
 }
 export function setOutLinePassColor(color: string, outlinePass: OutlinePass) {
   outlinePass.visibleEdgeColor.set(color); // 可见边缘颜色

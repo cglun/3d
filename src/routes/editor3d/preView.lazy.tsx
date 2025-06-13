@@ -39,7 +39,8 @@ function RouteComponent() {
   const [panelControllerButtonList, setPanelControllerButtonList] = useState<
     ActionItemMap[]
   >([]);
-  const [controller] = useState<LabelInfoPanelController>();
+  const [show, setShow] = useState(false);
+  const [controller, setController] = useState<LabelInfoPanelController>();
   const [showControllerButton, setShowControllerButton] = useState(false);
   const { scene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
@@ -86,36 +87,27 @@ function RouteComponent() {
         }
       });
   }, []);
+
   //@ts-ignore 忽略类型检查，暂时不清楚 Context116 完整类型定义
   function callBack() {
-    // const viewer = viewerInstance.getViewer();
-    // const instance1 = viewer.scene.userData as SceneUserData;
-    // const instance = instance1.customButtonList;
-    // // 检查 getToggleButtonGroup 方法是否存在
-    // setToggleButtonList(instance.getToggleButtonGroup);
-    // setRoamButtonList(instance.getRoamListByRoamButtonMap || []);
-    // setPanelControllerButtonList(instance.getPanelControllerButtonGroup || []);
-    // setController(instance.labelInfoPanelController);
-  }
-  //@ts-ignore 忽略类型检查，暂时不清楚 Context116 完整类型定义
-  function callBackError(error: unknown) {
-    console.error("加载失败", error);
-  }
-  //@ts-expect-error 忽略类型检查，暂时不清楚 progress 相关完整类型定义
-  function getProgress(progress: number) {
-    // console.log("加载进度----------------", progress);
+    const viewer = viewerInstance.getViewer();
+
+    // 检查 getToggleButtonGroup 方法是否存在
+    setToggleButtonList(viewer.getToggleButtonGroup);
+    setRoamButtonList(viewer.getRoamListByRoamButtonMap || []);
+    setPanelControllerButtonList(viewer.getPanelControllerButtonGroup || []);
+    setController(viewer.labelInfoPanelController);
   }
 
-  const [show, setShow] = useState(false);
   function handleClose() {
     setShow(false);
   }
   const modalBody = useRef<HTMLDivElement>(null);
-  const beishu = window.innerHeight / window.innerWidth; // 将 beishu 计算移到这里
+  const beiShu = window.innerHeight / window.innerWidth; // 将 beiShu 计算移到这里
   //@ts-ignore 忽略类型检查，暂时不清楚 Context116 完整类型定义
   const [size3d, setSize3d] = useState({
     w: 1138,
-    h: 1138 * beishu,
+    h: 1138 * beiShu,
   });
 
   useEffect(() => {
@@ -125,7 +117,7 @@ function RouteComponent() {
         const _w = modalBody.current?.clientWidth || 1138;
         const _h =
           modalBody.current?.clientHeight ||
-          modalBody.current?.clientWidth * beishu;
+          modalBody.current?.clientWidth * beiShu;
 
         setSize3d({ w: _w, h: _h });
       }

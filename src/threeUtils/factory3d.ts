@@ -31,9 +31,10 @@ export function createPerspectiveCamera(
   node: HTMLElement,
   cameraName = "透视相机"
 ) {
+  const { offsetWidth, offsetHeight } = node;
   const camera = new PerspectiveCamera(
     50,
-    node.offsetWidth / node.offsetHeight,
+    offsetWidth / offsetHeight,
     0.1,
     1000
   );

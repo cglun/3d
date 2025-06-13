@@ -16,10 +16,10 @@ import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
 
 import { cameraTween, meshTween } from "../../three/animate";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { getObjectWorldPosition, getUserSetting } from "../viewer3dUtils";
+import { getObjectWorldPosition } from "../viewer3dUtils";
 import { roamAnimation } from "./buttonGroup";
 
-import { CustomButtonList } from "../../three/Three3dConfig";
+import { ToggleButtonGroup } from "../../three/Three3dConfig";
 import { viewerInstance } from "../../three/ViewerInstance";
 import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
 
@@ -61,10 +61,11 @@ export function showModelByNameId(NAME_ID: string) {
     }
   }
 }
-export function showModelBackHome(customButtonList: CustomButtonList) {
-  if (customButtonList.toggleButtonGroup.type === "TOGGLE") {
+export function showModelBackHome(toggleButtonGroup: ToggleButtonGroup) {
+  const { type } = toggleButtonGroup.customButtonItem;
+  if (type == "TOGGLE") {
     showModelByNameId(GLOBAL_CONSTANT.MODEL_GROUP);
-    const { animationTime } = getUserSetting(customButtonList);
+    const { animationTime } = toggleButtonGroup.userSetting;
     cameraBackHome(getCamera(), getControls(), animationTime);
   }
 }
@@ -72,7 +73,7 @@ export function showModelBackHome(customButtonList: CustomButtonList) {
 // 显示模型-抽屉
 export function drawerOutByNameId(
   item: ActionItemMap,
-  customButtonList: CustomButtonList
+  toggleButtonGroup: ToggleButtonGroup
 ) {
   // 使用可选链操作符和默认值确保解构安全
 
@@ -84,7 +85,7 @@ export function drawerOutByNameId(
   };
   if (MODEL_GROUP) {
     const { x, y, z } = MODEL_GROUP.position;
-    const { modelOffset, animationTime } = getUserSetting(customButtonList);
+    const { modelOffset, animationTime } = toggleButtonGroup.userSetting;
 
     meshTween(
       MODEL_GROUP,
@@ -102,10 +103,11 @@ export function drawerOutByNameId(
   }
 }
 // 抽屉，回到初始位置
-export function drawerBackHome(customButtonList: CustomButtonList) {
-  if (customButtonList.toggleButtonGroup.type === "DRAWER") {
-    const { listGroup } = customButtonList.toggleButtonGroup;
-    const userSetting = getUserSetting(getScene().userData.customButtonList);
+export function drawerBackHome(toggleButtonGroup: ToggleButtonGroup) {
+  const { type, listGroup } = toggleButtonGroup.customButtonItem;
+
+  if (type === "DRAWER") {
+    const { userSetting } = toggleButtonGroup;
     listGroup.forEach((_item: ActionItemMap) => {
       const _d = _item.data;
       if (_item.data?.isSelected && !_d?.isRunning) {
@@ -140,7 +142,7 @@ export function drawerBackHome(customButtonList: CustomButtonList) {
 // 显示模型-拉伸
 export function stretchModelByNameId(
   NAME_ID: string,
-  customButtonList: CustomButtonList
+  toggleButtonGroup: ToggleButtonGroup
 ) {
   const MODEL_GROUP = createGroupIfNotExist(getScene(), NAME_ID, false);
   if (MODEL_GROUP) {
@@ -151,16 +153,18 @@ export function stretchModelByNameId(
     }
     MODEL_GROUP.userData.childrenIsRunning = true;
     if (isStretch) {
-      stretchListGroup(MODEL_GROUP, customButtonList, false);
+      stretchListGroup(MODEL_GROUP, toggleButtonGroup, false);
       return;
     }
-    stretchListGroup(MODEL_GROUP, customButtonList, true);
+    stretchListGroup(MODEL_GROUP, toggleButtonGroup, true);
   }
 }
 
 //展开的模型回到初始位置
-export function stretchModelBackHome(customButtonList: CustomButtonList) {
-  if (customButtonList.toggleButtonGroup.type === "STRETCH") {
+export function stretchModelBackHome(toggleButtonGroup: ToggleButtonGroup) {
+  const { type } = toggleButtonGroup.customButtonItem;
+
+  if (type === "STRETCH") {
     const MODEL_GROUP = createGroupIfNotExist(
       getScene(),
       GLOBAL_CONSTANT.MODEL_GROUP,
@@ -180,7 +184,7 @@ export function stretchModelBackHome(customButtonList: CustomButtonList) {
             !element.userData.childrenIsRunning &&
             element.userData.childrenIsStretch
           ) {
-            closeStretchModel(_element, customButtonList, index);
+            closeStretchModel(_element, toggleButtonGroup, index);
           }
         }
 
@@ -188,7 +192,7 @@ export function stretchModelBackHome(customButtonList: CustomButtonList) {
 
         //  stretchListGroup(element, customButtonList, false);
       }
-      const { animationTime } = getUserSetting(customButtonList);
+      const { animationTime } = toggleButtonGroup.userSetting;
       cameraBackHome(getCamera(), getControls(), animationTime);
     });
   }
@@ -196,11 +200,11 @@ export function stretchModelBackHome(customButtonList: CustomButtonList) {
 
 function closeStretchModel(
   group: Object3D<Object3DEventMap>,
-  customButtonList: CustomButtonList,
+  toggleButtonGroup: ToggleButtonGroup,
   index: number
 ) {
   const { x, y, z } = group.position;
-  const { modelOffset, animationTime } = getUserSetting(customButtonList);
+  const { modelOffset, animationTime } = toggleButtonGroup.userSetting;
 
   meshTween(
     group,
@@ -222,10 +226,10 @@ function closeStretchModel(
 
 function stretchListGroup(
   MODEL_GROUP: Object3D<Object3DEventMap>,
-  customButtonList: CustomButtonList,
+  toggleButtonGroup: ToggleButtonGroup,
   childrenIsStretch: boolean
 ) {
-  const { animationTime, modelOffset } = getUserSetting(customButtonList);
+  const { animationTime, modelOffset } = toggleButtonGroup.userSetting;
   const array = MODEL_GROUP.children;
   const directionMultiplier = MODEL_GROUP.userData.childrenIsStretch ? -1 : 1;
 
@@ -252,7 +256,7 @@ function stretchListGroup(
 let isMoveCamera = false;
 export function moveCameraSTRETCH(
   item: ActionItemMap,
-  customButtonList: CustomButtonList
+  toggleButtonGroup: ToggleButtonGroup
 ) {
   const { NAME_ID } = item;
 
@@ -262,7 +266,7 @@ export function moveCameraSTRETCH(
     // 移动相机到指定位置
     const camera = getCamera();
     const controls = getControls();
-    const { animationTime } = getUserSetting(customButtonList);
+    const { animationTime } = toggleButtonGroup.userSetting;
     if (isMoveCamera) {
       cameraBackHome(camera, controls, animationTime);
     } else {
@@ -283,7 +287,7 @@ export function moveCameraSTRETCH(
 
 export function moveCameraDRAWER(
   item: ActionItemMap,
-  customButtonList: CustomButtonList
+  toggleButtonGroup: ToggleButtonGroup
 ) {
   const { NAME_ID } = item;
 
@@ -293,7 +297,7 @@ export function moveCameraDRAWER(
     // 移动相机到指定位置
     const camera = getCamera();
     const controls = getControls();
-    const { animationTime, cameraOffset } = getUserSetting(customButtonList);
+    const { animationTime, cameraOffset } = toggleButtonGroup.userSetting;
 
     if (isMoveCamera && MODEL_GROUP.name === GLOBAL_CONSTANT.MODEL_GROUP) {
       cameraBackHome(camera, controls, animationTime);
@@ -327,7 +331,6 @@ export function cameraBackHome(
     .start()
     .onComplete(() => {
       controls.target.set(0, 0, 0);
-      // window.a =
       isMoveCamera = false;
     });
 }
@@ -345,7 +348,7 @@ function commonHandler(item: ActionItemMap) {
 
 export function animateTOGGLE(
   item: ActionItemMap,
-  customButtonList: CustomButtonList
+  toggleButtonGroup: ToggleButtonGroup
 ) {
   const { NAME_ID } = item;
 
@@ -358,7 +361,7 @@ export function animateTOGGLE(
       // document.getCurrentActionItemMap(item);
       commonHandler(item);
       item.isClick = !item.isClick;
-      const { cameraOffset, animationTime } = getUserSetting(customButtonList);
+      const { cameraOffset, animationTime } = toggleButtonGroup.userSetting;
       if (NAME_ID === GLOBAL_CONSTANT.MODEL_GROUP) {
         showModelByNameId(GLOBAL_CONSTANT.MODEL_GROUP);
         cameraBackHome(getCamera(), getControls(), animationTime);
@@ -390,24 +393,24 @@ export function animateTOGGLE(
 }
 export function animateDRAWER(
   item: ActionItemMap,
-  customButtonList: CustomButtonList
+  toggleButtonGroup: ToggleButtonGroup
 ) {
   return {
     ...item,
     handler: () => {
       commonHandler(item);
 
-      drawerBackHome(customButtonList);
+      drawerBackHome(toggleButtonGroup);
       if (!item.data?.isSelected && !item.data?.isRunning) {
-        drawerOutByNameId(item, customButtonList);
-        moveCameraDRAWER(item, customButtonList);
+        drawerOutByNameId(item, toggleButtonGroup);
+        moveCameraDRAWER(item, toggleButtonGroup);
       }
     },
   };
 }
 export function animateSTRETCH(
   item: ActionItemMap,
-  customButtonList: CustomButtonList
+  toggleButtonGroup: ToggleButtonGroup
 ) {
   const { NAME_ID } = item;
   return {
@@ -417,12 +420,12 @@ export function animateSTRETCH(
       //如果是全景按钮，
       if (NAME_ID === GLOBAL_CONSTANT.MODEL_GROUP) {
         //const customButtonList = getScene().userData
-        stretchModelBackHome(customButtonList);
+        stretchModelBackHome(toggleButtonGroup);
         return;
       }
-      stretchModelByNameId(NAME_ID, customButtonList);
-      moveCameraSTRETCH(item, customButtonList);
-      drawerBackHome(customButtonList);
+      stretchModelByNameId(NAME_ID, toggleButtonGroup);
+      moveCameraSTRETCH(item, toggleButtonGroup);
+      drawerBackHome(toggleButtonGroup);
     },
   };
 }
@@ -432,7 +435,6 @@ export let _roamIsRunning = false;
 export function animateROAM(
   scene: Scene,
   curveName: string,
-  customButtonList: CustomButtonList,
   isRunning: boolean
 ) {
   const vector: Vector3[] = [];
@@ -446,72 +448,12 @@ export function animateROAM(
     const position = getObjectWorldPosition(child);
     vector.push(position);
   });
-  const { speed } = getUserSetting(customButtonList, "roamButtonGroup");
-  const curve = new CatmullRomCurve3(vector, true);
 
+  const curve = new CatmullRomCurve3(vector, true);
   const { roamLine } = viewerInstance.getViewer().extraParams;
   if (roamLine) {
     roamLine.roamIsRunning = isRunning;
-    roamLine.speed = speed;
     roamLine.tubeGeometry = new TubeGeometry(curve, 100, 2, 3, true);
-  }
-}
-export function animateROAM_bf(
-  scene: Scene,
-  camera: PerspectiveCamera,
-  controls: OrbitControls,
-  curveName: string,
-  roamButtonGroup: CustomButtonList["roamButtonGroup"],
-  isRunning: boolean
-) {
-  const vector: Vector3[] = [];
-  const _curve = createGroupIfNotExist(scene, curveName, false);
-  if (!_curve) {
-    return;
-  }
-  _roamIsRunning = isRunning;
-
-  _curve.children.forEach((child) => {
-    const position = getObjectWorldPosition(child);
-    vector.push(position);
-  });
-
-  const curve = new CatmullRomCurve3(vector, true);
-
-  //drawROAMLine(curve, scene);
-  if (camera) {
-    // 初始化进度变量
-    let progress = 0;
-    // 移动速度，可根据需要调整
-    const speed = (roamButtonGroup?.userSetting?.speed ?? 2) / 10000;
-
-    function moveModelAlongCurve() {
-      if (progress <= 1 && _roamIsRunning) {
-        // 根据进度获取曲线上的点
-        const point = curve.getPoint(progress);
-        // 设置相机的位置
-        camera.position.copy(point);
-        // 获取曲线的切线方向
-        const tangent = curve.getTangent(progress).normalize();
-        // 计算相机的目标点，使其始终朝前
-        const target = camera.position.clone().add(tangent);
-
-        // 设置相机的朝向
-        //  model.lookAt(target.x, target.y, target.z);
-        controls.target.set(target.x, target.y, target.z);
-        controls.update();
-        // 增加进度
-        progress += speed;
-        if (progress > 1) {
-          progress = 0;
-        }
-
-        requestAnimationFrame(moveModelAlongCurve);
-      }
-    }
-
-    // 开始移动
-    moveModelAlongCurve();
   }
 }
 

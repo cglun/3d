@@ -1,25 +1,13 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { Button, ButtonGroup } from "react-bootstrap";
 
-import {
-  CatmullRomCurve3,
-  Mesh,
-  MeshBasicMaterial,
-  MeshLambertMaterial,
-  Scene,
-  TubeGeometry,
-  Vector3,
-} from "three";
-import { cameraTween } from "../../three/animate";
+import { Scene } from "three";
 import Toast3d from "../../component/common/Toast3d";
-
 import { useUpdateScene } from "../../app/hooks";
 import { styleBody } from "../../component/Editor/OutlineView/fontColor";
 import { editorInstance } from "../../three/EditorInstance";
-import { SceneUserData } from "../../three/Three3dConfig";
 import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
 import { cameraEnterAnimation } from "../../threeUtils/util4Camera";
-
 export const Route = createLazyFileRoute("/editor3d/test")({
   component: RouteComponent,
 });
@@ -47,102 +35,12 @@ function RouteComponent() {
           variant={btnColor}
           disabled={!useTween}
           onClick={() => {
-            cameraEnterAnimation(editorInstance.getEditor());
+            const instance = editorInstance.getEditor();
+            cameraEnterAnimation(instance);
+            console.log(instance.camera);
           }}
         >
           相机动画
-        </Button>
-      </ButtonGroup>
-      <ButtonGroup className="mt-2 ms-2" size="sm">
-        <Button
-          style={{
-            borderColor: styleBody.color,
-          }}
-          variant={btnColor}
-          onClick={() => {
-            //drawROAMLine(getScene(), "漫游动画1");
-            // drawROAMLine(getScene(), "漫游动画1");
-
-            const { extraParams, scene } = editorInstance.getEditor();
-            //@ts-expect-error
-            const curvePath = editorInstance
-              .getEditor()
-              .getCurveByEmptyMesh("漫游动画1");
-            const { roamLine } = extraParams;
-
-            const sampleClosedSpline = new CatmullRomCurve3([
-              new Vector3(-40, 0, -40),
-              new Vector3(40, 0, -40),
-              new Vector3(140, 0, -40),
-              new Vector3(40, 0, 40),
-              new Vector3(-40, 0, 40),
-            ]);
-
-            sampleClosedSpline.curveType = "catmullrom";
-            sampleClosedSpline.closed = true;
-
-            if (roamLine) {
-              roamLine.roamIsRunning = true;
-
-              roamLine.tubeGeometry = new TubeGeometry(
-                sampleClosedSpline, //一个路径对象。
-                600, //数值越大，线越平滑
-                1, //默认值是 1，代表管的半径。数值越大，管就越粗。在你的代码里设置为 2，说明管的半径是 2 个单位
-                3, //默认值是 8,横截面的分段数量。数值越大，管的横截面就越接近圆形
-                closed //路径是否闭合
-              );
-            }
-            const material = new MeshLambertMaterial({ color: 0xff00ff });
-            const wireframeMaterial = new MeshBasicMaterial({
-              color: 0x000000,
-              opacity: 0.3,
-              wireframe: true,
-              transparent: true,
-            });
-
-            const mesh = new Mesh(roamLine!!.tubeGeometry, material);
-            const wireframe = new Mesh(
-              roamLine!!.tubeGeometry,
-              wireframeMaterial
-            );
-            mesh.add(wireframe);
-
-            scene.add(mesh);
-
-            //          const controls = getControls();
-            // const { animationTime } = getUserSetting(scene.userData.customButtonList);
-            // cameraBackHome(camera as PerspectiveCamera, controls, animationTime);
-          }}
-        >
-          绘制漫游线
-        </Button>
-        <Button
-          style={{
-            borderColor: styleBody.color,
-          }}
-          variant={btnColor}
-          onClick={() => {
-            // drawROAMLine(getScene(), "漫游动画1");
-            // drawROAMLine(getScene(), "漫游动画1");
-            const { extraParams, camera, controls, scene } =
-              editorInstance.getEditor();
-            const { roamLine } = extraParams;
-
-            if (roamLine) {
-              roamLine.roamIsRunning = false;
-              const _userData = scene.userData as SceneUserData;
-              const { animationTime } =
-                _userData.customButtonList.panelControllerButtonGroup
-                  .userSetting;
-              cameraTween(camera, _userData.cameraPosition.end, animationTime)
-                .start()
-                .onComplete(() => {
-                  controls.target.set(0, 0, 0);
-                });
-            }
-          }}
-        >
-          停止漫游线
         </Button>
       </ButtonGroup>
     </>

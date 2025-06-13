@@ -29,7 +29,7 @@ body {
 }
 
 .card-header,
-.list-group .d-flex > div:first-child,
+.list-group .d-flex>div:first-child,
 .ellipsis-3d {
   white-space: nowrap;
   overflow: hidden;
@@ -65,7 +65,7 @@ h5 {
   cursor: pointer;
 }
 
-btn-group-sm > .btn,
+btn-group-sm>.btn,
 .btn-sm {
   --bs-btn-padding-y: 0;
   --bs-btn-font-size: 0.8rem;
@@ -90,6 +90,7 @@ btn-group-sm > .btn,
   color: var(--bs-primary-bg-subtle);
   opacity: 0.6;
 }
+
 .mark-label-controller-panel {
   background-color: #0f0404;
   padding: 0.116rem 0.6rem;
@@ -104,6 +105,7 @@ btn-group-sm > .btn,
 .mark-label-body p {
   margin-bottom: 0;
 }
+
 .bi-image {
   cursor: crosshair;
 }
@@ -116,10 +118,15 @@ btn-group-sm > .btn,
 #editor-canvas canvas {
   width: 100% !important;
 }
- 
+
 #editor-right .accordion-item {
   overflow-y: scroll;
   scrollbar-width: thin;
   height: 46vh;
 }
- 
+
+.lil-gui.autoPlace {
+  right: initial;
+  top: 40px;
+  left: 40px;
+}

@@ -150,21 +150,22 @@ export function resetListGroupIsClick(listGroup: ActionItemMap[]) {
 }
 
 // 获取切换按钮组
-export function getToggleButtonGroup(): ActionItemMap[] {
-  const { scene } = viewerInstance.getViewer();
+export function getToggleButtonGroup(scene: Scene): ActionItemMap[] {
   const customButtonList = scene.userData.customButtonList as CustomButtonList;
-  const { listGroup, type } = customButtonList.toggleButtonGroup;
+  const { listGroup, type } =
+    customButtonList.toggleButtonGroup.customButtonItem;
   return listGroup
     .map((item: ActionItemMap) => {
+      const { toggleButtonGroup } = customButtonList;
       if (type === "TOGGLE") {
-        return animateTOGGLE(item, customButtonList);
+        return animateTOGGLE(item, toggleButtonGroup);
       }
 
       if (type === "STRETCH") {
-        return animateSTRETCH(item, customButtonList);
+        return animateSTRETCH(item, toggleButtonGroup);
       }
       if (type === "DRAWER") {
-        return animateDRAWER(item, customButtonList);
+        return animateDRAWER(item, toggleButtonGroup);
       }
     })
     .filter((item) => item !== undefined) as ActionItemMap[];
@@ -197,18 +198,10 @@ export function generateRoamButtonGroup() {
   return roamButtonGroup;
 }
 //获取漫游动画按钮组
-export function getRoamListByRoamButtonMap(): ActionItemMap[] {
-  const { scene } = viewerInstance.getViewer();
-  const data = scene.userData as SceneUserData;
-
-  const { roamButtonGroup } = data.customButtonList as {
-    roamButtonGroup?: CustomButtonList["roamButtonGroup"];
-  };
-  if (!roamButtonGroup) {
-    return [];
-  }
-
-  const { listGroup } = roamButtonGroup;
+export function getRoamListByRoamButtonMap(scene: Scene): ActionItemMap[] {
+  const { customButtonList } = scene.userData as SceneUserData;
+  const { toggleButtonGroup, roamButtonGroup } = customButtonList;
+  const { listGroup } = roamButtonGroup.customButtonItem;
 
   return listGroup.map((item: ActionItemMap) => {
     const { NAME_ID, showName } = item;
@@ -225,11 +218,10 @@ export function getRoamListByRoamButtonMap(): ActionItemMap[] {
           const { camera, controls } = viewerInstance.getViewer();
           cameraBackHome(camera, controls, 1000);
         }
-        const customButtonListType = data.customButtonList as CustomButtonList;
 
-        showModelBackHome(customButtonListType);
-        stretchModelBackHome(customButtonListType);
-        drawerBackHome(customButtonListType);
+        showModelBackHome(toggleButtonGroup);
+        stretchModelBackHome(toggleButtonGroup);
+        drawerBackHome(toggleButtonGroup);
       },
     } as ActionItemMap;
   });
@@ -237,7 +229,7 @@ export function getRoamListByRoamButtonMap(): ActionItemMap[] {
 
 export function roamAnimation(isRunning: boolean) {
   const { scene, controls } = viewerInstance.getViewer();
-  const listGroup = getRoamListByRoamButtonMap();
+  const listGroup = getRoamListByRoamButtonMap(scene);
   // 获取用户数据并进行类型断言
 
   const { customButtonList } = scene.userData as {
@@ -250,7 +242,7 @@ export function roamAnimation(isRunning: boolean) {
       const { NAME_ID } = item;
       const NAME = NAME_ID.split("_AN_")[0];
       // animateROAM(scene, camera, controls, NAME, roamButtonGroup, isRunning);
-      animateROAM(scene, NAME, customButtonList, isRunning);
+      animateROAM(scene, NAME, isRunning);
     });
   }
   controls.enabled = !isRunning;
@@ -294,11 +286,9 @@ export function getPanelController() {
   return panelController;
 }
 
-export function getPanelControllerButtonGroup(): ActionItemMap[] {
-  // const data = getScene().userData as SceneUserData;
-  const { userData } = viewerInstance.getViewer().scene;
-  const { panelControllerButtonGroup } =
-    userData.customButtonList as CustomButtonList;
+export function getPanelControllerButtonGroup(scene: Scene): ActionItemMap[] {
+  const { panelControllerButtonGroup } = scene.userData
+    .customButtonList as CustomButtonList;
   if (!panelControllerButtonGroup) {
     return [];
   }

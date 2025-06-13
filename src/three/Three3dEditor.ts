@@ -7,6 +7,8 @@ import {
   Vector2,
   Vector3,
 } from "three";
+import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+
 import { GlbModel, UserDataType } from "../app/type";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { Three3d } from "./Three3d";
@@ -27,6 +29,14 @@ export class Three3dEditor extends Three3d {
   pointer = new Vector2(0, 0);
   onUpPosition = new Vector2(0, 0);
   onDownPosition = new Vector2(0, 0);
+  private _guiInstance: GUI | null = null; // 用于存储 GUI 实例
+
+  get guiInstance() {
+    return this._guiInstance;
+  }
+  set guiInstance(value: GUI | null) {
+    this._guiInstance = value;
+  }
 
   constructor(
     divElement: HTMLDivElement,
@@ -75,6 +85,7 @@ export class Three3dEditor extends Three3d {
   // 场景序列化
   sceneSerialization(): string {
     this.scene.userData.selected3d = undefined;
+    this.destroyGUI();
     const sceneCopy = this.scene.clone();
     const modelList: GlbModel[] = [];
 
@@ -193,5 +204,20 @@ export class Three3dEditor extends Three3d {
     vector3: Vector3
   ) {
     console.log("设置相机的类型", camera, vector3);
+  }
+
+  destroyGUI() {
+    if (this.guiInstance) {
+      this.guiInstance.destroy();
+      this.guiInstance = null;
+      this.tubeMesh = null;
+    }
+    if (this?.tubeMesh !== null) {
+      if (this.tubeMesh?.parent) {
+        this.tubeMesh.parent?.remove(this.tubeMesh);
+        this.tubeMesh.geometry.dispose();
+        this.tubeMesh = null;
+      }
+    }
   }
 }

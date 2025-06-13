@@ -1,15 +1,4 @@
-import {
-  Euler,
-  OrthographicCamera,
-  PerspectiveCamera,
-  Scene,
-  Vector3,
-  WebGLRenderer,
-} from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { Extra3d, Parameters3d } from "../three/config3d";
-import { LabelInfoPanelController } from "../viewer3d/label/LabelInfoPanelController";
-import { TourWindow } from "./MyContext";
+import { Euler, Vector3 } from "three";
 
 export interface CanvasNode {
   width: number;
@@ -123,31 +112,6 @@ export interface ConfirmButton {
   closeButton?: boolean;
 }
 
-// 定义 context 的类型
-export interface Context116_XX {
-  getScene: () => Scene; // 返回 Scene 类型
-  getControls: () => OrbitControls; // 返回 OrbitControls 类型
-  getCamera: () => PerspectiveCamera | OrthographicCamera; // 返回 PerspectiveCamera 类型
-
-  getAll: () => {
-    scene: Scene;
-    camera: PerspectiveCamera | OrthographicCamera;
-    controls: OrbitControls;
-    renderer: WebGLRenderer;
-    divElement: HTMLDivElement;
-    extra3d: Extra3d;
-    parameters3d: Parameters3d;
-  }; // 返回 object 类型
-  getUserData?: () => object; // 返回 {}
-  getToggleButtonGroup?: () => ActionItemMap[]; // 返回 ActionItemMap[] 类型
-  getRoamListByRoamButtonMap?: () => ActionItemMap[]; // 返回 ActionItemMap[] 类型
-  getPanelControllerButtonGroup?: () => ActionItemMap[]; // 返回 ActionItemMap[] 类型
-  labelInfoPanelController?: LabelInfoPanelController;
-  dispatchTourWindow?: React.Dispatch<TourWindow>;
-  setPanelController?: (
-    labelInfoPanelController: LabelInfoPanelController
-  ) => void;
-}
 declare global {
   interface Document {
     getCurrentActionItemMap: (item: ActionItemMap) => void;

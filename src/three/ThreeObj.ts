@@ -2,6 +2,7 @@
 
 import { CatmullRomCurve3 } from "three";
 import { RecordItem } from "../app/type";
+import { LabelInfoPanelController } from "../viewer3d/label/LabelInfoPanelController";
 
 export default abstract class ThreeObj {
   //属性

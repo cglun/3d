@@ -33,16 +33,41 @@ export const userCssStyle = {
   opacity: 1,
 };
 export type UserCssStyle = typeof userCssStyle;
-export interface CustomButtonList {
-  toggleButtonGroup: CustomButtonItem;
-  roamButtonGroup: CustomButtonItem;
-  panelControllerButtonGroup: CustomButtonItem;
+export interface RoamButtonUserSetting {
+  scale: number;
+  extrusionSegments: number;
+  radiusSegments: number;
+  closed: boolean;
+  lookAhead: boolean;
+  speed: number;
+  offset: number;
+  radius: number;
+}
+export interface ToggleButtonGroup {
+  customButtonItem: CustomButtonItem;
+  userSetting: {
+    modelOffset: Vector3;
+    cameraOffset: Vector3;
+    animationTime: number;
+  };
 }
 export interface CustomButtonItem {
   name: string;
   type: CustomButtonType;
-  userSetting: UserSetting;
   listGroup: ActionItemMap[];
+}
+export interface CustomButtonList {
+  toggleButtonGroup: ToggleButtonGroup;
+  roamButtonGroup: RoamButtonGroup;
+  panelControllerButtonGroup: CustomButtonItem;
+}
+
+export interface RoamButtonGroup {
+  customButtonItem: CustomButtonItem;
+  userSetting: RoamButtonUserSetting;
+}
+export interface PanelControllerButtonGroup {
+  customButtonItem: CustomButtonItem;
 }
 export interface Config3d {
   css2d: boolean;
@@ -65,11 +90,7 @@ export interface SceneUserData {
   config3d: Config3d;
   backgroundHDR: BackgroundHDR;
   javascript: string;
-  customButtonList: {
-    toggleButtonGroup: CustomButtonItem;
-    roamButtonGroup: CustomButtonItem;
-    panelControllerButtonGroup: CustomButtonItem;
-  };
+  customButtonList: typeof customButtonListInit;
   APP_THEME: {
     themeColor: APP_COLOR;
     iconFill: string;
@@ -81,32 +102,44 @@ export interface SceneUserData {
     markLabel: UserCssStyle;
   };
 }
-type UserSetting = typeof userSettingInit;
-export const userSettingInit = {
-  modelOffset: new Vector3(0, 0, 0),
-  cameraOffset: new Vector3(0, 0, 0),
-  animationTime: 1160,
-  speed: 1.16,
-};
+
 export const customButtonListInit = {
   toggleButtonGroup: {
-    name: "切换",
-    type: "TOGGLE" as CustomButtonType,
-    listGroup: [],
-    userSetting: { ...userSettingInit },
-  },
+    customButtonItem: {
+      name: "切换",
+      type: "TOGGLE" as CustomButtonType,
+      listGroup: [] as ActionItemMap[],
+    },
+    userSetting: {
+      modelOffset: new Vector3(0, 0, 0),
+      cameraOffset: new Vector3(0, 0, 0),
+      animationTime: 1160,
+    },
+  } as ToggleButtonGroup,
   roamButtonGroup: {
-    name: "漫游",
-    type: "ROAM" as CustomButtonType,
-    listGroup: [],
-    userSetting: { ...userSettingInit },
-  },
+    customButtonItem: {
+      name: "漫游",
+      type: "ROAM" as CustomButtonType,
+      listGroup: [] as ActionItemMap[],
+    },
+    userSetting: {
+      scale: 4,
+      extrusionSegments: 100,
+      radiusSegments: 3,
+      closed: true,
+      lookAhead: true,
+      speed: 2,
+      offset: 15,
+      radius: 1,
+    },
+  } as RoamButtonGroup,
   panelControllerButtonGroup: {
-    name: "面板",
-    type: "PANEL_CONTROLLER" as CustomButtonType,
-    listGroup: [],
-    userSetting: { ...userSettingInit },
-  },
+    customButtonItem: {
+      name: "面板",
+      type: "PANEL_CONTROLLER" as CustomButtonType,
+      listGroup: [] as ActionItemMap[],
+    },
+  } as PanelControllerButtonGroup,
 };
 export interface ExtraParams {
   mixer: AnimationMixer[];
@@ -124,7 +157,6 @@ export interface RoamLine {
   position: Vector3;
   lookAt: Vector3;
   tubeGeometry: TubeGeometry;
-  speed: number;
 }
 
 export interface BackgroundHDR {

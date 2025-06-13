@@ -7,15 +7,15 @@ export function getObjectWorldPosition(model: Object3D) {
   model.getWorldPosition(worldPosition);
   return worldPosition;
 }
-export function getUserSetting(
+export function getUserSetting_XX(
   customButtonList: CustomButtonList,
   type: "toggleButtonGroup" | "roamButtonGroup" = "toggleButtonGroup"
 ) {
-  const userSetting = customButtonList[type].userSetting;
-  const position = new Vector3(0, 0, 0);
-  const modelOffset = userSetting?.modelOffset ?? position;
-  const cameraOffset = userSetting?.cameraOffset ?? position;
-  const animationTime = userSetting?.animationTime ?? 1000;
-  const speed = userSetting?.speed ?? 1;
-  return { userSetting, modelOffset, animationTime, cameraOffset, speed };
+  // const userSetting = customButtonList[type].userSetting;
+  // const position = new Vector3(0, 0, 0);
+  // const modelOffset = userSetting?.modelOffset ?? position;
+  // const cameraOffset = userSetting?.cameraOffset ?? position;
+  // const animationTime = userSetting?.animationTime ?? 1000;
+  // const speed = userSetting?.speed ?? 1;
+  // return { userSetting, modelOffset, animationTime, cameraOffset, speed };
 }

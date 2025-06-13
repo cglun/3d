@@ -67,7 +67,7 @@ function EditorViewer3d() {
         id: parseInt(sceneId),
         name: "名字",
         des: "描述",
-        cover: "",
+        cover: "封面",
       };
 
       if (item.id !== -1) {
@@ -76,10 +76,13 @@ function EditorViewer3d() {
           // 假设 deserialize 是异步方法
           editor.deserialize(data, item);
 
-          // 在模型加载完成后更新场景
           editor.loadedModelsEnd = () => {
+            //这里为什么不有执行  debugger; // 在模型加载完成后更新场景
             editor.transformControl = editor.initTransformControl();
+
             editor.runJavascript();
+
+            editor.destroyGUI();
 
             // editor.initPostProcessing();
 
