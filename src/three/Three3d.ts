@@ -71,6 +71,8 @@ import {
 import { cameraEnterAnimation } from "../threeUtils/util4Camera";
 import { Dispatch } from "react";
 import { LabelInfoPanelController } from "../viewer3d/label/LabelInfoPanelController";
+import { editorInstance } from "./EditorInstance";
+import { viewerInstance } from "./ViewerInstance";
 
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;
@@ -88,8 +90,7 @@ export class Three3d extends ThreeObj {
   get labelInfoPanelController() {
     if (this._labelInfoPanelController === null) {
       this._labelInfoPanelController = new LabelInfoPanelController(
-        this.dispatchTourWindow,
-        this.scene
+        this.dispatchTourWindow
       );
     }
     return this._labelInfoPanelController;
@@ -568,7 +569,12 @@ export class Three3d extends ThreeObj {
     }
 
     const { javascript } = this.scene.userData;
+
     if (javascript) {
+      //@ts-ignore注意：在执行代码时，确保 this 指向正确的 ,对象在这里执行 javascript 代码
+      const editorIns = editorInstance.getEditor();
+      //@ts-ignore注意：在执行代码时，确保 this 指向正确的 ,对象在这里执行 javascript 代码
+      const viewerIns = viewerInstance.getViewer();
       eval(javascript);
     }
   }
@@ -621,5 +627,4 @@ export class Three3d extends ThreeObj {
     }
     return new CatmullRomCurve3(vector, true, "catmullrom");
   }
-  getCC() {}
 }

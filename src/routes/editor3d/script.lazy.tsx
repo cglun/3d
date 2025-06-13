@@ -22,11 +22,7 @@ import {
 } from "../../viewer3d/buttonList/buttonGroup";
 import Icon from "../../component/common/Icon";
 import { styleBody } from "../../component/Editor/OutlineView/fontColor";
-import {
-  CustomButtonList,
-  customButtonListInit,
-  SceneUserData,
-} from "../../three/Three3dConfig";
+import { customButtonListInit, SceneUserData } from "../../three/Three3dConfig";
 import { editorInstance } from "../../three/EditorInstance";
 
 export const Route = createLazyFileRoute("/editor3d/script")({
@@ -36,7 +32,8 @@ export const Route = createLazyFileRoute("/editor3d/script")({
 function RouteComponent() {
   const { scene, updateScene } = useUpdateScene(); // const [javaScriptCode, setJavaScriptCode] = useState<string>(javascript);
   const [showJavaScript, setShowJavaScript] = useState(false); // 是否为调试场景[调试场景不允许修改代码]
-  const [show, setShow] = useState(false); // 使用可选属性和类型断言
+  const [showButtonList, setShowButtonList] = useState(false); // 使用可选属性和类型断言
+
   const [showAllConfig, setShowAllConfig] = useState(false); // 使用可选属性和类型断言
   const [isSet, setIsSet] = useState(false);
 
@@ -111,7 +108,7 @@ function RouteComponent() {
                 variant={buttonColor}
                 style={{ borderColor: styleBody.color }}
                 onClick={() => {
-                  setShow(true);
+                  setShowButtonList(true);
                 }}
               >
                 <Icon iconName="pencil" gap={1} />
@@ -135,7 +132,7 @@ function RouteComponent() {
               show={showJavaScript}
               setShow={setShowJavaScript}
               callback={function (value): void {
-                scene.userData.javascript = value;
+                getScene().userData.javascript = value;
                 updateScene(scene);
               }}
             />
@@ -144,8 +141,8 @@ function RouteComponent() {
               isValidate={true}
               language="json"
               code={buttonList}
-              show={show}
-              setShow={setShow}
+              show={showButtonList}
+              setShow={setShowButtonList}
               callback={(value) => {
                 try {
                   getScene().userData.customButtonList = JSON.parse(value);

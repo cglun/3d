@@ -4,10 +4,9 @@ import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
 
 import { LabelInfo } from "./LabelInfo";
 
-import { Scene } from "three";
-import { UserStyles } from "../../app/type";
 import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
 import { viewerInstance } from "../../three/ViewerInstance";
+import { SceneUserData } from "../../three/Three3dConfig";
 
 // 标签信息面板控制器
 export class LabelInfoPanelController {
@@ -15,12 +14,10 @@ export class LabelInfoPanelController {
   canBeShowLabelInfo: LabelInfo[] = []; //全部可以显示的标签信息
   isShow = false;
   panelStatus = 0;
-  scene: Scene;
+
   boxName = "";
   modelName = "";
   showPanelTest1 = ["C_F1"];
-
-  userDataStyles: UserStyles;
 
   // 使用箭头函数确保 this 指向正确
   private showList = [
@@ -31,20 +28,16 @@ export class LabelInfoPanelController {
   ];
   dispatchTourWindow: React.Dispatch<TourWindow>;
   // 初始化标签信息面板控制器
-  constructor(dispatchTourWindow: React.Dispatch<TourWindow>, scene: Scene) {
-    this.scene = scene;
+  constructor(dispatchTourWindow: React.Dispatch<TourWindow>) {
     this.dispatchTourWindow = dispatchTourWindow;
-    this.userDataStyles = this.scene.userData.userCssStyleTopCard as UserStyles;
+
     // this.createLabelInfoPanelByModelGroupName(modelName);
   }
 
   setModelName(modelName: string) {
     this.modelName = modelName;
   }
-  //加载完成后初始化
-  setUserDataStyles() {
-    this.userDataStyles = this.scene.userData.userCssStyleTopCard as UserStyles;
-  }
+
   setIsShow(isShow: boolean) {
     this.isShow = isShow;
   }
@@ -89,8 +82,10 @@ export class LabelInfoPanelController {
         const headerTitle = labelHeader.children[1] as HTMLElement;
 
         const labelBody = labelDiv.children[1] as HTMLElement;
+        const { userCssStyle } = viewerInstance.getViewer().scene
+          .userData as SceneUserData;
         const { cardWidth, cardHeight, headerMarginTop, headerMarginLeft } =
-          this.userDataStyles;
+          userCssStyle.topCard;
         if (this.panelStatus < 3) {
           labelDiv.style.width = "auto";
           labelDiv.style.height = "auto";
@@ -132,15 +127,17 @@ export class LabelInfoPanelController {
    * @param modelGroupName 模型组名称
    */
   createLabelInfoPanelByModelGroupName(modelGroupName: string) {
+    const { scene } = viewerInstance.getViewer();
+
     const MARK_LABEL_INFO = createGroupIfNotExist(
-      this.scene,
+      scene,
       GLOBAL_CONSTANT.MARK_LABEL_INFO,
       true
     );
     if (MARK_LABEL_INFO) {
-      this.scene.add(MARK_LABEL_INFO);
+      scene.add(MARK_LABEL_INFO);
     }
-    const group = createGroupIfNotExist(this.scene, modelGroupName, false);
+    const group = createGroupIfNotExist(scene, modelGroupName, false);
 
     if (group) {
       const { children } = group;
@@ -150,7 +147,7 @@ export class LabelInfoPanelController {
           const label = new LabelInfo(child, this.dispatchTourWindow!);
           label.css3DSprite.visible = false;
 
-          this.scene.add(label.css3DSprite);
+          scene.add(label.css3DSprite);
           this.allLabelInfo.push(label);
         }
       }
@@ -186,10 +183,12 @@ export class LabelInfoPanelController {
   //高亮标签信息面板
   highlightLabelInfoPanel() {
     // getSelectedObjects().length = 0;
+    const { scene } = viewerInstance.getViewer();
+
     const viewer = viewerInstance.getViewer();
     this.canBeShowLabelInfo.forEach((item) => {
       const model = createGroupIfNotExist(
-        this.scene,
+        scene,
         item.css3DSprite.name.replace("SPRITE-", ""), //去除SPRITE-前缀，是为了找到对应的模型组
         false
       );

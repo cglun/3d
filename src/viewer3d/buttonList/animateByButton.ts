@@ -19,7 +19,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { getObjectWorldPosition } from "../viewer3dUtils";
 import { roamAnimation } from "./buttonGroup";
 
-import { ToggleButtonGroup } from "../../three/Three3dConfig";
+import { SceneUserData, ToggleButtonGroup } from "../../three/Three3dConfig";
 import { viewerInstance } from "../../three/ViewerInstance";
 import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
 
@@ -326,8 +326,9 @@ export function cameraBackHome(
   controls: OrbitControls,
   animationTime: number
 ) {
-  const { userData } = viewerInstance.getViewer().scene;
-  cameraTween(camera, userData.fixedCameraPosition, animationTime)
+  const { cameraPosition } = viewerInstance.getViewer().scene
+    .userData as SceneUserData;
+  cameraTween(camera, cameraPosition.end, animationTime)
     .start()
     .onComplete(() => {
       controls.target.set(0, 0, 0);

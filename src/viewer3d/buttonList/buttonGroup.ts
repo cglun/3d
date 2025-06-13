@@ -279,15 +279,10 @@ export function generatePanelControllerButtonGroup() {
   return panelControllerButtonGroup;
 }
 
-let panelController: LabelInfoPanelController;
-export function setPanelController(_panelController: LabelInfoPanelController) {
-  panelController = _panelController;
-}
-export function getPanelController() {
-  return panelController;
-}
-
-export function getPanelControllerButtonGroup(scene: Scene): ActionItemMap[] {
+export function getPanelControllerButtonGroup(
+  scene: Scene,
+  panelController: LabelInfoPanelController
+): ActionItemMap[] {
   const { customButtonList } = scene.userData as SceneUserData;
   const { listGroup } =
     customButtonList.panelControllerButtonGroup.customButtonItem;

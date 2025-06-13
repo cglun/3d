@@ -1,4 +1,4 @@
-import { Color, DataTexture, Object3D, Scene } from "three";
+import { Color, DataTexture, Object3D } from "three";
 import { GlbModel } from "../app/type";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { Three3d } from "./Three3d";
@@ -112,8 +112,7 @@ export class Three3dViewer extends Three3d {
     return screenshot;
   }
   getSelectedObjects(): Object3D[] {
-    const selectedObjects = this.scene.userData.selected3d;
-    return selectedObjects;
+    return this.outlinePass.selectedObjects;
   }
 
   getToggleButtonGroup() {
@@ -128,7 +127,9 @@ export class Three3dViewer extends Three3d {
   }
   getPanelControllerButtonGroup() {
     const { scene } = viewerInstance.getViewer();
-
-    return getPanelControllerButtonGroup(scene);
+    return getPanelControllerButtonGroup(
+      scene,
+      viewerInstance.getViewer().labelInfoPanelController!!
+    );
   }
 }

@@ -24,6 +24,7 @@ import { useLocation, useNavigate } from "@tanstack/react-router";
 import Icon from "../common/Icon";
 import { editorInstance } from "../../three/EditorInstance";
 import { getThemeByScene } from "../../threeUtils/util4UI";
+
 // 若 getThemeByScene 确实在该文件且正确导出，使用此导入语句
 
 export default function EditorTop() {
@@ -44,26 +45,10 @@ export default function EditorTop() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  function notJavascript() {
-    const { userData } = editorInstance.getEditor().scene;
-    if (!userData || !userData.javascript) {
-      return false;
-    }
-    try {
-      eval(userData.javascript);
-    } catch (error) {
-      Toast3d("查看控制台!", "脚本错误", APP_COLOR.Danger);
-      console.error(error);
-      return true;
-    }
-  }
-
   function saveScene() {
-    if (notJavascript()) {
-      return;
-    }
     const editor = editorInstance.getEditor();
     const dataJson = editor.sceneSerialization();
+    debugger;
     const { scene } = editor;
     axios
       .post("/project/update/", {
@@ -99,9 +84,6 @@ export default function EditorTop() {
 
   // 另存场景
   function saveAsNewScene() {
-    if (notJavascript()) {
-      return;
-    }
     const { scene } = editorInstance.getEditor();
     scene.userData.APP_THEME.sceneCanSave = true;
     function getValue(sceneName: string, des: string) {
