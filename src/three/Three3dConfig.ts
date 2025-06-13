@@ -59,7 +59,7 @@ export interface CustomButtonItem {
 export interface CustomButtonList {
   toggleButtonGroup: ToggleButtonGroup;
   roamButtonGroup: RoamButtonGroup;
-  panelControllerButtonGroup: CustomButtonItem;
+  panelControllerButtonGroup: PanelControllerButtonGroup;
 }
 
 export interface RoamButtonGroup {

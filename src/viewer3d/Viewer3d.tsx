@@ -24,12 +24,15 @@ import { getProjectData } from "../threeUtils/util4Scene";
 
 export default function Viewer3d({
   item,
+
   canvasStyle = { height: "100vh", width: "100vw" },
   showProgress = true,
+  callBack,
 }: {
   item: RecordItem;
   showProgress?: boolean;
   canvasStyle?: { height: string; width: string } & React.CSSProperties;
+  callBack: () => void;
 }) {
   // 修改为明确指定 HTMLDivElement 类型
   const canvas3d = useRef(null);
@@ -98,6 +101,8 @@ export default function Viewer3d({
     viewer.loadedModelsEnd = () => {
       if (item.des === "Scene") {
         viewer.runJavascript();
+
+        callBack();
       }
 
       //关了进度条

@@ -1,4 +1,4 @@
-import { Color, DataTexture, Object3D } from "three";
+import { Color, DataTexture, Object3D, Scene } from "three";
 import { GlbModel } from "../app/type";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { Three3d } from "./Three3d";
@@ -10,6 +10,8 @@ import {
   getRoamListByRoamButtonMap,
   getToggleButtonGroup,
 } from "../viewer3d/buttonList/buttonGroup";
+
+import { viewerInstance } from "./ViewerInstance";
 
 /**
  * Three3dViewer 类，继承自 Three3d 类，用于创建一个 3D 视图器。
@@ -115,12 +117,18 @@ export class Three3dViewer extends Three3d {
   }
 
   getToggleButtonGroup() {
-    return getToggleButtonGroup(this.scene);
+    const { scene } = viewerInstance.getViewer();
+
+    return getToggleButtonGroup(scene);
   }
   getRoamListByRoamButtonMap() {
-    return getRoamListByRoamButtonMap(this.scene);
+    const { scene } = viewerInstance.getViewer();
+
+    return getRoamListByRoamButtonMap(scene);
   }
   getPanelControllerButtonGroup() {
-    return getPanelControllerButtonGroup(this.scene);
+    const { scene } = viewerInstance.getViewer();
+
+    return getPanelControllerButtonGroup(scene);
   }
 }

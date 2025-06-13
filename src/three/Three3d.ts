@@ -88,12 +88,13 @@ export class Three3d extends ThreeObj {
   get labelInfoPanelController() {
     if (this._labelInfoPanelController === null) {
       this._labelInfoPanelController = new LabelInfoPanelController(
-        this.dispatchTourWindow
+        this.dispatchTourWindow,
+        this.scene
       );
     }
-    return this.labelInfoPanelController;
+    return this._labelInfoPanelController;
   }
-  set labelInfoPanelController(value: LabelInfoPanelController) {
+  set labelInfoPanelController(value: LabelInfoPanelController | null) {
     this._labelInfoPanelController = value;
   }
 
@@ -201,6 +202,7 @@ export class Three3d extends ThreeObj {
     this.divElement.appendChild(this.renderer.domElement);
     this.renderer.setAnimationLoop(() => this.animate());
     this._tubeMesh = null;
+    this._labelInfoPanelController = null;
     this.addCube();
   }
   addCube() {
@@ -405,7 +407,6 @@ export class Three3d extends ThreeObj {
   ): Object3D<Object3DEventMap>[] {
     const group: Object3D<Object3DEventMap>[] = [];
     labelGroup.children.forEach((item: Object3D<Object3DEventMap>) => {
-      debugger;
       const mark = new MarkLabel(this.dispatchTourWindow, {
         markName: item.name,
         logo: item.userData.logo,

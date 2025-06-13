@@ -31,17 +31,13 @@ export class LabelInfoPanelController {
   ];
   dispatchTourWindow: React.Dispatch<TourWindow>;
   // 初始化标签信息面板控制器
-  constructor(dispatchTourWindow: React.Dispatch<TourWindow>) {
-    // scene: Scene,
-    // dispatchTourWindow: React.Dispatch<TourWindow>
-    this.scene = viewerInstance.getViewer().scene;
+  constructor(dispatchTourWindow: React.Dispatch<TourWindow>, scene: Scene) {
+    this.scene = scene;
     this.dispatchTourWindow = dispatchTourWindow;
     this.userDataStyles = this.scene.userData.userCssStyleTopCard as UserStyles;
     // this.createLabelInfoPanelByModelGroupName(modelName);
   }
-  setScene(scene: Scene) {
-    this.scene = scene;
-  }
+
   setModelName(modelName: string) {
     this.modelName = modelName;
   }

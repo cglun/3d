@@ -14,7 +14,7 @@ import { APP_COLOR, CustomButtonType } from "../../app/type";
 import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
 import Toast3d from "../../component/common/Toast3d";
 import ModalConfirm3d from "../../component/common/ModalConfirm3d";
-import { Vector3 } from "three";
+
 import {
   generatePanelControllerButtonGroup,
   generateRoamButtonGroup,
@@ -61,54 +61,20 @@ function RouteComponent() {
   // 生成按钮组
   function generateButton() {
     setIsSet(false);
-    const { toggleButtonGroup } = JSON.parse(buttonList);
-
-    const gerToggleButtonGroup = generateToggleButtonGroup(
-      toggleButtonGroup.listGroup,
-      getScene(),
+    const editor = editorInstance.getEditor();
+    const { customButtonList } = editor.scene.userData as SceneUserData;
+    const { toggleButtonGroup, roamButtonGroup, panelControllerButtonGroup } =
+      customButtonList;
+    toggleButtonGroup.customButtonItem.type = buttonType;
+    toggleButtonGroup.customButtonItem.listGroup = generateToggleButtonGroup(
+      editor.scene,
       buttonType
     );
+    roamButtonGroup.customButtonItem.listGroup = generateRoamButtonGroup();
+    panelControllerButtonGroup.customButtonItem.listGroup =
+      generatePanelControllerButtonGroup();
 
-    const offset = 1;
-
-    const modelPositionOffset = {
-      TOGGLE: new Vector3(0, 0, 0),
-      STRETCH: new Vector3(0, offset, 0),
-      DRAWER: new Vector3(offset, 0, 0),
-      ROAM: new Vector3(0, 0, 0),
-      PANEL_CONTROLLER: new Vector3(0, 0, 0),
-    };
-    const cameraPositionOffset = {
-      TOGGLE: new Vector3(offset, 0, 0),
-      STRETCH: new Vector3(0, offset, 0),
-      DRAWER: new Vector3(offset, offset, 0),
-      ROAM: new Vector3(0, 0, 0),
-      PANEL_CONTROLLER: new Vector3(0, 0, 0),
-    };
-    //customButtonListInit.toggleButtonGroup.userSetting
-    const buttonGroup: CustomButtonList = {
-      toggleButtonGroup: {
-        ...customButtonListInit.toggleButtonGroup,
-        type: buttonType,
-        userSetting: {
-          cameraOffset: cameraPositionOffset[buttonType],
-          modelOffset: modelPositionOffset[buttonType],
-          animationTime: 300,
-          speed: 0,
-        },
-        listGroup: gerToggleButtonGroup,
-      },
-      roamButtonGroup: {
-        ...customButtonListInit.roamButtonGroup,
-        listGroup: generateRoamButtonGroup(),
-      },
-      panelControllerButtonGroup: {
-        ...customButtonListInit.panelControllerButtonGroup,
-        listGroup: generatePanelControllerButtonGroup(),
-      },
-    };
-    getScene().userData.customButtonList = buttonGroup;
-    updateScene(getScene());
+    updateScene(editor.scene);
     Toast3d("已生成按钮组");
   }
   function getScene() {

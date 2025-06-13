@@ -37,7 +37,7 @@ function getActionItemByMap(
 
 // 生成切换按钮组
 export function generateToggleButtonGroup(
-  originalCodeArr: ActionItemMap[],
+  // originalCodeArr: ActionItemMap[],
   sceneContext: Scene,
   customButtonType: CustomButtonType
 ): ActionItemMap[] {
@@ -47,6 +47,7 @@ export function generateToggleButtonGroup(
     GLOBAL_CONSTANT.MODEL_GROUP,
     false
   );
+
   if (MODEL_GROUP) {
     const { children } = MODEL_GROUP;
     actionList.push(
@@ -131,10 +132,10 @@ export function generateToggleButtonGroup(
     });
   }
 
-  const _code = [...actionList, ...originalCodeArr];
-  //  _code去除重复项
+  // const _code = [...actionList, ...originalCodeArr];
+  // //  _code去除重复项
   const uniqueActionList = Array.from(
-    new Map(_code.map((item) => [item.NAME_ID, item])).values()
+    new Map(actionList.map((item) => [item.NAME_ID, item])).values()
   );
   return uniqueActionList;
 }
@@ -287,13 +288,9 @@ export function getPanelController() {
 }
 
 export function getPanelControllerButtonGroup(scene: Scene): ActionItemMap[] {
-  const { panelControllerButtonGroup } = scene.userData
-    .customButtonList as CustomButtonList;
-  if (!panelControllerButtonGroup) {
-    return [];
-  }
-  const { listGroup } = panelControllerButtonGroup;
-
+  const { customButtonList } = scene.userData as SceneUserData;
+  const { listGroup } =
+    customButtonList.panelControllerButtonGroup.customButtonItem;
   return listGroup.map((item: ActionItemMap) => {
     const { NAME_ID } = item;
 

@@ -96,7 +96,9 @@ function RouteComponent() {
     setToggleButtonList(viewer.getToggleButtonGroup);
     setRoamButtonList(viewer.getRoamListByRoamButtonMap || []);
     setPanelControllerButtonList(viewer.getPanelControllerButtonGroup || []);
-    setController(viewer.labelInfoPanelController);
+    if (viewer.labelInfoPanelController) {
+      setController(viewer.labelInfoPanelController);
+    }
   }
 
   function handleClose() {
@@ -187,6 +189,7 @@ function RouteComponent() {
                   width: size3d.w + "px",
                   height: size3d.h + "px",
                 }}
+                callBack={callBack}
               />
             )}
           </Modal.Body>

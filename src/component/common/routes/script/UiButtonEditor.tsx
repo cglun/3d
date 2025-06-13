@@ -34,10 +34,12 @@ export default function UiButtonEditor({
     console.error("解析JSON 字符串", error);
   }
 
-  const toggleButtonGroup = customButtonList.toggleButtonGroup.listGroup;
-  const roamButtonGroup = customButtonList.roamButtonGroup.listGroup;
+  const toggleButtonGroup =
+    customButtonList.toggleButtonGroup.customButtonItem.listGroup;
+  const roamButtonGroup =
+    customButtonList.roamButtonGroup.customButtonItem.listGroup;
   const panelControllerButtonGroup =
-    customButtonList.panelControllerButtonGroup.listGroup;
+    customButtonList.panelControllerButtonGroup.customButtonItem.listGroup;
 
   // 更新按钮组数据的通用函数
   function updateButtonGroup(
@@ -49,11 +51,14 @@ export default function UiButtonEditor({
     const newCustomButtonList = { ...customButtonList };
 
     // 创建按钮组列表的副本
-    const newListGroup = [...newCustomButtonList[buttonGroupKey]!.listGroup];
+    const newListGroup = [
+      ...newCustomButtonList[buttonGroupKey].customButtonItem.listGroup,
+    ];
     // 创建当前按钮项的副本并更新
     newListGroup[index] = updateFn({ ...newListGroup[index] });
     // 更新副本中的按钮组列表
-    newCustomButtonList[buttonGroupKey]!.listGroup = newListGroup;
+    newCustomButtonList[buttonGroupKey].customButtonItem.listGroup =
+      newListGroup;
     return newCustomButtonList;
   }
   type ButtonGroupKey =
@@ -70,7 +75,9 @@ export default function UiButtonEditor({
     return (
       <>
         {buttonGroup.length > 0 &&
-          getBadgeByType(customButtonList[buttonGroupKey].type || "TOGGLE")}
+          getBadgeByType(
+            customButtonList[buttonGroupKey].customButtonItem.type || "TOGGLE"
+          )}
         <ListGroup horizontal className="mt-2 d-flex flex-wrap">
           {buttonGroup.map((item, index) => {
             return (

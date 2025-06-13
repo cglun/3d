@@ -36,7 +36,7 @@ export function CardText({
               id={`${placeholder}-form1`}
               onChange={(e) => {
                 // if (type === "color") {
-                //   // debugger;
+
                 //   getValue(cardKey, e.target.value + "c1");
                 //   // getValue(cardKey, rgbaToHex(e.target.value));
                 //   return;
