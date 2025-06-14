@@ -99,7 +99,6 @@ export interface UserStyles {
   cardRadius: number;
   cardBackgroundColor: string;
   cardBackgroundUrl: string;
-
   headerFontSize: number;
   headerColor: string;
   headerMarginTop: number;

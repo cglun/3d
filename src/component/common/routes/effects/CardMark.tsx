@@ -1,7 +1,7 @@
 import ListGroup from "react-bootstrap/esm/ListGroup";
 import { CardNumber } from "./CardNumber";
 import { CardText } from "./CardText";
-import { UserStyles } from "../../../../app/type";
+
 import { useUpdateScene } from "../../../../app/hooks";
 
 import { editorInstance } from "../../../../three/EditorInstance";
@@ -9,6 +9,7 @@ import {
   getCardBackgroundUrl,
   setClassName,
 } from "../../../../threeUtils/util4UI";
+import { UserStyles } from "../../../../app/type";
 
 export default function CardMark({
   userDataStyles,

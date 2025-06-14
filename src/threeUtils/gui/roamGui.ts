@@ -11,14 +11,14 @@ import {
 } from "../../three/Three3dConfig";
 
 import { cameraEnterAnimation } from "../../threeUtils/util4Camera";
-import { editorInstance } from "../../three/EditorInstance";
+import { editorInstance } from "@/three/EditorInstance";
 
 export function setRoamPath() {
   const editor = editorInstance.getEditor();
   if (editor.guiInstance !== null) {
     editor.destroyGUI();
   }
-
+  debugger;
   const { customButtonList } = editorInstance.getEditor().scene
     .userData as SceneUserData;
   const { userSetting } = customButtonList.roamButtonGroup;
@@ -123,7 +123,6 @@ function addTube(params: RoamButtonUserSetting) {
       params.closed //是否闭合
     );
   }
-  debugger;
   const material = new MeshLambertMaterial({ color: 0xff00ff });
   const wireframeMaterial = new MeshBasicMaterial({
     color: 0x000000,
