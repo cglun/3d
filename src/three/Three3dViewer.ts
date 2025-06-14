@@ -1,4 +1,12 @@
-import { Color, DataTexture, Object3D } from "three";
+import {
+  Color,
+  DataTexture,
+  Object3D,
+  Object3DEventMap,
+  Raycaster,
+  Vector2,
+  Vector3,
+} from "three";
 import { GlbModel } from "../app/type";
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 import { Three3d } from "./Three3d";
@@ -22,7 +30,10 @@ export class Three3dViewer extends Three3d {
    * 构造函数，初始化 Three3dViewer 实例。
    * @param divElement - 用于渲染 3D 场景的 HTML div 元素。
    */
-
+  point = new Vector3();
+  raycaster = new Raycaster();
+  pointer = new Vector2(0, 0);
+  canBeRaycast = [] as Object3D<Object3DEventMap>[];
   constructor(
     divElement: HTMLDivElement,
     dispatchTourWindow: React.Dispatch<TourWindow>
@@ -96,9 +107,7 @@ export class Three3dViewer extends Three3d {
 
     return JSON.stringify(result);
   }
-  onPointerClick(e: Event) {
-    console.log(e);
-  }
+
   // 截图,返回图片的base64
   /**
    * 截取当前场景的屏幕截图。
@@ -131,5 +140,56 @@ export class Three3dViewer extends Three3d {
       scene,
       viewerInstance.getViewer().labelInfoPanelController!!
     );
+  }
+  onPointerClick(event: MouseEvent) {
+    const { offsetX, offsetY } = event;
+    console.log("onPointerClick", offsetX, offsetY);
+
+    const { offsetWidth, offsetHeight } = this.divElement;
+    this.pointer.x = (offsetX / offsetWidth) * 2 - 1;
+    this.pointer.y = -(offsetY / offsetHeight) * 2 + 1;
+
+    this.raycaster.setFromCamera(this.pointer, this.camera);
+
+    const intersects = this.raycaster.intersectObjects(
+      this.canBeRaycast,
+      false
+    );
+
+    if (intersects.length > 0) {
+      const object = intersects[0].object;
+      this.outlinePass.selectedObjects = [object];
+      console.log(object.name);
+    }
+  }
+  setCanBeRaycast() {
+    const obj = createGroupIfNotExist(
+      this.scene,
+      GLOBAL_CONSTANT.MODEL_GROUP,
+      false
+    );
+
+    if (!obj) {
+      return;
+    }
+    const { customButtonList } = this.scene.userData as SceneUserData;
+
+    const canBeRaycast = [] as Object3D<Object3DEventMap>[];
+    customButtonList.toggleButtonGroup.customButtonItem.listGroup.map(
+      (item) => {
+        if (item.groupCanBeRaycast) {
+          const group = createGroupIfNotExist(this.scene, item.NAME_ID, false);
+          if (group) {
+            const array = group.children;
+            for (let index = 0; index < array.length; index++) {
+              const element = array[index];
+              canBeRaycast.push(element);
+            }
+          }
+        }
+      }
+    );
+
+    this.canBeRaycast = canBeRaycast;
   }
 }

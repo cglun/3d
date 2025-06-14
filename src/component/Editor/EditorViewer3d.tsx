@@ -45,20 +45,12 @@ function EditorViewer3d() {
         editorCanvas.current,
         dispatchTourWindow
       );
+      editor.addGridHelper();
       isInitialized.current = true; // 标记为已初始化
       editorInstance.setEditor(editor);
 
       editor.controls.enabled = true;
 
-      editor.divElement.addEventListener("pointerdown", (event) =>
-        editor.onPointerDown(event)
-      );
-      editor.divElement.addEventListener("pointerup", (event) =>
-        editor.onPointerUp(event)
-      );
-      editor.divElement.addEventListener("click", (event) =>
-        editor.onPointerMove(event)
-      );
       window.addEventListener("resize", () => editor.onWindowResize());
     }
 
@@ -152,12 +144,6 @@ function EditorViewer3d() {
       const editor = editorInstance.getEditor();
       if (editor) {
         window.removeEventListener("resize", editor.onWindowResize);
-        editor.divElement.removeEventListener(
-          "pointerdown",
-          editor.onPointerDown
-        );
-        editor.divElement.removeEventListener("pointerup", editor.onPointerUp);
-        editor.divElement.removeEventListener("click", editor.onPointerMove);
       }
     };
   }, [sceneId]);

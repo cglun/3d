@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from "react";
-import { HTTP_TYPE } from "./type";
+
 import { MyContext } from "./MyContext";
 import { PerspectiveCamera, Scene } from "three";
 
-export default function useFetch(url: string, type: HTTP_TYPE) {
+export default function useFetch(url: string, type: string = "GET") {
   const [data, setData] = React.useState(null);
   const [error, setError] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);

@@ -46,21 +46,23 @@ export function setRoamPath() {
       });
   }
   folderGeometry
-    .add(userSetting, "scale", 2, 10)
+    .add(userSetting, "scale", 0.1, 10)
     .name("缩放比例")
-    .step(2)
+    .step(0.1)
     .onChange(function () {
       setScale(editorInstance.getEditor().tubeMesh!, userSetting);
     });
+  folderGeometry.add(userSetting, "speed", 0.01, 20).name("速度").step(0.01);
+
   folderGeometry
-    .add(userSetting, "extrusionSegments", 50, 200)
+    .add(userSetting, "extrusionSegments", 5, 200)
     .name("曲线分段")
-    .step(50)
+    .step(5)
     .onChange(function () {
       addTube(userSetting);
     });
   folderGeometry
-    .add(userSetting, "radiusSegments", 2, 12)
+    .add(userSetting, "radiusSegments", 1, 12)
     .name("半径分段")
     .step(1)
     .onChange(function () {
@@ -74,9 +76,9 @@ export function setRoamPath() {
       addTube(userSetting);
     });
   folderGeometry
-    .add(userSetting, "radius", 0.1, 20)
+    .add(userSetting, "radius", 0.01, 20)
     .name("半径")
-    .step(0.1)
+    .step(0.01)
     .onChange(function () {
       addTube(userSetting);
     });
@@ -121,6 +123,7 @@ function addTube(params: RoamButtonUserSetting) {
       params.closed //是否闭合
     );
   }
+  debugger;
   const material = new MeshLambertMaterial({ color: 0xff00ff });
   const wireframeMaterial = new MeshBasicMaterial({
     color: 0x000000,

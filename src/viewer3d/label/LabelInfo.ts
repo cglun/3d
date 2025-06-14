@@ -1,4 +1,10 @@
-import { CatmullRomCurve3, Object3D, Object3DEventMap, Vector3 } from "three";
+import {
+  CatmullRomCurve3,
+  Object3D,
+  Object3DEventMap,
+  Scene,
+  Vector3,
+} from "three";
 import { TourWindow } from "../../app/MyContext";
 
 import { CSS3DSprite } from "three/examples/jsm/renderers/CSS3DRenderer.js";
@@ -13,7 +19,7 @@ import {
 
 import { UserStyles } from "../../app/type";
 import { SceneUserData } from "../../three/Three3dConfig";
-import { editorInstance } from "../../three/EditorInstance";
+
 import {
   getCardBackgroundUrl,
   getObjectNameByName,
@@ -52,12 +58,11 @@ export class LabelInfo {
 
   constructor(
     mesh: Object3D<Object3DEventMap>,
-
+    scene: Scene,
     dispatchTourWindow: React.Dispatch<TourWindow>
   ) {
     this.mesh = mesh;
     this.dispatchTourWindow = dispatchTourWindow;
-    const { scene } = editorInstance.getEditor();
 
     const _userData = scene.userData as SceneUserData;
     this.userDataStyles = _userData.userCssStyle.topCard;

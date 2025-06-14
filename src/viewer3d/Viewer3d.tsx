@@ -32,7 +32,7 @@ export default function Viewer3d({
   item: RecordItem;
   showProgress?: boolean;
   canvasStyle?: { height: string; width: string } & React.CSSProperties;
-  callBack: () => void;
+  callBack: (viewer: Three3dViewer) => void;
 }) {
   // 修改为明确指定 HTMLDivElement 类型
   const canvas3d = useRef(null);
@@ -72,7 +72,6 @@ export default function Viewer3d({
 
       if (viewer) {
         window.removeEventListener("resize", viewer.onWindowResize);
-
         viewer.divElement.removeEventListener("click", viewer.onPointerClick);
       }
       canvas3d.current = null;
@@ -101,8 +100,8 @@ export default function Viewer3d({
     viewer.loadedModelsEnd = () => {
       if (item.des === "Scene") {
         viewer.runJavascript();
-
-        callBack();
+        viewer.setCanBeRaycast();
+        callBack(viewer);
       }
 
       //关了进度条
@@ -112,6 +111,7 @@ export default function Viewer3d({
     };
     viewer.onLoadError = (error: string) => {
       Toast3d("有错误,看控制台", "提示", APP_COLOR.Danger);
+      //用Antd的组件显示
       console.error(error);
     };
 

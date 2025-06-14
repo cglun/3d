@@ -23,8 +23,8 @@ import { TourWindow } from "../app/MyContext";
 
 import { UnrealBloomPass } from "three/examples/jsm/Addons.js";
 import sceneUserData from "../three/Three3dConfig";
-import { createGroupIfNotExist, getTourSrc } from "./util4Scene";
-import { GLOBAL_CONSTANT } from "../three/GLOBAL_CONSTANT";
+import { getTourSrc } from "./util4Scene";
+
 import { setClassName } from "./util4UI";
 
 export function createPerspectiveCamera(
@@ -95,28 +95,6 @@ export function createScene() {
   //scene.background = new Color("#000116");
 
   return scene;
-}
-export function createNewScene_xx() {
-  //clearOldLabel();
-  const newScene = new Scene();
-  //newScene.name = "新场景";
-  newScene.userData = sceneUserData;
-
-  const HELPER_GROUP = createGroupIfNotExist(
-    newScene,
-    GLOBAL_CONSTANT.HELPER_GROUP
-  );
-  if (HELPER_GROUP) {
-    HELPER_GROUP.add(createGridHelper());
-    newScene.add(HELPER_GROUP);
-  }
-
-  const { useShadow } = newScene.userData.config3d;
-  const light = createDirectionalLight();
-  light.castShadow = useShadow;
-  newScene.add(light);
-
-  return newScene;
 }
 
 export function createCss2dLabel(name: string, logo: string) {

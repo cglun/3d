@@ -266,16 +266,25 @@ export function moveCameraSTRETCH(
     // 移动相机到指定位置
     const camera = getCamera();
     const controls = getControls();
-    const { animationTime } = toggleButtonGroup.userSetting;
+    const { animationTime, cameraOffset } = toggleButtonGroup.userSetting;
+
     if (isMoveCamera) {
       cameraBackHome(camera, controls, animationTime);
     } else {
-      const { cameraOffsetStretch } = item.data;
-
-      cameraTween(camera, cameraOffsetStretch, animationTime).start();
-      const { x, y, z } = MODEL_GROUP.position;
-      controls.target.set(x, y, z);
+      // const offSet = item.data.cameraOffsetStretch;
+      //相机位置
+      const { x, y, z } = item.data.cameraOffsetStretch;
+      // const { x, y, z } = getObjectWorldPosition(MODEL_GROUP);
+      const cameraPositionSTRETCH = new Vector3(
+        x + cameraOffset.x,
+        y + cameraOffset.y,
+        z + cameraOffset.z
+      );
+      const modelPosition = getObjectWorldPosition(MODEL_GROUP);
+      controls.target.set(modelPosition.x, modelPosition.y, modelPosition.z);
       controls.update();
+      cameraTween(camera, cameraPositionSTRETCH, animationTime).start();
+
       isMoveCamera = true;
     }
   }
@@ -293,7 +302,8 @@ export function moveCameraDRAWER(
     // 移动相机到指定位置
     const camera = getCamera();
     const controls = getControls();
-    const { animationTime, cameraOffset } = toggleButtonGroup.userSetting;
+    const { animationTime, cameraOffset, modelOffset } =
+      toggleButtonGroup.userSetting;
 
     if (isMoveCamera && MODEL_GROUP.name === GLOBAL_CONSTANT.MODEL_GROUP) {
       cameraBackHome(camera, controls, animationTime);
@@ -304,14 +314,24 @@ export function moveCameraDRAWER(
       const { x, y, z } = getObjectWorldPosition(MODEL_GROUP);
 
       const cameraPosition = new Vector3(
-        x + cameraOffset.x,
-        y + cameraOffset.y,
-        z + cameraOffset.z
+        x + cameraOffset.x + modelOffset.x,
+
+        y + cameraOffset.y + modelOffset.y,
+        z + cameraOffset.z + modelOffset.z
       );
 
-      cameraTween(camera, cameraPosition, animationTime).start();
-      controls.target.set(x, y, z);
-      controls.update();
+      cameraTween(camera, cameraPosition, animationTime)
+        .start()
+        .onComplete(() => {
+          controls.target.set(
+            x + modelOffset.x,
+            y + modelOffset.y,
+            z + modelOffset.z
+          );
+          controls.update();
+          camera.lookAt(controls.target);
+        });
+
       isMoveCamera = true;
     }
   }

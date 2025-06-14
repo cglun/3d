@@ -35,8 +35,11 @@ function TreeNode({
     setIsExpanded(!isExpanded);
     // resetTextWarning(node);
     setIsSelected(!isSelected);
-    const { scene } = editorInstance.getEditor();
+    const editor = editorInstance.getEditor();
+    const { scene } = editor;
     scene.userData.selected3d = node;
+
+    editor.transformControl.attach(node);
     updateScene(scene);
     //setTransformControls(node);
     onToggle(node.uuid, !isExpanded);

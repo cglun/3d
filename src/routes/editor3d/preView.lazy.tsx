@@ -15,9 +15,8 @@ import { useUpdateScene } from "../../app/hooks";
 import { ActionItemMap, APP_COLOR, RecordItem } from "../../app/type";
 import { resetListGroupIsClick } from "../../viewer3d/buttonList/buttonGroup";
 import { LabelInfoPanelController } from "../../viewer3d/label/LabelInfoPanelController";
-import { viewerInstance } from "../../three/ViewerInstance";
+
 import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
-import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
 
 // 定义响应数据的类型
 interface PageListResponse {
@@ -89,8 +88,8 @@ function RouteComponent() {
   }, []);
 
   //@ts-ignore 忽略类型检查，暂时不清楚 Context116 完整类型定义
-  function callBack() {
-    const viewer = viewerInstance.getViewer();
+  function callBack(viewer) {
+    //const viewer = viewerInstance.getViewer();
 
     // 检查 getToggleButtonGroup 方法是否存在
     setToggleButtonList(viewer.getToggleButtonGroup);
@@ -190,6 +189,7 @@ function RouteComponent() {
                   height: size3d.h + "px",
                 }}
                 callBack={callBack}
+                showProgress={false}
               />
             )}
           </Modal.Body>
@@ -338,15 +338,6 @@ function RouteComponent() {
                     );
                   }
                 )}
-              <Button
-                onClick={() => {
-                  const viewer = viewerInstance.getViewer();
-                  const box = createGroupIfNotExist(viewer.scene, "A", false);
-                  viewer.outlinePass.selectedObjects = [box!];
-                }}
-              >
-                gaoliangceshi
-              </Button>
             </ButtonGroup>
           </Modal.Footer>
         </Modal>

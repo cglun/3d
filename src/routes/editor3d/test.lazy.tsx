@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { Button, ButtonGroup } from "react-bootstrap";
 
-import { Scene } from "three";
+import { Scene, Vector3 } from "three";
 import Toast3d from "../../component/common/Toast3d";
 import { useUpdateScene } from "../../app/hooks";
 import { styleBody } from "../../component/Editor/OutlineView/fontColor";
@@ -49,10 +49,33 @@ function RouteComponent() {
           onClick={() => {
             const instance = editorInstance.getEditor();
             cameraEnterAnimation(instance);
+            Toast3d("查看控制台");
             console.log(instance.camera);
           }}
         >
           相机动画
+        </Button>
+        <Button
+          style={{
+            borderColor: styleBody.color,
+          }}
+          variant={btnColor}
+          onClick={() => {
+            const instance = editorInstance.getEditor();
+
+            Toast3d("查看控制台");
+            const { x, y, z } = instance.camera.position;
+            // 使用 parseFloat 将 toFixed(2) 返回的字符串转换为数字
+            console.log(
+              new Vector3(
+                parseFloat(x.toFixed(2)),
+                parseFloat(y.toFixed(2)),
+                parseFloat(z.toFixed(2))
+              )
+            );
+          }}
+        >
+          当前相机位置
         </Button>
       </ButtonGroup>
     </>

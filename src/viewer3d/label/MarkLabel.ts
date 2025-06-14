@@ -1,11 +1,11 @@
-import { Vector3 } from "three";
+import { Scene, Vector3 } from "three";
 import { TourWindow } from "../../app/MyContext";
 
 import { CSS3DSprite } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 
 import { UserStyles } from "../../app/type";
 import { SceneUserData } from "../../three/Three3dConfig";
-import { editorInstance } from "../../three/EditorInstance";
+
 import { getCardBackgroundUrl, setClassName } from "../../threeUtils/util4UI";
 import { getTourSrc } from "../../threeUtils/util4Scene";
 
@@ -48,12 +48,13 @@ export class MarkLabel {
   dispatchTourWindow: React.Dispatch<TourWindow>;
 
   constructor(
+    scene: Scene,
     dispatchTourWindow: React.Dispatch<TourWindow>,
     markLabelProps: MarkLabelProps
   ) {
     this.dispatchTourWindow = dispatchTourWindow;
     this.markLabelProps = markLabelProps;
-    const { scene } = editorInstance.getEditor();
+
     const _userData = scene.userData as SceneUserData;
     this.userDataStyles = _userData.userCssStyle.markLabel;
     this.createDiv();

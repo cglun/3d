@@ -7,6 +7,7 @@ import { LabelInfo } from "./LabelInfo";
 import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
 import { viewerInstance } from "../../three/ViewerInstance";
 import { SceneUserData } from "../../three/Three3dConfig";
+import { Scene } from "three";
 
 // 标签信息面板控制器
 export class LabelInfoPanelController {
@@ -14,7 +15,7 @@ export class LabelInfoPanelController {
   canBeShowLabelInfo: LabelInfo[] = []; //全部可以显示的标签信息
   isShow = false;
   panelStatus = 0;
-
+  scene: Scene;
   boxName = "";
   modelName = "";
   showPanelTest1 = ["C_F1"];
@@ -28,9 +29,9 @@ export class LabelInfoPanelController {
   ];
   dispatchTourWindow: React.Dispatch<TourWindow>;
   // 初始化标签信息面板控制器
-  constructor(dispatchTourWindow: React.Dispatch<TourWindow>) {
+  constructor(dispatchTourWindow: React.Dispatch<TourWindow>, scene: Scene) {
     this.dispatchTourWindow = dispatchTourWindow;
-
+    this.scene = scene;
     // this.createLabelInfoPanelByModelGroupName(modelName);
   }
 
@@ -144,7 +145,11 @@ export class LabelInfoPanelController {
       if (children) {
         for (let i = 0; i < children.length; i++) {
           const child = children[i];
-          const label = new LabelInfo(child, this.dispatchTourWindow!);
+          const label = new LabelInfo(
+            child,
+            this.scene,
+            this.dispatchTourWindow
+          );
           label.css3DSprite.visible = false;
 
           scene.add(label.css3DSprite);

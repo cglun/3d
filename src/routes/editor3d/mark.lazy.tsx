@@ -156,10 +156,11 @@ function RouteComponent() {
                 variant={getButtonColor(themeColor)}
                 disabled={!config3d.css3d}
                 onClick={() => {
-                  //addMark(createCss3dLabel(markName, logo));
-                  const label = new MarkLabel(dispatchTourWindow, {
+                  const { scene } = editorInstance.getEditor(); //addMark(createCss3dLabel(markName, logo));
+                  const label = new MarkLabel(scene, dispatchTourWindow, {
                     markName,
                     logo,
+
                     showEye: false,
                     tourObject: {
                       id: "id",
@@ -168,7 +169,7 @@ function RouteComponent() {
                   });
 
                   addMark(label.css3DSprite);
-                  const { scene } = editorInstance.getEditor();
+
                   updateScene(scene);
                 }}
               >
@@ -204,7 +205,8 @@ function RouteComponent() {
                     variant="top"
                     style={{ cursor: "crosshair" }}
                     onClick={() => {
-                      const label = new MarkLabel(dispatchTourWindow, {
+                      const { scene } = editorInstance.getEditor();
+                      const label = new MarkLabel(scene, dispatchTourWindow, {
                         markName: item.title,
                         logo,
                         showEye: true,
@@ -214,7 +216,7 @@ function RouteComponent() {
                         },
                       });
                       addMark(label.css3DSprite);
-                      const { scene } = editorInstance.getEditor();
+
                       updateScene(scene);
                     }}
                   ></Card.Img>

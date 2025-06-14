@@ -15,19 +15,14 @@ import {
   MeshStandardMaterial,
   Color,
   CatmullRomCurve3,
-  LineBasicMaterial,
-  BufferGeometry,
-  Line,
 } from "three";
 
 import TWEEN from "three/addons/libs/tween.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import ThreeObj from "./ThreeObj";
 import { GlbModel, RecordItem } from "../app/type";
-
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
-
-import { runScript } from "./scriptDev";
+import { runScriptDev } from "./scriptDev";
 import { enableShadow } from "./common3d";
 import {
   BackgroundHDR,
@@ -52,7 +47,6 @@ import { TourWindow } from "../app/MyContext";
 import { MarkLabel } from "../viewer3d/label/MarkLabel";
 import {
   createDirectionalLight,
-  createGridHelper,
   createLabelRenderer,
   createPerspectiveCamera,
   createUnrealBloomPass,
@@ -73,6 +67,7 @@ import { Dispatch } from "react";
 import { LabelInfoPanelController } from "../viewer3d/label/LabelInfoPanelController";
 import { editorInstance } from "./EditorInstance";
 import { viewerInstance } from "./ViewerInstance";
+import { runScriptPro } from "./scriptPro";
 
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;
@@ -90,7 +85,8 @@ export class Three3d extends ThreeObj {
   get labelInfoPanelController() {
     if (this._labelInfoPanelController === null) {
       this._labelInfoPanelController = new LabelInfoPanelController(
-        this.dispatchTourWindow
+        this.dispatchTourWindow,
+        this.scene
       );
     }
     return this._labelInfoPanelController;
@@ -232,14 +228,6 @@ export class Three3d extends ThreeObj {
 
     clearOldLabel();
     this.setTextureBackground();
-    const HELPER_GROUP = createGroupIfNotExist(
-      this.scene,
-      GLOBAL_CONSTANT.HELPER_GROUP
-    );
-    if (HELPER_GROUP) {
-      HELPER_GROUP.add(createGridHelper());
-      this.scene.add(HELPER_GROUP);
-    }
 
     const { useShadow } = this.scene.userData.config3d;
     const light = createDirectionalLight();
@@ -269,7 +257,6 @@ export class Three3d extends ThreeObj {
   }
   initPostProcessing() {
     const { offsetWidth, offsetHeight } = this.divElement;
-    console.log(this.divElement, "this.divElement");
 
     const composer = new EffectComposer(this.renderer);
 
@@ -408,7 +395,7 @@ export class Three3d extends ThreeObj {
   ): Object3D<Object3DEventMap>[] {
     const group: Object3D<Object3DEventMap>[] = [];
     labelGroup.children.forEach((item: Object3D<Object3DEventMap>) => {
-      const mark = new MarkLabel(this.dispatchTourWindow, {
+      const mark = new MarkLabel(this.scene, this.dispatchTourWindow, {
         markName: item.name,
         logo: item.userData.logo,
         showEye: item.userData.showEye,
@@ -565,7 +552,8 @@ export class Three3d extends ThreeObj {
     enableShadow(this.scene, this.scene);
 
     if (import.meta.env.MODE === "development") {
-      runScript(this);
+      const editorIns = editorInstance?.getEditor();
+      runScriptDev(editorIns);
     }
 
     const { javascript } = this.scene.userData;
@@ -575,7 +563,8 @@ export class Three3d extends ThreeObj {
       const editorIns = editorInstance?.getEditor();
       //@ts-ignore注意：在执行代码时，确保 this 指向正确的 ,对象在这里执行 javascript 代码
       const viewerIns = viewerInstance?.getViewer();
-      eval(javascript);
+      runScriptPro(editorIns, viewerIns);
+      // eval(javascript);
     }
   }
 
@@ -615,14 +604,16 @@ export class Three3d extends ThreeObj {
       });
 
       const curve = new CatmullRomCurve3(vector, true, "catmullrom"); //"centripetal" | "chordal" | "catmullrom"
-      const points = curve.getPoints(150); // 创建线条材质
-      const material = new LineBasicMaterial({ color: 0xff0000 });
-      // 创建 BufferGeometry 并设置顶点
-      const geometry = new BufferGeometry().setFromPoints(points);
 
-      // 创建线条对象
-      const line = new Line(geometry, material);
-      this.scene.add(line);
+      // const points = curve.getPoints(150); // 创建线条材质
+      // const material = new LineBasicMaterial({ color: 0xff0000 });
+      // // 创建 BufferGeometry 并设置顶点
+      // const geometry = new BufferGeometry().setFromPoints(points);
+
+      // // 创建线条对象
+      // const line = new Line(geometry, material);
+      // this.scene.add(line);
+
       return curve;
     }
     return new CatmullRomCurve3(vector, true, "catmullrom");

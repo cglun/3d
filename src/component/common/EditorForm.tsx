@@ -112,6 +112,7 @@ export default function EditorForm({
           <Viewer3d
             canvasStyle={{ height: "300px", width: "300px", margin: "0 auto" }}
             item={item}
+            callBack={() => {}}
           />
         ) : _item.cover?.trim().length > 0 ? (
           <Card.Img

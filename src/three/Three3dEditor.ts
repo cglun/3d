@@ -18,6 +18,7 @@ import { BackgroundHDR, SceneUserData } from "./Three3dConfig";
 import { createGroupIfNotExist } from "../threeUtils/util4Scene";
 import { Dispatch } from "react";
 import { TourWindow } from "../app/MyContext";
+import { createGridHelper } from "../threeUtils/factory3d";
 
 export class Three3dEditor extends Three3d {
   static divElement: HTMLDivElement;
@@ -154,43 +155,17 @@ export class Three3dEditor extends Three3d {
     return JSON.stringify(result);
   }
 
-  onPointerMove(event: MouseEvent) {
-    const { clientX, clientY } = event;
-
-    const { offsetWidth, offsetHeight } = this.divElement;
-    this.pointer.x = (clientX / offsetWidth) * 2 - 1;
-    this.pointer.y = -(clientY / offsetHeight) * 2 + 1;
-
-    this.raycaster.setFromCamera(this.pointer, this.camera);
-    const obj = createGroupIfNotExist(
-      this.scene,
-      GLOBAL_CONSTANT.MODEL_GROUP,
-      false
-    );
-    if (!obj) {
-      return;
-    }
-
-    const intersects = this.raycaster.intersectObjects(obj.children, false);
-
-    if (intersects.length > 0) {
-      const object = intersects[0].object;
-
-      if (object !== this.transformControl.object) {
-        this.transformControl.attach(object);
-      }
-    }
-  }
-
   onPointerDown(event: MouseEvent) {
-    this.onDownPosition.x = event.clientX;
-    this.onDownPosition.y = event.clientY;
-    console.log("onPointerDown", this.scene.children);
+    const { offsetX, offsetY } = event;
+    this.onDownPosition.x = offsetX;
+    this.onDownPosition.y = offsetY;
+
     // this.transformControl.getHelper().visible = false;
   }
   onPointerUp(event: MouseEvent) {
-    this.onUpPosition.x = event.clientX;
-    this.onUpPosition.y = event.clientY;
+    const { offsetX, offsetY } = event;
+    this.onUpPosition.x = offsetX;
+    this.onUpPosition.y = offsetY;
 
     if (this.onDownPosition.distanceTo(this.onUpPosition) === 0) {
       this.transformControl.detach();
@@ -218,6 +193,16 @@ export class Three3dEditor extends Three3d {
         this.tubeMesh.geometry.dispose();
         this.tubeMesh = null;
       }
+    }
+  }
+  addGridHelper() {
+    const HELPER_GROUP = createGroupIfNotExist(
+      this.scene,
+      GLOBAL_CONSTANT.HELPER_GROUP
+    );
+    if (HELPER_GROUP) {
+      HELPER_GROUP.add(createGridHelper());
+      this.scene.add(HELPER_GROUP);
     }
   }
 }
