@@ -9,21 +9,21 @@ import {
   Badge,
 } from "react-bootstrap";
 
-import ListCard from "./ListCard";
-import Toast3d from "../common/Toast3d";
-import ModalConfirm3d from "../common/ModalConfirm3d";
+import ListCard from "@/component/Editor/ListCard";
+import Toast3d from "@/component/common/Toast3d";
+import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import { Color } from "three";
-import { APP_COLOR, RecordItem } from "../../app/type";
+import { APP_COLOR, RecordItem } from "@/app/type";
 
-import axios from "../../app/http";
-import InputBase from "../common/InputBase";
-import { useUpdateScene } from "../../app/hooks";
-import { Search3d } from "./Search3d";
+import axios from "@/app/http";
+import InputBase from "@/component/common/InputBase";
+import { useUpdateScene } from "@/app/hooks";
+import { Search3d } from "@/component/Editor/Search3d";
 
 import { useLocation, useNavigate } from "@tanstack/react-router";
-import Icon from "../common/Icon";
-import { editorInstance } from "../../three/EditorInstance";
-import { getThemeByScene } from "../../threeUtils/util4UI";
+import Icon from "@/component/common/Icon";
+import { editorInstance } from "@/three/EditorInstance";
+import { getThemeByScene } from "@/threeUtils/util4UI";
 
 // 若 getThemeByScene 确实在该文件且正确导出，使用此导入语句
 

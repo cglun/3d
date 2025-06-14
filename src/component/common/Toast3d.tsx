@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Toast as BootToast } from "react-bootstrap";
 import { createRoot } from "react-dom/client";
-import { APP_COLOR, DELAY } from "../../app/type";
+import { APP_COLOR, DELAY } from "@/app/type";
 
-import Icon from "./Icon";
+import Icon from "@/component/common/Icon";
 /**
  * 消息提示
  * 用法：Toast3d("成功添加");

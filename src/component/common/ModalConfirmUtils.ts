@@ -1,4 +1,4 @@
-import { ConfirmButton } from "../../app/type";
+import { ConfirmButton } from "@/app/type";
 
 // 定义 ConfirmButton 类型的常量
 export const _confirmButton: ConfirmButton = {

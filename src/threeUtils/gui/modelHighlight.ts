@@ -1,6 +1,3 @@
-import { GUI } from "@/threeUtils/gui";
+import { editorInstance } from "@/three/EditorInstance";
 
-function a() {
-  console.log(GUI);
-}
-a();
+console.log(editorInstance);

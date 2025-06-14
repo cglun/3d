@@ -1,5 +1,5 @@
 import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
-import { UserStyles } from "../../../../app/type";
+import { UserStyles } from "@/app/type";
 import InputGroup from "react-bootstrap/esm/InputGroup";
 import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
 import Tooltip from "react-bootstrap/esm/Tooltip";

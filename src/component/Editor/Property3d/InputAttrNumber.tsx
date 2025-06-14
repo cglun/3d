@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Form from "react-bootstrap/esm/Form";
 import InputGroup from "react-bootstrap/esm/InputGroup";
-import { styleBody } from "../OutlineView/fontColor";
+import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 
 // 严格约束泛型 T，确保 T 的所有属性值类型为 number
 export function InputAttrNumber<T>({

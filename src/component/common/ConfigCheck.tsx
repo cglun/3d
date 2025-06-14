@@ -1,12 +1,12 @@
 import Form from "react-bootstrap/esm/Form";
-import { useUpdateScene } from "../../app/hooks";
+import { useUpdateScene } from "@/app/hooks";
 
 import InputGroup from "react-bootstrap/esm/InputGroup";
 
 import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
 import Tooltip from "react-bootstrap/esm/Tooltip";
-import { editorInstance } from "../../three/EditorInstance";
-import { Config3d } from "../../three/Three3dConfig";
+import { editorInstance } from "@/three/EditorInstance";
+import { Config3d } from "@/three/Three3dConfig";
 export function ConfigCheck({
   label = "label",
   configKey = "css2d",

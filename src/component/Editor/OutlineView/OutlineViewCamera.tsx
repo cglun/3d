@@ -1,16 +1,15 @@
 import ListGroup from "react-bootstrap/esm/ListGroup";
 import Button from "react-bootstrap/esm/Button";
-import { APP_COLOR } from "../../../app/type";
-import Toast3d from "../../common/Toast3d";
+import { APP_COLOR } from "@/app/type";
+import Toast3d from "@/component/common/Toast3d";
+import { useUpdateCamera, useUpdateScene } from "@/app/hooks";
+import Icon from "@/component/common/Icon";
+import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 
-import { useUpdateCamera, useUpdateScene } from "../../../app/hooks";
-import Icon from "../../common/Icon";
-import { styleBody } from "./fontColor";
-
-import { editorInstance } from "../../../three/EditorInstance";
-import { SceneUserData } from "../../../three/Three3dConfig";
-import { getButtonColor } from "../../../threeUtils/util4UI";
-import { cameraEnterAnimation } from "../../../threeUtils/util4Camera";
+import { editorInstance } from "@/three/EditorInstance";
+import { SceneUserData } from "@/three/Three3dConfig";
+import { getButtonColor } from "@/threeUtils/util4UI";
+import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
 
 export function OutlineViewCamera() {
   const { updateScene } = useUpdateScene();

@@ -1,17 +1,17 @@
 import React, { memo } from "react";
 import { Button, Container, ListGroupItem } from "react-bootstrap";
 
-import { APP_COLOR, UserDataType } from "../../app/type";
+import { APP_COLOR, UserDataType } from "@/app/type";
 import { Group, Light, Mesh, Object3D, Object3DEventMap } from "three";
-import ModalConfirm3d from "../common/ModalConfirm3d";
-import AlertBase from "../common/AlertBase";
-import Toast3d from "../common/Toast3d";
+import ModalConfirm3d from "@/component/common/ModalConfirm3d";
+import AlertBase from "@/component/common/AlertBase";
+import Toast3d from "@/component/common/Toast3d";
 
-import { useUpdateScene } from "../../app/hooks";
-import Icon from "../common/Icon";
-import { styleBody } from "./OutlineView/fontColor";
-import { editorInstance } from "../../three/EditorInstance";
-import { getObjectNameByName } from "../../threeUtils/util4UI";
+import { useUpdateScene } from "@/app/hooks";
+import Icon from "@/component/common/Icon";
+import { styleBody } from "@/component/Editor/OutlineView/fontColor";
+import { editorInstance } from "@/three/EditorInstance";
+import { getObjectNameByName } from "@/threeUtils/util4UI";
 
 function TreeNode({
   node,

@@ -1,9 +1,9 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import CodeEditor from "../../component/common/routes/script/CodeEditor";
+import CodeEditor from "@/component/common/routes/script/CodeEditor";
 import { Button, ButtonGroup, ListGroup, ListGroupItem } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useUpdateScene } from "../../app/hooks";
-import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
+import { useUpdateScene } from "@/app/hooks";
+import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
 export const Route = createLazyFileRoute("/editor3d/document")({
   component: RouteComponent,
 });

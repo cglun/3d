@@ -1,6 +1,6 @@
 import { useNavigate, Outlet, useLocation } from "@tanstack/react-router";
 import { Container, Nav } from "react-bootstrap";
-import Icon from "../common/Icon";
+import Icon from "@/component/common/Icon";
 import { useState } from "react";
 export default function EditorBottom() {
   const navigate = useNavigate();

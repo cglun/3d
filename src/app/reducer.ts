@@ -1,4 +1,4 @@
-import { EditorCamera, EditorScene, TourWindow } from "./MyContext";
+import { EditorCamera, EditorScene, TourWindow } from "@/app/MyContext";
 
 /**
  * 处理 TourWindow 状态的 reducer 函数

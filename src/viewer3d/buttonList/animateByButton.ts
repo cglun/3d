@@ -10,18 +10,18 @@ import {
   TubeGeometry,
   Vector3,
 } from "three";
-import { ActionItemMap } from "../../app/type";
+import { ActionItemMap } from "@/app/type";
 
-import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
+import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
 
-import { cameraTween, meshTween } from "../../three/animate";
+import { cameraTween, meshTween } from "@/three/animate";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { getObjectWorldPosition } from "../viewer3dUtils";
-import { roamAnimation } from "./buttonGroup";
+import { getObjectWorldPosition } from "@/viewer3d/viewer3dUtils";
+import { roamAnimation } from "@/viewer3d/buttonList/buttonGroup";
 
-import { SceneUserData, ToggleButtonGroup } from "../../three/Three3dConfig";
-import { viewerInstance } from "../../three/ViewerInstance";
-import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
+import { SceneUserData, ToggleButtonGroup } from "@/three/Three3dConfig";
+import { viewerInstance } from "@/three/ViewerInstance";
+import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
 
 function getScene() {
   return viewerInstance.getViewer().scene;

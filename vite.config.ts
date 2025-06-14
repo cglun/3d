@@ -1,12 +1,14 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import tanstackRouter from "@tanstack/router-plugin/vite";
+// 修改为默认导入
 import federation from "@originjs/vite-plugin-federation";
 import { resolve } from "path";
+
 export default defineConfig({
   plugins: [
     react(),
-    TanStackRouterVite(),
+    tanstackRouter,
     federation({
       name: "remote_app",
       filename: "remoteEntry.js",
@@ -18,13 +20,12 @@ export default defineConfig({
     }),
   ],
   base: "/editor3d/",
-
   build: {
     modulePreload: true,
     copyPublicDir: true,
     target: "esnext",
-    // minify: true,
-    minify: false,
+    minify: true,
+    // minify: false,
     cssCodeSplit: false,
     outDir: "../ArgDataV.Designer.V2.Vite/editor3d",
     //outDir: "dist/editor3d",
@@ -60,7 +61,7 @@ export default defineConfig({
   resolve: {
     conditions: ["browser", "import"],
     alias: {
-      "@": resolve(__dirname, "./src"), // 新增别名配置
+      "@": resolve(__dirname, "src"), // 新增别名配置
     },
   },
 });

@@ -1,4 +1,4 @@
-import { Three3dEditor } from "./Three3dEditor";
+import { Three3dEditor } from "@/three/Three3dEditor";
 
 export class EditorInstance {
   // 存储单例实例

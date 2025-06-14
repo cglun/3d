@@ -4,15 +4,15 @@ import { createRoot } from "react-dom/client";
 import { useEffect, useState } from "react";
 import { ButtonGroup } from "react-bootstrap";
 
-import { ConfirmButton } from "../../app/type";
+import { ConfirmButton } from "@/app/type";
 // 从新文件中引入常量
-import { _confirmButton } from "./ModalConfirmUtils";
+import { _confirmButton } from "@/component/common/ModalConfirmUtils";
 
-import Icon from "./Icon";
-import { styleBody } from "../Editor/OutlineView/fontColor";
+import Icon from "@/component/common/Icon";
+import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 
-import { editorInstance } from "../../three/EditorInstance";
-import { getButtonColor } from "../../threeUtils/util4UI";
+import { editorInstance } from "@/three/EditorInstance";
+import { getButtonColor } from "@/threeUtils/util4UI";
 
 let container = document.getElementById("toast");
 if (container === null) {

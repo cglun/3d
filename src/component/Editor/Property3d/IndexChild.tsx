@@ -14,18 +14,21 @@ import Card from "react-bootstrap/esm/Card";
 import InputGroup from "react-bootstrap/esm/InputGroup";
 
 import { ButtonGroup, Container } from "react-bootstrap";
-import { useUpdateScene } from "../../../app/hooks";
-import { Input3d } from "./Input3d";
-import { Selected3dName } from "./Selected3dName";
-import { getButtonColor, getThemeByScene } from "../../../threeUtils/util4UI";
-import AlertBase from "../../common/AlertBase";
+import { useUpdateScene } from "@/app/hooks";
+import { Input3d } from "@/component/Editor/Property3d/Input3d";
+import { Selected3dName } from "@/component/Editor/Property3d/Selected3dName";
+import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
+import AlertBase from "@/component/common/AlertBase";
 
-import { APP_COLOR } from "../../../app/type";
-import { InputAttrNumber } from "./InputAttrNumber";
-import Toast3d from "../../common/Toast3d";
-import { styleBody, styleHeader } from "../OutlineView/fontColor";
-import { editorInstance } from "../../../three/EditorInstance";
-import sceneUserData, { SceneUserData } from "../../../three/Three3dConfig";
+import { APP_COLOR } from "@/app/type";
+import { InputAttrNumber } from "@/component/Editor/Property3d/InputAttrNumber";
+import Toast3d from "@/component/common/Toast3d";
+import {
+  styleBody,
+  styleHeader,
+} from "@/component/Editor/OutlineView/fontColor";
+import { editorInstance } from "@/three/EditorInstance";
+import sceneUserData, { SceneUserData } from "@/three/Three3dConfig";
 
 const step = 0.1;
 function SceneProperty() {

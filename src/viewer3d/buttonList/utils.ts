@@ -6,8 +6,8 @@ import {
   Vector3,
 } from "three";
 
-import { getObjectWorldPosition } from "../viewer3dUtils";
-import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
+import { getObjectWorldPosition } from "@/viewer3d/viewer3dUtils";
+import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
 export function hasValueString(
   item: Object3D<Object3DEventMap>,
   value: string

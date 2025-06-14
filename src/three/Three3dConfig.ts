@@ -11,7 +11,7 @@ import {
   APP_COLOR,
   CustomButtonType,
   GlbModel,
-} from "../app/type";
+} from "@/app/type";
 import venice_sunset_1k from "/static/file3d/hdr/venice_sunset_1k.hdr?url";
 import spruit_sunrise_1k from "/static/file3d/hdr/spruit_sunrise_1k.hdr?url";
 export const userCssStyle = {

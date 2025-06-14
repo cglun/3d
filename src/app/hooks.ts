@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 
-import { MyContext } from "./MyContext";
+import { MyContext } from "@/app/MyContext";
 import { PerspectiveCamera, Scene } from "three";
 
 export default function useFetch(url: string, type: string = "GET") {

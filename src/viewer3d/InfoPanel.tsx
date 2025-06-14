@@ -1,6 +1,6 @@
 import Card from "react-bootstrap/esm/Card";
 import { Vector2 } from "three";
-import { RecordItem } from "../app/type";
+import { RecordItem } from "@/app/type";
 
 export interface InfoPanelProps {
   show: boolean; // 面板是否显示

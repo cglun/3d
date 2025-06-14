@@ -13,27 +13,24 @@ import {
 import { useContext, useEffect, useState } from "react";
 
 import { CSS2DObject, CSS3DSprite } from "three/examples/jsm/Addons.js";
-import Toast3d from "../../component/common/Toast3d";
-import { APP_COLOR, TourItem } from "../../app/type";
-import { useUpdateScene } from "../../app/hooks";
-import { ConfigCheck } from "../../component/common/ConfigCheck";
-import _axios from "../../app/http";
+import Toast3d from "@/component/common/Toast3d";
+import { APP_COLOR, TourItem } from "@/app/type";
+import { useUpdateScene } from "@/app/hooks";
+import { ConfigCheck } from "@/component/common/ConfigCheck";
+import _axios from "@/app/http";
 
-import { MyContext } from "../../app/MyContext";
+import { MyContext } from "@/app/MyContext";
 
-import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
-import { MarkLabel } from "../../viewer3d/label/MarkLabel";
-import { SceneUserData } from "../../three/Three3dConfig";
-import { editorInstance } from "../../three/EditorInstance";
+import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+import { MarkLabel } from "@/viewer3d/label/MarkLabel";
+import { SceneUserData } from "@/three/Three3dConfig";
+import { editorInstance } from "@/three/EditorInstance";
 import {
   getButtonColor,
   getThemeByScene,
   setClassName,
-} from "../../threeUtils/util4UI";
-import {
-  clearOldLabel,
-  createGroupIfNotExist,
-} from "../../threeUtils/util4Scene";
+} from "@/threeUtils/util4UI";
+import { clearOldLabel, createGroupIfNotExist } from "@/threeUtils/util4Scene";
 
 export const Route = createLazyFileRoute("/editor3d/mark")({
   component: RouteComponent,

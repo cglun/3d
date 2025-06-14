@@ -7,15 +7,15 @@ import {
   Modal,
 } from "react-bootstrap";
 
-import { APP_COLOR } from "../../app/type";
-import AlertBase from "../../component/common/AlertBase";
+import { APP_COLOR } from "@/app/type";
+import AlertBase from "@/component/common/AlertBase";
 import { useEffect, useState } from "react";
-import { useUpdateScene } from "../../app/hooks";
+import { useUpdateScene } from "@/app/hooks";
 import {
   getButtonColor,
   getThemeByScene,
   setClassName,
-} from "../../threeUtils/util4UI";
+} from "@/threeUtils/util4UI";
 
 export const Route = createLazyFileRoute("/editor3d/about")({
   component: RouteComponent,

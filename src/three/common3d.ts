@@ -11,12 +11,12 @@ import {
 
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 
-import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
+import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
 
-import { UserDataType } from "../app/type";
+import { UserDataType } from "@/app/type";
 
-import { hdr, HdrKey } from "./Three3dConfig";
-import { createGroupIfNotExist } from "../threeUtils/util4Scene";
+import { hdr, HdrKey } from "@/three/Three3dConfig";
+import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
 
 export function enableShadow(group: Scene | Group | Object3D, context: Scene) {
   const { useShadow } = context.userData.config3d;

@@ -1,5 +1,5 @@
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { setClassName } from "../../threeUtils/util4UI";
+import { setClassName } from "@/threeUtils/util4UI";
 
 interface IconProps extends React.HTMLAttributes<HTMLSpanElement> {
   iconName: string; // 给 iconName 设置默认值 "search-heart"

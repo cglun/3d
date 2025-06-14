@@ -1,10 +1,10 @@
 import InputGroup from "react-bootstrap/esm/InputGroup";
 import Form from "react-bootstrap/esm/Form";
-import { GLOBAL_CONSTANT } from "../../../three/GLOBAL_CONSTANT";
-import { styleBody } from "../OutlineView/fontColor";
-import { useUpdateScene } from "../../../app/hooks";
-import { SceneUserData } from "../../../three/Three3dConfig";
-import { editorInstance } from "../../../three/EditorInstance";
+import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+import { styleBody } from "@/component/Editor/OutlineView/fontColor";
+import { useUpdateScene } from "@/app/hooks";
+import { SceneUserData } from "@/three/Three3dConfig";
+import { editorInstance } from "@/three/EditorInstance";
 
 export function Selected3dName() {
   const { scene, updateScene } = useUpdateScene();

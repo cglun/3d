@@ -1,5 +1,5 @@
-import { Three3dEditor } from "./Three3dEditor";
-import { Three3dViewer } from "./Three3dViewer";
+import { Three3dEditor } from "@/three/Three3dEditor";
+import { Three3dViewer } from "@/three/Three3dViewer";
 
 export function runScriptPro(
   editorIns: Three3dEditor,

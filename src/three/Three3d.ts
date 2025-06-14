@@ -19,18 +19,18 @@ import {
 
 import TWEEN from "three/addons/libs/tween.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import ThreeObj from "./ThreeObj";
-import { GlbModel, RecordItem } from "../app/type";
+import ThreeObj from "@/three/ThreeObj";
+import { GlbModel, RecordItem } from "@/app/type";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
-import { runScriptDev } from "./scriptDev";
-import { enableShadow } from "./common3d";
+import { runScriptDev } from "@/three/scriptDev";
+import { enableShadow } from "@/three/common3d";
 import {
   BackgroundHDR,
   ExtraParams,
   hdr,
   HdrKey,
   SceneUserData,
-} from "./Three3dConfig";
+} from "@/three/Three3dConfig";
 
 import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
@@ -40,17 +40,17 @@ import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import { CSS3DRenderer } from "three/addons/renderers/CSS3DRenderer.js";
 import { Curves, GLTF, ShaderPass } from "three/addons/Addons.js";
-import sceneUserData from "./Three3dConfig";
-import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
-import { getObjectWorldPosition } from "../viewer3d/viewer3dUtils";
-import { TourWindow } from "../app/MyContext";
-import { MarkLabel } from "../viewer3d/label/MarkLabel";
+import sceneUserData from "@/three/Three3dConfig";
+import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+import { getObjectWorldPosition } from "@/viewer3d/viewer3dUtils";
+import { TourWindow } from "@/app/MyContext";
+import { MarkLabel } from "@/viewer3d/label/MarkLabel";
 import {
   createDirectionalLight,
   createLabelRenderer,
   createPerspectiveCamera,
   createUnrealBloomPass,
-} from "../threeUtils/factory3d";
+} from "@/threeUtils/factory3d";
 import {
   clearOldLabel,
   createGroupIfNotExist,
@@ -61,13 +61,13 @@ import {
   setGLTFTransform,
   setOutLinePassColor,
   strToJson,
-} from "../threeUtils/util4Scene";
-import { cameraEnterAnimation } from "../threeUtils/util4Camera";
+} from "@/threeUtils/util4Scene";
+import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
 import { Dispatch } from "react";
-import { LabelInfoPanelController } from "../viewer3d/label/LabelInfoPanelController";
-import { editorInstance } from "./EditorInstance";
-import { viewerInstance } from "./ViewerInstance";
-import { runScriptPro } from "./scriptPro";
+import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelController";
+import { editorInstance } from "@/three/EditorInstance";
+import { viewerInstance } from "@/three/ViewerInstance";
+import { runScriptPro } from "@/three/scriptPro";
 
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;

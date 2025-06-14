@@ -1,10 +1,10 @@
 import { Accordion, ListGroup, ListGroupItem } from "react-bootstrap";
 
-import IndexChild from "./IndexChild";
+import IndexChild from "@/component/Editor/Property3d/IndexChild";
 
 import { useEffect, useRef } from "react";
-import Icon from "../../common/Icon";
-import { useUpdateScene } from "../../../app/hooks";
+import Icon from "@/component/common/Icon";
+import { useUpdateScene } from "@/app/hooks";
 
 /**
  * 物体属性

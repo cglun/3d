@@ -7,19 +7,19 @@ import {
   Vector2,
   Vector3,
 } from "three";
-import { GlbModel } from "../app/type";
-import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
-import { Three3d } from "./Three3d";
-import { SceneUserData } from "./Three3dConfig";
-import { createGroupIfNotExist } from "../threeUtils/util4Scene";
-import { TourWindow } from "../app/MyContext";
+import { GlbModel } from "@/app/type";
+import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+import { Three3d } from "@/three/Three3d";
+import { SceneUserData } from "@/three/Three3dConfig";
+import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
+import { TourWindow } from "@/app/MyContext";
 import {
   getPanelControllerButtonGroup,
   getRoamListByRoamButtonMap,
   getToggleButtonGroup,
-} from "../viewer3d/buttonList/buttonGroup";
+} from "@/viewer3d/buttonList/buttonGroup";
 
-import { viewerInstance } from "./ViewerInstance";
+import { viewerInstance } from "@/three/ViewerInstance";
 
 /**
  * Three3dViewer 类，继承自 Three3d 类，用于创建一个 3D 视图器。

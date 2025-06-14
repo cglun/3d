@@ -2,14 +2,14 @@ import { Object3D } from "three";
 
 import { Accordion, Card, ListGroup } from "react-bootstrap";
 
-import Property3d from "../Property3d/Index";
-import TreeList from "../TreeList";
-import { useUpdateScene } from "../../../app/hooks";
-import { OutlineViewCamera } from "./OutlineViewCamera";
-import { OutlineViewScene } from "./OutlineViewScene";
+import Property3d from "@/component/Editor/Property3d/Index";
+import TreeList from "@/component/Editor/TreeList";
+import { useUpdateScene } from "@/app/hooks";
+import { OutlineViewCamera } from "@/component/Editor/OutlineView/OutlineViewCamera";
+import { OutlineViewScene } from "@/component/Editor/OutlineView/OutlineViewScene";
 
-import Icon from "../../common/Icon";
-import { styleHeader } from "./fontColor";
+import Icon from "@/component/common/Icon";
+import { styleHeader } from "@/component/Editor/OutlineView/fontColor";
 
 export default function Index() {
   const gap = 1;

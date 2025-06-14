@@ -1,10 +1,10 @@
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
-import EditorTop from "./EditorTop";
+import EditorTop from "@/component/Editor/EditorTop";
 import Col from "react-bootstrap/esm/Col";
-import EditorBottom from "./EditorBottom";
-import OutlineView from "./OutlineView/Index";
-import EditorViewer3d from "./EditorViewer3d";
+import EditorBottom from "@/component/Editor/EditorBottom";
+import OutlineView from "@/component/Editor/OutlineView/Index";
+import EditorViewer3d from "@/component/Editor/EditorViewer3d";
 export default function Index() {
   return (
     <Container fluid style={{ height: "95vh" }}>

@@ -7,16 +7,16 @@ import {
   Modal,
 } from "react-bootstrap";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import Viewer3d from "../../viewer3d/Viewer3d";
+import Viewer3d from "@/viewer3d/Viewer3d";
 import { useEffect, useRef, useState } from "react";
-import _axios from "../../app/http";
-import { useUpdateScene } from "../../app/hooks";
+import _axios from "@/app/http";
+import { useUpdateScene } from "@/app/hooks";
 
-import { ActionItemMap, APP_COLOR, RecordItem } from "../../app/type";
-import { resetListGroupIsClick } from "../../viewer3d/buttonList/buttonGroup";
-import { LabelInfoPanelController } from "../../viewer3d/label/LabelInfoPanelController";
+import { ActionItemMap, APP_COLOR, RecordItem } from "@/app/type";
+import { resetListGroupIsClick } from "@/viewer3d/buttonList/buttonGroup";
+import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelController";
 
-import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
+import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
 
 // 定义响应数据的类型
 interface PageListResponse {

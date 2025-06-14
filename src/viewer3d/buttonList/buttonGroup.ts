@@ -1,7 +1,7 @@
 import { Scene, Vector3 } from "three";
-import { ActionItemMap, CustomButtonType } from "../../app/type";
+import { ActionItemMap, CustomButtonType } from "@/app/type";
 
-import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
+import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
 
 import {
   animateDRAWER,
@@ -12,14 +12,14 @@ import {
   drawerBackHome,
   showModelBackHome,
   stretchModelBackHome,
-} from "./animateByButton";
+} from "@/viewer3d/buttonList/animateByButton";
 
-import { hasValueString } from "./utils";
-import { LabelInfoPanelController } from "../label/LabelInfoPanelController";
-import { CustomButtonList, SceneUserData } from "../../three/Three3dConfig";
-import { viewerInstance } from "../../three/ViewerInstance";
-import { editorInstance } from "../../three/EditorInstance";
-import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
+import { hasValueString } from "@/viewer3d/buttonList/utils";
+import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelController";
+import { CustomButtonList, SceneUserData } from "@/three/Three3dConfig";
+import { viewerInstance } from "@/three/ViewerInstance";
+import { editorInstance } from "@/three/EditorInstance";
+import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
 
 function getActionItemByMap(
   item: ActionItemMap,

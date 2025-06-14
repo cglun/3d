@@ -7,23 +7,23 @@ import {
   ListGroup,
 } from "react-bootstrap";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import CodeEditor from "../../component/common/routes/script/CodeEditor";
-import { useUpdateScene } from "../../app/hooks";
-import AlertBase from "../../component/common/AlertBase";
-import { APP_COLOR, CustomButtonType } from "../../app/type";
-import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
-import Toast3d from "../../component/common/Toast3d";
-import ModalConfirm3d from "../../component/common/ModalConfirm3d";
+import CodeEditor from "@/component/common/routes/script/CodeEditor";
+import { useUpdateScene } from "@/app/hooks";
+import AlertBase from "@/component/common/AlertBase";
+import { APP_COLOR, CustomButtonType } from "@/app/type";
+import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
+import Toast3d from "@/component/common/Toast3d";
+import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 
 import {
   generatePanelControllerButtonGroup,
   generateRoamButtonGroup,
   generateToggleButtonGroup,
-} from "../../viewer3d/buttonList/buttonGroup";
-import Icon from "../../component/common/Icon";
-import { styleBody } from "../../component/Editor/OutlineView/fontColor";
-import { customButtonListInit, SceneUserData } from "../../three/Three3dConfig";
-import { editorInstance } from "../../three/EditorInstance";
+} from "@/viewer3d/buttonList/buttonGroup";
+import Icon from "@/component/common/Icon";
+import { styleBody } from "@/component/Editor/OutlineView/fontColor";
+import { customButtonListInit, SceneUserData } from "@/three/Three3dConfig";
+import { editorInstance } from "@/three/EditorInstance";
 
 export const Route = createLazyFileRoute("/editor3d/script")({
   component: RouteComponent,

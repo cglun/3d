@@ -1,6 +1,6 @@
 // 修改导入名称为 _axios，避免与局部变量冲突
 import _axios from "axios";
-import { decrypt } from "./crypto";
+import { decrypt } from "@/app/crypto";
 
 // const codeMessage = {
 //   200: "服务器成功返回请求的数据。",

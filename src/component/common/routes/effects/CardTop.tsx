@@ -1,16 +1,13 @@
 import ListGroup from "react-bootstrap/esm/ListGroup";
-import { CardNumber } from "./CardNumber";
+import { CardNumber } from "@/component/common/routes/effects/CardNumber";
 import CardImg from "react-bootstrap/esm/CardImg";
-import { CardText } from "./CardText";
+import { CardText } from "@/component/common/routes/effects/CardText";
 
-import { useUpdateScene } from "../../../../app/hooks";
+import { useUpdateScene } from "@/app/hooks";
 
-import { editorInstance } from "../../../../three/EditorInstance";
-import { UserCssStyle } from "../../../../three/Three3dConfig";
-import {
-  getCardBackgroundUrl,
-  setClassName,
-} from "../../../../threeUtils/util4UI";
+import { editorInstance } from "@/three/EditorInstance";
+import { UserCssStyle } from "@/three/Three3dConfig";
+import { getCardBackgroundUrl, setClassName } from "@/threeUtils/util4UI";
 
 export default function CardTop({
   userDataStyles,

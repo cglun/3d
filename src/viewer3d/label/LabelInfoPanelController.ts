@@ -1,13 +1,13 @@
 import React from "react";
-import { TourWindow } from "../../app/MyContext";
-import { GLOBAL_CONSTANT } from "../../three/GLOBAL_CONSTANT";
-
-import { LabelInfo } from "./LabelInfo";
-
-import { createGroupIfNotExist } from "../../threeUtils/util4Scene";
-import { viewerInstance } from "../../three/ViewerInstance";
-import { SceneUserData } from "../../three/Three3dConfig";
 import { Scene } from "three";
+import { TourWindow } from "@/app/MyContext";
+import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+
+import { LabelInfo } from "@/viewer3d/label/LabelInfo";
+
+import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
+import { viewerInstance } from "@/three/ViewerInstance";
+import { SceneUserData } from "@/three/Three3dConfig";
 
 // 标签信息面板控制器
 export class LabelInfoPanelController {

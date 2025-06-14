@@ -3,21 +3,17 @@ import { useEffect, useState } from "react";
 import InputGroup from "react-bootstrap/esm/InputGroup";
 import Form from "react-bootstrap/esm/Form";
 import { Button, ButtonGroup, Card, Container } from "react-bootstrap";
-import Viewer3d from "../../viewer3d/Viewer3d";
-import Toast3d from "./Toast3d";
+import Viewer3d from "@/viewer3d/Viewer3d";
+import Toast3d from "@/component/common/Toast3d";
 
-import axios, { loadAssets } from "../../app/http";
-import { APP_COLOR, RecordItem } from "../../app/type";
+import axios, { loadAssets } from "@/app/http";
+import { APP_COLOR, RecordItem } from "@/app/type";
 
-import Icon from "./Icon";
-import { editorInstance } from "../../three/EditorInstance";
+import Icon from "@/component/common/Icon";
+import { editorInstance } from "@/three/EditorInstance";
 
-import { viewerInstance } from "../../three/ViewerInstance";
-import {
-  base64ToBlob,
-  blobToFile,
-  getButtonColor,
-} from "../../threeUtils/util4UI";
+import { viewerInstance } from "@/three/ViewerInstance";
+import { base64ToBlob, blobToFile, getButtonColor } from "@/threeUtils/util4UI";
 
 export default function EditorForm({
   item,

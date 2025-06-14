@@ -3,8 +3,11 @@ import Card from "react-bootstrap/esm/Card";
 import Form from "react-bootstrap/esm/Form";
 import InputGroup from "react-bootstrap/esm/InputGroup";
 import { Euler, Vector3 } from "three";
-import Icon from "../../common/Icon";
-import { styleBody, styleHeader } from "../OutlineView/fontColor";
+import Icon from "@/component/common/Icon";
+import {
+  styleBody,
+  styleHeader,
+} from "@/component/Editor/OutlineView/fontColor";
 
 export function Input3d({
   transform,

@@ -9,16 +9,16 @@ import {
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 
-import { GlbModel, UserDataType } from "../app/type";
-import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
-import { Three3d } from "./Three3d";
+import { GlbModel, UserDataType } from "@/app/type";
+import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+import { Three3d } from "@/three/Three3d";
 
 import { TransformControls } from "three/addons/controls/TransformControls.js";
-import { BackgroundHDR, SceneUserData } from "./Three3dConfig";
-import { createGroupIfNotExist } from "../threeUtils/util4Scene";
+import { BackgroundHDR, SceneUserData } from "@/three/Three3dConfig";
+import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
 import { Dispatch } from "react";
-import { TourWindow } from "../app/MyContext";
-import { createGridHelper } from "../threeUtils/factory3d";
+import { TourWindow } from "@/app/MyContext";
+import { createGridHelper } from "@/threeUtils/factory3d";
 
 export class Three3dEditor extends Three3d {
   static divElement: HTMLDivElement;

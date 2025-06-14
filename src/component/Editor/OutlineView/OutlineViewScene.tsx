@@ -1,10 +1,10 @@
 import ListGroup from "react-bootstrap/esm/ListGroup";
 
-import { useUpdateScene } from "../../../app/hooks";
-import Icon from "../../common/Icon";
-import { styleBody } from "./fontColor";
-import { editorInstance } from "../../../three/EditorInstance";
-import { SceneUserData } from "../../../three/Three3dConfig";
+import { useUpdateScene } from "@/app/hooks";
+import Icon from "@/component/common/Icon";
+import { styleBody } from "@/component/Editor/OutlineView/fontColor";
+import { editorInstance } from "@/three/EditorInstance";
+import { SceneUserData } from "@/three/Three3dConfig";
 
 export function OutlineViewScene() {
   const { scene, updateScene } = useUpdateScene();

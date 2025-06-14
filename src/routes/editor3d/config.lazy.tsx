@@ -1,20 +1,20 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { Button, Form, InputGroup, ListGroup } from "react-bootstrap";
 
-import { ConfigCheck } from "../../component/common/ConfigCheck";
-import { enableShadow } from "../../three/common3d";
+import { ConfigCheck } from "@/component/common/ConfigCheck";
+import { enableShadow } from "@/three/common3d";
 
-import { useUpdateScene } from "../../app/hooks";
-import Toast3d from "../../component/common/Toast3d";
+import { useUpdateScene } from "@/app/hooks";
+import Toast3d from "@/component/common/Toast3d";
 
-import { APP_COLOR, DELAY } from "../../app/type";
+import { APP_COLOR, DELAY } from "@/app/type";
 import { useEffect, useState } from "react";
-import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
-import Icon from "../../component/common/Icon";
+import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
+import Icon from "@/component/common/Icon";
 
-import { styleBody } from "../../component/Editor/OutlineView/fontColor";
-import { editorInstance } from "../../three/EditorInstance";
-import { config3dInit, SceneUserData } from "../../three/Three3dConfig";
+import { styleBody } from "@/component/Editor/OutlineView/fontColor";
+import { editorInstance } from "@/three/EditorInstance";
+import { config3dInit, SceneUserData } from "@/three/Three3dConfig";
 
 export const Route = createLazyFileRoute("/editor3d/config")({
   component: RouteComponent,

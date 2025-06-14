@@ -5,12 +5,10 @@ import {
   TubeGeometry,
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import {
-  RoamButtonUserSetting,
-  SceneUserData,
-} from "../../three/Three3dConfig";
+import { RoamButtonUserSetting, SceneUserData } from "@/three/Three3dConfig";
 
-import { cameraEnterAnimation } from "../../threeUtils/util4Camera";
+//@ts-ignore
+import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
 import { editorInstance } from "@/three/EditorInstance";
 
 export function setRoamPath() {
@@ -18,7 +16,7 @@ export function setRoamPath() {
   if (editor.guiInstance !== null) {
     editor.destroyGUI();
   }
-  debugger;
+
   const { customButtonList } = editorInstance.getEditor().scene
     .userData as SceneUserData;
   const { userSetting } = customButtonList.roamButtonGroup;

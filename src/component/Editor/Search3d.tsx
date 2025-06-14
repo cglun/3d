@@ -5,13 +5,13 @@ import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import InputGroup from "react-bootstrap/esm/InputGroup";
 
-import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
+import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
 
-import { useUpdateScene } from "../../app/hooks";
-import { RecordItem } from "../../app/type";
-import Icon from "../common/Icon";
+import { useUpdateScene } from "@/app/hooks";
+import { RecordItem } from "@/app/type";
+import Icon from "@/component/common/Icon";
 
-import { styleBody } from "./OutlineView/fontColor";
+import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 
 // 定义一个接口来描述 list 数组中元素的类型
 interface SearchableItem {

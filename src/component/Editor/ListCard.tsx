@@ -1,19 +1,19 @@
 import { memo } from "react";
 import { Button, ButtonGroup, Card, Container, Spinner } from "react-bootstrap";
-import AlertBase from "../common/AlertBase";
+import AlertBase from "@/component/common/AlertBase";
 
-import { APP_COLOR, RecordItem } from "../../app/type";
-import ModalConfirm3d from "../common/ModalConfirm3d";
-import Toast3d from "../common/Toast3d";
-import EditorForm from "../common/EditorForm";
-import axios, { loadAssets } from "../../app/http";
-import { useUpdateScene } from "../../app/hooks";
+import { APP_COLOR, RecordItem } from "@/app/type";
+import ModalConfirm3d from "@/component/common/ModalConfirm3d";
+import Toast3d from "@/component/common/Toast3d";
+import EditorForm from "@/component/common/EditorForm";
+import axios, { loadAssets } from "@/app/http";
+import { useUpdateScene } from "@/app/hooks";
 
-import Trigger3d from "../common/Trigger3d";
+import Trigger3d from "@/component/common/Trigger3d";
 import { useLocation, useNavigate } from "@tanstack/react-router";
-import Icon from "../common/Icon";
-import { editorInstance } from "../../three/EditorInstance";
-import { getThemeByScene } from "../../threeUtils/util4UI";
+import Icon from "@/component/common/Icon";
+import { editorInstance } from "@/three/EditorInstance";
+import { getThemeByScene } from "@/threeUtils/util4UI";
 
 interface Props {
   list: RecordItem[];

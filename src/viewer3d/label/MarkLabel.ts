@@ -1,13 +1,13 @@
 import { Scene, Vector3 } from "three";
-import { TourWindow } from "../../app/MyContext";
+import { TourWindow } from "@/app/MyContext";
 
 import { CSS3DSprite } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 
-import { UserStyles } from "../../app/type";
-import { SceneUserData } from "../../three/Three3dConfig";
+import { UserStyles } from "@/app/type";
+import { SceneUserData } from "@/three/Three3dConfig";
 
-import { getCardBackgroundUrl, setClassName } from "../../threeUtils/util4UI";
-import { getTourSrc } from "../../threeUtils/util4Scene";
+import { getCardBackgroundUrl, setClassName } from "@/threeUtils/util4UI";
+import { getTourSrc } from "@/threeUtils/util4Scene";
 
 export interface MarkLabelProps {
   markName: string;

@@ -1,21 +1,21 @@
 import { useReducer } from "react";
 import { useEffect, useRef, useState } from "react";
 import { Container, ProgressBar } from "react-bootstrap";
-import { APP_COLOR, RecordItem } from "../app/type";
+import { APP_COLOR, RecordItem } from "@/app/type";
 
-import Toast3d from "../component/common/Toast3d";
+import Toast3d from "@/component/common/Toast3d";
 import {
   initEditorCamera,
   initEditorScene,
   initTourWindow,
   MyContext,
-} from "../app/MyContext";
-import ModalTour from "../component/common/ModalTour";
-import { reducerCamera, reducerScene, reducerTour } from "../app/reducer";
+} from "@/app/MyContext";
+import ModalTour from "@/component/common/ModalTour";
+import { reducerCamera, reducerScene, reducerTour } from "@/app/reducer";
 
-import { viewerInstance } from "../three/ViewerInstance";
-import { Three3dViewer } from "../three/Three3dViewer";
-import { getProjectData } from "../threeUtils/util4Scene";
+import { viewerInstance } from "@/three/ViewerInstance";
+import { Three3dViewer } from "@/three/Three3dViewer";
+import { getProjectData } from "@/threeUtils/util4Scene";
 
 /**
  * 其他应用可以调用此组件，

@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useUpdateScene } from "../../app/hooks";
+import { useUpdateScene } from "@/app/hooks";
 
-import AlertBase from "../../component/common/AlertBase";
+import AlertBase from "@/component/common/AlertBase";
 import {
   Button,
   ButtonGroup,
@@ -13,13 +13,13 @@ import {
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
+import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
 
-import CardTop from "../../component/common/routes/effects/CardTop";
-import CardMark from "../../component/common/routes/effects/CardMark";
-import sceneUserData, { SceneUserData } from "../../three/Three3dConfig";
-import { editorInstance } from "../../three/EditorInstance";
-import { setRoamPath } from "../../threeUtils/gui/roamGui";
+import CardTop from "@/component/common/routes/effects/CardTop";
+import CardMark from "@/component/common/routes/effects/CardMark";
+import sceneUserData, { SceneUserData } from "@/three/Three3dConfig";
+import { editorInstance } from "@/three/EditorInstance";
+import { setRoamPath } from "@/threeUtils/gui/roamGui";
 
 // 定义一个变量来保存 GUI 实例
 

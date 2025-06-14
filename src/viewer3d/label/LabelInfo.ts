@@ -5,11 +5,11 @@ import {
   Scene,
   Vector3,
 } from "three";
-import { TourWindow } from "../../app/MyContext";
+import { TourWindow } from "@/app/MyContext";
 
 import { CSS3DSprite } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 
-import { getObjectWorldPosition } from "../viewer3dUtils";
+import { getObjectWorldPosition } from "@/viewer3d/viewer3dUtils";
 
 import {
   Line2,
@@ -17,15 +17,15 @@ import {
   LineMaterial,
 } from "three/examples/jsm/Addons.js";
 
-import { UserStyles } from "../../app/type";
-import { SceneUserData } from "../../three/Three3dConfig";
+import { UserStyles } from "@/app/type";
+import { SceneUserData } from "@/three/Three3dConfig";
 
 import {
   getCardBackgroundUrl,
   getObjectNameByName,
   setClassName,
-} from "../../threeUtils/util4UI";
-import { getTourSrc } from "../../threeUtils/util4Scene";
+} from "@/threeUtils/util4UI";
+import { getTourSrc } from "@/threeUtils/util4Scene";
 
 export class LabelInfo {
   mesh;

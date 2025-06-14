@@ -15,14 +15,14 @@ import { GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import axios from "../app/http";
+import axios from "@/app/http";
 import sceneUserData, {
   ExtraParams,
   RoamLine,
   SceneUserData,
-} from "../three/Three3dConfig";
-import { GLOBAL_CONSTANT } from "../three/GLOBAL_CONSTANT";
-import { GlbModel, UserDataType } from "../app/type";
+} from "@/three/Three3dConfig";
+import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+import { GlbModel, UserDataType } from "@/app/type";
 
 //设置物体的变换
 export function setGLTFTransform(model: GlbModel, gltf: GLTF, context: Scene) {

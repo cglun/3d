@@ -1,5 +1,5 @@
 import { Modal } from "react-bootstrap";
-import { MyContext } from "../../app/MyContext";
+import { MyContext } from "@/app/MyContext";
 import { useContext } from "react";
 export default function ModalTour() {
   const { tourWindow, dispatchTourWindow } = useContext(MyContext);

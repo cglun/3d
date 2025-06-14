@@ -1,15 +1,16 @@
 import { useReducer } from "react";
 import { createRootRoute } from "@tanstack/react-router";
+import { Alert } from "react-bootstrap";
 import {
   initEditorCamera,
   initEditorScene,
   initTourWindow,
   MyContext,
-} from "../app/MyContext";
-import { reducerCamera, reducerScene, reducerTour } from "../app/reducer";
-import Editor from "../component/Editor/Index";
-import { Alert } from "react-bootstrap";
-import { APP_COLOR } from "../app/type";
+} from "@/app/MyContext";
+import { reducerCamera, reducerScene, reducerTour } from "@/app/reducer";
+import Editor from "@/component/Editor/Index";
+
+import { APP_COLOR } from "@/app/type";
 
 export const Route = createRootRoute({
   component: RootComponent,

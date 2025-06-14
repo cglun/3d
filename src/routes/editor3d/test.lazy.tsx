@@ -2,14 +2,14 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { Button, ButtonGroup } from "react-bootstrap";
 
 import { Scene, Vector3 } from "three";
-import Toast3d from "../../component/common/Toast3d";
-import { useUpdateScene } from "../../app/hooks";
-import { styleBody } from "../../component/Editor/OutlineView/fontColor";
-import { editorInstance } from "../../three/EditorInstance";
-import { getButtonColor, getThemeByScene } from "../../threeUtils/util4UI";
-import { cameraEnterAnimation } from "../../threeUtils/util4Camera";
+import Toast3d from "@/component/common/Toast3d";
+import { useUpdateScene } from "@/app/hooks";
+import { styleBody } from "@/component/Editor/OutlineView/fontColor";
+import { editorInstance } from "@/three/EditorInstance";
+import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
+import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
 import { useEffect } from "react";
-import { config3dInit } from "../../three/Three3dConfig";
+import { config3dInit } from "@/three/Three3dConfig";
 export const Route = createLazyFileRoute("/editor3d/test")({
   component: RouteComponent,
 });

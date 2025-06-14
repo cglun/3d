@@ -11,17 +11,17 @@ import {
 } from "react-bootstrap";
 import { Object3D, Vector3 } from "three";
 import { TransformControlsMode } from "three/addons/controls/TransformControls.js";
-import { useUpdateCamera, useUpdateScene } from "../../app/hooks";
-import ModalTour from "../common/ModalTour";
-import Icon from "../common/Icon";
-import { Three3dEditor } from "../../three/Three3dEditor";
-import { editorInstance, EditorInstance } from "../../three/EditorInstance";
-import ModalConfirm3d from "../common/ModalConfirm3d";
-import AlertBase from "../common/AlertBase";
-import { APP_COLOR, RecordItem } from "../../app/type";
-import { getThemeByScene } from "../../threeUtils/util4UI";
-import { getProjectData } from "../../threeUtils/util4Scene";
-import { MyContext } from "../../app/MyContext";
+import { useUpdateCamera, useUpdateScene } from "@/app/hooks";
+import ModalTour from "@/component/common/ModalTour";
+import Icon from "@/component/common/Icon";
+import { Three3dEditor } from "@/three/Three3dEditor";
+import { editorInstance, EditorInstance } from "@/three/EditorInstance";
+import ModalConfirm3d from "@/component/common/ModalConfirm3d";
+import AlertBase from "@/component/common/AlertBase";
+import { APP_COLOR, RecordItem } from "@/app/type";
+import { getThemeByScene } from "@/threeUtils/util4UI";
+import { getProjectData } from "@/threeUtils/util4Scene";
+import { MyContext } from "@/app/MyContext";
 
 function EditorViewer3d() {
   const editorCanvas: React.RefObject<HTMLDivElement> =
