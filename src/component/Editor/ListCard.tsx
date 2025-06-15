@@ -14,6 +14,7 @@ import { useLocation, useNavigate } from "@tanstack/react-router";
 import Icon from "@/component/common/Icon";
 import { editorInstance } from "@/three/EditorInstance";
 import { getThemeByScene } from "@/threeUtils/util4UI";
+import sceneUserData from "@/three/Three3dConfig";
 
 interface Props {
   list: RecordItem[];
@@ -118,6 +119,48 @@ function RecordItemCard(props: Props) {
       }
     );
   }
+  function fixProject(item: RecordItem) {
+    const editor = editorInstance.getEditor();
+    //合并
+    const mergedData = Object.assign({}, editor.scene.userData, {
+      ...sceneUserData,
+    });
+    mergedData.projectId = item.id;
+    editor.scene.userData = mergedData;
+    //反序列化
+    const dataSrc = editor.sceneSerialization();
+
+    ModalConfirm3d(
+      {
+        title: "修复",
+        body: (
+          <AlertBase
+            type={APP_COLOR.Warning}
+            text={`是否修复 ：${item.name}`}
+          />
+        ),
+      },
+      () => {
+        axios
+          .post(`/project/update/`, {
+            id: item.id,
+            dataJson: dataSrc,
+          })
+          .then((res) => {
+            if (res.data.data) {
+              Toast3d(`【${item.name}】已修复`);
+            } else {
+              Toast3d(res.data, "提示", APP_COLOR.Warning);
+            }
+          })
+          .catch((error) => {
+            Toast3d(error, "提示", APP_COLOR.Warning);
+          });
+
+        Toast3d(`【${item.name}】已修复`);
+      }
+    );
+  }
 
   //默认图片
   const defaultImage3dUrl = new URL(
@@ -206,6 +249,15 @@ function RecordItemCard(props: Props) {
                 >
                   <Icon iconName="pencil" title="编辑" />
                 </Button>
+                {item.des == "Scene" && (
+                  <Button
+                    variant={themeColor}
+                    size="sm"
+                    onClick={() => fixProject(item)}
+                  >
+                    <Icon iconName="bi bi-wrench-adjustable" title="修复" />
+                  </Button>
+                )}
                 <Button
                   variant={themeColor}
                   size="sm"

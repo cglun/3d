@@ -3,11 +3,11 @@ import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import "../public/static/css/github-dark.min.css";
+import "/public/static/css/github-dark.min.css";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
-import "./App.css";
+import "@/App.css";
 // Import the generated route tree
-import { routeTree } from "./routeTree.gen";
+import { routeTree } from "@/routeTree.gen";
 
 // Create a new router instance
 const router = createRouter({ routeTree });

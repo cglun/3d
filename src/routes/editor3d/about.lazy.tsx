@@ -60,9 +60,7 @@ function RouteComponent() {
         </Modal.Header>
         <Modal.Body
           style={{
-            height: "70vh",
-            overflowY: "scroll",
-            scrollbarWidth: "thin",
+            height: "60vh",
           }}
         >
           <iframe src={href} width={"100%"} height={"100%"}></iframe>

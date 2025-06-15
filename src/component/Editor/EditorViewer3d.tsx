@@ -18,10 +18,11 @@ import { Three3dEditor } from "@/three/Three3dEditor";
 import { editorInstance, EditorInstance } from "@/three/EditorInstance";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import AlertBase from "@/component/common/AlertBase";
-import { APP_COLOR, RecordItem } from "@/app/type";
+import { APP_COLOR, DELAY, RecordItem } from "@/app/type";
 import { getThemeByScene } from "@/threeUtils/util4UI";
 import { getProjectData } from "@/threeUtils/util4Scene";
 import { MyContext } from "@/app/MyContext";
+import Toast3d from "../common/Toast3d";
 
 function EditorViewer3d() {
   const editorCanvas: React.RefObject<HTMLDivElement> =
@@ -45,7 +46,7 @@ function EditorViewer3d() {
         editorCanvas.current,
         dispatchTourWindow
       );
-      editor.addGridHelper();
+
       isInitialized.current = true; // 标记为已初始化
       editorInstance.setEditor(editor);
 
@@ -64,78 +65,95 @@ function EditorViewer3d() {
 
       if (item.id !== -1) {
         const editor = editorInstance.getEditor();
-        getProjectData(item.id).then((data: string) => {
-          // 假设 deserialize 是异步方法
-          editor.deserialize(data, item);
+        getProjectData(item.id)
+          .then((data: string) => {
+            // 假设 deserialize 是异步方法
+            editor.deserialize(data, item);
 
-          editor.loadedModelsEnd = () => {
-            //这里为什么不有执行  debugger; // 在模型加载完成后更新场景
-            editor.transformControl = editor.initTransformControl();
+            editor.loadedModelsEnd = () => {
+              //这里为什么不有执行  debugger; // 在模型加载完成后更新场景
+              editor.transformControl = editor.initTransformControl();
+              //  editor.addGridHelper();
+              editor.runJavascript();
 
-            editor.runJavascript();
+              editor.destroyGUI();
 
-            editor.destroyGUI();
+              // editor.initPostProcessing();
 
-            // editor.initPostProcessing();
+              setTimeout(() => {
+                ModalConfirm3d({
+                  title: "提示",
+                  body: (
+                    <AlertBase text={"加载完成"} type={APP_COLOR.Success} />
+                  ),
+                  confirmButton: {
+                    show: true,
+                  },
+                });
+              }, 1116);
 
-            setTimeout(() => {
+              setTimeout(() => {
+                ModalConfirm3d({
+                  title: "提示",
+                  body: (
+                    <AlertBase text={"关闭窗口"} type={APP_COLOR.Success} />
+                  ),
+                  confirmButton: {
+                    show: false,
+                  },
+                });
+              }, 1998);
+              updateScene(editor.scene);
+              updateCamera(editor.camera);
+              document.title = `【id:${item.id}】`;
+            };
+            editor.onLoadProgress = (progress: number) => {
               ModalConfirm3d({
-                title: "提示",
-                body: <AlertBase text={"加载完成"} type={APP_COLOR.Success} />,
+                title: "加载……",
+                body: <ProgressBar now={progress} label={`${progress}%`} />,
                 confirmButton: {
                   show: true,
                 },
               });
-            }, 1116);
+              if (progress === 100) {
+                ModalConfirm3d({
+                  title: "提示",
+                  body: (
+                    <AlertBase text={"加载完成"} type={APP_COLOR.Success} />
+                  ),
+                  confirmButton: {
+                    show: false,
+                  },
+                });
+                updateScene(editor.scene);
+                updateCamera(editor.camera);
+              }
+            };
 
-            setTimeout(() => {
+            editor.onLoadError = (error: string) => {
+              console.error(error);
               ModalConfirm3d({
                 title: "提示",
-                body: <AlertBase text={"关闭窗口"} type={APP_COLOR.Success} />,
+                body: (
+                  <AlertBase text={"有错，看控制台"} type={APP_COLOR.Danger} />
+                ),
                 confirmButton: {
-                  show: false,
+                  show: true,
+                  hasButton: true,
                 },
               });
-            }, 1998);
-            updateScene(editor.scene);
-            updateCamera(editor.camera);
-            document.title = `【id:${item.id}】`;
-          };
-          editor.onLoadProgress = (progress: number) => {
-            ModalConfirm3d({
-              title: "加载……",
-              body: <ProgressBar now={progress} label={`${progress}%`} />,
-              confirmButton: {
-                show: true,
-              },
-            });
-            if (progress === 100) {
-              ModalConfirm3d({
-                title: "提示",
-                body: <AlertBase text={"加载完成"} type={APP_COLOR.Success} />,
-                confirmButton: {
-                  show: false,
-                },
-              });
-              updateScene(editor.scene);
-              updateCamera(editor.camera);
-            }
-          };
-
-          editor.onLoadError = (error: string) => {
+            };
+          })
+          .catch((error: unknown) => {
             console.error(error);
-            ModalConfirm3d({
-              title: "提示",
-              body: (
-                <AlertBase text={"有错，看控制台"} type={APP_COLOR.Danger} />
-              ),
-              confirmButton: {
-                show: true,
-                hasButton: true,
-              },
-            });
-          };
-        });
+
+            Toast3d(
+              "加载失败，查看控制台",
+              "错误",
+              APP_COLOR.Danger,
+              DELAY.LONG
+            );
+          });
       }
     }
     initScene();

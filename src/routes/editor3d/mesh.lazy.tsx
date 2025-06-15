@@ -13,16 +13,11 @@ import { ButtonGroup, Card, Container } from "react-bootstrap";
 
 import { useUpdateScene } from "@/app/hooks";
 
-import { enableShadow } from "@/three/common3d";
-
 import Icon from "@/component/common/Icon";
 import { editorInstance } from "@/three/EditorInstance";
 import { getThemeByScene, setClassName } from "@/threeUtils/util4UI";
-import { glbLoader } from "@/threeUtils/util4Scene";
-import {
-  createDirectionalLight,
-  createGridHelper,
-} from "@/threeUtils/factory3d";
+import { addMonkey } from "@/threeUtils/util4Scene";
+import { createDirectionalLight } from "@/threeUtils/factory3d";
 
 export const Route = createLazyFileRoute("/editor3d/mesh")({
   component: RouteComponent,
@@ -49,26 +44,6 @@ function RouteComponent() {
     cube.receiveShadow = useShadow;
     getScene().add(cube);
     updateScene(getScene());
-  }
-  function addLocalModel() {
-    const blender = new URL(
-      `/public/static/file3d/models/blender.glb`,
-      import.meta.url
-    ).href;
-
-    const loader = glbLoader();
-    loader.load(blender, function (gltf) {
-      const group = new Group();
-      group.name = "猴子";
-      group.add(...gltf.scene.children);
-      getScene().add(group);
-
-      // const helper = createDirectionalLightHelper(light);
-      // getScene().add(helper);
-      getScene().add(createGridHelper());
-      enableShadow(getScene(), getScene());
-      updateScene(getScene());
-    });
   }
 
   function addAmbientLight() {
@@ -147,7 +122,7 @@ function RouteComponent() {
             <Button
               variant={themeColor}
               onClick={() => {
-                addLocalModel();
+                addMonkey();
               }}
             >
               猴头

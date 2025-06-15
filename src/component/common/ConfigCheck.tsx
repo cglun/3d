@@ -7,15 +7,19 @@ import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
 import Tooltip from "react-bootstrap/esm/Tooltip";
 import { editorInstance } from "@/three/EditorInstance";
 import { Config3d } from "@/three/Three3dConfig";
+import Icon from "@/component/common/Icon";
+import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 export function ConfigCheck({
   label = "label",
   configKey = "css2d",
+  iconName = "play-circle-fill",
   toolTip = "toolTip",
   disabled = false,
   callBack,
 }: {
   label: string;
   configKey: keyof Config3d;
+  iconName: string;
   toolTip?: string;
   disabled?: boolean;
   callBack?: () => void;
@@ -25,7 +29,10 @@ export function ConfigCheck({
 
   return (
     <InputGroup size="sm">
-      <InputGroup.Text>{label}</InputGroup.Text>
+      <InputGroup.Text style={{ color: styleBody.color }}>
+        <Icon iconName={iconName} gap={1} />
+        {label}
+      </InputGroup.Text>
       <InputGroup.Text>
         <OverlayTrigger
           delay={{ show: 250, hide: 250 }}

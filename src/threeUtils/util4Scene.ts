@@ -23,6 +23,7 @@ import sceneUserData, {
 } from "@/three/Three3dConfig";
 import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
 import { GlbModel, UserDataType } from "@/app/type";
+import { editorInstance } from "@/three/EditorInstance";
 
 //设置物体的变换
 export function setGLTFTransform(model: GlbModel, gltf: GLTF, context: Scene) {
@@ -243,7 +244,10 @@ export function manyou(
   camera.quaternion.setFromRotationMatrix(camera.matrix);
   // camera.updateMatrixWorld();
 }
-export function setOutLinePassColor(color: string, outlinePass: OutlinePass) {
+export function setOutLinePassColor_xx(
+  color: string,
+  outlinePass: OutlinePass
+) {
   outlinePass.visibleEdgeColor.set(color); // 可见边缘颜色
   outlinePass.hiddenEdgeColor.set(color); // 不可见边缘颜色
 }
@@ -267,4 +271,21 @@ export function setAnimateClip(
       action.play();
     });
   }
+}
+
+export function addMonkey() {
+  const { scene } = editorInstance.getEditor();
+  const blender = new URL(
+    `/public/static/file3d/models/blender.glb`,
+    import.meta.url
+  ).href;
+
+  const loader = glbLoader();
+  loader.load(blender, function (gltf) {
+    const group = new Group();
+    group.name = "猴子";
+    group.position.set(0, -1, 0);
+    group.add(...gltf.scene.children);
+    scene.add(group);
+  });
 }

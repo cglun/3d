@@ -11,7 +11,7 @@ import { RoamButtonUserSetting, SceneUserData } from "@/three/Three3dConfig";
 import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
 import { editorInstance } from "@/three/EditorInstance";
 
-export function setRoamPath() {
+export default function setRoamPath() {
   const editor = editorInstance.getEditor();
   if (editor.guiInstance !== null) {
     editor.destroyGUI();
@@ -36,7 +36,6 @@ export function setRoamPath() {
         const { tubeMesh } = editor;
         if (!roamLine.roamIsRunning) {
           cameraEnterAnimation(editor);
-          editor.destroyGUI();
         }
         if (tubeMesh === null) {
           addTube(userSetting);

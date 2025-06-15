@@ -8,13 +8,11 @@ import {
   Nav,
   Badge,
 } from "react-bootstrap";
-
+import { Color } from "three";
 import ListCard from "@/component/Editor/ListCard";
 import Toast3d from "@/component/common/Toast3d";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
-import { Color } from "three";
 import { APP_COLOR, RecordItem } from "@/app/type";
-
 import axios from "@/app/http";
 import InputBase from "@/component/common/InputBase";
 import { useUpdateScene } from "@/app/hooks";
@@ -47,9 +45,10 @@ export default function EditorTop() {
 
   function saveScene() {
     const editor = editorInstance.getEditor();
-    const dataJson = editor.sceneSerialization();
-
     const { scene } = editor;
+    const _copyScene = { ...scene.userData };
+
+    const dataJson = editor.sceneSerialization();
     axios
       .post("/project/update/", {
         id: scene.userData.projectId,
@@ -58,6 +57,7 @@ export default function EditorTop() {
       .then((res) => {
         if (res.data.code === 200) {
           Toast3d("保存成功");
+          scene.userData = _copyScene;
           updateScene(scene);
         } else {
           Toast3d(res.data.message, "提示", APP_COLOR.Warning);
@@ -85,7 +85,7 @@ export default function EditorTop() {
   // 另存场景
   function saveAsNewScene() {
     const { scene } = editorInstance.getEditor();
-    scene.userData.APP_THEME.sceneCanSave = true;
+    // scene.userData.APP_THEME.sceneCanSave = true;
     function getValue(sceneName: string, des: string) {
       scene.userData.sceneName = sceneName;
       scene.userData.des = des;
@@ -113,6 +113,10 @@ export default function EditorTop() {
           })
           .then((res) => {
             if (res.data.code === 200) {
+              const id = res.data.data;
+              navigate({
+                to: location.pathname + `?sceneId=${id}`,
+              });
               // setSceneIsSave(false);
               Toast3d("保存成功");
             } else {
@@ -181,6 +185,7 @@ export default function EditorTop() {
                 // const newScene = createNewScene();
                 const editor = editorInstance.getEditor();
                 editor.resetScene();
+                editor.addGridHelper();
                 editor.initTransformControl();
                 updateScene(editor.scene);
                 Toast3d("场景已新建");

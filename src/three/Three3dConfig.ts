@@ -12,19 +12,18 @@ import {
   CustomButtonType,
   GlbModel,
 } from "@/app/type";
-import venice_sunset_1k from "/static/file3d/hdr/venice_sunset_1k.hdr?url";
-import spruit_sunrise_1k from "/static/file3d/hdr/spruit_sunrise_1k.hdr?url";
+import venice_sunset_1k from "/public/static/file3d/hdr/venice_sunset_1k.hdr?url";
+import spruit_sunrise_1k from "/public/static/file3d/hdr/spruit_sunrise_1k.hdr?url";
 export const userCssStyle = {
   cardWidth: 130,
-  cardHeight: 130,
+  cardHeight: 150,
   cardRadius: 0.8,
-  cardBackgroundColor: "#56c2c2",
+  cardBackgroundColor: "#502626",
   cardBackgroundUrl: "",
   headerFontSize: 16,
-  headerColor: "#ffffff",
+  headerColor: "#e18989",
   bodyFontSize: 12,
-  bodyColor: "#ffffff",
-  modelHighlightColor: "#2eff7e",
+  bodyColor: "#48db4a",
   offsetX: 0,
   offsetY: 0,
   cardSize: 0.03,
@@ -32,6 +31,16 @@ export const userCssStyle = {
   headerMarginLeft: 18,
   opacity: 1,
 };
+export const modelEdgeHighlight = {
+  //设置颜色
+  edgeStrength: 5, // 边缘强度
+  edgeGlow: 1.16, // 边缘发光
+  edgeThickness: 1, // 边缘厚度
+  pulsePeriod: 0.5, // 脉冲周期
+  canSeeColor: "#00ff00",
+  noSeeColor: "#00ff00",
+};
+export type ModelEdgeHighlight = typeof modelEdgeHighlight;
 export type UserCssStyle = typeof userCssStyle;
 export interface RoamButtonUserSetting {
   scale: number;
@@ -102,6 +111,7 @@ export interface SceneUserData {
   userCssStyle: {
     topCard: UserCssStyle;
     markLabel: UserCssStyle;
+    modelEdgeHighlight: ModelEdgeHighlight;
   };
 }
 
@@ -175,6 +185,7 @@ export const hdr = {
 };
 const sceneUserData: SceneUserData = {
   projectId: -1,
+
   selected3d: null,
   isSelected: false,
   cameraPosition: {
@@ -198,12 +209,16 @@ const sceneUserData: SceneUserData = {
   userCssStyle: {
     topCard: {
       ...userCssStyle,
-    },
+      cardBackgroundColor: "#002e2e",
+    } as UserCssStyle,
     markLabel: {
       ...userCssStyle,
       cardHeight: 18,
       cardWidth: 140,
       bodyFontSize: 16,
+    } as UserCssStyle,
+    modelEdgeHighlight: {
+      ...modelEdgeHighlight,
     },
   },
 };

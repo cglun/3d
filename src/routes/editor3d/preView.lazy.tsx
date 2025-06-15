@@ -17,6 +17,7 @@ import { resetListGroupIsClick } from "@/viewer3d/buttonList/buttonGroup";
 import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelController";
 
 import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
+import Icon from "@/component/common/Icon";
 
 // 定义响应数据的类型
 interface PageListResponse {
@@ -153,7 +154,8 @@ function RouteComponent() {
                 setShow(true);
               }}
             >
-              预览场景
+              <Icon iconName="eye" gap={1} title="预览场景" />
+              场景
             </Button>
           )}
         </ButtonGroup>

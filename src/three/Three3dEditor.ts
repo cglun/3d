@@ -8,11 +8,9 @@ import {
   Vector3,
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-
 import { GlbModel, UserDataType } from "@/app/type";
 import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
 import { Three3d } from "@/three/Three3d";
-
 import { TransformControls } from "three/addons/controls/TransformControls.js";
 import { BackgroundHDR, SceneUserData } from "@/three/Three3dConfig";
 import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
@@ -44,7 +42,9 @@ export class Three3dEditor extends Three3d {
     dispatchTourWindow: Dispatch<TourWindow>
   ) {
     super(divElement, dispatchTourWindow);
+    this.addGridHelper();
   }
+
   initTransformControl() {
     const transformControl = new TransformControls(
       this.camera,
@@ -54,10 +54,22 @@ export class Three3dEditor extends Three3d {
       this.scene,
       GLOBAL_CONSTANT.HELPER_GROUP
     );
-    const _that = this.controls;
-    transformControl.addEventListener("change", () => this.animate());
+
+    //transformControl.addEventListener("change", () => this.animate());
+    //  transformControl.addEventListener("dragging-end", () => this.animate());
+    // transformControl.addEventListener("dragging-changed", function (event) {
+    //   _controls.enabled = !event.value;
+    //   if (!event.value) {
+    //     const { scene } = editorInstance.getEditor();
+    //     console.log(scene.children[1]);
+
+    //     _updateScene(scene);
+    //   }
+    // });
+    const _controls = this.controls;
+
     transformControl.addEventListener("dragging-changed", function (event) {
-      _that.enabled = !event.value;
+      _controls.enabled = !event.value;
     });
     transformControl.setMode("translate");
     const helper = transformControl.getHelper();

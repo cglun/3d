@@ -92,7 +92,7 @@ declare global {
   }
 }
 
-export interface UserStyles {
+export interface UserCssStyle_xx {
   cardWidth: number;
   cardHeight: number;
   cardSize: number;

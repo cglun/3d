@@ -37,7 +37,7 @@ export default function EditorBottom() {
       icon: "box",
     },
     {
-      title: "标注",
+      title: "标签",
       path: "mark",
       icon: "pin-map",
     },
@@ -58,11 +58,6 @@ export default function EditorBottom() {
       icon: "gear",
     },
     {
-      title: "文档",
-      path: "document",
-      icon: "file-earmark-word",
-    },
-    {
       title: "预览",
       path: "preView",
       icon: "eye",
@@ -71,6 +66,13 @@ export default function EditorBottom() {
       title: "测试",
       path: "test",
       icon: "triangle",
+    },
+
+    {
+      title: "日志",
+      path: "document",
+      icon: "file-text",
+      // icon: "file-earmark-word",
     },
     {
       title: "关于",

@@ -55,6 +55,7 @@ function RouteComponent() {
         <ListGroup.Item>
           <InputGroup size="sm">
             <InputGroup.Text style={{ color: styleBody.color }}>
+              <Icon iconName="key" gap={1} />
               TOKEN
             </InputGroup.Text>
             <Form.Control
@@ -102,6 +103,7 @@ function RouteComponent() {
       <ListGroup.Item>
         <ConfigCheck
           toolTip="相机视角动画"
+          iconName="bi bi-play-circle-fill"
           label="启用Tween"
           configKey="useTween"
         />
@@ -109,6 +111,7 @@ function RouteComponent() {
       <ListGroup.Item>
         <ConfigCheck
           label="投射阴影"
+          iconName="bi bi-shield-shaded"
           toolTip="模型阴影"
           configKey="useShadow"
           callBack={() => {
@@ -120,6 +123,7 @@ function RouteComponent() {
       </ListGroup.Item>
       <ListGroup.Item>
         <ConfigCheck
+          iconName="brush"
           label="关键帧动画"
           configKey="useKeyframe"
           toolTip={"设置并保存后，重新加载场景生效"}
@@ -127,6 +131,7 @@ function RouteComponent() {
       </ListGroup.Item>
       <ListGroup.Item>
         <ConfigCheck
+          iconName="node-plus-fill"
           label="使用合成"
           configKey="useComposer"
           toolTip="后期合成、模型高亮等"
@@ -134,7 +139,10 @@ function RouteComponent() {
       </ListGroup.Item>
       <ListGroup.Item>
         <InputGroup size="sm">
-          <InputGroup.Text>帧率</InputGroup.Text>
+          <InputGroup.Text style={{ color: styleBody.color }}>
+            <Icon iconName="clipboard2-pulse" gap={1} />
+            帧率
+          </InputGroup.Text>
           <Form.Select
             aria-label="FPS"
             value={FPS}

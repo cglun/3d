@@ -1,4 +1,4 @@
-export function rgbaToHex(rgba: string): string {
+export function rgbaToHex_xx(rgba: string): string {
   if (rgba === undefined || rgba === null) {
     return "#000000";
   }
@@ -21,4 +21,22 @@ export function rgbaToHex(rgba: string): string {
   const hexB = b.toString(16).padStart(2, "0");
 
   return `#${hexR}${hexG}${hexB}`;
+}
+
+export function setLabelHeaderColor(
+  div: HTMLDivElement,
+  key: keyof CSSStyleDeclaration,
+  value: string,
+  endString?: string
+) {
+  const spanElements = div.querySelectorAll("span");
+  const firstChild = div.children[0] as HTMLElement;
+  if (key !== length) {
+    //@ts-expect-error这个是没问题的。
+    firstChild.style[key] = `${value}${endString}`;
+    spanElements.forEach((span) => {
+      //@ts-expect-error 这个是没问题的。
+      span.style[key] = `${value}${endString}`;
+    });
+  }
 }

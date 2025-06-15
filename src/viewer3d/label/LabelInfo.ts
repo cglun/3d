@@ -17,8 +17,7 @@ import {
   LineMaterial,
 } from "three/examples/jsm/Addons.js";
 
-import { UserStyles } from "@/app/type";
-import { SceneUserData } from "@/three/Three3dConfig";
+import { SceneUserData, UserCssStyle } from "@/three/Three3dConfig";
 
 import {
   getCardBackgroundUrl,
@@ -35,7 +34,7 @@ export class LabelInfo {
     cardHeight: 116,
     cardRadius: 0.8,
     cardBackgroundColor: "#d85555",
-    cardBackgroundUrl: "/editor3d/public/static/images/defaultImage3d.png",
+    cardBackgroundUrl: "/editor3dpublic/static/images/defaultImage3d.png",
     headerFontSize: 18,
     headerColor: "#fe2ffe",
     bodyFontSize: 14,
@@ -46,7 +45,7 @@ export class LabelInfo {
     headerMarginTop: 0,
     headerMarginLeft: 0,
     cardSize: 0.04,
-  } as UserStyles;
+  } as UserCssStyle;
   name = "";
   tourObject = {
     id: "id",

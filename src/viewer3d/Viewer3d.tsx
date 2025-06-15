@@ -101,6 +101,7 @@ export default function Viewer3d({
       if (item.des === "Scene") {
         viewer.runJavascript();
         viewer.setCanBeRaycast();
+        viewer.setOutLinePassColor();
         callBack(viewer);
       }
 

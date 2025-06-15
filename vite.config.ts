@@ -61,7 +61,7 @@ export default defineConfig({
   resolve: {
     conditions: ["browser", "import"],
     alias: {
-      "@": resolve(__dirname, "src"), // 新增别名配置
+      "@": resolve(__dirname, "src"),
     },
   },
 });

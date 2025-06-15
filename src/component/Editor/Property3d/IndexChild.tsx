@@ -1,15 +1,7 @@
 import { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
-import {
-  Color,
-  Fog,
-  Light,
-  Object3D,
-  Object3DEventMap,
-  OrthographicCamera,
-  Vector2,
-} from "three";
+import { Color, Fog, Light, OrthographicCamera, Vector2 } from "three";
 import Card from "react-bootstrap/esm/Card";
 import InputGroup from "react-bootstrap/esm/InputGroup";
 
@@ -214,11 +206,10 @@ function SceneProperty() {
   );
 }
 
-function CommonProperty({
-  selected3d,
-}: {
-  selected3d: Object3D<Object3DEventMap> | null;
-}) {
+function CommonProperty() {
+  const { scene } = useUpdateScene();
+  const { selected3d } = scene.userData as SceneUserData;
+
   function LightProperty() {
     if (!(selected3d instanceof Light)) {
       return;
@@ -332,5 +323,5 @@ export default function IndexChild() {
       <Input3d transform={selected3d.position} title={"位置"} step={step} />
     );
   }
-  return <CommonProperty selected3d={selected3d} />;
+  return <CommonProperty />;
 }

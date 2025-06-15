@@ -59,7 +59,6 @@ import {
   manyou,
   setAnimateClip,
   setGLTFTransform,
-  setOutLinePassColor,
   strToJson,
 } from "@/threeUtils/util4Scene";
 import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
@@ -200,19 +199,18 @@ export class Three3d extends ThreeObj {
     this.renderer.setAnimationLoop(() => this.animate());
     this._tubeMesh = null;
     this._labelInfoPanelController = null;
-    this.addCube();
+    //this.addCube();
   }
   addCube() {
     const cube = new Mesh(
       new BoxGeometry(1, 1, 1),
       // 使用 MeshStandardMaterial 并设置发光属性
       new MeshStandardMaterial({
-        color: 0x00ff00,
-        emissive: 0x00ff00, // 设置发光颜色
-        emissiveIntensity: 1, // 设置发光强度
+        color: "#233e4f",
       })
     );
     this.scene.add(cube);
+    return cube;
   }
 
   private initScene(): Scene {
@@ -225,7 +223,6 @@ export class Three3d extends ThreeObj {
     this.scene.userData = { ...sceneUserData };
     this.extraParams.mixer = [];
     this.scene.children = [];
-
     clearOldLabel();
     this.setTextureBackground();
 
@@ -270,16 +267,24 @@ export class Three3d extends ThreeObj {
     );
 
     composer.addPass(outlinePass);
-
-    //设置颜色
-    outlinePass.edgeStrength = 1; // 边缘强度
-    outlinePass.edgeGlow = 0.4; // 边缘发光
-    outlinePass.edgeThickness = 1; // 边缘厚度
-    outlinePass.pulsePeriod = 1.16; // 脉冲周期
-
     const userData = this.scene.userData as SceneUserData;
-    const color = userData.userCssStyle.topCard.modelHighlightColor;
-    setOutLinePassColor(color, outlinePass);
+
+    const {
+      canSeeColor,
+      noSeeColor,
+      edgeStrength,
+      edgeGlow,
+      edgeThickness,
+      pulsePeriod,
+    } = userData.userCssStyle.modelEdgeHighlight;
+    //设置颜色
+    outlinePass.edgeStrength = edgeStrength; // 边缘强度
+    outlinePass.edgeGlow = edgeGlow; // 边缘发光
+    outlinePass.edgeThickness = edgeThickness; // 边缘厚度
+    outlinePass.pulsePeriod = pulsePeriod; // 脉冲周期
+
+    outlinePass.visibleEdgeColor.set(canSeeColor); // 可见边缘颜色
+    outlinePass.hiddenEdgeColor.set(noSeeColor); // 不可见边缘颜色
 
     composer.addPass(createUnrealBloomPass(this.divElement));
 
@@ -308,9 +313,9 @@ export class Three3d extends ThreeObj {
           ...(object.userData as SceneUserData),
           projectName: item.name,
           projectId: item.id,
-          canSave: true,
         };
-
+        debugger;
+        _scene.userData.APP_THEME.sceneCanSave = true;
         const labelGroup = createGroupIfNotExist(
           object,
           GLOBAL_CONSTANT.MARK_LABEL_GROUP,
@@ -582,6 +587,23 @@ export class Three3d extends ThreeObj {
     this.camera.updateProjectionMatrix(); // 更新相机的投影矩阵
     this.renderer.setSize(offsetWidth, offsetHeight); // 更新渲染器的大小
     this.controls.update(0); // 更新控制器的状态，传递 delta 参数
+  }
+  setOutLinePassColor() {
+    const outlinePass = this.outlinePass;
+    const {
+      edgeStrength,
+      edgeThickness,
+      pulsePeriod,
+      canSeeColor,
+      noSeeColor,
+    } = this.scene.userData.userCssStyle.modelEdgeHighlight;
+    outlinePass.edgeStrength = edgeStrength;
+    outlinePass.edgeThickness = edgeThickness;
+    outlinePass.pulsePeriod = pulsePeriod;
+    outlinePass.visibleEdgeColor.set(canSeeColor);
+    outlinePass.hiddenEdgeColor.set(noSeeColor);
+    outlinePass.visibleEdgeColor.set(canSeeColor);
+    outlinePass.hiddenEdgeColor.set(noSeeColor);
   }
   getCurveByEmptyMesh(curveEmptyGroupName: string): CatmullRomCurve3 {
     let vector: Vector3[] = [

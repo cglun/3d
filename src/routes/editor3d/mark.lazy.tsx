@@ -92,8 +92,10 @@ function RouteComponent() {
             </ListGroup.Item> */}
             <ListGroup.Item>
               <ConfigCheck
+                iconName="geo-alt"
                 label="3D标签"
                 configKey="css3d"
+                toolTip="显示和隐藏标签"
                 callBack={clearOldLabel}
               />
             </ListGroup.Item>
