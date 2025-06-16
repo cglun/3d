@@ -14,11 +14,11 @@ import { editorInstance } from "@/three/EditorInstance";
 
 import Icon from "@/component/common/Icon";
 import markLabelGUI from "@/component/common/routes/effects/gui/markLabelGUI";
-import setRoamPath from "@/component/common/routes/effects/gui/modelHighlightGUI";
 import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
 import { MyContext } from "@/app/MyContext";
 import topCardGUI from "@/component/common/routes/effects/gui/topCardGUI";
 import modelHighlightGUI from "@/component/common/routes/effects/gui/modelHighlightGUI";
+import roamGUI from "@/component/common/routes/effects/gui/roamGUI";
 
 // 定义一个变量来保存 GUI 实例
 
@@ -48,6 +48,7 @@ function RouteComponent() {
     return () => {
       // 在组件卸载时销毁 GUI 实例
       editor?.destroyGUI();
+      editor.outlinePass.selectedObjects = [];
     };
   }, []);
 
@@ -100,7 +101,7 @@ function RouteComponent() {
             variant={buttonColor}
             onClick={() => {
               stopRoam();
-              modelHighlightGUI();
+              modelHighlightGUI(dispatchTourWindow);
             }}
           >
             <Icon iconName="bi bi-highlights" gap={1} title="设置模型高亮" />
@@ -110,7 +111,7 @@ function RouteComponent() {
       </ListGroupItem>
       <ListGroupItem>
         <ButtonGroup size="sm">
-          <Button variant={buttonColor} onClick={setRoamPath}>
+          <Button variant={buttonColor} onClick={roamGUI}>
             <Icon iconName=" bi bi-person-walking" gap={1} />
             漫游
           </Button>

@@ -164,7 +164,7 @@ function RecordItemCard(props: Props) {
 
   //默认图片
   const defaultImage3dUrl = new URL(
-    "/static/images/defaultImage3d.png",
+    "@static/images/defaultImage3d.png",
     import.meta.url
   ).href;
 

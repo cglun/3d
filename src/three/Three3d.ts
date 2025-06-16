@@ -194,7 +194,6 @@ export class Three3d extends ThreeObj {
     const { composer, outlinePass } = this.initPostProcessing();
     this._composer = composer;
     this._outlinePass = outlinePass;
-
     this.divElement.appendChild(this.renderer.domElement);
     this.renderer.setAnimationLoop(() => this.animate());
     this._tubeMesh = null;
@@ -202,6 +201,10 @@ export class Three3d extends ThreeObj {
     //this.addCube();
   }
   addCube() {
+    const box = createGroupIfNotExist(this.scene, "此顶牌不会被保存", false);
+    if (box) {
+      return box;
+    }
     const cube = new Mesh(
       new BoxGeometry(1, 1, 1),
       // 使用 MeshStandardMaterial 并设置发光属性
@@ -209,6 +212,7 @@ export class Three3d extends ThreeObj {
         color: "#233e4f",
       })
     );
+    cube.userData.isHelper = true;
     this.scene.add(cube);
     return cube;
   }
@@ -308,18 +312,18 @@ export class Three3d extends ThreeObj {
     loader.parse(scene, (object: Object3D<Object3DEventMap>) => {
       if (object instanceof Scene) {
         const _scene = this.scene;
-
+        _scene.children = object.children;
         _scene.userData = {
           ...(object.userData as SceneUserData),
           projectName: item.name,
           projectId: item.id,
         };
-        debugger;
         _scene.userData.APP_THEME.sceneCanSave = true;
+
         const labelGroup = createGroupIfNotExist(
           object,
           GLOBAL_CONSTANT.MARK_LABEL_GROUP,
-          false
+          true
         );
 
         if (labelGroup) _scene.add(labelGroup);
@@ -600,8 +604,6 @@ export class Three3d extends ThreeObj {
     outlinePass.edgeStrength = edgeStrength;
     outlinePass.edgeThickness = edgeThickness;
     outlinePass.pulsePeriod = pulsePeriod;
-    outlinePass.visibleEdgeColor.set(canSeeColor);
-    outlinePass.hiddenEdgeColor.set(noSeeColor);
     outlinePass.visibleEdgeColor.set(canSeeColor);
     outlinePass.hiddenEdgeColor.set(noSeeColor);
   }

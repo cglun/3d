@@ -187,6 +187,7 @@ export default function EditorTop() {
                 editor.resetScene();
                 editor.addGridHelper();
                 editor.initTransformControl();
+
                 updateScene(editor.scene);
                 Toast3d("场景已新建");
               }}

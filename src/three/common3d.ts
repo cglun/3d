@@ -60,7 +60,7 @@ export function raycasterSelect_xx(
   return [];
 }
 
-export function setBoxHelper(selectedMesh: Object3D, scene: Scene) {
+export function setBoxHelper_xx(selectedMesh: Object3D, scene: Scene) {
   const HELPER_GROUP = createGroupIfNotExist(
     scene,
     GLOBAL_CONSTANT.HELPER_GROUP

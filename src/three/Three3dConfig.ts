@@ -12,8 +12,17 @@ import {
   CustomButtonType,
   GlbModel,
 } from "@/app/type";
-import venice_sunset_1k from "/public/static/file3d/hdr/venice_sunset_1k.hdr?url";
-import spruit_sunrise_1k from "/public/static/file3d/hdr/spruit_sunrise_1k.hdr?url";
+//import venice_sunset_1k from "@static/file3d/hdr/venice_sunset_1k.hdr?url";
+//import spruit_sunrise_1k from "@static/file3d/hdr/spruit_sunrise_1k.hdr?url";
+const venice_sunset_1k = new URL(
+  "@static/file3d/hdr/venice_sunset_1k.hdr",
+  import.meta.url
+).href;
+const spruit_sunrise_1k = new URL(
+  "@static/file3d/hdr/spruit_sunrise_1k.hdr",
+  import.meta.url
+).href;
+
 export const userCssStyle = {
   cardWidth: 130,
   cardHeight: 150,
@@ -199,7 +208,8 @@ const sceneUserData: SceneUserData = {
     asBackground: true,
     isColor: false,
   } as BackgroundHDR,
-  javascript: "",
+
+  javascript: "console.log(116)",
   customButtonList: { ...customButtonListInit } as CustomButtonList,
   APP_THEME: {
     themeColor: APP_COLOR.Dark, // 若 APP_COLOR 有具体结构，需按需填充

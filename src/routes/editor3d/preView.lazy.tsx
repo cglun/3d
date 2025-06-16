@@ -290,9 +290,9 @@ function RouteComponent() {
                   //  const controller = getPanelController();
                   if (controller) {
                     const modelNameList = [
-                      "2-001-001",
-                      "2-001-002",
-                      "2-001-003",
+                      "2-004-015",
+                      "2-010-017",
+                      "2-008-015",
                     ];
                     controller.findLabelInfoByModelBoxName(modelNameList);
                     const isShow = controller.canBeShowLabelInfo.length > 0;

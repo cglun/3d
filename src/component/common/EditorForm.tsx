@@ -60,7 +60,7 @@ export default function EditorForm({
       });
   }
   const defaultImage3dUrl = new URL(
-    "/static/images/defaultImage3d.png",
+    "@static/images/defaultImage3d.png",
     import.meta.url
   ).href;
   const defaultImage3d = (

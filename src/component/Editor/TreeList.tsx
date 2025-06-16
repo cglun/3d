@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { Button, Container, ListGroupItem } from "react-bootstrap";
 
-import { APP_COLOR, UserDataType } from "@/app/type";
+import { APP_COLOR } from "@/app/type";
 import { Group, Light, Mesh, Object3D, Object3DEventMap } from "three";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import AlertBase from "@/component/common/AlertBase";
@@ -38,7 +38,7 @@ function TreeNode({
     const editor = editorInstance.getEditor();
     const { scene } = editor;
     scene.userData.selected3d = node;
-
+    node.userData.isSelected = !isExpanded;
     editor.transformControl.attach(node);
     updateScene(scene);
     //setTransformControls(node);
@@ -61,7 +61,7 @@ function TreeNode({
         if (targetItem === undefined) {
           return;
         }
-        if (targetItem.parent == null) {
+        if (targetItem.parent === null) {
           return;
         }
 
@@ -87,9 +87,6 @@ function TreeNode({
   }
 
   const light = `d-flex justify-content-between ${node.userData.isSelected ? "text-warning" : ""}`;
-  if (node.userData.type === UserDataType.TransformHelper) {
-    return;
-  }
 
   return (
     <ListGroupItem>

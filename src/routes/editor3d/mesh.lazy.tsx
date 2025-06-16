@@ -48,8 +48,9 @@ function RouteComponent() {
 
   function addAmbientLight() {
     const light = new AmbientLight(0xffffff, 0.5);
+    light.name = "环境光【不能投射阴影】";
     getScene().add(light);
-    light.userData.isSelected = true;
+
     updateScene(getScene());
   }
   function addPlane() {

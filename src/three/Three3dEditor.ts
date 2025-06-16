@@ -8,12 +8,12 @@ import {
   Vector3,
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { GlbModel, UserDataType } from "@/app/type";
+import { GlbModel } from "@/app/type";
 import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
 import { Three3d } from "@/three/Three3d";
 import { TransformControls } from "three/addons/controls/TransformControls.js";
 import { BackgroundHDR, SceneUserData } from "@/three/Three3dConfig";
-import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
+import { addMonkey, createGroupIfNotExist } from "@/threeUtils/util4Scene";
 import { Dispatch } from "react";
 import { TourWindow } from "@/app/MyContext";
 import { createGridHelper } from "@/threeUtils/factory3d";
@@ -73,20 +73,16 @@ export class Three3dEditor extends Three3d {
     });
     transformControl.setMode("translate");
     const helper = transformControl.getHelper();
-    helper.userData = {
-      type: UserDataType.TransformHelper,
-      isHelper: true,
-      isSelected: false,
-    };
-
     helper.visible = true;
-    HELPER_GROUP?.add(helper);
+
     if (HELPER_GROUP) {
+      HELPER_GROUP.userData.isHelper = true;
+      HELPER_GROUP.add(helper);
       this.scene.add(HELPER_GROUP);
     }
 
     transformControl.addEventListener("objectChange", function () {
-      console.log(" updateSplineOutline()");
+      //  console.log(" updateSplineOutline()");
       //updateSplineOutline();
     });
     return transformControl;
@@ -216,5 +212,8 @@ export class Three3dEditor extends Three3d {
       HELPER_GROUP.add(createGridHelper());
       this.scene.add(HELPER_GROUP);
     }
+  }
+  _addMonkey() {
+    addMonkey();
   }
 }

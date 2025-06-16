@@ -1,8 +1,7 @@
-import { useReducer } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useReducer, useEffect, useRef, useState } from "react";
+
 import { Container, ProgressBar } from "react-bootstrap";
 import { APP_COLOR, RecordItem } from "@/app/type";
-
 import Toast3d from "@/component/common/Toast3d";
 import {
   initEditorCamera,
@@ -24,7 +23,6 @@ import { getProjectData } from "@/threeUtils/util4Scene";
 
 export default function Viewer3d({
   item,
-
   canvasStyle = { height: "100vh", width: "100vw" },
   showProgress = true,
   callBack,
@@ -51,9 +49,7 @@ export default function Viewer3d({
       console.log("Viewer3d", item.id);
       const viewer = new Three3dViewer(canvas3d.current, dispatchTourWindow);
       viewerInstance.setViewer(viewer);
-
       viewer.controls.enabled = true;
-
       viewer.divElement.addEventListener("click", (event) =>
         viewer.onPointerClick(event)
       );

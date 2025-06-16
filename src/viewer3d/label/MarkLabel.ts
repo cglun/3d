@@ -1,7 +1,11 @@
 import { Scene, Vector3 } from "three";
 import { TourWindow } from "@/app/MyContext";
 import { CSS3DSprite } from "three/examples/jsm/renderers/CSS3DRenderer.js";
-import { SceneUserData, UserCssStyle } from "@/three/Three3dConfig";
+import {
+  SceneUserData,
+  userCssStyle,
+  UserCssStyle,
+} from "@/three/Three3dConfig";
 import { getCardBackgroundUrl, setClassName } from "@/threeUtils/util4UI";
 import { getTourSrc } from "@/threeUtils/util4Scene";
 
@@ -23,21 +27,7 @@ export class MarkLabel {
   };
 
   userDataStyles = {
-    cardWidth: 116,
-    cardHeight: 116,
-    cardRadius: 0.8,
-    cardBackgroundColor: "#d85555",
-    cardBackgroundUrl: "/editor3dpublic/static/images/defaultImage3d.png",
-    headerFontSize: 18,
-    headerColor: "#fe2ffe",
-    bodyFontSize: 14,
-    bodyColor: "#fee1e1",
-    modelHighlightColor: "#aaffaa",
-    offsetX: 116 / 2,
-    offsetY: 116 / 2,
-    headerMarginTop: 0,
-    headerMarginLeft: 0,
-    cardSize: 0.04,
+    ...userCssStyle,
   } as UserCssStyle;
 
   css3DSprite = new CSS3DSprite(this.div);

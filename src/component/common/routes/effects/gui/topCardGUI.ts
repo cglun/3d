@@ -7,7 +7,7 @@ import { Dispatch } from "react";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 
-import { LabelInfo } from "@/viewer3d/label/LabelInfo";
+import { setLabelFontColor, setFontSize, createTestLabel } from "../utils";
 
 export default function topCardGUI(dispatchTourWindow: Dispatch<TourWindow>) {
   const editor = editorInstance.getEditor();
@@ -17,25 +17,29 @@ export default function topCardGUI(dispatchTourWindow: Dispatch<TourWindow>) {
   const userData = editor.scene.userData as SceneUserData;
   const { topCard } = userData.userCssStyle;
   const folderGeometry = editor.guiInstance.addFolder("顶牌");
-  const cube = editor.addCube();
-  cube.name = "此顶牌不会被保存";
-  const label = new LabelInfo(cube, editor.scene, dispatchTourWindow);
-  label.css3DSprite.position.set(0, -5, 0);
-  editor.scene.add(label.css3DSprite);
-  const labelStyle = label.div.style;
+
+  const { labelInfo } = createTestLabel(editor, dispatchTourWindow, {
+    mark: false,
+    label: true,
+    blender: false,
+  });
+  editor.outlinePass.selectedObjects = [];
+  //没有就创建，显示
+  const labelInfoDiv = labelInfo.div;
+  const { style } = labelInfoDiv;
   folderGeometry
     .add(topCard, "cardWidth", 30, 500)
     .name("宽度")
     .step(1)
     .onChange(() => {
-      labelStyle.width = `${topCard.cardWidth}px`;
+      style.width = `${topCard.cardWidth}px`;
     });
   folderGeometry
     .add(topCard, "cardHeight", 20, 600)
     .name("高度")
     .step(1)
     .onChange(() => {
-      labelStyle.height = `${topCard.cardHeight}px`;
+      style.height = `${topCard.cardHeight}px`;
     });
 
   folderGeometry
@@ -43,7 +47,7 @@ export default function topCardGUI(dispatchTourWindow: Dispatch<TourWindow>) {
     .name("缩放")
     .step(0.01)
     .onChange(() => {
-      label.css3DSprite.scale.set(
+      labelInfo.css3DSprite.scale.set(
         topCard.cardSize,
         topCard.cardSize,
         topCard.cardSize
@@ -55,27 +59,27 @@ export default function topCardGUI(dispatchTourWindow: Dispatch<TourWindow>) {
     .name("圆角")
     .step(0.01)
     .onChange(() => {
-      labelStyle.borderRadius = `${topCard.cardRadius}px`;
+      style.borderRadius = `${topCard.cardRadius}px`;
     });
   folderGeometry
     .addColor(topCard, "cardBackgroundColor")
     .name("背景颜色")
     .onChange(() => {
-      labelStyle.backgroundColor = `${topCard.cardBackgroundColor}`;
-      labelStyle.backgroundImage = "";
+      style.backgroundColor = `${topCard.cardBackgroundColor}`;
+      style.backgroundImage = "";
     });
   folderGeometry
     .add(topCard, "cardBackgroundUrl")
     .name("背景URL")
     .onChange(() => {
-      labelStyle.backgroundImage = `url("${topCard.cardBackgroundUrl}")`;
+      style.backgroundImage = `url("${topCard.cardBackgroundUrl}")`;
     });
   folderGeometry
     .add(topCard, "opacity", 0.01, 1)
     .step(0.01)
     .name("透明度")
     .onChange(() => {
-      labelStyle.opacity = topCard.opacity.toString();
+      style.opacity = topCard.opacity.toString();
     });
 
   folderGeometry
@@ -83,46 +87,30 @@ export default function topCardGUI(dispatchTourWindow: Dispatch<TourWindow>) {
     .step(0.1)
     .name("标题字体大小")
     .onChange(() => {
-      // labelStyle.padding = `${topCard.headerMarginTop}px ${topCard.headerMarginLeft}px`;
-      const p = label.div.children[0];
-      for (let index = 0; index < p.children.length; index++) {
-        const element = p.children[index] as HTMLDivElement;
-        element.style.fontSize = `${topCard.headerFontSize}px`;
-      }
+      const div = labelInfoDiv.children[0] as HTMLDivElement;
+      setFontSize(div, topCard.headerFontSize);
     });
   folderGeometry
     .addColor(topCard, "headerColor")
     .name("标题字体颜色")
     .onChange(() => {
-      // labelStyle.color = `${topCard.headerColor}`;
-      const header1 = label.div.children[0].children[0] as HTMLDivElement;
-      const header2 = label.div.children[0].children[1] as HTMLDivElement;
-      header1.style.color = `${topCard.headerColor}`;
-      header2.style.color = `${topCard.headerColor}`;
+      const header = labelInfoDiv.children[0] as HTMLDivElement;
+      setLabelFontColor(header, topCard.headerColor);
     });
   folderGeometry
     .add(topCard, "bodyFontSize", 0.1, 100)
     .step(0.1)
     .name("正文字体大小")
     .onChange(() => {
-      // labelStyle.padding = `${topCard.headerMarginTop}px ${topCard.headerMarginLeft}px`;
-      const p = label.div.children[1];
-      for (let index = 0; index < p.children.length; index++) {
-        const element = p.children[index] as HTMLDivElement;
-        element.style.fontSize = `${topCard.bodyFontSize}px`;
-      }
+      const div = labelInfoDiv.children[1] as HTMLDivElement;
+      setFontSize(div, topCard.bodyFontSize);
     });
   folderGeometry
     .addColor(topCard, "bodyColor")
-
     .name("正文字体颜色")
     .onChange(() => {
-      // labelStyle.padding = `${topCard.headerMarginTop}px ${topCard.headerMarginLeft}px`;
-      const p = label.div.children[1];
-      for (let index = 0; index < p.children.length; index++) {
-        const element = p.children[index] as HTMLDivElement;
-        element.style.color = `${topCard.bodyColor}`;
-      }
+      const div = labelInfoDiv.children[1] as HTMLDivElement;
+      setLabelFontColor(div, topCard.bodyColor);
     });
 
   folderGeometry
@@ -130,14 +118,14 @@ export default function topCardGUI(dispatchTourWindow: Dispatch<TourWindow>) {
     .step(0.1)
     .name("上下边距")
     .onChange(() => {
-      labelStyle.padding = `${topCard.headerMarginTop}px ${topCard.headerMarginLeft}px`;
+      style.padding = `${topCard.headerMarginTop}px ${topCard.headerMarginLeft}px`;
     });
   folderGeometry
     .add(topCard, "headerMarginLeft", 0.1, 100)
     .step(0.1)
     .name("左右边距")
     .onChange(() => {
-      labelStyle.padding = `${topCard.headerMarginTop}px ${topCard.headerMarginLeft}px`;
+      style.padding = `${topCard.headerMarginTop}px ${topCard.headerMarginLeft}px`;
     });
 
   // folderGeometry.addColor( topCard, "bodyColor").onChange( function ( val ) {

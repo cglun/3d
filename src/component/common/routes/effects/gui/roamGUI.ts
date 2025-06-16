@@ -11,7 +11,7 @@ import { RoamButtonUserSetting, SceneUserData } from "@/three/Three3dConfig";
 import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
 import { editorInstance } from "@/three/EditorInstance";
 
-export default function setRoamPath() {
+export default function roamGUI() {
   const editor = editorInstance.getEditor();
   if (editor.guiInstance !== null) {
     editor.destroyGUI();

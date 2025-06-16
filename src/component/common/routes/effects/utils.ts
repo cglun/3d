@@ -1,3 +1,12 @@
+import { TourWindow } from "@/app/MyContext";
+import { editorInstance } from "@/three/EditorInstance";
+import { Three3dEditor } from "@/three/Three3dEditor";
+import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
+import { LabelInfo } from "@/viewer3d/label/LabelInfo";
+import { MarkLabel } from "@/viewer3d/label/MarkLabel";
+import { Dispatch } from "react";
+import { CSS3DSprite } from "three/examples/jsm/Addons.js";
+
 export function rgbaToHex_xx(rgba: string): string {
   if (rgba === undefined || rgba === null) {
     return "#000000";
@@ -23,20 +32,116 @@ export function rgbaToHex_xx(rgba: string): string {
   return `#${hexR}${hexG}${hexB}`;
 }
 
-export function setLabelHeaderColor(
-  div: HTMLDivElement,
-  key: keyof CSSStyleDeclaration,
-  value: string,
-  endString?: string
-) {
-  const spanElements = div.querySelectorAll("span");
-  const firstChild = div.children[0] as HTMLElement;
-  if (key !== length) {
-    //@ts-expect-error这个是没问题的。
-    firstChild.style[key] = `${value}${endString}`;
-    spanElements.forEach((span) => {
-      //@ts-expect-error 这个是没问题的。
-      span.style[key] = `${value}${endString}`;
-    });
+export function setFontSize(div: HTMLDivElement, fontSize: number) {
+  for (let index = 0; index < div.children.length; index++) {
+    const element = div.children[index] as HTMLDivElement;
+    element.style.fontSize = `${fontSize}px`;
   }
+}
+
+export function setLabelFontColor(div: HTMLDivElement, color: string) {
+  for (let index = 0; index < div.children.length; index++) {
+    const element = div.children[index] as HTMLDivElement;
+    element.style.color = color;
+  }
+}
+
+export function showLabel(
+  labelName: string,
+  dispatchTourWindow: Dispatch<TourWindow>
+) {
+  //创建lab
+  const editor = editorInstance.getEditor();
+  //let label: MarkLabel;
+  let label = createGroupIfNotExist(
+    editor.scene,
+    labelName,
+    false
+  ) as CSS3DSprite;
+  if (label) {
+    label.visible = true;
+    return label;
+  } else {
+    const label = new MarkLabel(editor.scene, dispatchTourWindow, {
+      markName: "此标签不会被保存",
+      logo: "geo-alt",
+      showEye: false,
+      tourObject: {
+        id: "id",
+        title: "title",
+      },
+    });
+    label.css3DSprite.name = labelName;
+    label.css3DSprite.userData.isHelper = true;
+    editor.scene.add(label.css3DSprite);
+    return label;
+  }
+}
+export function hideLabel(labelName: string) {
+  const editor = editorInstance.getEditor();
+  const label = createGroupIfNotExist(editor.scene, labelName, false);
+  if (label) {
+    label.visible = false;
+  }
+}
+type TestLabelType = {
+  markLabel: MarkLabel | null;
+  labelInfo: LabelInfo | null;
+};
+
+export const testLabel: TestLabelType = {
+  markLabel: null,
+  labelInfo: null,
+};
+export function getMarkLabelTest(
+  editor: Three3dEditor,
+  dispatchTourWindow: Dispatch<TourWindow>
+) {
+  if (testLabel.markLabel) {
+    return testLabel.markLabel;
+  }
+  const markLabel = new MarkLabel(editor.scene, dispatchTourWindow, {
+    markName: "此标签不会被保存",
+    logo: "geo-alt",
+    showEye: false,
+    tourObject: {
+      id: "id",
+      title: "title",
+    },
+  });
+  testLabel.markLabel = markLabel;
+  editor.scene.add(testLabel.markLabel.css3DSprite);
+  return testLabel.markLabel;
+}
+
+export function getLabelInfo(
+  editor: Three3dEditor,
+  dispatchTourWindow: Dispatch<TourWindow>
+) {
+  if (testLabel.labelInfo) {
+    return testLabel.labelInfo;
+  }
+
+  const cube = editor.addCube();
+
+  testLabel.labelInfo = new LabelInfo(cube, editor.scene, dispatchTourWindow);
+  editor.scene.add(testLabel.labelInfo.css3DSprite);
+  return testLabel.labelInfo;
+}
+
+export function createTestLabel(
+  editor: Three3dEditor,
+  dispatchTourWindow: Dispatch<TourWindow>,
+  show: { mark: boolean; label: boolean; blender: boolean }
+) {
+  const { mark, label, blender } = show;
+  const marker = getMarkLabelTest(editor, dispatchTourWindow);
+  const labelInfo = getLabelInfo(editor, dispatchTourWindow);
+  const bl = createGroupIfNotExist(editor.scene, "blender", false);
+  if (bl) {
+    bl.visible = blender;
+  }
+  marker.css3DSprite.visible = mark;
+  labelInfo.css3DSprite.visible = label;
+  return { marker, labelInfo };
 }

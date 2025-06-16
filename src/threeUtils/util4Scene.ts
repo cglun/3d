@@ -275,10 +275,8 @@ export function setAnimateClip(
 
 export function addMonkey() {
   const { scene } = editorInstance.getEditor();
-  const blender = new URL(
-    `/public/static/file3d/models/blender.glb`,
-    import.meta.url
-  ).href;
+  const blender = new URL(`@static/file3d/models/blender.glb`, import.meta.url)
+    .href;
 
   const loader = glbLoader();
   loader.load(blender, function (gltf) {

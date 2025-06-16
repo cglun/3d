@@ -22,7 +22,7 @@ export const Route = createLazyFileRoute("/editor3d/about")({
 });
 
 function RouteComponent() {
-  const href = new URL("/public/static/about.html", import.meta.url).href;
+  const href = new URL("@/about.html", import.meta.url).href;
   const { scene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
   const buttonColor = getButtonColor(themeColor);

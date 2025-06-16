@@ -41,15 +41,20 @@ function RouteComponent() {
           buttonName: "切换场景",
           des: "3d列表，新增修复功能，由于更新导致无法打开场景，可使用修复功能修复！",
         },
-
         {
           logoName: "bi bi-stars",
           position: "底部栏",
           buttonName: "特效",
           des: "重新制作操作界面",
         },
+        {
+          logoName: "lightbulb",
+          position: "右侧栏",
+          buttonName: "灯光",
+          des: "修复灯光加载问题",
+        },
       ],
-      updateTime: "2025年6月15日",
+      updateTime: "2025年6月16日",
     },
   ];
 
