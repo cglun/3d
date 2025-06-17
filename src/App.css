@@ -126,7 +126,17 @@ btn-group-sm>.btn,
 }
 
 .lil-gui.autoPlace {
-  right: initial;
-  top: 40px;
-  left: 40px;
+  position: unset
+}
+
+.lil-gui .controller .name {
+  color: var(--bs-secondary-text-emphasis);
+ 
+}
+
+.lil-gui,
+.lil-gui.root>.title {
+  font-size: 1.3cap;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-accordion-active-color);
 }

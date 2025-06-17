@@ -28,12 +28,12 @@ export class Three3dEditor extends Three3d {
   pointer = new Vector2(0, 0);
   onUpPosition = new Vector2(0, 0);
   onDownPosition = new Vector2(0, 0);
-  private _guiInstance: GUI | null = null; // 用于存储 GUI 实例
+  private _guiInstance: GUI = new GUI().hide(); // 用于存储 GUI 实例
 
   get guiInstance() {
     return this._guiInstance;
   }
-  set guiInstance(value: GUI | null) {
+  set guiInstance(value: GUI) {
     this._guiInstance = value;
   }
 
@@ -192,7 +192,7 @@ export class Three3dEditor extends Three3d {
   destroyGUI() {
     if (this.guiInstance) {
       this.guiInstance.destroy();
-      this.guiInstance = null;
+
       this.tubeMesh = null;
     }
     if (this?.tubeMesh !== null) {
@@ -215,5 +215,15 @@ export class Three3dEditor extends Three3d {
   }
   _addMonkey() {
     addMonkey();
+  }
+  createGUI(title: string) {
+    this.destroyGUI();
+    const container = document.querySelector("#gui-container-property");
+
+    this.guiInstance = new GUI({ title });
+    this.guiInstance.domElement.style.width = "100%";
+    container?.appendChild(this.guiInstance.domElement);
+
+    return this.guiInstance;
   }
 }

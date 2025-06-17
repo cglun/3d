@@ -24,14 +24,7 @@ import { GlbModel, RecordItem } from "@/app/type";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { runScriptDev } from "@/three/scriptDev";
 import { enableShadow } from "@/three/common3d";
-import {
-  BackgroundHDR,
-  ExtraParams,
-  hdr,
-  HdrKey,
-  SceneUserData,
-} from "@/three/Three3dConfig";
-
+import { ExtraParams, SceneUserData } from "@/three/Three3dConfig";
 import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
@@ -228,7 +221,7 @@ export class Three3d extends ThreeObj {
     this.extraParams.mixer = [];
     this.scene.children = [];
     clearOldLabel();
-    this.setTextureBackground();
+    this.setTextureBackground_test();
 
     const { useShadow } = this.scene.userData.config3d;
     const light = createDirectionalLight();
@@ -328,34 +321,7 @@ export class Three3d extends ThreeObj {
 
         if (labelGroup) _scene.add(labelGroup);
 
-        const { backgroundHDR } = _scene.userData as SceneUserData;
-        //是背景色
-        if (backgroundHDR.isColor) {
-          _scene.background = new Color(backgroundHDR.color);
-        }
-        //背景图HDR
-        if (!backgroundHDR.isColor) {
-          const rgbeLoader = new RGBELoader();
-          //const { backgroundHDR } = object.userData as SceneUserData;
-
-          const { color, asBackground } = backgroundHDR;
-          rgbeLoader.load(hdr[color as HdrKey], (texture) => {
-            texture.mapping = EquirectangularReflectionMapping;
-            _scene.background = null;
-            if (asBackground) {
-              _scene.background = texture;
-            }
-            _scene.environment = texture;
-            const {
-              backgroundBlurriness,
-              backgroundIntensity,
-              environmentIntensity,
-            } = object;
-            _scene.backgroundBlurriness = backgroundBlurriness;
-            _scene.backgroundIntensity = backgroundIntensity;
-            _scene.environmentIntensity = environmentIntensity;
-          });
-        }
+        this.setTextureBackground_test(object);
         //const newCamera = this.initCamera();
       }
     });
@@ -376,24 +342,34 @@ export class Three3d extends ThreeObj {
       this.loadModelByUrl(model);
     });
   }
-  //加载完后设置背景
-  setTextureBackground() {
-    const rgbeLoader = new RGBELoader();
-    const { backgroundHDR } = this.scene.userData;
-    const { color, isColor } = backgroundHDR;
+  setTextureBackground_test(object?: Scene) {
+    const { backgroundHDR } = this.scene.userData as SceneUserData;
+    const { asBackground, HDRName, isColor, color } = backgroundHDR; //是背景色
     if (isColor) {
-      const bgColor = backgroundHDR as BackgroundHDR;
-      this.scene.background = new Color(bgColor.color);
+      this.scene.background = new Color(color);
     }
+    //背景图HDR
     if (!isColor) {
-      rgbeLoader.load(hdr[color as HdrKey], (texture) => {
+      const rgbeLoader = new RGBELoader();
+      //const { backgroundHDR } = object.userData as SceneUserData;
+
+      rgbeLoader.load(HDRName, (texture) => {
         texture.mapping = EquirectangularReflectionMapping;
         this.scene.background = null;
-        if (backgroundHDR.asBackground) {
+        if (asBackground) {
           this.scene.background = texture;
-          // scene.backgroundBlurriness = 0; // @TODO: Needs PMREM
         }
         this.scene.environment = texture;
+        if (object) {
+          const {
+            backgroundBlurriness,
+            backgroundIntensity,
+            environmentIntensity,
+          } = object;
+          this.scene.backgroundBlurriness = backgroundBlurriness;
+          this.scene.backgroundIntensity = backgroundIntensity;
+          this.scene.environmentIntensity = environmentIntensity;
+        }
       });
     }
   }
@@ -540,7 +516,7 @@ export class Three3d extends ThreeObj {
   //加载完后统一执行
   private loadEndRun(): void {
     cameraEnterAnimation(this);
-    this.setTextureBackground();
+    this.setTextureBackground_test();
     this.loadedModelsEnd();
     const labelGroup = createGroupIfNotExist(
       this.scene,

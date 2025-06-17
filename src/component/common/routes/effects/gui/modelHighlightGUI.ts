@@ -1,4 +1,3 @@
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { editorInstance } from "@/three/EditorInstance";
 import { SceneUserData } from "@/three/Three3dConfig";
 
@@ -10,13 +9,13 @@ export default function modelHighlightGUI(
   dispatchTourWindow: Dispatch<TourWindow>
 ) {
   const editor = editorInstance.getEditor();
-  editor.destroyGUI();
-  // 创建 GUI 实例并保存到变量中
-  editor.guiInstance = new GUI({ width: 285 });
+
+  const folderGeometry = editor.createGUI("模型高亮");
+
   const userData = editor.scene.userData as SceneUserData;
 
   const { modelEdgeHighlight } = userData.userCssStyle;
-  const folderGeometry = editor.guiInstance.addFolder("模型高亮");
+
   const outlinePass = editor.outlinePass;
   outlinePass.selectedObjects = [editor.addCube()];
   editor.setOutLinePassColor();

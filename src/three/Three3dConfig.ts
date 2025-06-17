@@ -180,21 +180,28 @@ export interface RoamLine {
   tubeGeometry: TubeGeometry;
 }
 
-export interface BackgroundHDR {
-  color: string | HdrKey;
-  asBackground: boolean;
-  isColor: boolean;
-}
-
-// 定义 hdr 对象键的联合类型
+// export interface backgroundHDR {
+//   color: string;
+//   asBackground: boolean;
+//   isColor: boolean;
+//   HDRName: string[];
+// }
 export type HdrKey = keyof typeof hdr;
 export const hdr = {
   "venice_sunset_1k.hdr": venice_sunset_1k,
   "spruit_sunrise_1k.hdr": spruit_sunrise_1k,
 };
+export const backgroundHDR = {
+  color: "#00ff00",
+  asBackground: true,
+  isColor: false,
+  HDRName: hdr["venice_sunset_1k.hdr"],
+};
+export type BackgroundHDR = typeof backgroundHDR;
+// 定义 hdr 对象键的联合类型
+
 const sceneUserData: SceneUserData = {
   projectId: -1,
-
   selected3d: null,
   isSelected: false,
   cameraPosition: {
@@ -203,12 +210,7 @@ const sceneUserData: SceneUserData = {
   },
   config3d: { ...config3dInit },
 
-  backgroundHDR: {
-    color: "venice_sunset_1k.hdr",
-    asBackground: true,
-    isColor: false,
-  } as BackgroundHDR,
-
+  backgroundHDR: { ...backgroundHDR },
   javascript: "console.log(116)",
   customButtonList: { ...customButtonListInit } as CustomButtonList,
   APP_THEME: {

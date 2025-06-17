@@ -4,10 +4,10 @@ import { useUpdateScene } from "@/app/hooks";
 import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 import { editorInstance } from "@/three/EditorInstance";
-import { SceneUserData } from "@/three/Three3dConfig";
+import sceneGUI from "../PropertyGUI/sceneGUI";
 
 export function OutlineViewScene() {
-  const { scene, updateScene } = useUpdateScene();
+  const { scene } = useUpdateScene();
 
   return (
     scene && (
@@ -15,10 +15,14 @@ export function OutlineViewScene() {
         className={"d-flex justify-content-between"}
         style={styleBody}
         onClick={() => {
-          const { scene } = editorInstance.getEditor();
-          const userData = scene.userData as SceneUserData;
-          userData.selected3d = scene;
-          updateScene(scene);
+          const editor = editorInstance.getEditor();
+          //editor.createGUI("场景");
+          sceneGUI(editor.scene);
+
+          // editor.destroyGUI();
+          // const userData = editor.scene.userData as SceneUserData;
+          // userData.selected3d = scene;
+          // updateScene(scene);
         }}
       >
         <div>

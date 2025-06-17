@@ -1,5 +1,5 @@
 import { TourWindow } from "@/app/MyContext";
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+
 import { editorInstance } from "@/three/EditorInstance";
 import { SceneUserData } from "@/three/Three3dConfig";
 import { Dispatch } from "react";
@@ -12,19 +12,17 @@ import {
 
 export default function markLabelGUI(dispatchTourWindow: Dispatch<TourWindow>) {
   const editor = editorInstance.getEditor();
-  editor.destroyGUI();
-  // 创建 GUI 实例并保存到变量中
-  editor.guiInstance = new GUI({ width: 285 });
+
   const userData = editor.scene.userData as SceneUserData;
   const { markLabel } = userData.userCssStyle;
-  const folderGeometry = editor.guiInstance.addFolder("标签");
+  const folderGeometry = editor.createGUI("标签");
 
   const { marker } = createTestLabel(editor, dispatchTourWindow, {
     mark: true,
     label: false,
     blender: false,
   });
-  editor.outlinePass.selectedObjects = [];
+
   //没有就创建，显示
   const markDiv = marker.div;
   const { style } = markDiv;

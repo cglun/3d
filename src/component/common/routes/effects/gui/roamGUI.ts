@@ -4,27 +4,15 @@ import {
   MeshLambertMaterial,
   TubeGeometry,
 } from "three";
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { RoamButtonUserSetting, SceneUserData } from "@/three/Three3dConfig";
-
-//@ts-ignore
 import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
 import { editorInstance } from "@/three/EditorInstance";
-
 export default function roamGUI() {
   const editor = editorInstance.getEditor();
-  if (editor.guiInstance !== null) {
-    editor.destroyGUI();
-  }
-
   const { customButtonList } = editorInstance.getEditor().scene
     .userData as SceneUserData;
   const { userSetting } = customButtonList.roamButtonGroup;
-
-  // 创建 GUI 实例并保存到变量中
-  editor.guiInstance = new GUI({ width: 285 });
-
-  const folderGeometry = editor.guiInstance.addFolder("Geometry");
+  const folderGeometry = editor.createGUI("漫游");
 
   const { roamLine } = editorInstance.getEditor().extraParams;
   if (roamLine) {
@@ -32,7 +20,6 @@ export default function roamGUI() {
       .add(roamLine, "roamIsRunning")
       .name("启动/停止")
       .onChange(function () {
-        const editor = editorInstance.getEditor();
         const { tubeMesh } = editor;
         if (!roamLine.roamIsRunning) {
           cameraEnterAnimation(editor);

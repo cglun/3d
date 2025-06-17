@@ -96,7 +96,7 @@ export function hideBoxHelper(scene: Scene) {
 }
 
 //环境贴图设置
-export function setTextureBackground_xx(scene: Scene) {
+export function setTextureBackground_test_xx(scene: Scene) {
   const rgbeLoader = new RGBELoader();
   const { backgroundHDR } = scene.userData;
 

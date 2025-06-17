@@ -2,7 +2,15 @@ import React, { memo } from "react";
 import { Button, Container, ListGroupItem } from "react-bootstrap";
 
 import { APP_COLOR } from "@/app/type";
-import { Group, Light, Mesh, Object3D, Object3DEventMap } from "three";
+import {
+  AmbientLight,
+  DirectionalLight,
+  Group,
+  Light,
+  Mesh,
+  Object3D,
+  Object3DEventMap,
+} from "three";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import AlertBase from "@/component/common/AlertBase";
 import Toast3d from "@/component/common/Toast3d";
@@ -12,6 +20,9 @@ import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 import { editorInstance } from "@/three/EditorInstance";
 import { getObjectNameByName } from "@/threeUtils/util4UI";
+
+import directionalLightGUI from "./PropertyGUI/lightGUI/directionalLightGUI";
+import ambientLightGUI from "./PropertyGUI/lightGUI/ambientLightGUI";
 
 function TreeNode({
   node,
@@ -33,11 +44,19 @@ function TreeNode({
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
+    console.log(node.name);
+    if (node instanceof DirectionalLight) {
+      directionalLightGUI(node);
+    }
+    if (node instanceof AmbientLight) {
+      ambientLightGUI(node);
+    }
+
     // resetTextWarning(node);
     setIsSelected(!isSelected);
     const editor = editorInstance.getEditor();
     const { scene } = editor;
-    scene.userData.selected3d = node;
+
     node.userData.isSelected = !isExpanded;
     editor.transformControl.attach(node);
     updateScene(scene);

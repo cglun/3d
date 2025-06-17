@@ -1,10 +1,13 @@
 import { Accordion, ListGroup, ListGroupItem } from "react-bootstrap";
 
-import IndexChild from "@/component/Editor/Property3d/IndexChild";
+import IndexChild, {
+  SceneProperty,
+} from "@/component/Editor/Property3d/IndexChild";
 
 import { useEffect, useRef } from "react";
 import Icon from "@/component/common/Icon";
 import { useUpdateScene } from "@/app/hooks";
+import { Scene } from "three";
 
 /**
  * 物体属性
@@ -54,15 +57,15 @@ export default function Index() {
         <Icon iconName="menu-button" gap={gap} />
         属性
       </Accordion.Header>
-      <Accordion.Body>
-        {select && (
+      <Accordion.Body id="gui-container-property" className="py-0">
+        {/* {select && (
           <ListGroup>
             <ListGroupItem>{select.name}</ListGroupItem>
             <ListGroupItem>
-              <IndexChild />
+              <SceneProperty />
             </ListGroupItem>
           </ListGroup>
-        )}
+        )} */}
       </Accordion.Body>
     </Accordion.Item>
   );

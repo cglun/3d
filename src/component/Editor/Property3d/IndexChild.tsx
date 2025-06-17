@@ -23,7 +23,7 @@ import { editorInstance } from "@/three/EditorInstance";
 import sceneUserData, { SceneUserData } from "@/three/Three3dConfig";
 
 const step = 0.1;
-function SceneProperty() {
+export function SceneProperty() {
   const { scene, updateScene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
 
@@ -75,7 +75,7 @@ function SceneProperty() {
             onChange={() => {
               const { backgroundHDR } = editor.scene.userData;
               backgroundHDR.asBackground = !backgroundHDR.asBackground;
-              editor.setTextureBackground();
+              editor.setTextureBackground_test();
               updateScene(editor.scene);
             }}
           />
@@ -90,7 +90,7 @@ function SceneProperty() {
             value={scene.userData.backgroundHDR.color}
             onChange={(e) => {
               editor.scene.userData.backgroundHDR.color = e.target.value;
-              editor.setTextureBackground();
+              editor.setTextureBackground_test();
               updateScene(editor.scene);
             }}
           >
@@ -148,7 +148,7 @@ function SceneProperty() {
             }
             if (backgroundHDR.asBackground) {
               editor.scene.userData.backgroundHDR.asBackground = true;
-              editor.setTextureBackground();
+              editor.setTextureBackground_test();
             }
             updateScene(editor.scene);
           }}

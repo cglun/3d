@@ -1,29 +1,22 @@
 import { TourWindow } from "@/app/MyContext";
-
 import { editorInstance } from "@/three/EditorInstance";
 import { SceneUserData } from "@/three/Three3dConfig";
-
 import { Dispatch } from "react";
-
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-
 import { setLabelFontColor, setFontSize, createTestLabel } from "../utils";
-
 export default function topCardGUI(dispatchTourWindow: Dispatch<TourWindow>) {
   const editor = editorInstance.getEditor();
-  editor.destroyGUI();
-  // 创建 GUI 实例并保存到变量中
-  editor.guiInstance = new GUI({ width: 285 });
+
+  const folderGeometry = editor.createGUI("顶牌");
+
   const userData = editor.scene.userData as SceneUserData;
   const { topCard } = userData.userCssStyle;
-  const folderGeometry = editor.guiInstance.addFolder("顶牌");
 
   const { labelInfo } = createTestLabel(editor, dispatchTourWindow, {
     mark: false,
     label: true,
     blender: false,
   });
-  editor.outlinePass.selectedObjects = [];
+
   //没有就创建，显示
   const labelInfoDiv = labelInfo.div;
   const { style } = labelInfoDiv;

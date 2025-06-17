@@ -44,13 +44,6 @@ function RouteComponent() {
     earlyReturnElement = <AlertBase text={"请到设置中开启合成"} />;
   }
   const editor = editorInstance.getEditor();
-  useEffect(() => {
-    return () => {
-      // 在组件卸载时销毁 GUI 实例
-      editor?.destroyGUI();
-      editor.outlinePass.selectedObjects = [];
-    };
-  }, []);
 
   // 如果有需要提前返回的元素，直接返回
   if (earlyReturnElement) {
