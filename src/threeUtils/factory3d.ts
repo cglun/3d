@@ -61,12 +61,16 @@ export function createDirectionalLight(name = "平行光") {
   light.shadow.camera.bottom = -10;
   light.position.set(3, 3, 3);
   light.shadow.bias = -0.0001;
-
+  light.castShadow = true;
   light.lookAt(0, 0, 0);
   return light;
 }
 export function createDirectionalLightHelper(light: DirectionalLight) {
-  return new DirectionalLightHelper(light, 1, "#fff");
+  const lightHelper = new DirectionalLightHelper(light, 1, "#fff");
+
+  lightHelper.lookAt(0, 0, 0);
+  //更新指向
+  return lightHelper;
 }
 
 export function createGridHelper(name = "网格辅助", wh = new Vector2(10, 10)) {

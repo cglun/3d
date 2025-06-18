@@ -22,6 +22,7 @@ import { useLocation, useNavigate } from "@tanstack/react-router";
 import Icon from "@/component/common/Icon";
 import { editorInstance } from "@/three/EditorInstance";
 import { getThemeByScene } from "@/threeUtils/util4UI";
+import { stopRoam } from "../common/routes/effects/utils";
 
 // 若 getThemeByScene 确实在该文件且正确导出，使用此导入语句
 
@@ -185,9 +186,7 @@ export default function EditorTop() {
                 // const newScene = createNewScene();
                 const editor = editorInstance.getEditor();
                 editor.resetScene();
-                editor.addGridHelper();
-                editor.initTransformControl();
-
+                stopRoam();
                 updateScene(editor.scene);
                 Toast3d("场景已新建");
               }}

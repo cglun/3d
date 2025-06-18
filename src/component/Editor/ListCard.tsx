@@ -226,7 +226,7 @@ function RecordItemCard(props: Props) {
                   const editor = editorInstance.getEditor();
                   if (item.des === "Scene") {
                     const url = `${pathname}?sceneId=${item.id}`;
-                    editor.resetScene();
+
                     navigate({
                       to: url,
                     });
@@ -234,7 +234,7 @@ function RecordItemCard(props: Props) {
                   }
 
                   editor.addOneModel(item);
-                  editor.loadedModelsEnd();
+                  //editor.loadedModelsEnd();
                   updateScene(editor.scene);
                 }}
               >

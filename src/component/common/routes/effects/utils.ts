@@ -1,11 +1,11 @@
 import { TourWindow } from "@/app/MyContext";
 import { editorInstance } from "@/three/EditorInstance";
 import { Three3dEditor } from "@/three/Three3dEditor";
-import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
+import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
+
 import { LabelInfo } from "@/viewer3d/label/LabelInfo";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
 import { Dispatch } from "react";
-import { CSS3DSprite } from "three/examples/jsm/Addons.js";
 
 export function rgbaToHex_xx(rgba: string): string {
   if (rgba === undefined || rgba === null) {
@@ -53,11 +53,7 @@ export function showLabel(
   //创建lab
   const editor = editorInstance.getEditor();
   //let label: MarkLabel;
-  let label = createGroupIfNotExist(
-    editor.scene,
-    labelName,
-    false
-  ) as CSS3DSprite;
+  let label = editor.scene.getObjectByName(labelName);
   if (label) {
     label.visible = true;
     return label;
@@ -79,7 +75,7 @@ export function showLabel(
 }
 export function hideLabel(labelName: string) {
   const editor = editorInstance.getEditor();
-  const label = createGroupIfNotExist(editor.scene, labelName, false);
+  const label = editor.scene.getObjectByName(labelName);
   if (label) {
     label.visible = false;
   }
@@ -137,11 +133,21 @@ export function createTestLabel(
   const { mark, label, blender } = show;
   const marker = getMarkLabelTest(editor, dispatchTourWindow);
   const labelInfo = getLabelInfo(editor, dispatchTourWindow);
-  const bl = createGroupIfNotExist(editor.scene, "blender", false);
+
+  const bl = editor.scene.getObjectByName("blender");
   if (bl) {
     bl.visible = blender;
   }
   marker.css3DSprite.visible = mark;
   labelInfo.css3DSprite.visible = label;
   return { marker, labelInfo };
+}
+
+export function stopRoam() {
+  const editor = editorInstance.getEditor();
+  const { roamLine } = editor.extraParams;
+  if (roamLine !== undefined) {
+    roamLine.roamIsRunning = false;
+    cameraEnterAnimation(editor);
+  }
 }

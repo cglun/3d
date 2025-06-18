@@ -21,10 +21,9 @@ import { roamAnimation } from "@/viewer3d/buttonList/buttonGroup";
 
 import { SceneUserData, ToggleButtonGroup } from "@/three/Three3dConfig";
 import { viewerInstance } from "@/three/ViewerInstance";
-import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
 
-function getScene() {
-  return viewerInstance.getViewer().scene;
+function _getViewer() {
+  return viewerInstance.getViewer();
 }
 
 function getCamera() {
@@ -35,18 +34,13 @@ function getControls() {
 }
 // 显示模型-显示和隐藏
 export function showModelByNameId(NAME_ID: string) {
-  const MODEL_GROUP = createGroupIfNotExist(
-    getScene(),
-    GLOBAL_CONSTANT.MODEL_GROUP,
-    false
-  );
-  if (MODEL_GROUP) {
-    MODEL_GROUP.traverse((item) => {
-      item.layers.set(1);
-    });
-  }
+  const MODEL_GROUP = _getViewer().MODEL_GROUP;
 
-  const groups = createGroupIfNotExist(getScene(), NAME_ID, false);
+  MODEL_GROUP.traverse((item) => {
+    item.layers.set(1);
+  });
+
+  const groups = _getViewer().scene.getObjectByName(NAME_ID);
   if (groups) {
     groups.traverse((item) => {
       item.layers.set(0);
@@ -77,7 +71,7 @@ export function drawerOutByNameId(
 ) {
   // 使用可选链操作符和默认值确保解构安全
 
-  const MODEL_GROUP = createGroupIfNotExist(getScene(), item.NAME_ID, false);
+  const MODEL_GROUP = _getViewer().scene.getObjectByName(item.NAME_ID);
   item.data = {
     isSelected: true,
     isRunning: true,
@@ -111,7 +105,8 @@ export function drawerBackHome(toggleButtonGroup: ToggleButtonGroup) {
     listGroup.forEach((_item: ActionItemMap) => {
       const _d = _item.data;
       if (_item.data?.isSelected && !_d?.isRunning) {
-        const model = createGroupIfNotExist(getScene(), _item.NAME_ID, false);
+        const model = _getViewer().scene.getObjectByName(_item.NAME_ID);
+
         _item.data = {
           isRunning: true,
           isSelected: true,
@@ -144,7 +139,8 @@ export function stretchModelByNameId(
   NAME_ID: string,
   toggleButtonGroup: ToggleButtonGroup
 ) {
-  const MODEL_GROUP = createGroupIfNotExist(getScene(), NAME_ID, false);
+  const MODEL_GROUP = _getViewer().scene.getObjectByName(NAME_ID);
+
   if (MODEL_GROUP) {
     const isStretch = MODEL_GROUP.userData.childrenIsStretch;
     const isStretchRunning = MODEL_GROUP.userData.childrenIsRunning;
@@ -165,14 +161,7 @@ export function stretchModelBackHome(toggleButtonGroup: ToggleButtonGroup) {
   const { type } = toggleButtonGroup.customButtonItem;
 
   if (type === "STRETCH") {
-    const MODEL_GROUP = createGroupIfNotExist(
-      getScene(),
-      GLOBAL_CONSTANT.MODEL_GROUP,
-      false
-    );
-    if (!MODEL_GROUP) {
-      return;
-    }
+    const MODEL_GROUP = _getViewer().MODEL_GROUP;
     MODEL_GROUP.children.forEach((_item) => {
       const { children } = _item;
       for (let index = 0; index < children.length; index++) {
@@ -260,7 +249,7 @@ export function moveCameraSTRETCH(
 ) {
   const { NAME_ID } = item;
 
-  const MODEL_GROUP = createGroupIfNotExist(getScene(), NAME_ID, false);
+  const MODEL_GROUP = _getViewer().scene.getObjectByName(NAME_ID);
 
   if (MODEL_GROUP) {
     // 移动相机到指定位置
@@ -295,9 +284,7 @@ export function moveCameraDRAWER(
   toggleButtonGroup: ToggleButtonGroup
 ) {
   const { NAME_ID } = item;
-
-  const MODEL_GROUP = createGroupIfNotExist(getScene(), NAME_ID, false);
-
+  const MODEL_GROUP = _getViewer().scene.getObjectByName(NAME_ID);
   if (MODEL_GROUP) {
     // 移动相机到指定位置
     const camera = getCamera();
@@ -385,7 +372,7 @@ export function animateTOGGLE(
         return;
       }
       showModelByNameId(NAME_ID);
-      const model = createGroupIfNotExist(getScene(), NAME_ID, false);
+      const model = _getViewer().scene.getObjectByName(NAME_ID);
       if (model) {
         const { x, y, z } = getObjectWorldPosition(model);
         const camera = getCamera();
@@ -436,7 +423,7 @@ export function animateSTRETCH(
       commonHandler(item);
       //如果是全景按钮，
       if (NAME_ID === GLOBAL_CONSTANT.MODEL_GROUP) {
-        //const customButtonList = getScene().userData
+        //const customButtonList = _getViewer().userData
         stretchModelBackHome(toggleButtonGroup);
         return;
       }
@@ -455,8 +442,8 @@ export function animateROAM(
   isRunning: boolean
 ) {
   const vector: Vector3[] = [];
-  const _curve = createGroupIfNotExist(scene, curveName, false);
 
+  const _curve = scene.getObjectByName(curveName);
   if (!_curve) {
     return;
   }
@@ -476,7 +463,7 @@ export function animateROAM(
 
 export function drawROAMLine2(scene: Scene, roamName: string) {
   const vector: Vector3[] = [];
-  const _curve = createGroupIfNotExist(scene, roamName, false);
+  const _curve = scene.getObjectByName(roamName);
   if (!_curve) {
     return;
   }
@@ -501,7 +488,7 @@ export function drawROAMLine2(scene: Scene, roamName: string) {
 }
 export function drawROAMLine_xx(scene: Scene, roamName: string) {
   const vector: Vector3[] = [];
-  const _curve = createGroupIfNotExist(scene, roamName, false);
+  const _curve = scene.getObjectByName(roamName);
   if (!_curve) {
     return;
   }

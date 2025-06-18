@@ -1,5 +1,4 @@
 import {
-  BoxHelper,
   Camera,
   EquirectangularReflectionMapping,
   Group,
@@ -13,10 +12,7 @@ import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 
 import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
 
-import { UserDataType } from "@/app/type";
-
 import { hdr, HdrKey } from "@/three/Three3dConfig";
-import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
 
 export function enableShadow(group: Scene | Group | Object3D, context: Scene) {
   const { useShadow } = context.userData.config3d;
@@ -60,33 +56,6 @@ export function raycasterSelect_xx(
   return [];
 }
 
-export function setBoxHelper_xx(selectedMesh: Object3D, scene: Scene) {
-  const HELPER_GROUP = createGroupIfNotExist(
-    scene,
-    GLOBAL_CONSTANT.HELPER_GROUP
-  );
-
-  const BOX_HELPER = scene.getObjectByName(
-    GLOBAL_CONSTANT.BOX_HELPER
-  ) as BoxHelper;
-  if (!BOX_HELPER) {
-    const boxHelper = new BoxHelper(selectedMesh, 0xffff00);
-    boxHelper.name = GLOBAL_CONSTANT.BOX_HELPER;
-    boxHelper.userData = {
-      type: UserDataType.BoxHelper,
-      isHelper: true,
-      isSelected: false,
-    };
-    HELPER_GROUP?.add(boxHelper);
-  } else {
-    BOX_HELPER.visible = true;
-    BOX_HELPER.setFromObject(selectedMesh);
-    BOX_HELPER.update();
-  }
-  if (HELPER_GROUP) {
-    scene.add(HELPER_GROUP);
-  }
-}
 // 显示或隐藏BOX_HELPER
 export function hideBoxHelper(scene: Scene) {
   const boxHelper = scene.getObjectByName(GLOBAL_CONSTANT.BOX_HELPER);

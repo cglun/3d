@@ -47,10 +47,11 @@ function RouteComponent() {
   }
 
   function addAmbientLight() {
+    const editor = editorInstance.getEditor();
     const light = new AmbientLight(0xffffff, 0.5);
     light.name = "环境光【不能投射阴影】";
-    getScene().add(light);
-
+    editor.LIGHT_GROUP.add(light);
+    editor.scene.add(editor.LIGHT_GROUP);
     updateScene(getScene());
   }
   function addPlane() {
@@ -78,12 +79,13 @@ function RouteComponent() {
     updateScene(getScene());
   }
   function addDirectionalLight() {
-    const { useShadow } = getScene().userData.config3d;
+    const editor = editorInstance.getEditor();
+    const { useShadow } = editor.scene.userData.config3d;
     const light = createDirectionalLight();
 
     light.castShadow = useShadow;
-
-    getScene().add(light);
+    editor.LIGHT_GROUP.add(light);
+    editor.scene.add(editor.LIGHT_GROUP);
 
     updateScene(getScene());
   }

@@ -10,6 +10,7 @@ import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
 import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
 import { useEffect } from "react";
 import { config3dInit } from "@/three/Three3dConfig";
+import { viewerInstance } from "@/three/ViewerInstance";
 export const Route = createLazyFileRoute("/editor3d/test")({
   component: RouteComponent,
 });
@@ -37,6 +38,22 @@ function RouteComponent() {
   return (
     <>
       <ButtonGroup className="mt-2 ms-2" size="sm">
+        <Button
+          variant={btnColor}
+          onClick={() => {
+            console.log(editorInstance.getEditor());
+          }}
+        >
+          editorIns
+        </Button>
+        <Button
+          variant={btnColor}
+          onClick={() => {
+            console.log(viewerInstance.getViewer());
+          }}
+        >
+          viewerIns
+        </Button>
         <ButtonXX />
         <ButtonXX attr="children" />
         <ButtonXX attr="userData" />

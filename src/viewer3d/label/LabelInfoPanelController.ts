@@ -1,11 +1,7 @@
 import React from "react";
 import { Scene } from "three";
 import { TourWindow } from "@/app/MyContext";
-import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
-
 import { LabelInfo } from "@/viewer3d/label/LabelInfo";
-
-import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
 import { viewerInstance } from "@/three/ViewerInstance";
 import { SceneUserData } from "@/three/Three3dConfig";
 
@@ -130,15 +126,7 @@ export class LabelInfoPanelController {
   createLabelInfoPanelByModelGroupName(modelGroupName: string) {
     const { scene } = viewerInstance.getViewer();
 
-    const MARK_LABEL_INFO = createGroupIfNotExist(
-      scene,
-      GLOBAL_CONSTANT.MARK_LABEL_INFO,
-      true
-    );
-    if (MARK_LABEL_INFO) {
-      scene.add(MARK_LABEL_INFO);
-    }
-    const group = createGroupIfNotExist(scene, modelGroupName, false);
+    const group = scene.getObjectByName(modelGroupName);
 
     if (group) {
       const { children } = group;
@@ -152,7 +140,7 @@ export class LabelInfoPanelController {
           );
           label.css3DSprite.visible = false;
 
-          scene.add(label.css3DSprite);
+          viewerInstance.getViewer().MARK_LABEL_GROUP.add(label.css3DSprite);
           this.allLabelInfo.push(label);
         }
       }
@@ -187,16 +175,12 @@ export class LabelInfoPanelController {
 
   //高亮标签信息面板
   highlightLabelInfoPanel() {
-    // getSelectedObjects().length = 0;
     const { scene } = viewerInstance.getViewer();
 
     const viewer = viewerInstance.getViewer();
     this.canBeShowLabelInfo.forEach((item) => {
-      const model = createGroupIfNotExist(
-        scene,
-        item.css3DSprite.name.replace("SPRITE-", ""), //去除SPRITE-前缀，是为了找到对应的模型组
-        false
-      );
+      const modelName = item.css3DSprite.name.replace("SPRITE-", "");
+      const model = scene.getObjectByName(modelName);
       if (model) {
         viewer.getSelectedObjects().push(model);
       }

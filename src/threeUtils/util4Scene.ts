@@ -26,14 +26,9 @@ import { GlbModel, UserDataType } from "@/app/type";
 import { editorInstance } from "@/three/EditorInstance";
 
 //设置物体的变换
-export function setGLTFTransform(model: GlbModel, gltf: GLTF, context: Scene) {
-  let MODEL_GROUP = createGroupIfNotExist(context, GLOBAL_CONSTANT.MODEL_GROUP);
+export function setGLTFTransform(model: GlbModel, gltf: GLTF) {
   const scene = gltf.scene;
-  if (!MODEL_GROUP) {
-    MODEL_GROUP = new Group();
-    MODEL_GROUP.name = GLOBAL_CONSTANT.MODEL_GROUP;
-    context.add(MODEL_GROUP);
-  }
+
   const { position, rotation, scale } = model;
   const group = new Group();
   group.name = model.name;
@@ -47,11 +42,11 @@ export function setGLTFTransform(model: GlbModel, gltf: GLTF, context: Scene) {
   // group.rotation.set(rotation._x, rotation._y, rotation._z, "XYZ");
   group.setRotationFromEuler(rotation);
   group.scale.set(scale.x, scale.y, scale.z);
-  MODEL_GROUP.add(group);
-  return MODEL_GROUP;
+
+  return group;
 }
 //创建group,如果group不存在,则创建group
-export function createGroupIfNotExist(
+export function createGroupIfNotExist_XX(
   contextScene: Object3D,
   name: string,
   createGroup: boolean = true

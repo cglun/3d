@@ -21,7 +21,6 @@ import _axios from "@/app/http";
 
 import { MyContext } from "@/app/MyContext";
 
-import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
 import { SceneUserData } from "@/three/Three3dConfig";
 import { editorInstance } from "@/three/EditorInstance";
@@ -30,7 +29,7 @@ import {
   getThemeByScene,
   setClassName,
 } from "@/threeUtils/util4UI";
-import { clearOldLabel, createGroupIfNotExist } from "@/threeUtils/util4Scene";
+import { clearOldLabel } from "@/threeUtils/util4Scene";
 
 export const Route = createLazyFileRoute("/editor3d/mark")({
   component: RouteComponent,
@@ -66,16 +65,8 @@ function RouteComponent() {
   if (!config3d) return;
 
   function addMark(label: CSS3DSprite | CSS2DObject) {
-    const { scene } = editorInstance.getEditor();
-    const MARK_LABEL_GROUP = createGroupIfNotExist(
-      scene,
-      GLOBAL_CONSTANT.MARK_LABEL_GROUP
-    );
-
-    if (!MARK_LABEL_GROUP) return;
-
-    MARK_LABEL_GROUP.add(label);
-    scene.add(MARK_LABEL_GROUP);
+    const editor = editorInstance.getEditor();
+    editor.MARK_LABEL_GROUP.add(label);
   }
 
   return (

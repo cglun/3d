@@ -31,6 +31,9 @@ export default defineConfig({
         bootstrap: { singleton: true, requiredVersion: "^5.3.6" },
         three: { singleton: true, requiredVersion: "^0.177.0" },
         axios: { singleton: true, requiredVersion: "^1.10.0" },
+        "@static/js/@monaco-editor/react": { singleton: true },
+        "@static/js/react-monaco-editor": { singleton: true },
+
         // "@static/file3d/hdr/venice_sunset_1k.hdr?url": {
         //   singleton: false,
         // },

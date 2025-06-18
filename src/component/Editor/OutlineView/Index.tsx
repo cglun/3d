@@ -11,18 +11,37 @@ import { OutlineViewScene } from "@/component/Editor/OutlineView/OutlineViewScen
 import Icon from "@/component/common/Icon";
 import { styleHeader } from "@/component/Editor/OutlineView/fontColor";
 
+import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+
 export default function Index() {
   const gap = 1;
   const { scene } = useUpdateScene();
-  const lightList: Object3D[] = [];
-  const meshList: Object3D[] = [];
+
+  if (!scene.children) {
+    return null;
+  }
+
+  let LIGHT_GROUP: Object3D[] = [];
+  let MODEL_GROUP: Object3D[] = [];
+
+  // if (scene.getObjectByName instanceof Function) {
+  //   LIGHT_GROUP = scene.getObjectByName("LIGHT_GROUP")?.children || [];
+  //   MODEL_GROUP = scene.getObjectByName("MODEL_GROUP")?.children || [];
+  // }
+
   const array = scene.children;
+
   for (let index = 0; index < array.length; index++) {
     const element = array[index];
-    if ("isLight" in element && element.isLight) {
-      lightList.push(element);
-    } else {
-      meshList.push(element);
+    if (element.name === GLOBAL_CONSTANT.LIGHT_GROUP) {
+      element.children.forEach((item) => {
+        LIGHT_GROUP.push(item);
+      });
+    }
+    if (element.name === GLOBAL_CONSTANT.MODEL_GROUP) {
+      element.children.forEach((item) => {
+        MODEL_GROUP.push(item);
+      });
     }
   }
 
@@ -60,7 +79,7 @@ export default function Index() {
             </Card.Header>
             <Card.Body>
               <ListGroup className="da-gang">
-                {lightList.length > 0 && <TreeList data={lightList} />}
+                {LIGHT_GROUP.length > 0 && <TreeList data={LIGHT_GROUP} />}
               </ListGroup>
             </Card.Body>
           </Card>
@@ -70,7 +89,7 @@ export default function Index() {
             </Card.Header>
             <Card.Body>
               <ListGroup className="da-gang">
-                {meshList.length > 0 && <TreeList data={meshList} />}
+                {MODEL_GROUP.length > 0 && <TreeList data={MODEL_GROUP} />}
               </ListGroup>
             </Card.Body>
           </Card>

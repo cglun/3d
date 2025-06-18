@@ -1,34 +1,49 @@
 import {
+  BoxGeometry,
   Color,
   DataTexture,
+  DirectionalLight,
+  Group,
+  Mesh,
+  MeshBasicMaterial,
+  Object3D,
   OrthographicCamera,
   PerspectiveCamera,
   Raycaster,
+  Scene,
   Vector2,
   Vector3,
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { GlbModel } from "@/app/type";
-import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+
 import { Three3d } from "@/three/Three3d";
 import { TransformControls } from "three/addons/controls/TransformControls.js";
 import { BackgroundHDR, SceneUserData } from "@/three/Three3dConfig";
-import { addMonkey, createGroupIfNotExist } from "@/threeUtils/util4Scene";
+import { addMonkey } from "@/threeUtils/util4Scene";
 import { Dispatch } from "react";
 import { TourWindow } from "@/app/MyContext";
-import { createGridHelper } from "@/threeUtils/factory3d";
+import {
+  createDirectionalLight,
+  createGridHelper,
+} from "@/threeUtils/factory3d";
+import directionalLightGUI from "@/component/Editor/PropertyGUI/lightGUI/directionalLightGUI";
+
+import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
 
 export class Three3dEditor extends Three3d {
   static divElement: HTMLDivElement;
 
-  transformControl = this.initTransformControl();
+  transformControl: TransformControls;
   //  divElement: HTMLDivElement;
   point = new Vector3();
   raycaster = new Raycaster();
   pointer = new Vector2(0, 0);
   onUpPosition = new Vector2(0, 0);
   onDownPosition = new Vector2(0, 0);
-  private _guiInstance: GUI = new GUI().hide(); // 用于存储 GUI 实例
+  currentSelected3d: Object3D = new Scene();
+  private _guiInstance = new GUI().hide(); // 用于存储 GUI 实例
+  HELPER_GROUP = new Group();
 
   get guiInstance() {
     return this._guiInstance;
@@ -42,7 +57,31 @@ export class Three3dEditor extends Three3d {
     dispatchTourWindow: Dispatch<TourWindow>
   ) {
     super(divElement, dispatchTourWindow);
-    this.addGridHelper();
+    this.HELPER_GROUP.name = GLOBAL_CONSTANT.HELPER_GROUP;
+
+    const { useShadow } = this.scene.userData.config3d;
+    const light = createDirectionalLight();
+    light.castShadow = useShadow;
+    // const lightHelper = createDirectionalLightHelper(light);
+    // this.HELPER_GROUP.add(lightHelper);
+    this.HELPER_GROUP.name = GLOBAL_CONSTANT.HELPER_GROUP;
+    this.HELPER_GROUP.add(createGridHelper());
+    this.scene.add(this.HELPER_GROUP);
+    this.LIGHT_GROUP.add(light);
+    this.transformControl = this.initTransformControl();
+    this.controls.addEventListener("change", () => {
+      //、 if (this.currentSelected3d.type === "PerspectiveCamera") {
+      // // 获取编辑器实例
+      // const editor = editorInstance.getEditor();
+      // const { guiInstance } = editor;
+      // // 销毁旧的 GUI
+      // editor.destroyGUI();
+      // // 创建新的相机 GUI
+      // const newGui = editor.createGUI("相机属性");
+      // // 传入当前选中的相机实例
+      // cameraGUI(this.currentSelected3d as PerspectiveCamera);
+      // }
+    });
   }
 
   initTransformControl() {
@@ -50,22 +89,7 @@ export class Three3dEditor extends Three3d {
       this.camera,
       this.renderer.domElement
     );
-    const HELPER_GROUP = createGroupIfNotExist(
-      this.scene,
-      GLOBAL_CONSTANT.HELPER_GROUP
-    );
 
-    //transformControl.addEventListener("change", () => this.animate());
-    //  transformControl.addEventListener("dragging-end", () => this.animate());
-    // transformControl.addEventListener("dragging-changed", function (event) {
-    //   _controls.enabled = !event.value;
-    //   if (!event.value) {
-    //     const { scene } = editorInstance.getEditor();
-    //     console.log(scene.children[1]);
-
-    //     _updateScene(scene);
-    //   }
-    // });
     const _controls = this.controls;
 
     transformControl.addEventListener("dragging-changed", function (event) {
@@ -74,16 +98,14 @@ export class Three3dEditor extends Three3d {
     transformControl.setMode("translate");
     const helper = transformControl.getHelper();
     helper.visible = true;
+    this.HELPER_GROUP.add(helper);
 
-    if (HELPER_GROUP) {
-      HELPER_GROUP.userData.isHelper = true;
-      HELPER_GROUP.add(helper);
-      this.scene.add(HELPER_GROUP);
-    }
-
-    transformControl.addEventListener("objectChange", function () {
-      //  console.log(" updateSplineOutline()");
-      //updateSplineOutline();
+    transformControl.addEventListener("objectChange", () => {
+      const curSelected = this.currentSelected3d;
+      if (curSelected.type === "DirectionalLight") {
+        curSelected.lookAt(0, 0, 0);
+        directionalLightGUI(curSelected as DirectionalLight);
+      }
     });
     return transformControl;
   }
@@ -95,45 +117,40 @@ export class Three3dEditor extends Three3d {
   sceneSerialization(): string {
     this.scene.userData.selected3d = undefined;
     this.destroyGUI();
-    const sceneCopy = this.scene.clone();
-    const modelList: GlbModel[] = [];
-
-    const MODEL_GROUP = createGroupIfNotExist(
-      sceneCopy,
-      GLOBAL_CONSTANT.MODEL_GROUP
-    );
-    const HELPER_GROUP = createGroupIfNotExist(
-      sceneCopy,
+    const helperGroup = this.scene.getObjectByName(
       GLOBAL_CONSTANT.HELPER_GROUP
     );
-    if (HELPER_GROUP) {
-      HELPER_GROUP.children = [];
-    }
-    const existModelGroup = MODEL_GROUP && MODEL_GROUP.children;
 
-    if (existModelGroup) {
-      MODEL_GROUP.children.forEach((child) => {
-        const { id, name, position, rotation, scale } = child;
-        const _userData = child.userData;
-
-        const model: GlbModel = {
-          id,
-          name,
-          position,
-          rotation,
-          scale,
-          // 修改部分，确保 userData 包含所需属性
-          userData: {
-            ...child.userData,
-            modelUrl: _userData.modelUrl || "",
-            modelTotal: _userData.modelTotal || 0,
-            modelLoaded: _userData.modelLoaded || 0,
-          },
-        };
-        modelList.push(model);
-      });
-      MODEL_GROUP.children = [];
+    if (helperGroup) {
+      this.scene.remove(helperGroup);
     }
+    const sceneCopy = this.scene.clone();
+
+    const modelList: GlbModel[] = [];
+    sceneCopy.children = [];
+    sceneCopy.add(this.MARK_LABEL_GROUP);
+    sceneCopy.add(this.LIGHT_GROUP);
+
+    this.MODEL_GROUP.children.forEach((child) => {
+      const { id, name, position, rotation, scale } = child;
+      const _userData = child.userData;
+
+      const model: GlbModel = {
+        id,
+        name,
+        position,
+        rotation,
+        scale,
+        // 修改部分，确保 userData 包含所需属性
+        userData: {
+          ...child.userData,
+          modelUrl: _userData.modelUrl || "",
+          modelTotal: _userData.modelTotal || 0,
+          modelLoaded: _userData.modelLoaded || 0,
+        },
+      };
+      modelList.push(model);
+    });
 
     // 处理背景
     const background = sceneCopy.background as Color | DataTexture;
@@ -203,16 +220,7 @@ export class Three3dEditor extends Three3d {
       }
     }
   }
-  addGridHelper() {
-    const HELPER_GROUP = createGroupIfNotExist(
-      this.scene,
-      GLOBAL_CONSTANT.HELPER_GROUP
-    );
-    if (HELPER_GROUP) {
-      HELPER_GROUP.add(createGridHelper());
-      this.scene.add(HELPER_GROUP);
-    }
-  }
+
   _addMonkey() {
     addMonkey();
   }
@@ -225,5 +233,14 @@ export class Three3dEditor extends Three3d {
     container?.appendChild(this.guiInstance.domElement);
 
     return this.guiInstance;
+  }
+  addCube() {
+    const cube = new Mesh(
+      new BoxGeometry(1, 1, 1),
+      new MeshBasicMaterial({ color: 0xff0000 })
+    );
+    cube.position.set(0, 0, 0);
+    this.HELPER_GROUP.add(cube);
+    return cube;
   }
 }

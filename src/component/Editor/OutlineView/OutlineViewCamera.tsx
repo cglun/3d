@@ -2,7 +2,7 @@ import ListGroup from "react-bootstrap/esm/ListGroup";
 import Button from "react-bootstrap/esm/Button";
 import { APP_COLOR } from "@/app/type";
 import Toast3d from "@/component/common/Toast3d";
-import { useUpdateCamera, useUpdateScene } from "@/app/hooks";
+import { useUpdateCamera } from "@/app/hooks";
 import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 
@@ -10,22 +10,20 @@ import { editorInstance } from "@/three/EditorInstance";
 import { SceneUserData } from "@/three/Three3dConfig";
 import { getButtonColor } from "@/threeUtils/util4UI";
 import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
+import cameraGUI from "../PropertyGUI/cameraGUI";
 
 export function OutlineViewCamera() {
-  const { updateScene } = useUpdateScene();
   const { camera } = useUpdateCamera();
-
   return (
     camera && (
       <ListGroup.Item
         className={"d-flex justify-content-between"}
         style={styleBody}
         onClick={() => {
-          // object3D.userData.isSelected = !object3D.userData.isSelected;
-          const { camera, scene } = editorInstance.getEditor();
-          const userData = scene.userData as SceneUserData;
-          userData.selected3d = camera;
-          updateScene(scene);
+          const editor = editorInstance.getEditor();
+          editor.currentSelected3d = editor.camera;
+          editor.transformControl?.detach();
+          cameraGUI(editor.camera);
         }}
       >
         <div>
@@ -44,7 +42,6 @@ export function OutlineViewCamera() {
               const { camera, scene } = editorInstance.getEditor();
               const userData = scene.userData as SceneUserData;
               userData.cameraPosition.start = camera.position.clone();
-
               Toast3d("设置成功");
             }}
           >

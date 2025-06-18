@@ -7,4 +7,5 @@ export const GLOBAL_CONSTANT = {
   _ENV_: "_ENV_",
   _MARK_LABEL_: "_MARK_LABEL_",
   _ROAM_: "_ROAM_",
+  LIGHT_GROUP: "LIGHT_GROUP",
 };

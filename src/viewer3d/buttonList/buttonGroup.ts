@@ -19,7 +19,6 @@ import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelControl
 import { CustomButtonList, SceneUserData } from "@/three/Three3dConfig";
 import { viewerInstance } from "@/three/ViewerInstance";
 import { editorInstance } from "@/three/EditorInstance";
-import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
 
 function getActionItemByMap(
   item: ActionItemMap,
@@ -42,11 +41,7 @@ export function generateToggleButtonGroup(
   customButtonType: CustomButtonType
 ): ActionItemMap[] {
   const actionList: ActionItemMap[] = [];
-  const MODEL_GROUP = createGroupIfNotExist(
-    sceneContext,
-    GLOBAL_CONSTANT.MODEL_GROUP,
-    false
-  );
+  const MODEL_GROUP = sceneContext.getObjectByName(GLOBAL_CONSTANT.MODEL_GROUP);
 
   if (MODEL_GROUP) {
     const { children } = MODEL_GROUP;
@@ -174,10 +169,10 @@ export function getToggleButtonGroup(scene: Scene): ActionItemMap[] {
 
 //生成漫游动画按钮组
 export function generateRoamButtonGroup() {
-  // const { actionMixerList } = editorGetAll().parameters3d;
   const roamButtonGroup: ActionItemMap[] = [];
   const { scene } = editorInstance.getEditor();
-  const roam = createGroupIfNotExist(scene, "_ROAM_", false);
+
+  const roam = scene.getObjectByName("_ROAM_");
   if (roam) {
     roam.children.forEach((item) => {
       const { name } = item;

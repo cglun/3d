@@ -3,22 +3,22 @@ import { useUpdateScene } from "@/app/hooks";
 
 import AlertBase from "@/component/common/AlertBase";
 import { Button, ButtonGroup, ListGroup, ListGroupItem } from "react-bootstrap";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 
 import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
 
 // import CardTop from "@/component/common/routes/effects/CardTop";
 // import CardMark from "@/component/common/routes/effects/CardMark";
 import { SceneUserData } from "@/three/Three3dConfig";
-import { editorInstance } from "@/three/EditorInstance";
 
 import Icon from "@/component/common/Icon";
 import markLabelGUI from "@/component/common/routes/effects/gui/markLabelGUI";
-import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
+
 import { MyContext } from "@/app/MyContext";
 import topCardGUI from "@/component/common/routes/effects/gui/topCardGUI";
 import modelHighlightGUI from "@/component/common/routes/effects/gui/modelHighlightGUI";
 import roamGUI from "@/component/common/routes/effects/gui/roamGUI";
+import { stopRoam } from "@/component/common/routes/effects/utils";
 
 // 定义一个变量来保存 GUI 实例
 
@@ -43,7 +43,6 @@ function RouteComponent() {
   } else if (!userData.config3d?.useComposer) {
     earlyReturnElement = <AlertBase text={"请到设置中开启合成"} />;
   }
-  const editor = editorInstance.getEditor();
 
   // 如果有需要提前返回的元素，直接返回
   if (earlyReturnElement) {
@@ -57,13 +56,6 @@ function RouteComponent() {
     //   setHasGui(false);
     // }
     // setShow(false);
-  }
-  function stopRoam() {
-    const { roamLine } = editor.extraParams;
-    if (roamLine !== undefined) {
-      roamLine.roamIsRunning = false;
-      cameraEnterAnimation(editor);
-    }
   }
 
   return (

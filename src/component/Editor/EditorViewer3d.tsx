@@ -48,9 +48,11 @@ function EditorViewer3d() {
       );
 
       isInitialized.current = true; // 标记为已初始化
+      updateScene(editor.scene);
+      updateCamera(editor.camera);
       editorInstance.setEditor(editor);
 
-      editor.controls.enabled = true;
+      // editor.controls.enabled = true;
 
       window.addEventListener("resize", () => editor.onWindowResize());
     }
@@ -65,6 +67,7 @@ function EditorViewer3d() {
 
       if (item.id !== -1) {
         const editor = editorInstance.getEditor();
+        editor.resetScene();
         getProjectData(item.id)
           .then((data: string) => {
             // 假设 deserialize 是异步方法
@@ -72,14 +75,14 @@ function EditorViewer3d() {
 
             editor.loadedModelsEnd = () => {
               //这里为什么不有执行  debugger; // 在模型加载完成后更新场景
-              editor.transformControl = editor.initTransformControl();
-              //  editor.addGridHelper();
+
+              //  editor.addGridHelper();=[]
               editor.runJavascript();
 
               editor.destroyGUI();
+              // editor.initTransformControl();
 
-              // editor.initPostProcessing();
-
+              editor.scene.add(editor.HELPER_GROUP);
               setTimeout(() => {
                 ModalConfirm3d({
                   title: "提示",
@@ -103,6 +106,7 @@ function EditorViewer3d() {
                   },
                 });
               }, 1998);
+
               updateScene(editor.scene);
               updateCamera(editor.camera);
               document.title = `【id:${item.id}】`;

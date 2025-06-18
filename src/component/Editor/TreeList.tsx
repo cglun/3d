@@ -23,6 +23,8 @@ import { getObjectNameByName } from "@/threeUtils/util4UI";
 
 import directionalLightGUI from "./PropertyGUI/lightGUI/directionalLightGUI";
 import ambientLightGUI from "./PropertyGUI/lightGUI/ambientLightGUI";
+import meshGroupGUI from "./PropertyGUI/meshGroupGUI";
+import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
 
 function TreeNode({
   node,
@@ -44,21 +46,31 @@ function TreeNode({
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
-    console.log(node.name);
+
+    const editor = editorInstance.getEditor();
+    editor.currentSelected3d = node;
+
+    editor.destroyGUI();
     if (node instanceof DirectionalLight) {
+      editor.transformControl.attach(node);
       directionalLightGUI(node);
     }
     if (node instanceof AmbientLight) {
       ambientLightGUI(node);
     }
+    if (node instanceof Group) {
+      meshGroupGUI(node);
+
+      editor.transformControl.attach(node);
+    }
 
     // resetTextWarning(node);
     setIsSelected(!isSelected);
-    const editor = editorInstance.getEditor();
+
     const { scene } = editor;
 
     node.userData.isSelected = !isExpanded;
-    editor.transformControl.attach(node);
+
     updateScene(scene);
     //setTransformControls(node);
     onToggle(node.uuid, !isExpanded);
@@ -122,7 +134,7 @@ function TreeNode({
           {getObjectNameByName(node)}
         </div>
         <div>
-          {delBtn ? (
+          {delBtn && node.name !== GLOBAL_CONSTANT.MODEL_GROUP ? (
             <Button
               className="me-1"
               size="sm"

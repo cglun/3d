@@ -7,7 +7,7 @@ import {
 } from "three";
 
 import { getObjectWorldPosition } from "@/viewer3d/viewer3dUtils";
-import { createGroupIfNotExist } from "@/threeUtils/util4Scene";
+
 export function hasValueString(
   item: Object3D<Object3DEventMap>,
   value: string
@@ -17,7 +17,8 @@ export function hasValueString(
 
 export function getCurveByMesh(scene: Scene, curveName: string) {
   const vector: Vector3[] = [];
-  const _curve = createGroupIfNotExist(scene, curveName, false);
+  const _curve = scene.getObjectByName(curveName);
+
   if (!_curve) {
     return;
   }

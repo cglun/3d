@@ -180,22 +180,16 @@ export interface RoamLine {
   tubeGeometry: TubeGeometry;
 }
 
-// export interface backgroundHDR {
-//   color: string;
-//   asBackground: boolean;
-//   isColor: boolean;
-//   HDRName: string[];
-// }
 export type HdrKey = keyof typeof hdr;
 export const hdr = {
   "venice_sunset_1k.hdr": venice_sunset_1k,
   "spruit_sunrise_1k.hdr": spruit_sunrise_1k,
 };
 export const backgroundHDR = {
-  color: "#00ff00",
+  color: "#14171f",
   asBackground: true,
   isColor: false,
-  HDRName: hdr["venice_sunset_1k.hdr"],
+  HDRName: "venice_sunset_1k.hdr",
 };
 export type BackgroundHDR = typeof backgroundHDR;
 // 定义 hdr 对象键的联合类型

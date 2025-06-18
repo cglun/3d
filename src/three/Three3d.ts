@@ -11,10 +11,10 @@ import {
   TubeGeometry,
   Vector2,
   Mesh,
-  BoxGeometry,
-  MeshStandardMaterial,
   Color,
   CatmullRomCurve3,
+  Group,
+  DirectionalLight,
 } from "three";
 
 import TWEEN from "three/addons/libs/tween.module.js";
@@ -24,7 +24,7 @@ import { GlbModel, RecordItem } from "@/app/type";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { runScriptDev } from "@/three/scriptDev";
 import { enableShadow } from "@/three/common3d";
-import { ExtraParams, SceneUserData } from "@/three/Three3dConfig";
+import { ExtraParams, hdr, HdrKey, SceneUserData } from "@/three/Three3dConfig";
 import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
@@ -39,14 +39,12 @@ import { getObjectWorldPosition } from "@/viewer3d/viewer3dUtils";
 import { TourWindow } from "@/app/MyContext";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
 import {
-  createDirectionalLight,
   createLabelRenderer,
   createPerspectiveCamera,
   createUnrealBloomPass,
 } from "@/threeUtils/factory3d";
 import {
   clearOldLabel,
-  createGroupIfNotExist,
   getProjectData,
   glbLoader,
   manyou,
@@ -74,6 +72,28 @@ export class Three3d extends ThreeObj {
   private _labelRenderer3d: CSS3DRenderer;
   private _dispatchTourWindow: Dispatch<TourWindow>;
   private _labelInfoPanelController: LabelInfoPanelController | null = null;
+  private _MODEL_GROUP: Group = new Group();
+  private _MARK_LABEL_GROUP: Group = new Group();
+  private _LIGHT_GROUP: Group = new Group();
+  get LIGHT_GROUP() {
+    return this._LIGHT_GROUP;
+  }
+  set LIGHT_GROUP(value) {
+    this._LIGHT_GROUP = value;
+  }
+  get MARK_LABEL_GROUP() {
+    return this._MARK_LABEL_GROUP;
+  }
+  set MARK_LABEL_GROUP(value) {
+    this._MARK_LABEL_GROUP = value;
+  }
+
+  get MODEL_GROUP() {
+    return this._MODEL_GROUP;
+  }
+  set MODEL_GROUP(value) {
+    this._MODEL_GROUP = value;
+  }
   get labelInfoPanelController() {
     if (this._labelInfoPanelController === null) {
       this._labelInfoPanelController = new LabelInfoPanelController(
@@ -177,6 +197,15 @@ export class Three3d extends ThreeObj {
     this.divElement = divElement;
     this._scene = this.initScene();
     this.resetScene();
+
+    this.MARK_LABEL_GROUP.name = GLOBAL_CONSTANT.MARK_LABEL_GROUP;
+    this.MODEL_GROUP.name = GLOBAL_CONSTANT.MODEL_GROUP;
+    this.LIGHT_GROUP.name = GLOBAL_CONSTANT.LIGHT_GROUP;
+
+    this.scene.add(this.MARK_LABEL_GROUP);
+    this.scene.add(this.MODEL_GROUP);
+    this.scene.add(this.LIGHT_GROUP);
+
     this._camera = this.initCamera();
     this._renderer = this.initRenderer();
     this._controls = this.initControls();
@@ -193,22 +222,6 @@ export class Three3d extends ThreeObj {
     this._labelInfoPanelController = null;
     //this.addCube();
   }
-  addCube() {
-    const box = createGroupIfNotExist(this.scene, "此顶牌不会被保存", false);
-    if (box) {
-      return box;
-    }
-    const cube = new Mesh(
-      new BoxGeometry(1, 1, 1),
-      // 使用 MeshStandardMaterial 并设置发光属性
-      new MeshStandardMaterial({
-        color: "#233e4f",
-      })
-    );
-    cube.userData.isHelper = true;
-    this.scene.add(cube);
-    return cube;
-  }
 
   private initScene(): Scene {
     const scene = new Scene();
@@ -219,14 +232,12 @@ export class Three3d extends ThreeObj {
   resetScene() {
     this.scene.userData = { ...sceneUserData };
     this.extraParams.mixer = [];
-    this.scene.children = [];
+    this.MARK_LABEL_GROUP.children = [];
+    this.MODEL_GROUP.children = [];
+    this.LIGHT_GROUP.children = [];
+
     clearOldLabel();
     this.setTextureBackground_test();
-
-    const { useShadow } = this.scene.userData.config3d;
-    const light = createDirectionalLight();
-    light.castShadow = useShadow;
-    this.scene.add(light);
   }
 
   private initCamera(): PerspectiveCamera {
@@ -304,25 +315,33 @@ export class Three3d extends ThreeObj {
     const { scene, models, loader } = strToJson(data);
     loader.parse(scene, (object: Object3D<Object3DEventMap>) => {
       if (object instanceof Scene) {
-        const _scene = this.scene;
-        _scene.children = object.children;
-        _scene.userData = {
+        this.scene.children = [];
+        //在编辑器里增加灯光辅助
+        const light = object.getObjectByName(GLOBAL_CONSTANT.LIGHT_GROUP);
+
+        light?.children.forEach((item) => {
+          //  加上helper
+          if (item instanceof DirectionalLight) {
+            this.LIGHT_GROUP.add(item);
+          }
+        });
+
+        this.scene.add(this.LIGHT_GROUP); //更新
+        const markLabelGroup = object.getObjectByName(
+          GLOBAL_CONSTANT.MARK_LABEL_GROUP
+        );
+        this.MARK_LABEL_GROUP.copy(markLabelGroup!);
+        this.scene.add(this.MARK_LABEL_GROUP);
+
+        this.scene.add(this.MODEL_GROUP);
+
+        this.scene.userData = {
           ...(object.userData as SceneUserData),
           projectName: item.name,
           projectId: item.id,
         };
-        _scene.userData.APP_THEME.sceneCanSave = true;
-
-        const labelGroup = createGroupIfNotExist(
-          object,
-          GLOBAL_CONSTANT.MARK_LABEL_GROUP,
-          true
-        );
-
-        if (labelGroup) _scene.add(labelGroup);
-
+        this.scene.userData.APP_THEME.sceneCanSave = true;
         this.setTextureBackground_test(object);
-        //const newCamera = this.initCamera();
       }
     });
 
@@ -353,7 +372,7 @@ export class Three3d extends ThreeObj {
       const rgbeLoader = new RGBELoader();
       //const { backgroundHDR } = object.userData as SceneUserData;
 
-      rgbeLoader.load(HDRName, (texture) => {
+      rgbeLoader.load(hdr[HDRName as HdrKey], (texture) => {
         texture.mapping = EquirectangularReflectionMapping;
         this.scene.background = null;
         if (asBackground) {
@@ -369,6 +388,7 @@ export class Three3d extends ThreeObj {
           this.scene.backgroundBlurriness = backgroundBlurriness;
           this.scene.backgroundIntensity = backgroundIntensity;
           this.scene.environmentIntensity = environmentIntensity;
+          this.scene.fog = object.fog;
         }
       });
     }
@@ -403,9 +423,8 @@ export class Three3d extends ThreeObj {
       model.userData.modelUrl + "?url",
       (gltf: GLTF) => {
         //设置动画，设置模型组的位置，旋转和缩放
-        const group = setGLTFTransform(model, gltf, this.scene);
-        this.scene.add(group);
-
+        const group = setGLTFTransform(model, gltf);
+        this.MODEL_GROUP.add(group);
         //设置动画
         setAnimateClip(gltf, this.scene, group, this.extraParams);
         enableShadow(group, this.scene);
@@ -446,12 +465,14 @@ export class Three3d extends ThreeObj {
     getProjectData(item.id).then((res: string) => {
       const model = JSON.parse(res) as GlbModel;
       const loader = glbLoader();
+
       loader.load(
         model.userData.modelUrl + "?url",
         (gltf: GLTF) => {
-          const group = setGLTFTransform(model, gltf, this.scene);
+          const group = setGLTFTransform(model, gltf);
           enableShadow(group, this.scene);
-          this.scene.add(group);
+
+          this.MODEL_GROUP.add(group);
           this.onLoadProgress(100);
         },
         (xhr: { loaded: number }) => {
@@ -518,10 +539,8 @@ export class Three3d extends ThreeObj {
     cameraEnterAnimation(this);
     this.setTextureBackground_test();
     this.loadedModelsEnd();
-    const labelGroup = createGroupIfNotExist(
-      this.scene,
-      GLOBAL_CONSTANT.MARK_LABEL_GROUP,
-      false
+    const labelGroup = this.scene.getObjectByName(
+      GLOBAL_CONSTANT.MARK_LABEL_GROUP
     );
 
     if (labelGroup) {
@@ -591,11 +610,9 @@ export class Three3d extends ThreeObj {
       new Vector3(40, 0, 40),
       new Vector3(-40, 0, 40),
     ];
-    const _curve = createGroupIfNotExist(
-      this.scene,
-      curveEmptyGroupName,
-      false
-    );
+
+    const _curve = this.scene.getObjectByName(curveEmptyGroupName);
+
     if (_curve) {
       vector = [];
       _curve.children.forEach((child: Object3D<Object3DEventMap>) => {
