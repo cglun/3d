@@ -39,7 +39,7 @@ export default function roamGUI() {
   folderGeometry.add(userSetting, "speed", 0.01, 20).name("速度").step(0.01);
 
   folderGeometry
-    .add(userSetting, "extrusionSegments", 5, 200)
+    .add(userSetting, "extrusionSegments", 5, 1160)
     .name("曲线分段")
     .step(5)
     .onChange(function () {
@@ -73,16 +73,7 @@ export default function roamGUI() {
       addTube(userSetting);
     });
 
-  folderGeometry.open();
-
-  folderGeometry
-    .add(userSetting, "lookAhead")
-    .name("向前看")
-    .onChange(function () {
-      console.log("lookAhead");
-
-      // animateCamera();
-    });
+  folderGeometry.add(userSetting, "lookAhead").name("向前看");
 }
 function addTube(params: RoamButtonUserSetting) {
   const { tubeMesh } = editorInstance.getEditor();
@@ -98,7 +89,7 @@ function addTube(params: RoamButtonUserSetting) {
   curvePath.closed = true;
 
   if (roamLine) {
-    roamLine.roamIsRunning = true;
+    // roamLine.roamIsRunning = true;
     roamLine.tubeGeometry = new TubeGeometry(
       curvePath, //曲线
       params.extrusionSegments, //曲线的分段数量

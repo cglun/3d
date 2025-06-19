@@ -1,0 +1,260 @@
+{
+  "projectId": 219,
+  "cameraPosition": {
+    "start": {
+      "x": -16.56217243450651,
+      "y": 13.605900294611196,
+      "z": -1.7593239668844025
+    },
+    "end": {
+      "x": -9.852735292410301,
+      "y": 4.875383650450651,
+      "z": -0.15265027260019443
+    }
+  },
+  "config3d": {
+    "css2d": true,
+    "css3d": true,
+    "useTween": true,
+    "useShadow": true,
+    "useKeyframe": true,
+    "FPS": 60,
+    "useComposer": true
+  },
+  "backgroundHDR": {
+    "color": "#14171f",
+    "asBackground": true,
+    "isColor": false,
+    "HDRName": "venice_sunset_1k.hdr"
+  },
+  "javascript": "console.log(116)",
+  "customButtonList": {
+    "toggleButtonGroup": {
+      "customButtonItem": {
+        "name": "切换",
+        "type": "DRAWER",
+        "listGroup": [
+          {
+            "showName": "全景",
+            "NAME_ID": "MODEL_GROUP",
+            "showButton": true,
+            "isClick": false,
+            "groupCanBeRaycast": false,
+            "data": {
+              "isSelected": false,
+              "isRunning": false,
+              "cameraOffsetStretch": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          },
+          {
+            "showName": "F3",
+            "NAME_ID": "F3",
+            "showButton": true,
+            "isClick": false,
+            "groupCanBeRaycast": false,
+            "data": {
+              "isSelected": false,
+              "isRunning": false,
+              "cameraOffsetStretch": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          },
+          {
+            "showName": "F4",
+            "NAME_ID": "F4",
+            "showButton": true,
+            "isClick": false,
+            "groupCanBeRaycast": false,
+            "data": {
+              "isSelected": false,
+              "isRunning": false,
+              "cameraOffsetStretch": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          },
+          {
+            "showName": "F5",
+            "NAME_ID": "F5",
+            "showButton": true,
+            "isClick": false,
+            "groupCanBeRaycast": false,
+            "data": {
+              "isSelected": false,
+              "isRunning": false,
+              "cameraOffsetStretch": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          },
+          {
+            "showName": "F6",
+            "NAME_ID": "F6",
+            "showButton": true,
+            "isClick": false,
+            "groupCanBeRaycast": false,
+            "data": {
+              "isSelected": false,
+              "isRunning": false,
+              "cameraOffsetStretch": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          }
+        ]
+      },
+      "userSetting": {
+        "modelOffset": {
+          "x": 0,
+          "y": 0,
+          "z": 10
+        },
+        "cameraOffset": {
+          "x": 0,
+          "y": 4,
+          "z": 0
+        },
+        "animationTime": 1160
+      }
+    },
+    "roamButtonGroup": {
+      "customButtonItem": {
+        "name": "漫游",
+        "type": "ROAM",
+        "listGroup": [
+          {
+            "showName": ["开始", "停止"],
+            "NAME_ID": "漫游动画1_AN_START",
+            "showButton": true,
+            "isClick": false,
+            "groupCanBeRaycast": false,
+            "data": {
+              "isSelected": false,
+              "isRunning": false,
+              "cameraOffsetStretch": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          }
+        ]
+      },
+      "userSetting": {
+        "scale": 1,
+        "extrusionSegments": 505,
+        "radiusSegments": 3,
+        "closed": true,
+        "lookAhead": false,
+        "speed": 0.6,
+        "offset": -0.1,
+        "radius": 0.01
+      }
+    },
+    "panelControllerButtonGroup": {
+      "customButtonItem": {
+        "name": "面板",
+        "type": "PANEL_CONTROLLER",
+        "listGroup": [
+          {
+            "showName": "展开",
+            "NAME_ID": "expandLabelInfo",
+            "showButton": true,
+            "isClick": false,
+            "groupCanBeRaycast": false,
+            "data": {
+              "isSelected": false,
+              "isRunning": false,
+              "cameraOffsetStretch": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          },
+          {
+            "showName": "收起",
+            "NAME_ID": "foldLabelInfo",
+            "showButton": true,
+            "isClick": false,
+            "groupCanBeRaycast": false,
+            "data": {
+              "isSelected": false,
+              "isRunning": false,
+              "cameraOffsetStretch": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "APP_THEME": {
+    "themeColor": "dark",
+    "iconFill": "",
+    "sceneCanSave": true
+  },
+  "userCssStyle": {
+    "topCard": {
+      "cardWidth": 130,
+      "cardHeight": 150,
+      "cardRadius": 0.8,
+      "cardBackgroundColor": "#002e2e",
+      "cardBackgroundUrl": "",
+      "headerFontSize": 16,
+      "headerColor": "#e18989",
+      "bodyFontSize": 12,
+      "bodyColor": "#48db4a",
+      "offsetX": 0,
+      "offsetY": 0,
+      "cardSize": 0.03,
+      "headerMarginTop": 15,
+      "headerMarginLeft": 18,
+      "opacity": 1
+    },
+    "markLabel": {
+      "cardWidth": 140,
+      "cardHeight": 18,
+      "cardRadius": 0.8,
+      "cardBackgroundColor": "#502626",
+      "cardBackgroundUrl": "",
+      "headerFontSize": 16,
+      "headerColor": "#e18989",
+      "bodyFontSize": 16,
+      "bodyColor": "#48db4a",
+      "offsetX": 0,
+      "offsetY": 0,
+      "cardSize": 0.03,
+      "headerMarginTop": 15,
+      "headerMarginLeft": 18,
+      "opacity": 1
+    },
+    "modelEdgeHighlight": {
+      "edgeStrength": 5,
+      "edgeGlow": 1.16,
+      "edgeThickness": 1,
+      "pulsePeriod": 0.5,
+      "canSeeColor": "#00ff00",
+      "noSeeColor": "#00ff00"
+    }
+  },
+  "sceneName": "新场景",
+  "des": "Scene",
+  "projectName": "名字"
+}
