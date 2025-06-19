@@ -1,11 +1,4 @@
-import {
-  AnimationMixer,
-  Mesh,
-  Object3D,
-  Object3DEventMap,
-  TubeGeometry,
-  Vector3,
-} from "three";
+import { AnimationMixer, Mesh, TubeGeometry, Vector3 } from "three";
 import {
   ActionItemMap,
   APP_COLOR,
@@ -102,12 +95,11 @@ export const config3dInit = {
 
 export interface SceneUserData {
   projectId: number;
-  selected3d: Object3D<Object3DEventMap> | null;
+
   cameraPosition: {
     start: Vector3;
     end: Vector3;
   };
-  isSelected: boolean;
   config3d: Config3d;
   backgroundHDR: BackgroundHDR;
   javascript: string;
@@ -196,8 +188,6 @@ export type BackgroundHDR = typeof backgroundHDR;
 
 const sceneUserData: SceneUserData = {
   projectId: -1,
-  selected3d: null,
-  isSelected: false,
   cameraPosition: {
     start: new Vector3(15, 16, 17),
     end: new Vector3(5, 6, 7),

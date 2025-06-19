@@ -53,7 +53,7 @@ export function showLabel(
   //创建lab
   const editor = editorInstance.getEditor();
   //let label: MarkLabel;
-  let label = editor.scene.getObjectByName(labelName);
+  const label = editor.scene.getObjectByName(labelName);
   if (label) {
     label.visible = true;
     return label;

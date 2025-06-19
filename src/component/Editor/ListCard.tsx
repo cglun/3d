@@ -127,7 +127,7 @@ function RecordItemCard(props: Props) {
     });
     mergedData.projectId = item.id;
     editor.scene.userData = mergedData;
-    //反序列化
+
     const dataSrc = editor.sceneSerialization();
 
     ModalConfirm3d(

@@ -23,7 +23,7 @@ export default abstract class ThreeObj {
   // abstract initCamera(): void;
   // abstract initRenderer(): void;
   // abstract initControls(): void;
-  //反序列化
+
   abstract deserialize(str: string, item: RecordItem): void;
   // 移除抽象方法 loadModelByUrl
   abstract onWindowResize(): void;

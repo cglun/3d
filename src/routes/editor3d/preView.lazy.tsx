@@ -18,6 +18,7 @@ import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelControl
 
 import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
 import Icon from "@/component/common/Icon";
+import { Three3dViewer } from "@/three/Three3dViewer";
 
 // 定义响应数据的类型
 interface PageListResponse {
@@ -88,8 +89,8 @@ function RouteComponent() {
       });
   }, []);
 
-  //@ts-ignore 忽略类型检查，暂时不清楚 Context116 完整类型定义
-  function callBack(viewer) {
+  // 忽略类型检查，暂时不清楚 Context116 完整类型定义
+  function callBack(viewer: Three3dViewer) {
     //const viewer = viewerInstance.getViewer();
 
     // 检查 getToggleButtonGroup 方法是否存在
@@ -116,10 +117,9 @@ function RouteComponent() {
     setShow(true);
     function handleResize3d() {
       if (modalBody.current) {
-        const _w = modalBody.current?.clientWidth || 1138;
-        const _h =
-          modalBody.current?.clientHeight ||
-          modalBody.current?.clientWidth * beiShu;
+        const _body = modalBody.current;
+        const _w = _body.offsetWidth || 1138;
+        const _h = _body.offsetHeight || _body.offsetWidth * beiShu;
 
         setSize3d({ w: _w, h: _h });
       }
@@ -191,7 +191,7 @@ function RouteComponent() {
                   height: size3d.h + "px",
                 }}
                 callBack={callBack}
-                showProgress={false}
+                showProgress={true}
               />
             )}
           </Modal.Body>

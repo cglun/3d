@@ -139,8 +139,7 @@ export class LabelInfoPanelController {
             this.dispatchTourWindow
           );
           label.css3DSprite.visible = false;
-
-          viewerInstance.getViewer().MARK_LABEL_GROUP.add(label.css3DSprite);
+          viewerInstance.getViewer().scene.add(label.css3DSprite);
           this.allLabelInfo.push(label);
         }
       }

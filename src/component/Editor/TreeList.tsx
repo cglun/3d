@@ -11,6 +11,9 @@ import {
   Object3D,
   Object3DEventMap,
 } from "three";
+
+import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
+
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import AlertBase from "@/component/common/AlertBase";
 import Toast3d from "@/component/common/Toast3d";
@@ -24,20 +27,21 @@ import { getObjectNameByName } from "@/threeUtils/util4UI";
 import directionalLightGUI from "./PropertyGUI/lightGUI/directionalLightGUI";
 import ambientLightGUI from "./PropertyGUI/lightGUI/ambientLightGUI";
 import meshGroupGUI from "./PropertyGUI/meshGroupGUI";
-import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+
+import css3CSS3DSpriteGUI from "./PropertyGUI/css3CSS3DSpriteGUI";
 
 function TreeNode({
   node,
   onToggle,
 }: {
-  node: Object3D;
+  node: Object3D<Object3DEventMap>;
   onToggle: (uuid: string, isExpanded: boolean) => void;
 }) {
   const hasChildren = node.children && node.children.length > 0;
   // 确保所有的 useState 调用和 useUpdateScene 调用都在条件返回之前
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [delBtn, setDelBtn] = React.useState(false);
-  const [isSelected, setIsSelected] = React.useState(false);
+
   const { updateScene } = useUpdateScene();
 
   if (node.userData.isHelper) {
@@ -46,34 +50,55 @@ function TreeNode({
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
-
     const editor = editorInstance.getEditor();
-    editor.currentSelected3d = node;
+    const editorObject = editor.scene.getObjectByProperty("uuid", node.uuid);
+    if (editorObject) {
+      editor.currentSelected3d = editorObject;
+    }
 
     editor.destroyGUI();
-    if (node instanceof DirectionalLight) {
-      editor.transformControl.attach(node);
-      directionalLightGUI(node);
+    if (editorObject instanceof DirectionalLight) {
+      editor.transformControl.attach(editorObject);
+      directionalLightGUI(editorObject);
     }
-    if (node instanceof AmbientLight) {
-      ambientLightGUI(node);
+    if (editorObject instanceof AmbientLight) {
+      ambientLightGUI(editorObject);
     }
-    if (node instanceof Group) {
-      meshGroupGUI(node);
+    if (editorObject instanceof Group) {
+      meshGroupGUI(editorObject);
 
-      editor.transformControl.attach(node);
+      editor.transformControl.attach(editorObject);
+    }
+
+    if (editorObject instanceof CSS3DSprite) {
+      //editor.HELPER_GROUP.add(editorObject);
+      // editor.MARK_LABEL_GROUP.add(editorObject);
+      // editor.scene.add(editor.MARK_LABEL_GROUP);
+      // const editorObject1 = editor.scene.getObjectByName(
+      //   GLOBAL_CONSTANT.MARK_LABEL_GROUP
+      // );
+      // if (editorObject1) {
+      //   editorObject1.add(editorObject);
+      // }
+
+      // const label = editor.scene.getObjectByName(node.name);
+      css3CSS3DSpriteGUI(editorObject);
+      editor.transformControl.detach();
+      // editor.transformControl.attach(editorObject);
+    }
+    if (editorObject?.parent?.name.includes("_GROUP")) {
+      editorObject.userData.isSelected = !editorObject.userData.isSelected;
     }
 
     // resetTextWarning(node);
-    setIsSelected(!isSelected);
 
     const { scene } = editor;
-
-    node.userData.isSelected = !isExpanded;
+    //setTransformControls(node);
+    if (editorObject) {
+      onToggle(editorObject.uuid, !isExpanded);
+    }
 
     updateScene(scene);
-    //setTransformControls(node);
-    onToggle(node.uuid, !isExpanded);
   };
 
   const delMesh = (e: React.MouseEvent<HTMLButtonElement>, item: Object3D) => {
@@ -110,14 +135,15 @@ function TreeNode({
   function getLogo(item: Object3D) {
     let logo = "hexagon";
     // 修改为使用 instanceof 检查类型
-    if (item instanceof Mesh) logo = "box";
-    if (item instanceof Group) logo = "collection";
+    if (item instanceof Mesh) logo = "box-seam";
+    if (item instanceof Group) logo = "folder";
+    // if (item instanceof Group) logo = "collection";
     if (item instanceof Light) logo = "lightbulb";
-
+    if (item instanceof CSS3DSprite) logo = "pin-map";
     return <Icon iconName={logo} gap={1} />;
   }
 
-  const light = `d-flex justify-content-between ${node.userData.isSelected ? "text-warning" : ""}`;
+  const light = `d-flex justify-content-between ${node.userData.isSelected && "text-warning"}`;
 
   return (
     <ListGroupItem>
@@ -134,7 +160,7 @@ function TreeNode({
           {getObjectNameByName(node)}
         </div>
         <div>
-          {delBtn && node.name !== GLOBAL_CONSTANT.MODEL_GROUP ? (
+          {delBtn && node?.parent?.name.includes("_GROUP") ? (
             <Button
               className="me-1"
               size="sm"

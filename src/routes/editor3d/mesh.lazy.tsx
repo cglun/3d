@@ -26,24 +26,24 @@ export const Route = createLazyFileRoute("/editor3d/mesh")({
 function RouteComponent() {
   const { scene, updateScene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
-  function getScene() {
-    return editorInstance.getEditor().scene;
+  function getEditor() {
+    return editorInstance.getEditor();
   }
   function addBox() {
     // 创建立方体
     const cubeGeometry = new BoxGeometry(1, 1, 1);
     const cubeMaterial = new MeshLambertMaterial();
     const cube = new Mesh(cubeGeometry, cubeMaterial);
-    cube.name = "cube1";
+    cube.name = "立方体";
     // cube.castShadow = true; // 立方体投射阴影
     cube.position.set(0, 0.5, 0);
-    cube.userData.isSelected = true;
+
     //
-    const { useShadow } = getScene().userData.config3d;
+    const { useShadow } = getEditor().scene.userData.config3d;
     cube.castShadow = useShadow;
     cube.receiveShadow = useShadow;
-    getScene().add(cube);
-    updateScene(getScene());
+    getEditor().GEOMETRY.add(cube);
+    updateScene(getEditor().scene);
   }
 
   function addAmbientLight() {
@@ -52,7 +52,7 @@ function RouteComponent() {
     light.name = "环境光【不能投射阴影】";
     editor.LIGHT_GROUP.add(light);
     editor.scene.add(editor.LIGHT_GROUP);
-    updateScene(getScene());
+    updateScene(getEditor().scene);
   }
   function addPlane() {
     // 创建地面
@@ -60,23 +60,24 @@ function RouteComponent() {
     const planeGeometry = new PlaneGeometry(10, 10);
     const planeMaterial = new MeshLambertMaterial({ color: 0xdddddd });
     const plane = new Mesh(planeGeometry, planeMaterial);
+    plane.name = "平面";
     plane.receiveShadow = true; // 地面接收阴影
     plane.castShadow = true;
     plane.rotation.x = -Math.PI / 2;
-    plane.userData.isSelected = true;
-    const { useShadow } = getScene().userData.config3d;
+
+    const { useShadow } = getEditor().scene.userData.config3d;
     plane.receiveShadow = useShadow;
     plane.castShadow = useShadow;
 
-    getScene().add(plane);
-    updateScene(getScene());
+    getEditor().GEOMETRY.add(plane);
+    updateScene(getEditor().scene);
   }
+  //@ts-expect-error 组
   function addGroup() {
     const group = new Group();
-    group.userData.isSelected = true;
 
-    getScene().add(group);
-    updateScene(getScene());
+    getEditor().scene.add(group);
+    updateScene(getEditor().scene);
   }
   function addDirectionalLight() {
     const editor = editorInstance.getEditor();
@@ -87,7 +88,7 @@ function RouteComponent() {
     editor.LIGHT_GROUP.add(light);
     editor.scene.add(editor.LIGHT_GROUP);
 
-    updateScene(getScene());
+    updateScene(getEditor().scene);
   }
 
   return (
@@ -114,14 +115,14 @@ function RouteComponent() {
             >
               平面
             </Button>
-            <Button
+            {/* <Button
               variant={themeColor}
               onClick={() => {
                 addGroup();
               }}
             >
               组
-            </Button>
+            </Button> */}
             <Button
               variant={themeColor}
               onClick={() => {
@@ -146,7 +147,7 @@ function RouteComponent() {
                 addDirectionalLight();
               }}
             >
-              面光
+              平行光
             </Button>
             <Button
               variant={themeColor}

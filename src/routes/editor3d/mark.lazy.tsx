@@ -67,6 +67,7 @@ function RouteComponent() {
   function addMark(label: CSS3DSprite | CSS2DObject) {
     const editor = editorInstance.getEditor();
     editor.MARK_LABEL_GROUP.add(label);
+    editor.scene.add(editor.MARK_LABEL_GROUP);
   }
 
   return (

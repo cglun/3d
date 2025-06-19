@@ -47,8 +47,10 @@ export default function EditorTop() {
   function saveScene() {
     const editor = editorInstance.getEditor();
     const { scene } = editor;
-    const _copyScene = { ...scene.userData };
-
+    if (scene.userData.projectId === -1) {
+      Toast3d("请先另存场景", "提示", APP_COLOR.Warning);
+      return;
+    }
     const dataJson = editor.sceneSerialization();
     axios
       .post("/project/update/", {
@@ -58,8 +60,6 @@ export default function EditorTop() {
       .then((res) => {
         if (res.data.code === 200) {
           Toast3d("保存成功");
-          scene.userData = _copyScene;
-          updateScene(scene);
         } else {
           Toast3d(res.data.message, "提示", APP_COLOR.Warning);
         }

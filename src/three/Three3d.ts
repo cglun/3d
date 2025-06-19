@@ -14,7 +14,6 @@ import {
   Color,
   CatmullRomCurve3,
   Group,
-  DirectionalLight,
 } from "three";
 
 import TWEEN from "three/addons/libs/tween.module.js";
@@ -34,7 +33,7 @@ import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import { CSS3DRenderer } from "three/addons/renderers/CSS3DRenderer.js";
 import { Curves, GLTF, ShaderPass } from "three/addons/Addons.js";
 import sceneUserData from "@/three/Three3dConfig";
-import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+import { GLOBAL_CONSTANT, GROUP } from "@/three/GLOBAL_CONSTANT";
 import { getObjectWorldPosition } from "@/viewer3d/viewer3dUtils";
 import { TourWindow } from "@/app/MyContext";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
@@ -75,6 +74,13 @@ export class Three3d extends ThreeObj {
   private _MODEL_GROUP: Group = new Group();
   private _MARK_LABEL_GROUP: Group = new Group();
   private _LIGHT_GROUP: Group = new Group();
+  private _GEOMETRY: Group = new Group();
+  get GEOMETRY() {
+    return this._GEOMETRY;
+  }
+  set GEOMETRY(value) {
+    this._GEOMETRY = value;
+  }
   get LIGHT_GROUP() {
     return this._LIGHT_GROUP;
   }
@@ -201,10 +207,12 @@ export class Three3d extends ThreeObj {
     this.MARK_LABEL_GROUP.name = GLOBAL_CONSTANT.MARK_LABEL_GROUP;
     this.MODEL_GROUP.name = GLOBAL_CONSTANT.MODEL_GROUP;
     this.LIGHT_GROUP.name = GLOBAL_CONSTANT.LIGHT_GROUP;
+    this.GEOMETRY.name = GROUP.GEOMETRY;
 
     this.scene.add(this.MARK_LABEL_GROUP);
     this.scene.add(this.MODEL_GROUP);
     this.scene.add(this.LIGHT_GROUP);
+    this.scene.add(this.GEOMETRY);
 
     this._camera = this.initCamera();
     this._renderer = this.initRenderer();
@@ -232,9 +240,11 @@ export class Three3d extends ThreeObj {
   resetScene() {
     this.scene.userData = { ...sceneUserData };
     this.extraParams.mixer = [];
+
     this.MARK_LABEL_GROUP.children = [];
     this.MODEL_GROUP.children = [];
     this.LIGHT_GROUP.children = [];
+    this.GEOMETRY.children = [];
 
     clearOldLabel();
     this.setTextureBackground_test();
@@ -315,24 +325,39 @@ export class Three3d extends ThreeObj {
     const { scene, models, loader } = strToJson(data);
     loader.parse(scene, (object: Object3D<Object3DEventMap>) => {
       if (object instanceof Scene) {
+        // 处理选中
+
         this.scene.children = [];
         //在编辑器里增加灯光辅助
         const light = object.getObjectByName(GLOBAL_CONSTANT.LIGHT_GROUP);
+        if (light) {
+          this.LIGHT_GROUP.children = light.children;
+        }
 
-        light?.children.forEach((item) => {
-          //  加上helper
-          if (item instanceof DirectionalLight) {
-            this.LIGHT_GROUP.add(item);
-          }
-        });
+        // light?.children.forEach((item) => {
+        //   //  加上helper
+        //   if (item instanceof DirectionalLight) {
+        //     this.LIGHT_GROUP.add(item);
+        //   }
+        // });
 
-        this.scene.add(this.LIGHT_GROUP); //更新
+        //加入标签
+        const geometry = object.getObjectByName(GROUP.GEOMETRY);
+        if (geometry) {
+          this.GEOMETRY.children = geometry.children;
+        }
+
         const markLabelGroup = object.getObjectByName(
           GLOBAL_CONSTANT.MARK_LABEL_GROUP
         );
-        this.MARK_LABEL_GROUP.copy(markLabelGroup!);
-        this.scene.add(this.MARK_LABEL_GROUP);
+        if (markLabelGroup) {
+          this.MARK_LABEL_GROUP.children = markLabelGroup.children;
+        }
+        //清除掉helper  里的CSS3DSprite
 
+        this.scene.add(this.LIGHT_GROUP); //更新
+        this.scene.add(this.GEOMETRY);
+        this.scene.add(this.MARK_LABEL_GROUP);
         this.scene.add(this.MODEL_GROUP);
 
         this.scene.userData = {
@@ -424,6 +449,7 @@ export class Three3d extends ThreeObj {
       (gltf: GLTF) => {
         //设置动画，设置模型组的位置，旋转和缩放
         const group = setGLTFTransform(model, gltf);
+        group.userData.isSelected = false; //重置选中
         this.MODEL_GROUP.add(group);
         //设置动画
         setAnimateClip(gltf, this.scene, group, this.extraParams);

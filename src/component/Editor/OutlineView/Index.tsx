@@ -1,8 +1,8 @@
 import { Object3D } from "three";
 
-import { Accordion, Card, ListGroup } from "react-bootstrap";
+import { Accordion, Card, ListGroup, ListGroupItem } from "react-bootstrap";
 
-import Property3d from "@/component/Editor/Property3d/Index";
+import Property3d from "@/component/Editor/PropertyGUI/Index";
 import TreeList from "@/component/Editor/TreeList";
 import { useUpdateScene } from "@/app/hooks";
 import { OutlineViewCamera } from "@/component/Editor/OutlineView/OutlineViewCamera";
@@ -11,7 +11,10 @@ import { OutlineViewScene } from "@/component/Editor/OutlineView/OutlineViewScen
 import Icon from "@/component/common/Icon";
 import { styleHeader } from "@/component/Editor/OutlineView/fontColor";
 
-import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+import { GLOBAL_CONSTANT, GROUP } from "@/three/GLOBAL_CONSTANT";
+import { APP_COLOR } from "@/app/type";
+// import { editor } from "monaco-editor";
+// import { editorInstance } from "@/three/EditorInstance";
 
 export default function Index() {
   const gap = 1;
@@ -21,8 +24,10 @@ export default function Index() {
     return null;
   }
 
-  let LIGHT_GROUP: Object3D[] = [];
-  let MODEL_GROUP: Object3D[] = [];
+  const LIGHT_GROUP: Object3D[] = [];
+  const MODEL_GROUP: Object3D[] = [];
+  const MARK_LABEL_GROUP: Object3D[] = [];
+  const GEOMETRY: Object3D[] = [];
 
   // if (scene.getObjectByName instanceof Function) {
   //   LIGHT_GROUP = scene.getObjectByName("LIGHT_GROUP")?.children || [];
@@ -32,15 +37,25 @@ export default function Index() {
   const array = scene.children;
 
   for (let index = 0; index < array.length; index++) {
-    const element = array[index];
-    if (element.name === GLOBAL_CONSTANT.LIGHT_GROUP) {
-      element.children.forEach((item) => {
+    const { name, children } = array[index];
+    if (name === GLOBAL_CONSTANT.LIGHT_GROUP) {
+      children.forEach((item) => {
         LIGHT_GROUP.push(item);
       });
     }
-    if (element.name === GLOBAL_CONSTANT.MODEL_GROUP) {
-      element.children.forEach((item) => {
+    if (name === GLOBAL_CONSTANT.MODEL_GROUP) {
+      children.forEach((item) => {
         MODEL_GROUP.push(item);
+      });
+    }
+    if (name === GLOBAL_CONSTANT.MARK_LABEL_GROUP) {
+      children.forEach((item) => {
+        MARK_LABEL_GROUP.push(item);
+      });
+    }
+    if (name === GROUP.GEOMETRY) {
+      children.forEach((item) => {
+        GEOMETRY.push(item);
       });
     }
   }
@@ -56,40 +71,54 @@ export default function Index() {
           <Card>
             <Card.Header className="text-center" style={styleHeader}>
               <Icon iconName="camera-reels" gap={gap} title="相机" />
+
+              <Icon iconName="box2" gap={gap} title="场景" />
             </Card.Header>
             <Card.Body>
               <ListGroup>
                 <OutlineViewCamera />
-              </ListGroup>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Header className="text-center" style={styleHeader}>
-              <Icon iconName="box2" gap={gap} title=" 场景" />
-            </Card.Header>
-            <Card.Body>
-              <ListGroup>
                 <OutlineViewScene />
               </ListGroup>
             </Card.Body>
           </Card>
+
           <Card>
             <Card.Header className="text-center" style={styleHeader}>
               <Icon iconName="lightbulb" gap={gap} title="灯光" />
             </Card.Header>
             <Card.Body>
               <ListGroup className="da-gang">
-                {LIGHT_GROUP.length > 0 && <TreeList data={LIGHT_GROUP} />}
+                {TreeListShow(LIGHT_GROUP)}
               </ListGroup>
             </Card.Body>
           </Card>
           <Card>
             <Card.Header className="text-center" style={styleHeader}>
-              <Icon iconName="box" gap={gap} title="模型" />
+              <Icon iconName="box" gap={gap} title="几何体" />
             </Card.Header>
             <Card.Body>
               <ListGroup className="da-gang">
-                {MODEL_GROUP.length > 0 && <TreeList data={MODEL_GROUP} />}
+                {TreeListShow(GEOMETRY)}
+              </ListGroup>
+            </Card.Body>
+          </Card>
+          <Card>
+            <Card.Header className="text-center" style={styleHeader}>
+              <Icon iconName="bi bi-boxes" gap={gap} title="模型" />
+            </Card.Header>
+            <Card.Body>
+              <ListGroup className="da-gang">
+                {TreeListShow(MODEL_GROUP)}
+              </ListGroup>
+            </Card.Body>
+          </Card>
+          <Card>
+            <Card.Header className="text-center" style={styleHeader}>
+              <Icon iconName="pin-map" gap={gap} title="标签" />
+            </Card.Header>
+            <Card.Body>
+              <ListGroup className="da-gang">
+                {TreeListShow(MARK_LABEL_GROUP)}
               </ListGroup>
             </Card.Body>
           </Card>
@@ -97,5 +126,16 @@ export default function Index() {
       </Accordion.Item>
       <Property3d />
     </Accordion>
+  );
+}
+
+function TreeListShow(group: Object3D[]) {
+  if (group.length) {
+    return <TreeList data={group} />;
+  }
+  return (
+    <ListGroupItem style={{ cursor: "initial" }}>
+      <span className={`text-${APP_COLOR.Secondary}`}> 空</span>
+    </ListGroupItem>
   );
 }

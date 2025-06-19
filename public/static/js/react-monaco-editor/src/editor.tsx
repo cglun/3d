@@ -40,7 +40,7 @@ function MonacoEditor({
       width: fixedWidth,
       height: fixedHeight,
     }),
-    [fixedWidth, fixedHeight],
+    [fixedWidth, fixedHeight]
   );
 
   const handleEditorWillMount = () => {
@@ -86,7 +86,7 @@ function MonacoEditor({
           ...finalOptions,
           ...(theme ? { theme } : {}),
         },
-        overrideServices,
+        overrideServices
       );
       // After initializing monaco editor
       handleEditorDidMount();
@@ -114,7 +114,7 @@ function MonacoEditor({
             text: value,
           },
         ],
-        undefined,
+        undefined
       );
       editor.current.pushUndoStop();
       __prevent_trigger_change_event.current = false;
@@ -161,7 +161,7 @@ function MonacoEditor({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    []
   );
 
   return (

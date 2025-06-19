@@ -14,15 +14,16 @@ import {
   Vector2,
   Vector3,
 } from "three";
+import { Dispatch } from "react";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { GlbModel } from "@/app/type";
-
+import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
 import { Three3d } from "@/three/Three3d";
 import { TransformControls } from "three/addons/controls/TransformControls.js";
 import { BackgroundHDR, SceneUserData } from "@/three/Three3dConfig";
 import { addMonkey } from "@/threeUtils/util4Scene";
-import { Dispatch } from "react";
+
 import { TourWindow } from "@/app/MyContext";
+import { GlbModel } from "@/app/type";
 import {
   createDirectionalLight,
   createGridHelper,
@@ -30,6 +31,9 @@ import {
 import directionalLightGUI from "@/component/Editor/PropertyGUI/lightGUI/directionalLightGUI";
 
 import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
+import cameraGUI from "@/component/Editor/PropertyGUI/cameraGUI";
+import meshGroupGUI from "@/component/Editor/PropertyGUI/meshGroupGUI";
+import css3CSS3DSpriteGUI from "@/component/Editor/PropertyGUI/css3CSS3DSpriteGUI";
 
 export class Three3dEditor extends Three3d {
   static divElement: HTMLDivElement;
@@ -69,7 +73,11 @@ export class Three3dEditor extends Three3d {
     this.scene.add(this.HELPER_GROUP);
     this.LIGHT_GROUP.add(light);
     this.transformControl = this.initTransformControl();
-    this.controls.addEventListener("change", () => {
+    this.controls.addEventListener("end", () => {
+      if (this.currentSelected3d.type === "PerspectiveCamera") {
+        cameraGUI(this.currentSelected3d as PerspectiveCamera);
+      }
+
       //、 if (this.currentSelected3d.type === "PerspectiveCamera") {
       // // 获取编辑器实例
       // const editor = editorInstance.getEditor();
@@ -92,8 +100,15 @@ export class Three3dEditor extends Three3d {
 
     const _controls = this.controls;
 
-    transformControl.addEventListener("dragging-changed", function (event) {
+    transformControl.addEventListener("dragging-changed", (event) => {
       _controls.enabled = !event.value;
+      const curSelected = this.currentSelected3d;
+      if (curSelected instanceof Group) {
+        meshGroupGUI(curSelected);
+      }
+      if (curSelected instanceof CSS3DSprite) {
+        css3CSS3DSpriteGUI(curSelected);
+      }
     });
     transformControl.setMode("translate");
     const helper = transformControl.getHelper();
@@ -102,7 +117,7 @@ export class Three3dEditor extends Three3d {
 
     transformControl.addEventListener("objectChange", () => {
       const curSelected = this.currentSelected3d;
-      if (curSelected.type === "DirectionalLight") {
+      if (curSelected instanceof DirectionalLight) {
         curSelected.lookAt(0, 0, 0);
         directionalLightGUI(curSelected as DirectionalLight);
       }
@@ -115,21 +130,24 @@ export class Three3dEditor extends Three3d {
 
   // 场景序列化
   sceneSerialization(): string {
-    this.scene.userData.selected3d = undefined;
-    this.destroyGUI();
-    const helperGroup = this.scene.getObjectByName(
-      GLOBAL_CONSTANT.HELPER_GROUP
-    );
-
-    if (helperGroup) {
-      this.scene.remove(helperGroup);
-    }
     const sceneCopy = this.scene.clone();
 
+    // this.destroyGUI();
+    const helperGroup = sceneCopy.getObjectByName(GLOBAL_CONSTANT.HELPER_GROUP);
+    if (helperGroup) {
+      sceneCopy.remove(helperGroup);
+    }
+    const modelGroup = sceneCopy.getObjectByName(GLOBAL_CONSTANT.MODEL_GROUP);
+    if (modelGroup) {
+      sceneCopy.remove(modelGroup);
+    }
+
+    //sceneCopy.children = [];
     const modelList: GlbModel[] = [];
-    sceneCopy.children = [];
+
     sceneCopy.add(this.MARK_LABEL_GROUP);
     sceneCopy.add(this.LIGHT_GROUP);
+    sceneCopy.add(this.GEOMETRY);
 
     this.MODEL_GROUP.children.forEach((child) => {
       const { id, name, position, rotation, scale } = child;
@@ -176,7 +194,10 @@ export class Three3dEditor extends Three3d {
       modelsJsonString: JSON.stringify(modelList),
       type: "scene",
     };
-
+    this.scene.add(this.HELPER_GROUP);
+    this.scene.add(this.MARK_LABEL_GROUP);
+    this.scene.add(this.LIGHT_GROUP);
+    this.scene.add(this.GEOMETRY);
     return JSON.stringify(result);
   }
 

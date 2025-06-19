@@ -9,6 +9,8 @@ import {
   ProgressBar,
   Row,
 } from "react-bootstrap";
+//import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
+
 import { Object3D, Vector3 } from "three";
 import { TransformControlsMode } from "three/addons/controls/TransformControls.js";
 import { useUpdateCamera, useUpdateScene } from "@/app/hooks";
@@ -80,9 +82,19 @@ function EditorViewer3d() {
               editor.runJavascript();
 
               editor.destroyGUI();
-              // editor.initTransformControl();
-
               editor.scene.add(editor.HELPER_GROUP);
+              //拿到helper 里的所有元素
+              //   const helper = editor.HELPER_GROUP;
+              //item instanceof CSS3DSprite
+              // 反向循环移除所有 CSS3DSprite 实例
+
+              // for (let i = helper.children.length - 1; i >= 0; i--) {
+              //   const css3DSprite = helper.children[i];
+              //   if (css3DSprite instanceof CSS3DSprite) {
+              //     helper.remove(css3DSprite);
+              //   }
+              // }
+              // debugger;
               setTimeout(() => {
                 ModalConfirm3d({
                   title: "提示",

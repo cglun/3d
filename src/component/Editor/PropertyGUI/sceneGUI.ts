@@ -30,6 +30,9 @@ export default function sceneGUI(scene: Scene) {
   if (scene.fog !== null) {
     fog = scene.fog as FogExp2;
   }
+  const intensity = folder
+    .add(scene, "environmentIntensity", 0, 10, 0.001)
+    .name("光强度");
 
   const fogFolder = folder
     .addColor(fog, "color")
@@ -48,15 +51,16 @@ export default function sceneGUI(scene: Scene) {
   const fogResetter = {
     resetFog: () => {
       // 重置雾气，这里假设重置为初始的 fog 对象
-      const color = new Color(0xcccccc);
+      const color = new Color("#000");
       const density = 0.0025;
       scene.fog = new FogExp2(color, density);
       fogFolder.setValue(color);
       fogDensity.setValue(density);
+      intensity.setValue(1.16);
       Toast3d("重置成功");
     },
   };
-  folder.add(fogResetter, "resetFog").name("默认雾气值");
+  folder.add(fogResetter, "resetFog").name("使用默认值");
 
   // 定义 HDR 选项
   const hdrOptions = {
@@ -80,9 +84,8 @@ export default function sceneGUI(scene: Scene) {
       backgroundHDR.asBackground = value;
       editor.setTextureBackground_test();
     });
-  bgHDRFolder.add(scene, "backgroundBlurriness", 0, 1, 0.01).name("模糊度");
-  bgHDRFolder.add(scene, "backgroundIntensity", 0, 1, 0.01).name("透明度");
-  bgHDRFolder.add(scene, "environmentIntensity", 0, 10, 0.01).name("光强度");
+  bgHDRFolder.add(scene, "backgroundBlurriness", 0, 1, 0.001).name("模糊度");
+  bgHDRFolder.add(scene, "backgroundIntensity", 0, 1, 0.001).name("透明度");
 
   const bgColor = folder
     .addColor(backgroundHDR, "color")

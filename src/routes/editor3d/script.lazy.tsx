@@ -52,9 +52,8 @@ function RouteComponent() {
   const buttonColor = getButtonColor(themeColor);
 
   //复制一份数据，然后去掉对象的selected3d属性，不然要序列化会报错，要报废
-  const _sceneUserData = { ...scene.userData };
-  _sceneUserData.selected3d = null;
-  const userDataString = JSON.stringify(_sceneUserData, null, 3);
+
+  const userDataString = JSON.stringify(scene.userData, null, 3);
 
   // 生成按钮组
   function generateButton() {
