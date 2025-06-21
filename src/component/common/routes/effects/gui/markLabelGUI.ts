@@ -72,9 +72,13 @@ export default function markLabelGUI(dispatchTourWindow: Dispatch<TourWindow>) {
     .name("背景URL")
     .onChange(() => {
       style.backgroundImage = `url("${markLabel.cardBackgroundUrl}")`;
+      if (style.backgroundImage.trim().length === 0) {
+        style.backgroundColor = `${markLabel.cardBackgroundColor}`;
+        style.backgroundColor = "";
+      }
     });
   folderGeometry
-    .add(markLabel, "opacity", 0.01, 1)
+    .add(markLabel, "opacity", 0, 1)
     .step(0.01)
     .name("透明度")
     .onChange(() => {
@@ -97,17 +101,18 @@ export default function markLabelGUI(dispatchTourWindow: Dispatch<TourWindow>) {
     });
 
   folderGeometry
-    .add(markLabel, "headerMarginTop", 0.1, 100)
-    .step(0.1)
-    .name("上下边距")
+    .add(markLabel, "headerMarginTop", 0, 100)
+    .step(0.01)
+    .name("上下距")
     .onChange(() => {
-      style.padding = `${markLabel.headerMarginTop}px ${markLabel.headerMarginLeft}px`;
+      style.paddingTop = `${markLabel.headerMarginTop}px`;
     });
   folderGeometry
     .add(markLabel, "headerMarginLeft", 0.1, 100)
     .step(0.1)
-    .name("左右边距")
+    .name("左边距")
     .onChange(() => {
-      style.padding = `${markLabel.headerMarginTop}px ${markLabel.headerMarginLeft}px`;
+      style.paddingLeft = `${markLabel.headerMarginLeft}px`;
+      // style.padding = `${markLabel.headerMarginTop}px ${markLabel.headerMarginLeft}px`;
     });
 }

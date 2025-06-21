@@ -88,7 +88,10 @@ export class LabelInfo {
 
     labelStyle.width = cardWidth + "px";
     labelStyle.height = cardHeight + "px";
-    labelStyle.padding = headerMarginTop + "px " + headerMarginLeft + "px";
+    labelStyle.paddingLeft = headerMarginLeft + "px";
+    labelStyle.paddingTop = headerMarginTop + "px ";
+
+    //labelStyle.paddingLeft = headerMarginTop + "px " + headerMarginLeft + "px";
     labelStyle.borderRadius = cardRadius + "px";
     labelStyle.backgroundColor = cardBackgroundColor;
     labelStyle.backgroundImage = getCardBackgroundUrl(cardBackgroundUrl);
@@ -98,6 +101,7 @@ export class LabelInfo {
     labelStyle.fontSize = bodyFontSize + "px";
     labelStyle.color = headerColor;
     //const { x, y, z } = getObjectWorldPosition(this.mesh);
+    labelStyle.backgroundColor = "transparent"; // 背景透明
     labelStyle.top = offsetY + "px";
     labelStyle.left = offsetX + "px";
     // labelStyle.left = offsetX * this.size + "px";

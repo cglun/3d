@@ -23,14 +23,14 @@ export default function topCardGUI(dispatchTourWindow: Dispatch<TourWindow>) {
   folderGeometry
     .add(topCard, "cardWidth", 30, 500)
     .name("宽度")
-    .step(1)
+    .step(0.1)
     .onChange(() => {
       style.width = `${topCard.cardWidth}px`;
     });
   folderGeometry
     .add(topCard, "cardHeight", 20, 600)
     .name("高度")
-    .step(1)
+    .step(0.1)
     .onChange(() => {
       style.height = `${topCard.cardHeight}px`;
     });
@@ -109,16 +109,17 @@ export default function topCardGUI(dispatchTourWindow: Dispatch<TourWindow>) {
   folderGeometry
     .add(topCard, "headerMarginTop", 0.1, 100)
     .step(0.1)
-    .name("上下边距")
+    .name("上边距")
     .onChange(() => {
-      style.padding = `${topCard.headerMarginTop}px ${topCard.headerMarginLeft}px`;
+      style.paddingTop = `${topCard.headerMarginTop}px`;
     });
   folderGeometry
     .add(topCard, "headerMarginLeft", 0.1, 100)
     .step(0.1)
-    .name("左右边距")
+    .name("左边距")
     .onChange(() => {
-      style.padding = `${topCard.headerMarginTop}px ${topCard.headerMarginLeft}px`;
+      style.paddingLeft = `${topCard.headerMarginLeft}px`;
+      // style.padding = `${topCard.headerMarginTop}px ${topCard.headerMarginLeft}px`;
     });
 
   // folderGeometry.addColor( topCard, "bodyColor").onChange( function ( val ) {

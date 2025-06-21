@@ -24,6 +24,23 @@ function RouteComponent() {
     {
       list: [
         {
+          logoName: "bi bi-stars",
+          position: "底部栏",
+          buttonName: "特效",
+          des: "漫游路径优化，路线更平滑。 ",
+        },
+        {
+          logoName: "bi bi-stars",
+          position: "底部栏",
+          buttonName: "特效",
+          des: "标签/顶牌背景bug修复。",
+        },
+      ],
+      updateTime: "2025年6月21日",
+    },
+    {
+      list: [
+        {
           logoName: "bi bi-arrow-clockwise",
           position: "右上角",
           buttonName: "刷新",

@@ -29,7 +29,7 @@ export const userCssStyle = {
   offsetX: 0,
   offsetY: 0,
   cardSize: 0.03,
-  headerMarginTop: 15,
+  headerMarginTop: 0,
   headerMarginLeft: 18,
   opacity: 1,
 };

@@ -79,8 +79,11 @@ export class MarkLabel {
     } = this.userDataStyles;
 
     labelStyle.width = cardWidth + "px";
+    labelStyle.height = cardHeight + "px";
     labelStyle.lineHeight = cardHeight + "px";
-    labelStyle.padding = headerMarginTop + "px " + headerMarginLeft + "px";
+    labelStyle.paddingLeft = headerMarginLeft + "px";
+    labelStyle.paddingTop = headerMarginTop + "px";
+
     labelStyle.borderRadius = cardRadius + "px";
     labelStyle.backgroundColor = cardBackgroundColor;
     labelStyle.backgroundImage = getCardBackgroundUrl(cardBackgroundUrl);
@@ -89,7 +92,7 @@ export class MarkLabel {
     labelStyle.backgroundSize = "cover";
     labelStyle.fontSize = bodyFontSize + "px";
     labelStyle.color = headerColor;
-
+    labelStyle.backgroundColor = "transparent"; // 背景透明
     labelStyle.top = offsetY + "px";
     labelStyle.left = offsetX + "px";
 
@@ -98,9 +101,9 @@ export class MarkLabel {
     header.style.fontSize = headerFontSize + "px";
     header.style.color = headerColor;
 
-    const logo = document.createElement("i");
-    logo.className = setClassName(this.markLabelProps.logo);
-    header.appendChild(logo);
+    // const logo = document.createElement("i");
+    // logo.className = setClassName(this.markLabelProps.logo);
+    // header.appendChild(logo);
 
     const title = document.createElement("span");
     title.style.fontSize = this.userDataStyles.headerColor + "px";

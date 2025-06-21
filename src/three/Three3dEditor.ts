@@ -229,12 +229,10 @@ export class Three3dEditor extends Three3d {
   destroyGUI() {
     if (this.guiInstance) {
       this.guiInstance.destroy();
-
-      this.tubeMesh = null;
     }
-    if (this?.tubeMesh !== null) {
-      if (this.tubeMesh?.parent) {
-        this.tubeMesh.parent?.remove(this.tubeMesh);
+    if (this.tubeMesh !== null) {
+      if (this.tubeMesh.parent) {
+        this.tubeMesh.parent.remove(this.tubeMesh);
         this.tubeMesh.geometry.dispose();
         this.tubeMesh = null;
       }

@@ -1,8 +1,5 @@
 import {
-  BufferGeometry,
   CatmullRomCurve3,
-  Line,
-  LineBasicMaterial,
   Object3D,
   Object3DEventMap,
   PerspectiveCamera,

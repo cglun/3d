@@ -59,7 +59,7 @@ export function showLabel(
     return label;
   } else {
     const label = new MarkLabel(editor.scene, dispatchTourWindow, {
-      markName: "此标签不会被保存",
+      markName: "标签",
       logo: "geo-alt",
       showEye: false,
       tourObject: {
@@ -97,7 +97,7 @@ export function getMarkLabelTest(
     return testLabel.markLabel;
   }
   const markLabel = new MarkLabel(editor.scene, dispatchTourWindow, {
-    markName: "此标签不会被保存",
+    markName: "预览标签",
     logo: "geo-alt",
     showEye: false,
     tourObject: {

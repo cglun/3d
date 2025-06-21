@@ -161,8 +161,14 @@ export class Three3d extends ThreeObj {
   get camera() {
     return this._camera;
   }
+  set camera(value) {
+    this._camera = value;
+  }
   get scene() {
     return this._scene;
+  }
+  set scene(value) {
+    this._scene = value;
   }
   get renderer() {
     return this._renderer;
@@ -173,11 +179,20 @@ export class Three3d extends ThreeObj {
   get controls() {
     return this._controls;
   }
+  set controls(value) {
+    this._controls = value;
+  }
   get composer() {
     return this._composer;
   }
+  set composer(value) {
+    this._composer = value;
+  }
   get outlinePass() {
     return this._outlinePass;
+  }
+  set outlinePass(value) {
+    this._outlinePass = value;
   }
 
   get timeS() {
@@ -198,7 +213,6 @@ export class Three3d extends ThreeObj {
     this.divElement = divElement;
     this._scene = this.initScene();
     this.resetScene();
-
     this.MARK_LABEL_GROUP.name = GROUP.MARK_LABEL;
     this.MODEL_GROUP.name = GROUP.MODEL;
     this.LIGHT_GROUP.name = GROUP.LIGHT;
@@ -218,6 +232,7 @@ export class Three3d extends ThreeObj {
 
     const { composer, outlinePass } = this.initPostProcessing();
     this._composer = composer;
+
     this._outlinePass = outlinePass;
     this.divElement.appendChild(this.renderer.domElement);
     this.renderer.setAnimationLoop(() => this.animate());
@@ -226,7 +241,6 @@ export class Three3d extends ThreeObj {
       this.dispatchTourWindow,
       this.scene
     );
-    //this.addCube();
   }
 
   private initScene(): Scene {
@@ -242,6 +256,7 @@ export class Three3d extends ThreeObj {
     this.MARK_LABEL_GROUP.children = [];
     this.MODEL_GROUP.children = [];
     this.LIGHT_GROUP.children = [];
+
     this.GEOMETRY.children = [];
     const { roamLine } = this.extraParams;
     if (roamLine && roamLine.roamIsRunning) {
@@ -360,6 +375,7 @@ export class Three3d extends ThreeObj {
         this.scene.add(this.GEOMETRY);
         this.scene.add(this.MARK_LABEL_GROUP);
         this.scene.add(this.MODEL_GROUP);
+        this.outlinePass.selectedObjects = [];
 
         this.scene.userData = {
           ...(object.userData as SceneUserData),

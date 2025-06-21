@@ -2,7 +2,7 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { useUpdateScene } from "@/app/hooks";
 
 import { Button, ButtonGroup, ListGroup, ListGroupItem } from "react-bootstrap";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
 
@@ -14,6 +14,7 @@ import topCardGUI from "@/component/common/routes/effects/gui/topCardGUI";
 import modelHighlightGUI from "@/component/common/routes/effects/gui/modelHighlightGUI";
 import roamGUI from "@/component/common/routes/effects/gui/roamGUI";
 import { stopRoam } from "@/component/common/routes/effects/utils";
+import { editorInstance } from "@/three/EditorInstance";
 
 // 定义一个变量来保存 GUI 实例
 
@@ -26,6 +27,14 @@ function RouteComponent() {
   const { themeColor } = getThemeByScene(scene);
   const buttonColor = getButtonColor(themeColor);
   const { dispatchTourWindow } = useContext(MyContext);
+  useEffect(() => {
+    return () => {
+      const editor = editorInstance.getEditor();
+      editor.outlinePass.selectedObjects = [];
+      editor.destroyGUI();
+      stopRoam();
+    };
+  }, []);
   // const userData = scene.userData as SceneUserData;
 
   // const { topCard, markLabel } =
