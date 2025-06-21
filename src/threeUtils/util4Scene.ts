@@ -21,7 +21,7 @@ import sceneUserData, {
   RoamLine,
   SceneUserData,
 } from "@/three/Three3dConfig";
-import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+import { GROUP } from "@/three/GLOBAL_CONSTANT";
 import { GlbModel, UserDataType } from "@/app/type";
 import { editorInstance } from "@/three/EditorInstance";
 
@@ -59,7 +59,7 @@ export function createGroupIfNotExist_XX(
   if (createGroup) {
     group = new Group();
     group.name = name;
-    if (name === GLOBAL_CONSTANT.HELPER_GROUP) {
+    if (name === GROUP.HELPER) {
       group.userData.isHelper = true;
     }
     return group;
@@ -201,6 +201,7 @@ export function manyou(
   const time = Date.now();
   const loopTime = (20 * 1000) / params.speed;
   const t = (time % loopTime) / loopTime;
+  tubeGeometry;
 
   tubeGeometry.parameters.path.getPointAt(t, position);
   position.multiplyScalar(params.scale);

@@ -23,6 +23,7 @@ import Icon from "@/component/common/Icon";
 import { editorInstance } from "@/three/EditorInstance";
 import { getThemeByScene } from "@/threeUtils/util4UI";
 import { stopRoam } from "../common/routes/effects/utils";
+import { SceneUserData } from "@/three/Three3dConfig";
 
 // 若 getThemeByScene 确实在该文件且正确导出，使用此导入语句
 
@@ -176,6 +177,23 @@ export default function EditorTop() {
         </Nav>
         <Nav className="me-2">
           <ButtonGroup aria-label="Basic example" size="sm">
+            <Button
+              variant={themeColor}
+              onClick={() => {
+                const { scene } = editorInstance.getEditor();
+                const userData = scene.userData as SceneUserData;
+                const refreshTime = userData.APP_THEME?.refreshTime || 0;
+                userData.APP_THEME.refreshTime = refreshTime + 1;
+
+                updateScene(scene);
+              }}
+            >
+              <Icon
+                iconName="bi bi-arrow-clockwise"
+                title="刷新"
+                placement="left"
+              />
+            </Button>
             <Button
               variant={themeColor}
               onClick={() => {

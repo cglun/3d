@@ -91,151 +91,149 @@ function RouteComponent() {
       </ListGroup.Item>
 
       <ListGroup>
-        {projectId && projectId !== -1 && (
-          <ListGroup.Item>
-            <ButtonGroup size="sm">
-              <Button
-                variant={buttonColor}
-                style={{ borderColor: styleBody.color }}
-                onClick={() => {
-                  setShowJavaScript(true);
-                }}
-              >
-                <Icon iconName="pencil" gap={1} />
-                代码
-              </Button>
-              <Button
-                variant={buttonColor}
-                style={{ borderColor: styleBody.color }}
-                onClick={() => {
-                  setShowButtonList(true);
-                }}
-              >
-                <Icon iconName="pencil" gap={1} />
-                按钮
-              </Button>
-              <Button
-                variant={buttonColor}
-                style={{ borderColor: styleBody.color }}
-                onClick={() => {
-                  setShowAllConfig(true);
-                }}
-              >
-                <Icon iconName="building-gear" gap={1} />
-                一键配置
-              </Button>
-            </ButtonGroup>
-            <CodeEditor
-              tipsTitle="脚本编辑"
-              code={javascript}
-              isValidate={true}
-              show={showJavaScript}
-              setShow={setShowJavaScript}
-              callback={function (value): void {
-                getScene().userData.javascript = value;
-                updateScene(scene);
-              }}
-            />
-            <CodeEditor
-              tipsTitle="按钮组编辑"
-              isValidate={true}
-              language="json"
-              code={buttonList}
-              show={showButtonList}
-              setShow={setShowButtonList}
-              callback={(value) => {
-                try {
-                  getScene().userData.customButtonList = JSON.parse(value);
-                  updateScene(getScene());
-                } catch (error) {
-                  if (error instanceof Error) {
-                    ModalConfirm3d({
-                      title: "提示",
-                      body: error.message,
-                      confirmButton: {
-                        show: true,
-                        closeButton: true,
-                        hasButton: true,
-                      },
-                    });
-                  }
-                }
+        {/* {projectId && projectId !== -1 && ( */}
+        <ListGroup.Item>
+          <ButtonGroup size="sm">
+            <Button
+              variant={buttonColor}
+              style={{ borderColor: styleBody.color }}
+              onClick={() => {
+                setShowJavaScript(true);
               }}
             >
-              <ButtonGroup size="sm">
-                {isSet ? (
-                  <>
-                    <Form key={"inline-radio-2"}>
-                      <Form.Check
-                        defaultChecked={buttonType === "TOGGLE"}
-                        inline
-                        label="切换"
-                        name="buttonType"
-                        type={"radio"}
-                        id={`inline-radio-1`}
-                        onClick={() => {
-                          setButtonType("TOGGLE");
-                        }}
-                      />
-                      <Form.Check
-                        defaultChecked={buttonType === "STRETCH"}
-                        inline
-                        label="拉伸"
-                        name="buttonType"
-                        type={"radio"}
-                        id={`inline-radio-2`}
-                        onClick={() => {
-                          setButtonType("STRETCH");
-                        }}
-                      />
-                      <Form.Check
-                        defaultChecked={buttonType === "DRAWER"}
-                        inline
-                        label="抽屉"
-                        name="buttonType"
-                        type={"radio"}
-                        id={`inline-radio-3`}
-                        onClick={() => {
-                          setButtonType("DRAWER");
-                        }}
-                      />
-                    </Form>
-                    <Button variant={buttonColor} onClick={generateButton}>
-                      生成按钮
-                    </Button>
-                  </>
-                ) : (
-                  <Button
-                    variant={buttonColor}
-                    onClick={() => {
-                      getScene().userData.customButtonList =
-                        customButtonListInit;
-                      updateScene(getScene());
-                      setButtonType(buttonType);
-                      setIsSet(true);
-                      Toast3d("已重置按钮组");
-                    }}
-                  >
-                    <Icon iconName="recycle" /> 重置
-                  </Button>
-                )}
-              </ButtonGroup>
-            </CodeEditor>
-            <CodeEditor
-              tipsTitle="一键配置"
-              language="json"
-              code={userDataString}
-              isValidate={true}
-              show={showAllConfig}
-              setShow={setShowAllConfig}
-              callback={function (value): void {
-                getScene().userData = JSON.parse(value);
-                getScene().userData.projectId = projectId; // 防止项目id丢失
-                updateScene(getScene());
+              <Icon iconName="pencil" gap={1} />
+              代码
+            </Button>
+            <Button
+              variant={buttonColor}
+              style={{ borderColor: styleBody.color }}
+              onClick={() => {
+                setShowButtonList(true);
               }}
-            />
-          </ListGroup.Item>
-        )}
+            >
+              <Icon iconName="pencil" gap={1} />
+              按钮
+            </Button>
+            <Button
+              variant={buttonColor}
+              style={{ borderColor: styleBody.color }}
+              onClick={() => {
+                setShowAllConfig(true);
+              }}
+            >
+              <Icon iconName="building-gear" gap={1} />
+              一键配置
+            </Button>
+          </ButtonGroup>
+          <CodeEditor
+            tipsTitle="脚本编辑"
+            code={javascript}
+            isValidate={true}
+            show={showJavaScript}
+            setShow={setShowJavaScript}
+            callback={function (value): void {
+              getScene().userData.javascript = value;
+              updateScene(scene);
+            }}
+          />
+          <CodeEditor
+            tipsTitle="按钮组编辑"
+            isValidate={true}
+            language="json"
+            code={buttonList}
+            show={showButtonList}
+            setShow={setShowButtonList}
+            callback={(value) => {
+              try {
+                getScene().userData.customButtonList = JSON.parse(value);
+                updateScene(getScene());
+              } catch (error) {
+                if (error instanceof Error) {
+                  ModalConfirm3d({
+                    title: "提示",
+                    body: error.message,
+                    confirmButton: {
+                      show: true,
+                      closeButton: true,
+                      hasButton: true,
+                    },
+                  });
+                }
+              }
+            }}
+          >
+            <ButtonGroup size="sm">
+              {isSet ? (
+                <>
+                  <Form key={"inline-radio-2"}>
+                    <Form.Check
+                      defaultChecked={buttonType === "TOGGLE"}
+                      inline
+                      label="切换"
+                      name="buttonType"
+                      type={"radio"}
+                      id={`inline-radio-1`}
+                      onClick={() => {
+                        setButtonType("TOGGLE");
+                      }}
+                    />
+                    <Form.Check
+                      defaultChecked={buttonType === "STRETCH"}
+                      inline
+                      label="拉伸"
+                      name="buttonType"
+                      type={"radio"}
+                      id={`inline-radio-2`}
+                      onClick={() => {
+                        setButtonType("STRETCH");
+                      }}
+                    />
+                    <Form.Check
+                      defaultChecked={buttonType === "DRAWER"}
+                      inline
+                      label="抽屉"
+                      name="buttonType"
+                      type={"radio"}
+                      id={`inline-radio-3`}
+                      onClick={() => {
+                        setButtonType("DRAWER");
+                      }}
+                    />
+                  </Form>
+                  <Button variant={buttonColor} onClick={generateButton}>
+                    生成按钮
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant={buttonColor}
+                  onClick={() => {
+                    getScene().userData.customButtonList = customButtonListInit;
+                    updateScene(getScene());
+                    setButtonType(buttonType);
+                    setIsSet(true);
+                    Toast3d("已重置按钮组");
+                  }}
+                >
+                  <Icon iconName="recycle" /> 重置
+                </Button>
+              )}
+            </ButtonGroup>
+          </CodeEditor>
+          <CodeEditor
+            tipsTitle="一键配置"
+            language="json"
+            code={userDataString}
+            isValidate={true}
+            show={showAllConfig}
+            setShow={setShowAllConfig}
+            callback={function (value): void {
+              getScene().userData = JSON.parse(value);
+              getScene().userData.projectId = projectId; // 防止项目id丢失
+              updateScene(getScene());
+            }}
+          />
+        </ListGroup.Item>
       </ListGroup>
     </Container>
   );

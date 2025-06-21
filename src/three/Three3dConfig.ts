@@ -108,6 +108,7 @@ export interface SceneUserData {
     themeColor: APP_COLOR;
     iconFill: string;
     sceneCanSave: boolean;
+    refreshTime: number;
   };
   userCssStyle: {
     topCard: UserCssStyle;
@@ -201,6 +202,7 @@ const sceneUserData: SceneUserData = {
     themeColor: APP_COLOR.Dark, // 若 APP_COLOR 有具体结构，需按需填充
     iconFill: "",
     sceneCanSave: false,
+    refreshTime: 0,
   },
   userCssStyle: {
     topCard: {

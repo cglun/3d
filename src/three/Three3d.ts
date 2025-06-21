@@ -22,7 +22,7 @@ import ThreeObj from "@/three/ThreeObj";
 import { GlbModel, RecordItem } from "@/app/type";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { runScriptDev } from "@/three/scriptDev";
-import { enableShadow } from "@/three/common3d";
+
 import { ExtraParams, hdr, HdrKey, SceneUserData } from "@/three/Three3dConfig";
 import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
@@ -33,7 +33,7 @@ import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import { CSS3DRenderer } from "three/addons/renderers/CSS3DRenderer.js";
 import { Curves, GLTF, ShaderPass } from "three/addons/Addons.js";
 import sceneUserData from "@/three/Three3dConfig";
-import { GLOBAL_CONSTANT, GROUP } from "@/three/GLOBAL_CONSTANT";
+
 import { getObjectWorldPosition } from "@/viewer3d/viewer3dUtils";
 import { TourWindow } from "@/app/MyContext";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
@@ -57,6 +57,7 @@ import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelControl
 import { editorInstance } from "@/three/EditorInstance";
 import { viewerInstance } from "@/three/ViewerInstance";
 import { runScriptPro } from "@/three/scriptPro";
+import { GROUP } from "./GLOBAL_CONSTANT";
 
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;
@@ -70,7 +71,7 @@ export class Three3d extends ThreeObj {
   private _labelRenderer2d: CSS2DRenderer;
   private _labelRenderer3d: CSS3DRenderer;
   private _dispatchTourWindow: Dispatch<TourWindow>;
-  private _labelInfoPanelController: LabelInfoPanelController | null = null;
+  private _labelInfoPanelController: LabelInfoPanelController;
   private _MODEL_GROUP: Group = new Group();
   private _MARK_LABEL_GROUP: Group = new Group();
   private _LIGHT_GROUP: Group = new Group();
@@ -101,15 +102,9 @@ export class Three3d extends ThreeObj {
     this._MODEL_GROUP = value;
   }
   get labelInfoPanelController() {
-    if (this._labelInfoPanelController === null) {
-      this._labelInfoPanelController = new LabelInfoPanelController(
-        this.dispatchTourWindow,
-        this.scene
-      );
-    }
     return this._labelInfoPanelController;
   }
-  set labelInfoPanelController(value: LabelInfoPanelController | null) {
+  set labelInfoPanelController(value: LabelInfoPanelController) {
     this._labelInfoPanelController = value;
   }
 
@@ -204,9 +199,9 @@ export class Three3d extends ThreeObj {
     this._scene = this.initScene();
     this.resetScene();
 
-    this.MARK_LABEL_GROUP.name = GLOBAL_CONSTANT.MARK_LABEL_GROUP;
-    this.MODEL_GROUP.name = GLOBAL_CONSTANT.MODEL_GROUP;
-    this.LIGHT_GROUP.name = GLOBAL_CONSTANT.LIGHT_GROUP;
+    this.MARK_LABEL_GROUP.name = GROUP.MARK_LABEL;
+    this.MODEL_GROUP.name = GROUP.MODEL;
+    this.LIGHT_GROUP.name = GROUP.LIGHT;
     this.GEOMETRY.name = GROUP.GEOMETRY;
 
     this.scene.add(this.MARK_LABEL_GROUP);
@@ -227,7 +222,10 @@ export class Three3d extends ThreeObj {
     this.divElement.appendChild(this.renderer.domElement);
     this.renderer.setAnimationLoop(() => this.animate());
     this._tubeMesh = null;
-    this._labelInfoPanelController = null;
+    this._labelInfoPanelController = new LabelInfoPanelController(
+      this.dispatchTourWindow,
+      this.scene
+    );
     //this.addCube();
   }
 
@@ -245,6 +243,11 @@ export class Three3d extends ThreeObj {
     this.MODEL_GROUP.children = [];
     this.LIGHT_GROUP.children = [];
     this.GEOMETRY.children = [];
+    const { roamLine } = this.extraParams;
+    if (roamLine && roamLine.roamIsRunning) {
+      roamLine.roamIsRunning = false;
+      cameraEnterAnimation(this);
+    }
 
     clearOldLabel();
     this.setTextureBackground_test();
@@ -329,7 +332,7 @@ export class Three3d extends ThreeObj {
 
         this.scene.children = [];
         //在编辑器里增加灯光辅助
-        const light = object.getObjectByName(GLOBAL_CONSTANT.LIGHT_GROUP);
+        const light = object.getObjectByName(GROUP.LIGHT);
         if (light) {
           this.LIGHT_GROUP.children = light.children;
         }
@@ -347,9 +350,7 @@ export class Three3d extends ThreeObj {
           this.GEOMETRY.children = geometry.children;
         }
 
-        const markLabelGroup = object.getObjectByName(
-          GLOBAL_CONSTANT.MARK_LABEL_GROUP
-        );
+        const markLabelGroup = object.getObjectByName(GROUP.MARK_LABEL);
         if (markLabelGroup) {
           this.MARK_LABEL_GROUP.children = markLabelGroup.children;
         }
@@ -453,7 +454,7 @@ export class Three3d extends ThreeObj {
         this.MODEL_GROUP.add(group);
         //设置动画
         setAnimateClip(gltf, this.scene, group, this.extraParams);
-        enableShadow(group, this.scene);
+        this.enableShadow(group);
 
         this.extraParams.loadedModel += model.userData.modelTotal;
 
@@ -496,7 +497,7 @@ export class Three3d extends ThreeObj {
         model.userData.modelUrl + "?url",
         (gltf: GLTF) => {
           const group = setGLTFTransform(model, gltf);
-          enableShadow(group, this.scene);
+          this.enableShadow(group);
 
           this.MODEL_GROUP.add(group);
           this.onLoadProgress(100);
@@ -564,23 +565,24 @@ export class Three3d extends ThreeObj {
   private loadEndRun(): void {
     cameraEnterAnimation(this);
     this.setTextureBackground_test();
-    this.loadedModelsEnd();
-    const labelGroup = this.scene.getObjectByName(
-      GLOBAL_CONSTANT.MARK_LABEL_GROUP
-    );
+    //阴影的设置
+    const { useShadow } = this.scene.userData.config3d;
+    this.renderer.shadowMap.enabled = useShadow;
+    this.enableShadow(this.GEOMETRY);
+    this.enableShadow(this.LIGHT_GROUP);
+    this.enableShadow(this.MODEL_GROUP);
+
+    const labelGroup = this.scene.getObjectByName(GROUP.MARK_LABEL);
 
     if (labelGroup) {
       const _labelGroup = this.setLabelGroup(labelGroup);
       labelGroup.children = _labelGroup;
     }
+
+    this.loadedModelsEnd();
   }
 
   runJavascript(): void {
-    //阴影的设置
-    const { useShadow } = this.scene.userData.config3d;
-    this.renderer.shadowMap.enabled = useShadow;
-    enableShadow(this.scene, this.scene);
-
     if (import.meta.env.MODE === "development") {
       const editorIns = editorInstance?.getEditor();
       runScriptDev(editorIns);
@@ -638,15 +640,16 @@ export class Three3d extends ThreeObj {
     ];
 
     const _curve = this.scene.getObjectByName(curveEmptyGroupName);
-
+    let catmullRomCurve3: CatmullRomCurve3;
     if (_curve) {
       vector = [];
       _curve.children.forEach((child: Object3D<Object3DEventMap>) => {
         const position = getObjectWorldPosition(child);
+        child.layers.set(0);
         vector.push(position);
       });
 
-      const curve = new CatmullRomCurve3(vector, true, "catmullrom"); //"centripetal" | "chordal" | "catmullrom"
+      catmullRomCurve3 = new CatmullRomCurve3(vector, true, "catmullrom", 0.25); //"centripetal" | "chordal" | "catmullrom"
 
       // const points = curve.getPoints(150); // 创建线条材质
       // const material = new LineBasicMaterial({ color: 0xff0000 });
@@ -656,9 +659,29 @@ export class Three3d extends ThreeObj {
       // // 创建线条对象
       // const line = new Line(geometry, material);
       // this.scene.add(line);
-
-      return curve;
+      return catmullRomCurve3;
+    } else {
+      debugger;
+      return new CatmullRomCurve3(vector, true, "catmullrom");
     }
-    return new CatmullRomCurve3(vector, true, "catmullrom");
+  }
+  enableShadow(group: Group) {
+    const { useShadow } = this.scene.userData.config3d;
+
+    group.traverse((child: Object3D) => {
+      if (child.userData.isHelper) {
+        return;
+      }
+      if (child.type !== "AmbientLight") {
+        // 修改部分
+        if (Object.prototype.hasOwnProperty.call(child, "castShadow")) {
+          child.castShadow = useShadow;
+        }
+
+        if (Object.prototype.hasOwnProperty.call(child, "receiveShadow")) {
+          child.receiveShadow = useShadow;
+        }
+      }
+    });
   }
 }

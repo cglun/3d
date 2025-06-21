@@ -55,10 +55,10 @@ export function createDirectionalLight(name = "平行光") {
   light.shadow.mapSize.height = 2048; // 阴影图的高度
   light.shadow.camera.near = 0.5; // 阴影摄像机的近剪裁面
   light.shadow.camera.far = 500; // 阴影摄像机的远剪裁面
-  light.shadow.camera.left = -1;
-  light.shadow.camera.right = 1;
-  light.shadow.camera.top = 1;
-  light.shadow.camera.bottom = -1;
+  light.shadow.camera.left = -10;
+  light.shadow.camera.right = 10;
+  light.shadow.camera.top = 10;
+  light.shadow.camera.bottom = -10;
   light.position.set(3, 3, 3);
   light.shadow.bias = 0.0001;
   light.castShadow = true;

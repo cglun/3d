@@ -25,6 +25,7 @@ import { getThemeByScene } from "@/threeUtils/util4UI";
 import { getProjectData } from "@/threeUtils/util4Scene";
 import { MyContext } from "@/app/MyContext";
 import Toast3d from "../common/Toast3d";
+import { SceneUserData } from "@/three/Three3dConfig";
 
 function EditorViewer3d() {
   const editorCanvas: React.RefObject<HTMLDivElement> =
@@ -40,7 +41,8 @@ function EditorViewer3d() {
   const location = useLocation().search; // 获取 sceneId 参数
   const searchParams = new URLSearchParams(location);
   const sceneId = searchParams.get("sceneId") ?? "-1";
-
+  const userData = scene.userData as SceneUserData;
+  const refreshTime = userData.APP_THEME?.refreshTime || 0;
   useEffect(() => {
     // let editor: Three3dEditor;
     if (editorCanvas.current && !isInitialized.current) {
@@ -180,7 +182,7 @@ function EditorViewer3d() {
         window.removeEventListener("resize", editor.onWindowResize);
       }
     };
-  }, [sceneId]);
+  }, [sceneId, refreshTime]);
 
   function setMode(modeName: TransformControlsMode) {
     const editor = EditorInstance.getInstance().getEditor();

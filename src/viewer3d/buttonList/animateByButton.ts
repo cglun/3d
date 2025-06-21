@@ -12,7 +12,7 @@ import {
 } from "three";
 import { ActionItemMap } from "@/app/type";
 
-import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+import { GROUP } from "@/three/GLOBAL_CONSTANT";
 
 import { cameraTween, meshTween } from "@/three/animate";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -58,7 +58,7 @@ export function showModelByNameId(NAME_ID: string) {
 export function showModelBackHome(toggleButtonGroup: ToggleButtonGroup) {
   const { type } = toggleButtonGroup.customButtonItem;
   if (type == "TOGGLE") {
-    showModelByNameId(GLOBAL_CONSTANT.MODEL_GROUP);
+    showModelByNameId(GROUP.MODEL);
     const { animationTime } = toggleButtonGroup.userSetting;
     cameraBackHome(getCamera(), getControls(), animationTime);
   }
@@ -292,10 +292,10 @@ export function moveCameraDRAWER(
     const { animationTime, cameraOffset, modelOffset } =
       toggleButtonGroup.userSetting;
 
-    if (isMoveCamera && MODEL_GROUP.name === GLOBAL_CONSTANT.MODEL_GROUP) {
+    if (isMoveCamera && MODEL_GROUP.name === GROUP.MODEL) {
       cameraBackHome(camera, controls, animationTime);
     } else {
-      if (MODEL_GROUP.name === GLOBAL_CONSTANT.MODEL_GROUP) {
+      if (MODEL_GROUP.name === GROUP.MODEL) {
         return;
       }
       const { x, y, z } = getObjectWorldPosition(MODEL_GROUP);
@@ -331,10 +331,12 @@ export function cameraBackHome(
 ) {
   const { cameraPosition } = viewerInstance.getViewer().scene
     .userData as SceneUserData;
+
   cameraTween(camera, cameraPosition.end, animationTime)
     .start()
     .onComplete(() => {
       controls.target.set(0, 0, 0);
+
       isMoveCamera = false;
     });
 }
@@ -350,6 +352,7 @@ function commonHandler(item: ActionItemMap) {
   }
 }
 
+//显隐动画
 export function animateTOGGLE(
   item: ActionItemMap,
   toggleButtonGroup: ToggleButtonGroup
@@ -366,8 +369,8 @@ export function animateTOGGLE(
       commonHandler(item);
       item.isClick = !item.isClick;
       const { cameraOffset, animationTime } = toggleButtonGroup.userSetting;
-      if (NAME_ID === GLOBAL_CONSTANT.MODEL_GROUP) {
-        showModelByNameId(GLOBAL_CONSTANT.MODEL_GROUP);
+      if (NAME_ID === GROUP.MODEL) {
+        showModelByNameId(GROUP.MODEL);
         cameraBackHome(getCamera(), getControls(), animationTime);
         return;
       }
@@ -395,6 +398,7 @@ export function animateTOGGLE(
     },
   };
 }
+//抽屉按钮动画
 export function animateDRAWER(
   item: ActionItemMap,
   toggleButtonGroup: ToggleButtonGroup
@@ -412,6 +416,7 @@ export function animateDRAWER(
     },
   };
 }
+//拉伸按钮动画
 export function animateSTRETCH(
   item: ActionItemMap,
   toggleButtonGroup: ToggleButtonGroup
@@ -422,7 +427,7 @@ export function animateSTRETCH(
     handler: () => {
       commonHandler(item);
       //如果是全景按钮，
-      if (NAME_ID === GLOBAL_CONSTANT.MODEL_GROUP) {
+      if (NAME_ID === GROUP.MODEL) {
         //const customButtonList = _getViewer().userData
         stretchModelBackHome(toggleButtonGroup);
         return;
@@ -459,64 +464,4 @@ export function animateROAM(
     roamLine.roamIsRunning = isRunning;
     roamLine.tubeGeometry = new TubeGeometry(curve, 100, 2, 3, true);
   }
-}
-
-export function drawROAMLine2(scene: Scene, roamName: string) {
-  const vector: Vector3[] = [];
-  const _curve = scene.getObjectByName(roamName);
-  if (!_curve) {
-    return;
-  }
-
-  _curve.children.forEach((child) => {
-    const position = getObjectWorldPosition(child);
-    vector.push(position);
-  });
-
-  const curve = new CatmullRomCurve3(vector, true, "centripetal"); //"centripetal" | "chordal" | "catmullrom"
-
-  const points = curve.getPoints(150); // 创建线条材质
-  const material = new LineBasicMaterial({ color: 0xff0000 });
-  // 创建 BufferGeometry 并设置顶点
-  const geometry = new BufferGeometry().setFromPoints(points);
-
-  // 创建线条对象
-  const line = new Line(geometry, material);
-
-  //将线条添加到场景中
-  scene.add(line);
-}
-export function drawROAMLine_xx(scene: Scene, roamName: string) {
-  const vector: Vector3[] = [];
-  const _curve = scene.getObjectByName(roamName);
-  if (!_curve) {
-    return;
-  }
-
-  _curve.children.forEach((child) => {
-    const position = getObjectWorldPosition(child);
-    vector.push(position);
-  });
-
-  const curve = new CatmullRomCurve3(vector, true, "centripetal"); //"centripetal" | "chordal" | "catmullrom"
-
-  // getAll().parameters3d.roamLine.tubeGeometry = new TubeGeometry(
-
-  const points = curve.getPoints(150); // 创建线条材质
-  const material = new LineBasicMaterial({ color: 0xff0000 });
-  // 创建 BufferGeometry 并设置顶点
-  const geometry = new BufferGeometry().setFromPoints(points);
-
-  // 创建线条对象
-  const line = new Line(geometry, material);
-  scene.add(line);
-  return curve;
-  //将线条添加到场景中
-
-  //   curve,
-  //   100, // 曲线上的点数量
-  //   2, //  TubeGeometry 的半径
-  //   3, //  TubeGeometry 的半径分段数
-  //   true //  TubeGeometry 是否为闭合
-  // );
 }

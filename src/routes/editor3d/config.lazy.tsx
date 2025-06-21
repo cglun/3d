@@ -2,7 +2,6 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { Button, Form, InputGroup, ListGroup } from "react-bootstrap";
 
 import { ConfigCheck } from "@/component/common/ConfigCheck";
-import { enableShadow } from "@/three/common3d";
 
 import { useUpdateScene } from "@/app/hooks";
 import Toast3d from "@/component/common/Toast3d";
@@ -115,9 +114,15 @@ function RouteComponent() {
           toolTip="模型阴影"
           configKey="useShadow"
           callBack={() => {
-            const { renderer, scene } = editorInstance.getEditor();
-            renderer.shadowMap.enabled = scene.userData.config3d.useShadow;
-            enableShadow(scene, scene);
+            const editor = editorInstance.getEditor();
+
+            const { shadowMap } = editor.renderer;
+            const { config3d } = editor.scene.userData as SceneUserData;
+            shadowMap.enabled = config3d.useShadow;
+
+            editor.enableShadow(editor.MODEL_GROUP);
+            editor.enableShadow(editor.LIGHT_GROUP);
+            updateScene(editor.scene);
           }}
         />
       </ListGroup.Item>
@@ -131,7 +136,8 @@ function RouteComponent() {
       </ListGroup.Item>
       <ListGroup.Item>
         <ConfigCheck
-          iconName="node-plus-fill"
+          iconName="diagram-2"
+          // iconName="node-plus-fill"
           label="使用合成"
           configKey="useComposer"
           toolTip="后期合成、模型高亮等"

@@ -29,6 +29,7 @@ import ambientLightGUI from "./PropertyGUI/lightGUI/ambientLightGUI";
 import meshGroupGUI from "./PropertyGUI/meshGroupGUI";
 
 import css3CSS3DSpriteGUI from "./PropertyGUI/css3CSS3DSpriteGUI";
+import { GROUP } from "@/three/GLOBAL_CONSTANT";
 
 function TreeNode({
   node,
@@ -64,7 +65,7 @@ function TreeNode({
     if (editorObject instanceof AmbientLight) {
       ambientLightGUI(editorObject);
     }
-    if (editorObject instanceof Group) {
+    if (editorObject instanceof Group || editorObject instanceof Mesh) {
       meshGroupGUI(editorObject);
 
       editor.transformControl.attach(editorObject);
@@ -75,16 +76,23 @@ function TreeNode({
       // editor.MARK_LABEL_GROUP.add(editorObject);
       // editor.scene.add(editor.MARK_LABEL_GROUP);
       // const editorObject1 = editor.scene.getObjectByName(
-      //   GLOBAL_CONSTANT.MARK_LABEL_GROUP
+      //   GROUP.MARK_LABEL_GROUP
       // );
       // if (editorObject1) {
       //   editorObject1.add(editorObject);
       // }
-
-      // const label = editor.scene.getObjectByName(node.name);
       css3CSS3DSpriteGUI(editorObject);
-      editor.transformControl.detach();
-      // editor.transformControl.attach(editorObject);
+      const group = editor.scene.getObjectByName(GROUP.MARK_LABEL);
+      group?.remove(editorObject);
+      group?.add(editorObject);
+
+      // editor.transformControl.detach();
+
+      editor.transformControl.attach(editorObject);
+    }
+
+    if (editorObject?.parent?.parent?.name === GROUP._ROAM_) {
+      editor.transformControl.attach(editorObject);
     }
     if (editorObject?.parent?.name.includes("_GROUP")) {
       editorObject.userData.isSelected = !editorObject.userData.isSelected;
@@ -112,7 +120,8 @@ function TreeNode({
         ),
       },
       () => {
-        const { scene, transformControl } = editorInstance.getEditor();
+        const editor = editorInstance.getEditor();
+        const { scene, transformControl } = editor;
         const targetItem = scene.getObjectByProperty("uuid", item.uuid);
         if (targetItem === undefined) {
           return;
@@ -126,6 +135,7 @@ function TreeNode({
         if (transformControl) {
           transformControl.detach();
         }
+        editor.destroyGUI();
         updateScene(scene);
         Toast3d(`【${getObjectNameByName(item)}】已删除`);
       }

@@ -24,6 +24,24 @@ function RouteComponent() {
     {
       list: [
         {
+          logoName: "bi bi-arrow-clockwise",
+          position: "右上角",
+          buttonName: "刷新",
+          des: "增加刷新按钮。",
+        },
+        {
+          logoName: "archive",
+          position: "右侧栏",
+          buttonName: "大纲",
+          des: "分类显示。",
+        },
+      ],
+      updateTime: "2025年6月19日",
+    },
+
+    {
+      list: [
+        {
           logoName: "file-text",
           position: "底部栏",
           buttonName: "日志",

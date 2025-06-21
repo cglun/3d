@@ -1,10 +1,10 @@
 import { editorInstance } from "@/three/EditorInstance";
-import { Group } from "three";
+import { Group, Mesh } from "three";
 import positionGUI from "@/component/Editor/PropertyGUI/commonGUI/positionGUI";
 import scaleGUI from "@/component/Editor/PropertyGUI/commonGUI/scaleGUI";
 import rotationGUI from "@/component/Editor/PropertyGUI/commonGUI/rotationGUI";
 
-export default function meshGroupGUI(group: Group) {
+export default function meshGroupGUI(group: Group | Mesh) {
   const editor = editorInstance.getEditor();
   const folder = editor.createGUI("模型组"); // 添加旋转控件，将度转换为弧度
   folder.add(group, "name").name("模型名称");

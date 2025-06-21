@@ -1,7 +1,7 @@
 import { Scene, Vector3 } from "three";
 import { ActionItemMap, CustomButtonType } from "@/app/type";
 
-import { GLOBAL_CONSTANT } from "@/three/GLOBAL_CONSTANT";
+import { GROUP } from "@/three/GLOBAL_CONSTANT";
 
 import {
   animateDRAWER,
@@ -41,7 +41,7 @@ export function generateToggleButtonGroup(
   customButtonType: CustomButtonType
 ): ActionItemMap[] {
   const actionList: ActionItemMap[] = [];
-  const MODEL_GROUP = sceneContext.getObjectByName(GLOBAL_CONSTANT.MODEL_GROUP);
+  const MODEL_GROUP = sceneContext.getObjectByName(GROUP.MODEL);
 
   if (MODEL_GROUP) {
     const { children } = MODEL_GROUP;
@@ -66,7 +66,7 @@ export function generateToggleButtonGroup(
     children.forEach((item) => {
       const level2 = item.children;
       level2.forEach((item) => {
-        if (!hasValueString(item, GLOBAL_CONSTANT._ENV_)) {
+        if (!hasValueString(item, GROUP._ENV_)) {
           const { name } = item;
           actionList.push(
             getActionItemByMap(
@@ -101,7 +101,7 @@ export function generateToggleButtonGroup(
       level2.forEach((item) => {
         const level3 = item.children;
 
-        if (!hasValueString(item, GLOBAL_CONSTANT._ENV_)) {
+        if (!hasValueString(item, GROUP._ENV_)) {
           level3.forEach((item) => {
             const { name } = item;
             actionList.push(

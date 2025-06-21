@@ -11,7 +11,7 @@ import { OutlineViewScene } from "@/component/Editor/OutlineView/OutlineViewScen
 import Icon from "@/component/common/Icon";
 import { styleHeader } from "@/component/Editor/OutlineView/fontColor";
 
-import { GLOBAL_CONSTANT, GROUP } from "@/three/GLOBAL_CONSTANT";
+import { GROUP } from "@/three/GLOBAL_CONSTANT";
 import { APP_COLOR } from "@/app/type";
 // import { editor } from "monaco-editor";
 // import { editorInstance } from "@/three/EditorInstance";
@@ -24,10 +24,10 @@ export default function Index() {
     return null;
   }
 
-  const LIGHT_GROUP: Object3D[] = [];
-  const MODEL_GROUP: Object3D[] = [];
-  const MARK_LABEL_GROUP: Object3D[] = [];
-  const GEOMETRY: Object3D[] = [];
+  let LIGHT_GROUP: Object3D[] = [];
+  let MODEL_GROUP: Object3D[] = [];
+  let MARK_LABEL_GROUP: Object3D[] = [];
+  let GEOMETRY: Object3D[] = [];
 
   // if (scene.getObjectByName instanceof Function) {
   //   LIGHT_GROUP = scene.getObjectByName("LIGHT_GROUP")?.children || [];
@@ -36,28 +36,53 @@ export default function Index() {
 
   const array = scene.children;
 
+  // for (let index = 0; index < array.length; index++) {
+  //   const { name, children } = array[index];
+  //   if (name === GROUP.LIGHT_GROUP) {
+  //     LIGHT_GROUP = getGroupByName(children);
+  //   }
+  //   if (name === GROUP.MODEL) {
+  //     children.forEach((item) => {
+  //       MODEL_GROUP.push(item);
+  //     });
+  //   }
+  //   if (name === GROUP.MARK_LABEL_GROUP) {
+  //     children.forEach((item) => {
+  //       MARK_LABEL_GROUP.push(item);
+  //     });
+  //   }
+  //   if (name === GROUP.GEOMETRY) {
+  //     children.forEach((item) => {
+  //       GEOMETRY.push(item);
+  //     });
+  //   }
+  // }
   for (let index = 0; index < array.length; index++) {
     const { name, children } = array[index];
-    if (name === GLOBAL_CONSTANT.LIGHT_GROUP) {
-      children.forEach((item) => {
-        LIGHT_GROUP.push(item);
-      });
+    switch (name) {
+      case GROUP.LIGHT:
+        LIGHT_GROUP = getGroupByName(children);
+        break;
+      case GROUP.MODEL:
+        MODEL_GROUP = getGroupByName(children);
+        break;
+      case GROUP.MARK_LABEL:
+        MARK_LABEL_GROUP = getGroupByName(children);
+        break;
+      case GROUP.GEOMETRY:
+        GEOMETRY = getGroupByName(children);
+        break;
+      default:
+        break;
     }
-    if (name === GLOBAL_CONSTANT.MODEL_GROUP) {
-      children.forEach((item) => {
-        MODEL_GROUP.push(item);
-      });
-    }
-    if (name === GLOBAL_CONSTANT.MARK_LABEL_GROUP) {
-      children.forEach((item) => {
-        MARK_LABEL_GROUP.push(item);
-      });
-    }
-    if (name === GROUP.GEOMETRY) {
-      children.forEach((item) => {
-        GEOMETRY.push(item);
-      });
-    }
+  }
+
+  function getGroupByName(children: Object3D[]) {
+    const arr: Object3D[] = [];
+    children.forEach((item) => {
+      arr.push(item);
+    });
+    return arr;
   }
 
   return (

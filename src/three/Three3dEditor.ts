@@ -30,7 +30,7 @@ import {
 } from "@/threeUtils/factory3d";
 import directionalLightGUI from "@/component/Editor/PropertyGUI/lightGUI/directionalLightGUI";
 
-import { GLOBAL_CONSTANT } from "./GLOBAL_CONSTANT";
+import { GROUP } from "@/three/GLOBAL_CONSTANT";
 import cameraGUI from "@/component/Editor/PropertyGUI/cameraGUI";
 import meshGroupGUI from "@/component/Editor/PropertyGUI/meshGroupGUI";
 import css3CSS3DSpriteGUI from "@/component/Editor/PropertyGUI/css3CSS3DSpriteGUI";
@@ -61,14 +61,13 @@ export class Three3dEditor extends Three3d {
     dispatchTourWindow: Dispatch<TourWindow>
   ) {
     super(divElement, dispatchTourWindow);
-    this.HELPER_GROUP.name = GLOBAL_CONSTANT.HELPER_GROUP;
 
     const { useShadow } = this.scene.userData.config3d;
     const light = createDirectionalLight();
     light.castShadow = useShadow;
     // const lightHelper = createDirectionalLightHelper(light);
     // this.HELPER_GROUP.add(lightHelper);
-    this.HELPER_GROUP.name = GLOBAL_CONSTANT.HELPER_GROUP;
+    this.HELPER_GROUP.name = GROUP.HELPER;
     this.HELPER_GROUP.add(createGridHelper());
     this.scene.add(this.HELPER_GROUP);
     this.LIGHT_GROUP.add(light);
@@ -133,11 +132,11 @@ export class Three3dEditor extends Three3d {
     const sceneCopy = this.scene.clone();
 
     // this.destroyGUI();
-    const helperGroup = sceneCopy.getObjectByName(GLOBAL_CONSTANT.HELPER_GROUP);
+    const helperGroup = sceneCopy.getObjectByName(GROUP.HELPER);
     if (helperGroup) {
       sceneCopy.remove(helperGroup);
     }
-    const modelGroup = sceneCopy.getObjectByName(GLOBAL_CONSTANT.MODEL_GROUP);
+    const modelGroup = sceneCopy.getObjectByName(GROUP.MODEL);
     if (modelGroup) {
       sceneCopy.remove(modelGroup);
     }

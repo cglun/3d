@@ -67,10 +67,8 @@ export class Three3dViewer extends Three3d {
   }
   getPanelControllerButtonGroup() {
     const { scene } = viewerInstance.getViewer();
-    return getPanelControllerButtonGroup(
-      scene,
-      viewerInstance.getViewer().labelInfoPanelController!!
-    );
+    const controller = viewerInstance.getViewer().labelInfoPanelController;
+    return getPanelControllerButtonGroup(scene, controller);
   }
   onPointerClick(event: MouseEvent) {
     const { offsetX, offsetY } = event;
