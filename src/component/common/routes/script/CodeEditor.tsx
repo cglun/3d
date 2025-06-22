@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, ButtonGroup, Modal, Tab, Tabs } from "react-bootstrap";
+import Editor from "@monaco-editor/react";
+import { monaco } from "react-monaco-editor";
 
-import Editor from "@static/js/@monaco-editor/react";
-import { monaco } from "@static/js/react-monaco-editor";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import { useUpdateScene } from "@/app/hooks";
 import { APP_COLOR } from "@/app/type";

@@ -31,9 +31,9 @@ export default defineConfig({
         bootstrap: { singleton: true, requiredVersion: "^5.3.6" },
         three: { singleton: true, requiredVersion: "^0.177.0" },
         axios: { singleton: true, requiredVersion: "^1.10.0" },
-        "@static/js/@monaco-editor/react": { singleton: true },
-        "@static/js/react-monaco-editor": { singleton: true },
-
+        "@monaco-editor/react": { singleton: true },
+        "react-monaco-editor": { singleton: true },
+        "@static/css/github-dark.min.css": { singleton: true },
         // "@static/file3d/hdr/venice_sunset_1k.hdr?url": {
         //   singleton: false,
         // },
@@ -54,7 +54,7 @@ export default defineConfig({
     copyPublicDir: true,
     target: "esnext",
     minify: true,
-    // minify: false,
+    //minify: false,
     cssCodeSplit: false,
     outDir: "../ArgDataV.Designer.V2.Vite/editor3d",
     //outDir: "dist/editor3d",
@@ -67,9 +67,9 @@ export default defineConfig({
 
     rollupOptions: {
       external: [
-        "@static/css/github-dark.min.css?transform-only",
-        "@static/js/@monaco-editor/react",
-        "@static/js/react-monaco-editor",
+        "@static/css/github-dark.min.css",
+        "@react-monaco-editor",
+        "@monaco-editor/react",
         // "@static/file3d/hdr/spruit_sunrise_1k.hdr?url",
         // "@static/file3d/hdr/venice_sunset_1k.hdr?url",
         //new RegExp(".hdr"),
@@ -84,16 +84,15 @@ export default defineConfig({
           react: ["react", "react-dom"],
           // 将第三方库打包到一个单独的 chunk 中
           vendor: ["axios", "bootstrap", "three"],
+          // 将 monaco-editor 相关依赖打包到一个单独的 chunk 中
+          monaco: ["react-monaco-editor", "@monaco-editor/react"],
           // 可以根据需要添加更多的 chunk
         },
       },
     },
   },
   optimizeDeps: {
-    exclude: [
-      "@static/js/@monaco-editor/react",
-      "@static/js/react-monaco-editor",
-    ],
+    exclude: ["@react-monaco-editor", "@monaco-editor/react"],
   },
   server: {
     proxy: {
