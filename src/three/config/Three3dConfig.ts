@@ -53,6 +53,7 @@ export interface RoamButtonUserSetting {
   speed: number;
   offset: number;
   radius: number;
+  tension: number;
 }
 export interface ToggleButtonGroup {
   customButtonItem: CustomButtonItem;
@@ -95,7 +96,6 @@ export const config3dInit = {
 
 export interface SceneUserData {
   projectId: number;
-
   cameraPosition: {
     start: Vector3;
     end: Vector3;
@@ -137,14 +137,15 @@ export const customButtonListInit = {
       listGroup: [] as ActionItemMap[],
     },
     userSetting: {
-      scale: 4,
+      scale: 1,
       extrusionSegments: 100,
       radiusSegments: 3,
       closed: true,
       lookAhead: true,
       speed: 2,
-      offset: 15,
+      offset: 1,
       radius: 1,
+      tension: 0.25,
     },
   } as RoamButtonGroup,
   panelControllerButtonGroup: {
@@ -164,6 +165,7 @@ export interface ExtraParams {
   roamLine?: RoamLine;
 }
 export interface RoamLine {
+  roamTime: number;
   roamIsRunning: boolean;
   direction: Vector3;
   biNormal: Vector3;

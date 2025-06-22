@@ -5,6 +5,7 @@ export enum GROUP {
   LIGHT = "LIGHT_GROUP",
   GEOMETRY = "GEOMETRY_GROUP",
   BOX = "BOX_HELPER",
-  _ENV_ = "_ENV_",
-  _ROAM_ = "_ROAM_",
+  ENV = "_ENV_",
+  ROAM = "_ROAM_",
+  TEST = "TEST_GROUP",
 }

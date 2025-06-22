@@ -9,6 +9,7 @@ import {
   Object3DEventMap,
   Scene,
   Vector3,
+  Clock,
 } from "three";
 
 import { GLTF } from "three/addons/loaders/GLTFLoader.js";
@@ -21,7 +22,7 @@ import sceneUserData, {
   RoamLine,
   SceneUserData,
 } from "@/three/config/Three3dConfig";
-import { GROUP } from "@/three/GLOBAL_CONSTANT";
+import { GROUP } from "@/three/config/CONSTANT";
 import { GlbModel, UserDataType } from "@/app/type";
 import { editorInstance } from "@/three/instance/EditorInstance";
 
@@ -184,7 +185,8 @@ export function removeCanvasChild(canvas3d: React.RefObject<HTMLDivElement>) {
 export function manyou(
   roamLine: RoamLine,
   camera: PerspectiveCamera,
-  params: typeof sceneUserData.customButtonList.roamButtonGroup.userSetting
+  params: typeof sceneUserData.customButtonList.roamButtonGroup.userSetting,
+  clock: Clock
 ) {
   const {
     tubeGeometry,
@@ -195,13 +197,15 @@ export function manyou(
     normal,
     roamIsRunning,
   } = roamLine;
+  const runTime = clock.getElapsedTime();
+
   if (!roamIsRunning) {
     return;
   }
-  const time = Date.now();
+
+  const time = Date.now() - runTime * 1000;
   const loopTime = (20 * 1000) / params.speed;
   const t = (time % loopTime) / loopTime;
-  tubeGeometry;
 
   tubeGeometry.parameters.path.getPointAt(t, position);
   position.multiplyScalar(params.scale);

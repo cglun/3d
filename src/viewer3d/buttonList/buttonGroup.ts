@@ -1,7 +1,7 @@
 import { Scene, Vector3 } from "three";
 import { ActionItemMap, CustomButtonType } from "@/app/type";
 
-import { GROUP } from "@/three/GLOBAL_CONSTANT";
+import { GROUP } from "@/three/config/CONSTANT";
 
 import {
   animateDRAWER,
@@ -66,7 +66,7 @@ export function generateToggleButtonGroup(
     children.forEach((item) => {
       const level2 = item.children;
       level2.forEach((item) => {
-        if (!hasValueString(item, GROUP._ENV_)) {
+        if (!hasValueString(item, GROUP.ENV)) {
           const { name } = item;
           actionList.push(
             getActionItemByMap(
@@ -101,7 +101,7 @@ export function generateToggleButtonGroup(
       level2.forEach((item) => {
         const level3 = item.children;
 
-        if (!hasValueString(item, GROUP._ENV_)) {
+        if (!hasValueString(item, GROUP.ENV)) {
           level3.forEach((item) => {
             const { name } = item;
             actionList.push(
@@ -211,7 +211,13 @@ export function getRoamListByRoamButtonMap(scene: Scene): ActionItemMap[] {
         }
         if (state.includes("_STOP")) {
           roamAnimation(false);
-          const { camera, controls } = viewerInstance.getViewer();
+          const { camera, controls, extraParams } = viewerInstance.getViewer();
+          const { roamLine } = extraParams;
+          if (roamLine) {
+            roamLine.position = new Vector3(0, 0, 0);
+          }
+          console.log(roamLine?.position);
+
           cameraBackHome(camera, controls, 1000);
         }
 
@@ -228,9 +234,7 @@ export function roamAnimation(isRunning: boolean) {
   const listGroup = getRoamListByRoamButtonMap(scene);
   // 获取用户数据并进行类型断言
 
-  const { customButtonList } = scene.userData as {
-    customButtonList?: CustomButtonList;
-  };
+  const { customButtonList } = scene.userData as SceneUserData;
 
   // 进行空值检查
   if (customButtonList && customButtonList.roamButtonGroup) {

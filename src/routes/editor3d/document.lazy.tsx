@@ -27,6 +27,23 @@ function RouteComponent() {
           logoName: "bi bi-stars",
           position: "底部栏",
           buttonName: "特效",
+          des: "标签和立方体在切换其他功能时，可以隐藏。",
+        },
+        {
+          logoName: "bi bi-stars",
+          position: "底部栏",
+          buttonName: "特效",
+          des: "漫游路径增加张力参数，可以调整线条形状。",
+        },
+      ],
+      updateTime: "2025年6月22日",
+    },
+    {
+      list: [
+        {
+          logoName: "bi bi-stars",
+          position: "底部栏",
+          buttonName: "特效",
           des: "漫游路径优化，路线更平滑。 ",
         },
         {

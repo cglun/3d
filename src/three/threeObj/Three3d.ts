@@ -62,7 +62,7 @@ import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelControl
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
 import { runScriptPro } from "@/three/script/scriptPro";
-import { GROUP } from "@/three/GLOBAL_CONSTANT";
+import { GROUP } from "@/three/config/CONSTANT";
 import ThreeObj from "@/three/threeObj/ThreeObj";
 
 export class Three3d extends ThreeObj {
@@ -74,6 +74,7 @@ export class Three3d extends ThreeObj {
   private _controls: OrbitControls;
   private _clock = new Clock();
   private _timeS = 0;
+
   private _labelRenderer2d: CSS2DRenderer;
   private _labelRenderer3d: CSS3DRenderer;
   private _dispatchTourWindow: Dispatch<TourWindow>;
@@ -82,6 +83,15 @@ export class Three3d extends ThreeObj {
   private _MARK_LABEL_GROUP: Group = new Group();
   private _LIGHT_GROUP: Group = new Group();
   private _GEOMETRY: Group = new Group();
+  private _TEST_GROUP: Group = new Group();
+
+  get TEST_GROUP() {
+    return this._TEST_GROUP;
+  }
+  set TEST_GROUP(value) {
+    this._TEST_GROUP = value;
+  }
+
   get GEOMETRY() {
     return this._GEOMETRY;
   }
@@ -122,6 +132,7 @@ export class Three3d extends ThreeObj {
     loadedModel: 0,
 
     roamLine: {
+      roamTime: 0,
       roamIsRunning: false,
       direction: new Vector3(),
       biNormal: new Vector3(),
@@ -223,11 +234,13 @@ export class Three3d extends ThreeObj {
     this.MODEL_GROUP.name = GROUP.MODEL;
     this.LIGHT_GROUP.name = GROUP.LIGHT;
     this.GEOMETRY.name = GROUP.GEOMETRY;
+    this.TEST_GROUP.name = GROUP.TEST;
 
     this.scene.add(this.MARK_LABEL_GROUP);
     this.scene.add(this.MODEL_GROUP);
     this.scene.add(this.LIGHT_GROUP);
     this.scene.add(this.GEOMETRY);
+    this.scene.add(this.TEST_GROUP);
 
     this._camera = this.initCamera();
     this._renderer = this.initRenderer();
@@ -571,7 +584,7 @@ export class Three3d extends ThreeObj {
       this.controls.update();
       if (roamLine) {
         const { userSetting } = customButtonList.roamButtonGroup;
-        manyou(roamLine, this.camera, userSetting);
+        manyou(roamLine, this.camera, userSetting, this.clock);
       }
 
       if (useComposer) {
@@ -652,11 +665,13 @@ export class Three3d extends ThreeObj {
     outlinePass.visibleEdgeColor.set(canSeeColor);
     outlinePass.hiddenEdgeColor.set(noSeeColor);
   }
-  getCurveByEmptyMesh(curveEmptyGroupName: string): CatmullRomCurve3 {
+  getCurveByEmptyMesh(
+    curveEmptyGroupName: string,
+    tension: number
+  ): CatmullRomCurve3 {
     let vector: Vector3[] = [
       new Vector3(-40, 0, -40),
       new Vector3(40, 0, -40),
-      new Vector3(140, 0, -40),
       new Vector3(40, 0, 40),
       new Vector3(-40, 0, 40),
     ];
@@ -671,20 +686,15 @@ export class Three3d extends ThreeObj {
         vector.push(position);
       });
 
-      catmullRomCurve3 = new CatmullRomCurve3(vector, true, "catmullrom", 0.25); //"centripetal" | "chordal" | "catmullrom"
-
-      // const points = curve.getPoints(150); // 创建线条材质
-      // const material = new LineBasicMaterial({ color: 0xff0000 });
-      // // 创建 BufferGeometry 并设置顶点
-      // const geometry = new BufferGeometry().setFromPoints(points);
-
-      // // 创建线条对象
-      // const line = new Line(geometry, material);
-      // this.scene.add(line);
+      catmullRomCurve3 = new CatmullRomCurve3(
+        vector,
+        true,
+        "catmullrom",
+        tension
+      ); //"centripetal" | "chordal" | "catmullrom"
       return catmullRomCurve3;
     } else {
-      debugger;
-      return new CatmullRomCurve3(vector, true, "catmullrom");
+      return new CatmullRomCurve3(vector, true, "catmullrom", tension);
     }
   }
   enableShadow(group: Group) {

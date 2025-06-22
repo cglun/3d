@@ -24,12 +24,12 @@ import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { getObjectNameByName } from "@/three/utils/util4UI";
 
-import directionalLightGUI from "./PropertyGUI/lightGUI/directionalLightGUI";
-import ambientLightGUI from "./PropertyGUI/lightGUI/ambientLightGUI";
-import meshGroupGUI from "./PropertyGUI/meshGroupGUI";
+import directionalLightGUI from "../Editor/PropertyGUI/lightGUI/directionalLightGUI";
+import ambientLightGUI from "../Editor/PropertyGUI/lightGUI/ambientLightGUI";
+import meshGroupGUI from "../Editor/PropertyGUI/meshGroupGUI";
 
-import css3CSS3DSpriteGUI from "./PropertyGUI/css3CSS3DSpriteGUI";
-import { GROUP } from "@/three/GLOBAL_CONSTANT";
+import css3CSS3DSpriteGUI from "../Editor/PropertyGUI/css3CSS3DSpriteGUI";
+import { GROUP } from "@/three/config/CONSTANT";
 
 function TreeNode({
   node,
@@ -91,7 +91,7 @@ function TreeNode({
       editor.transformControl.attach(editorObject);
     }
 
-    if (editorObject?.parent?.parent?.name === GROUP._ROAM_) {
+    if (editorObject?.parent?.parent?.name === GROUP.ROAM) {
       editor.transformControl.attach(editorObject);
     }
     if (editorObject?.parent?.name.includes("_GROUP")) {

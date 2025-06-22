@@ -6,7 +6,7 @@ import { monaco } from "react-monaco-editor";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import { useUpdateScene } from "@/app/hooks";
 import { APP_COLOR } from "@/app/type";
-import UiButtonEditor from "@/component/common/routes/script/UiButtonEditor";
+import UiButtonEditor from "@/component/routes/script/UiButtonEditor";
 import Toast3d from "@/component/common/Toast3d";
 import Icon from "@/component/common/Icon";
 import { editorInstance } from "@/three/instance/EditorInstance";

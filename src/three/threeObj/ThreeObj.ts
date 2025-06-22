@@ -39,5 +39,8 @@ export default abstract class ThreeObj {
   abstract addOneModel(item: RecordItem): void;
   abstract setTextureBackground_test(): void;
   //通过给定的空物体创建曲线
-  abstract getCurveByEmptyMesh(curveEmptyGroupName: string): CatmullRomCurve3;
+  abstract getCurveByEmptyMesh(
+    curveEmptyGroupName: string,
+    tension: number
+  ): CatmullRomCurve3;
 }

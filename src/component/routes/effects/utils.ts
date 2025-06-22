@@ -1,4 +1,5 @@
 import { TourWindow } from "@/app/MyContext";
+import { GROUP } from "@/three/config/CONSTANT";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
 
@@ -7,6 +8,7 @@ import { cameraEnterAnimation } from "@/three/utils/util4Camera";
 import { LabelInfo } from "@/viewer3d/label/LabelInfo";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
 import { Dispatch } from "react";
+import { Vector3 } from "three";
 
 export function rgbaToHex_xx(rgba: string): string {
   if (rgba === undefined || rgba === null) {
@@ -107,7 +109,8 @@ export function getMarkLabelTest(
     },
   });
   testLabel.markLabel = markLabel;
-  editor.scene.add(testLabel.markLabel.css3DSprite);
+  testLabel.markLabel.css3DSprite.name = GROUP.TEST + "_markLabel";
+  editor.TEST_GROUP.add(testLabel.markLabel.css3DSprite);
   return testLabel.markLabel;
 }
 
@@ -122,7 +125,8 @@ export function getLabelInfo(
   const cube = editor.addCube();
 
   testLabel.labelInfo = new LabelInfo(cube, editor.scene, dispatchTourWindow);
-  editor.scene.add(testLabel.labelInfo.css3DSprite);
+  testLabel.labelInfo.name = GROUP.TEST + "_labelInfo";
+  editor.TEST_GROUP.add(testLabel.labelInfo.css3DSprite);
   return testLabel.labelInfo;
 }
 
@@ -147,7 +151,9 @@ export function createTestLabel(
 export function stopRoam() {
   const editor = editorInstance.getEditor();
   const { roamLine } = editor.extraParams;
-  if (roamLine !== undefined) {
+
+  if (roamLine && roamLine.roamIsRunning) {
+    roamLine.position = new Vector3(0, 0, 0);
     roamLine.roamIsRunning = false;
     cameraEnterAnimation(editor);
   }

@@ -9,7 +9,7 @@ import {
 } from "three";
 import { ActionItemMap } from "@/app/type";
 
-import { GROUP } from "@/three/GLOBAL_CONSTANT";
+import { GROUP } from "@/three/config/CONSTANT";
 
 import { cameraTween, meshTween } from "@/three/animate";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";

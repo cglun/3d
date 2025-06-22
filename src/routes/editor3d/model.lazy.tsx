@@ -1,11 +1,12 @@
+import { Container } from "react-bootstrap";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import React, { useEffect } from "react";
 import ListGroup from "react-bootstrap/esm/ListGroup";
-import { Search3d } from "@/component/Editor/Search3d";
-import { UploadModel } from "@/component/Editor/UploadModel";
-import ListCard from "@/component/Editor/ListCard";
+import { Search3d } from "@/component/common/Search3d";
+import { UploadModel } from "@/component/common/UploadModel";
+import ListCard from "@/component/common/ListCard";
 import _axios from "@/app/http";
-import { Container } from "react-bootstrap";
+
 import { RecordItem } from "@/app/type";
 
 // 定义响应数据的类型

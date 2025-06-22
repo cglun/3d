@@ -3,7 +3,7 @@ import { Object3D } from "three";
 import { Accordion, Card, ListGroup, ListGroupItem } from "react-bootstrap";
 
 import Property3d from "@/component/Editor/PropertyGUI/Index";
-import TreeList from "@/component/Editor/TreeList";
+import TreeList from "@/component/common/TreeList";
 import { useUpdateScene } from "@/app/hooks";
 import { OutlineViewCamera } from "@/component/Editor/OutlineView/OutlineViewCamera";
 import { OutlineViewScene } from "@/component/Editor/OutlineView/OutlineViewScene";
@@ -11,7 +11,7 @@ import { OutlineViewScene } from "@/component/Editor/OutlineView/OutlineViewScen
 import Icon from "@/component/common/Icon";
 import { styleHeader } from "@/component/Editor/OutlineView/fontColor";
 
-import { GROUP } from "@/three/GLOBAL_CONSTANT";
+import { GROUP } from "@/three/config/CONSTANT";
 import { APP_COLOR } from "@/app/type";
 // import { editor } from "monaco-editor";
 // import { editorInstance } from "@/three/EditorInstance";

@@ -9,20 +9,20 @@ import {
   Badge,
 } from "react-bootstrap";
 import { Color } from "three";
-import ListCard from "@/component/Editor/ListCard";
+import ListCard from "@/component/common/ListCard";
 import Toast3d from "@/component/common/Toast3d";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import { APP_COLOR, RecordItem } from "@/app/type";
 import axios from "@/app/http";
 import InputBase from "@/component/common/InputBase";
 import { useUpdateScene } from "@/app/hooks";
-import { Search3d } from "@/component/Editor/Search3d";
+import { Search3d } from "@/component/common/Search3d";
 
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import Icon from "@/component/common/Icon";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { getThemeByScene } from "@/three/utils/util4UI";
-import { stopRoam } from "@/component/common/routes/effects/utils";
+import { stopRoam } from "@/component/routes/effects/utils";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 
 // 若 getThemeByScene 确实在该文件且正确导出，使用此导入语句

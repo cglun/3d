@@ -30,7 +30,7 @@ import {
 } from "@/three/utils/factory3d";
 import directionalLightGUI from "@/component/Editor/PropertyGUI/lightGUI/directionalLightGUI";
 
-import { GROUP } from "@/three/GLOBAL_CONSTANT";
+import { GROUP } from "@/three/config/CONSTANT";
 import cameraGUI from "@/component/Editor/PropertyGUI/cameraGUI";
 import meshGroupGUI from "@/component/Editor/PropertyGUI/meshGroupGUI";
 import css3CSS3DSpriteGUI from "@/component/Editor/PropertyGUI/css3CSS3DSpriteGUI";
@@ -254,12 +254,17 @@ export class Three3dEditor extends Three3d {
     return this.guiInstance;
   }
   addCube() {
+    const testCube = this.scene.getObjectByName(GROUP.TEST + "_cube");
+    if (testCube) {
+      return testCube;
+    }
     const cube = new Mesh(
       new BoxGeometry(1, 1, 1),
       new MeshBasicMaterial({ color: 0xff0000 })
     );
+    cube.name = GROUP.TEST + "_cube";
     cube.position.set(0, 0, 0);
-    this.HELPER_GROUP.add(cube);
+    this.TEST_GROUP.add(cube);
     return cube;
   }
 }

@@ -7,7 +7,7 @@ import {
   ListGroup,
 } from "react-bootstrap";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import CodeEditor from "@/component/common/routes/script/CodeEditor";
+import CodeEditor from "@/component/routes/script/CodeEditor";
 import { useUpdateScene } from "@/app/hooks";
 import AlertBase from "@/component/common/AlertBase";
 import { APP_COLOR, CustomButtonType } from "@/app/type";

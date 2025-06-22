@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { SceneUserData } from "@/three/config/Three3dConfig";
-import { createTestLabel } from "@/component/common/routes/effects/utils";
+import { createTestLabel } from "@/component/routes/effects/utils";
 import { TourWindow } from "@/app/MyContext";
 export default function modelHighlightGUI(
   dispatchTourWindow: Dispatch<TourWindow>

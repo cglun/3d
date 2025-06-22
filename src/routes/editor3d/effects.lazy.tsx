@@ -7,14 +7,15 @@ import { useContext, useEffect } from "react";
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 
 import Icon from "@/component/common/Icon";
-import markLabelGUI from "@/component/common/routes/effects/gui/markLabelGUI";
+import markLabelGUI from "@/component/routes/effects/gui/markLabelGUI";
 
 import { MyContext } from "@/app/MyContext";
-import topCardGUI from "@/component/common/routes/effects/gui/topCardGUI";
-import modelHighlightGUI from "@/component/common/routes/effects/gui/modelHighlightGUI";
-import roamGUI from "@/component/common/routes/effects/gui/roamGUI";
-import { stopRoam } from "@/component/common/routes/effects/utils";
+import topCardGUI from "@/component/routes/effects/gui/topCardGUI";
+import modelHighlightGUI from "@/component/routes/effects/gui/modelHighlightGUI";
+import roamGUI from "@/component/routes/effects/gui/roamGUI";
+import { stopRoam } from "@/component/routes/effects/utils";
 import { editorInstance } from "@/three/instance/EditorInstance";
+import { GROUP } from "@/three/config/CONSTANT";
 
 // 定义一个变量来保存 GUI 实例
 
@@ -28,9 +29,16 @@ function RouteComponent() {
   const buttonColor = getButtonColor(themeColor);
   const { dispatchTourWindow } = useContext(MyContext);
   useEffect(() => {
+    const editor = editorInstance.getEditor();
+    const testGroup = editor.scene.getObjectByName(GROUP.TEST);
+    if (testGroup) testGroup.visible = true;
     return () => {
-      const editor = editorInstance.getEditor();
       editor.outlinePass.selectedObjects = [];
+
+      // testGroup?.children.forEach((item) => {
+      //   item.visible = false;
+      // });
+      if (testGroup) testGroup.visible = false;
       editor.destroyGUI();
       stopRoam();
     };
