@@ -7,24 +7,18 @@ import {
 } from "three";
 import { TourWindow } from "@/app/MyContext";
 
-import { CSS3DSprite } from "three/examples/jsm/renderers/CSS3DRenderer.js";
+import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
+import { getObjectWorldPosition } from "@/three/utils/utils";
 
-import { getObjectWorldPosition } from "@/viewer3d/viewer3dUtils";
-
-import {
-  Line2,
-  LineGeometry,
-  LineMaterial,
-} from "three/examples/jsm/Addons.js";
-
-import { SceneUserData, userCssStyle } from "@/three/Three3dConfig";
+import { SceneUserData, userCssStyle } from "@/three/config/Three3dConfig";
 
 import {
   getCardBackgroundUrl,
   getObjectNameByName,
   setClassName,
-} from "@/threeUtils/util4UI";
-import { getTourSrc } from "@/threeUtils/util4Scene";
+} from "@/three/utils/util4UI";
+import { getTourSrc } from "@/three/utils/util4Scene";
+import { LineGeometry, LineMaterial, Line2 } from "three/addons/Addons.js";
 
 export class LabelInfo {
   mesh;
@@ -208,7 +202,7 @@ export class LabelInfo {
     // 使用 LineGeometry
     const geometry = new LineGeometry();
     geometry.setPositions(points.flatMap((p) => [p.x, p.y, p.z]));
-    // 使用 LineMaterial
+
     const material = new LineMaterial({
       color,
       linewidth: lineWidth,

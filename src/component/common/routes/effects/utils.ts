@@ -1,7 +1,8 @@
 import { TourWindow } from "@/app/MyContext";
-import { editorInstance } from "@/three/EditorInstance";
-import { Three3dEditor } from "@/three/Three3dEditor";
-import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
+
+import { cameraEnterAnimation } from "@/three/utils/util4Camera";
 
 import { LabelInfo } from "@/viewer3d/label/LabelInfo";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";

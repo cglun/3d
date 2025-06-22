@@ -13,11 +13,11 @@ import { GROUP } from "@/three/GLOBAL_CONSTANT";
 
 import { cameraTween, meshTween } from "@/three/animate";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { getObjectWorldPosition } from "@/viewer3d/viewer3dUtils";
+import { getObjectWorldPosition } from "@/three/utils/utils";
 import { roamAnimation } from "@/viewer3d/buttonList/buttonGroup";
 
-import { SceneUserData, ToggleButtonGroup } from "@/three/Three3dConfig";
-import { viewerInstance } from "@/three/ViewerInstance";
+import { SceneUserData, ToggleButtonGroup } from "@/three/config/Three3dConfig";
+import { viewerInstance } from "@/three/instance/ViewerInstance";
 
 function _getViewer() {
   return viewerInstance.getViewer();

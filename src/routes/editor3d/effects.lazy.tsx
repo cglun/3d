@@ -4,7 +4,7 @@ import { useUpdateScene } from "@/app/hooks";
 import { Button, ButtonGroup, ListGroup, ListGroupItem } from "react-bootstrap";
 import { useContext, useEffect } from "react";
 
-import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
+import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 
 import Icon from "@/component/common/Icon";
 import markLabelGUI from "@/component/common/routes/effects/gui/markLabelGUI";
@@ -14,7 +14,7 @@ import topCardGUI from "@/component/common/routes/effects/gui/topCardGUI";
 import modelHighlightGUI from "@/component/common/routes/effects/gui/modelHighlightGUI";
 import roamGUI from "@/component/common/routes/effects/gui/roamGUI";
 import { stopRoam } from "@/component/common/routes/effects/utils";
-import { editorInstance } from "@/three/EditorInstance";
+import { editorInstance } from "@/three/instance/EditorInstance";
 
 // 定义一个变量来保存 GUI 实例
 

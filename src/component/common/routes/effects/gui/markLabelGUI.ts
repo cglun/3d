@@ -1,7 +1,7 @@
 import { TourWindow } from "@/app/MyContext";
 
-import { editorInstance } from "@/three/EditorInstance";
-import { SceneUserData } from "@/three/Three3dConfig";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { SceneUserData } from "@/three/config/Three3dConfig";
 import { Dispatch } from "react";
 
 import {

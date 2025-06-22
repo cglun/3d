@@ -9,7 +9,10 @@ import {
 } from "react-bootstrap";
 import { ActionItemMap, APP_COLOR, CustomButtonType } from "@/app/type";
 
-import { CustomButtonList, customButtonListInit } from "@/three/Three3dConfig";
+import {
+  CustomButtonList,
+  customButtonListInit,
+} from "@/three/config/Three3dConfig";
 import Icon from "@/component/common/Icon";
 
 export default function UiButtonEditor({

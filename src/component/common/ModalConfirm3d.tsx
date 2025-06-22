@@ -11,8 +11,8 @@ import { _confirmButton } from "@/component/common/ModalConfirmUtils";
 import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 
-import { editorInstance } from "@/three/EditorInstance";
-import { getButtonColor } from "@/threeUtils/util4UI";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { getButtonColor } from "@/three/utils/util4UI";
 
 let container = document.getElementById("toast");
 if (container === null) {

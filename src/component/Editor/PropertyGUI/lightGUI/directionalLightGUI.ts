@@ -1,4 +1,4 @@
-import { editorInstance } from "@/three/EditorInstance";
+import { editorInstance } from "@/three/instance/EditorInstance";
 
 import { DirectionalLight } from "three";
 import { lightGUI } from "./lightGUI";

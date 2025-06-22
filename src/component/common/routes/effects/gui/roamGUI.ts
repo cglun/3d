@@ -4,9 +4,12 @@ import {
   MeshLambertMaterial,
   TubeGeometry,
 } from "three";
-import { RoamButtonUserSetting, SceneUserData } from "@/three/Three3dConfig";
-import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
-import { editorInstance } from "@/three/EditorInstance";
+import {
+  RoamButtonUserSetting,
+  SceneUserData,
+} from "@/three/config/Three3dConfig";
+import { cameraEnterAnimation } from "@/three/utils/util4Camera";
+import { editorInstance } from "@/three/instance/EditorInstance";
 export default function roamGUI() {
   const editor = editorInstance.getEditor();
   const { customButtonList } = editorInstance.getEditor().scene

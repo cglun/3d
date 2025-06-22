@@ -8,12 +8,12 @@ import Toast3d from "@/component/common/Toast3d";
 
 import { APP_COLOR, DELAY } from "@/app/type";
 import { useEffect, useState } from "react";
-import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
+import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import Icon from "@/component/common/Icon";
 
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
-import { editorInstance } from "@/three/EditorInstance";
-import { config3dInit, SceneUserData } from "@/three/Three3dConfig";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { config3dInit, SceneUserData } from "@/three/config/Three3dConfig";
 
 export const Route = createLazyFileRoute("/editor3d/config")({
   component: RouteComponent,

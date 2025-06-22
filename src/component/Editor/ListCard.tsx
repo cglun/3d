@@ -12,9 +12,9 @@ import { useUpdateScene } from "@/app/hooks";
 import Trigger3d from "@/component/common/Trigger3d";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import Icon from "@/component/common/Icon";
-import { editorInstance } from "@/three/EditorInstance";
-import { getThemeByScene } from "@/threeUtils/util4UI";
-import sceneUserData from "@/three/Three3dConfig";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { getThemeByScene } from "@/three/utils/util4UI";
+import sceneUserData from "@/three/config/Three3dConfig";
 
 interface Props {
   list: RecordItem[];

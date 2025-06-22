@@ -14,10 +14,10 @@ import { ButtonGroup, Card, Container } from "react-bootstrap";
 import { useUpdateScene } from "@/app/hooks";
 
 import Icon from "@/component/common/Icon";
-import { editorInstance } from "@/three/EditorInstance";
-import { getThemeByScene, setClassName } from "@/threeUtils/util4UI";
-import { addMonkey } from "@/threeUtils/util4Scene";
-import { createDirectionalLight } from "@/threeUtils/factory3d";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { getThemeByScene, setClassName } from "@/three/utils/util4UI";
+import { addMonkey } from "@/three/utils/util4Scene";
+import { createDirectionalLight } from "@/three/utils/factory3d";
 
 export const Route = createLazyFileRoute("/editor3d/mesh")({
   component: RouteComponent,

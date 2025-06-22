@@ -10,10 +10,14 @@ import axios, { loadAssets } from "@/app/http";
 import { APP_COLOR, RecordItem } from "@/app/type";
 
 import Icon from "@/component/common/Icon";
-import { editorInstance } from "@/three/EditorInstance";
+import { editorInstance } from "@/three/instance/EditorInstance";
 
-import { viewerInstance } from "@/three/ViewerInstance";
-import { base64ToBlob, blobToFile, getButtonColor } from "@/threeUtils/util4UI";
+import { viewerInstance } from "@/three/instance/ViewerInstance";
+import {
+  base64ToBlob,
+  blobToFile,
+  getButtonColor,
+} from "@/three/utils/util4UI";
 
 export default function EditorForm({
   item,

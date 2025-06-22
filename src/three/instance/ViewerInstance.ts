@@ -1,4 +1,4 @@
-import { Three3dViewer } from "@/three/Three3dViewer";
+import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 
 export class ViewerInstance {
   // 存储单例实例

@@ -5,9 +5,9 @@ import {
   SceneUserData,
   userCssStyle,
   UserCssStyle,
-} from "@/three/Three3dConfig";
-import { getCardBackgroundUrl, setClassName } from "@/threeUtils/util4UI";
-import { getTourSrc } from "@/threeUtils/util4Scene";
+} from "@/three/config/Three3dConfig";
+import { getCardBackgroundUrl, setClassName } from "@/three/utils/util4UI";
+import { getTourSrc } from "@/three/utils/util4Scene";
 
 export interface MarkLabelProps {
   markName: string;

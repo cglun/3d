@@ -9,9 +9,12 @@ import { APP_COLOR } from "@/app/type";
 import UiButtonEditor from "@/component/common/routes/script/UiButtonEditor";
 import Toast3d from "@/component/common/Toast3d";
 import Icon from "@/component/common/Icon";
-import { editorInstance } from "@/three/EditorInstance";
-import { CustomButtonList, customButtonListInit } from "@/three/Three3dConfig";
-import { getThemeByScene } from "@/threeUtils/util4UI";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import {
+  CustomButtonList,
+  customButtonListInit,
+} from "@/three/config/Three3dConfig";
+import { getThemeByScene } from "@/three/utils/util4UI";
 
 interface CodeEditorProps {
   language?: string;

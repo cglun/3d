@@ -1,4 +1,4 @@
-import { editorInstance } from "@/three/EditorInstance";
+import { editorInstance } from "@/three/instance/EditorInstance";
 import { Group, Mesh } from "three";
 import positionGUI from "@/component/Editor/PropertyGUI/commonGUI/positionGUI";
 import scaleGUI from "@/component/Editor/PropertyGUI/commonGUI/scaleGUI";

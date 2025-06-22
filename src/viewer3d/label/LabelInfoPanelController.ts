@@ -2,8 +2,8 @@ import React from "react";
 import { Scene } from "three";
 import { TourWindow } from "@/app/MyContext";
 import { LabelInfo } from "@/viewer3d/label/LabelInfo";
-import { viewerInstance } from "@/three/ViewerInstance";
-import { SceneUserData } from "@/three/Three3dConfig";
+import { viewerInstance } from "@/three/instance/ViewerInstance";
+import { SceneUserData } from "@/three/config/Three3dConfig";
 
 // 标签信息面板控制器
 export class LabelInfoPanelController {

@@ -12,9 +12,9 @@ import {
 import ModalTour from "@/component/common/ModalTour";
 import { reducerCamera, reducerScene, reducerTour } from "@/app/reducer";
 
-import { viewerInstance } from "@/three/ViewerInstance";
-import { Three3dViewer } from "@/three/Three3dViewer";
-import { getProjectData } from "@/threeUtils/util4Scene";
+import { viewerInstance } from "@/three/instance/ViewerInstance";
+import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
+import { getProjectData } from "@/three/utils/util4Scene";
 
 /**
  * 其他应用可以调用此组件，

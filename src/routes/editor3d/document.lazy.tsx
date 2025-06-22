@@ -9,7 +9,7 @@ import {
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useUpdateScene } from "@/app/hooks";
-import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
+import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import Icon from "@/component/common/Icon";
 import { APP_COLOR } from "@/app/type";
 export const Route = createLazyFileRoute("/editor3d/document")({

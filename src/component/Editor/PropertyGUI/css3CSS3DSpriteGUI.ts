@@ -1,4 +1,4 @@
-import { editorInstance } from "@/three/EditorInstance";
+import { editorInstance } from "@/three/instance/EditorInstance";
 import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
 import positionGUI from "@/component/Editor/PropertyGUI/commonGUI/positionGUI";
 

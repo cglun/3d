@@ -21,8 +21,8 @@ import Toast3d from "@/component/common/Toast3d";
 import { useUpdateScene } from "@/app/hooks";
 import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
-import { editorInstance } from "@/three/EditorInstance";
-import { getObjectNameByName } from "@/threeUtils/util4UI";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { getObjectNameByName } from "@/three/utils/util4UI";
 
 import directionalLightGUI from "./PropertyGUI/lightGUI/directionalLightGUI";
 import ambientLightGUI from "./PropertyGUI/lightGUI/ambientLightGUI";

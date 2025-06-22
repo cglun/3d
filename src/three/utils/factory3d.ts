@@ -16,16 +16,12 @@ import {
   CSS3DSprite,
   CSS3DRenderer,
 } from "three/addons/renderers/CSS3DRenderer.js";
-
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { UserDataType } from "@/app/type";
-
 import { TourWindow } from "@/app/MyContext";
-
-import { UnrealBloomPass } from "three/examples/jsm/Addons.js";
-import sceneUserData from "@/three/Three3dConfig";
-import { getTourSrc } from "@/threeUtils/util4Scene";
-
-import { setClassName } from "@/threeUtils/util4UI";
+import sceneUserData from "@/three/config/Three3dConfig";
+import { getTourSrc } from "@/three/utils/util4Scene";
+import { setClassName } from "@/three/utils/util4UI";
 
 export function createPerspectiveCamera(
   node: HTMLElement,

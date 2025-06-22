@@ -10,7 +10,7 @@ import {
   Scene,
   Vector3,
 } from "three";
-import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
+
 import { GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
@@ -20,10 +20,10 @@ import sceneUserData, {
   ExtraParams,
   RoamLine,
   SceneUserData,
-} from "@/three/Three3dConfig";
+} from "@/three/config/Three3dConfig";
 import { GROUP } from "@/three/GLOBAL_CONSTANT";
 import { GlbModel, UserDataType } from "@/app/type";
-import { editorInstance } from "@/three/EditorInstance";
+import { editorInstance } from "@/three/instance/EditorInstance";
 
 //设置物体的变换
 export function setGLTFTransform(model: GlbModel, gltf: GLTF) {
@@ -239,13 +239,6 @@ export function manyou(
   camera.matrixWorldNeedsUpdate = true;
   camera.quaternion.setFromRotationMatrix(camera.matrix);
   // camera.updateMatrixWorld();
-}
-export function setOutLinePassColor_xx(
-  color: string,
-  outlinePass: OutlinePass
-) {
-  outlinePass.visibleEdgeColor.set(color); // 可见边缘颜色
-  outlinePass.hiddenEdgeColor.set(color); // 不可见边缘颜色
 }
 
 //设置动画

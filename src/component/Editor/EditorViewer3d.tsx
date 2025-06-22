@@ -16,16 +16,20 @@ import { TransformControlsMode } from "three/addons/controls/TransformControls.j
 import { useUpdateCamera, useUpdateScene } from "@/app/hooks";
 import ModalTour from "@/component/common/ModalTour";
 import Icon from "@/component/common/Icon";
-import { Three3dEditor } from "@/three/Three3dEditor";
-import { editorInstance, EditorInstance } from "@/three/EditorInstance";
+
+import {
+  editorInstance,
+  EditorInstance,
+} from "@/three/instance/EditorInstance";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import AlertBase from "@/component/common/AlertBase";
 import { APP_COLOR, DELAY, RecordItem } from "@/app/type";
-import { getThemeByScene } from "@/threeUtils/util4UI";
-import { getProjectData } from "@/threeUtils/util4Scene";
+import { getThemeByScene } from "@/three/utils/util4UI";
+import { getProjectData } from "@/three/utils/util4Scene";
 import { MyContext } from "@/app/MyContext";
-import Toast3d from "../common/Toast3d";
-import { SceneUserData } from "@/three/Three3dConfig";
+import Toast3d from "@/component/common/Toast3d";
+import { SceneUserData } from "@/three/config/Three3dConfig";
+import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
 
 function EditorViewer3d() {
   const editorCanvas: React.RefObject<HTMLDivElement> =

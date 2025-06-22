@@ -1,6 +1,6 @@
 import { Object3D, Object3DEventMap, Raycaster, Vector2, Vector3 } from "three";
-import { Three3d } from "@/three/Three3d";
-import { SceneUserData } from "@/three/Three3dConfig";
+
+import { SceneUserData } from "@/three/config/Three3dConfig";
 
 import { TourWindow } from "@/app/MyContext";
 import {
@@ -9,7 +9,8 @@ import {
   getToggleButtonGroup,
 } from "@/viewer3d/buttonList/buttonGroup";
 
-import { viewerInstance } from "@/three/ViewerInstance";
+import { viewerInstance } from "@/three/instance/ViewerInstance";
+import { Three3d } from "./Three3d";
 
 /**
  * Three3dViewer 类，继承自 Three3d 类，用于创建一个 3D 视图器。

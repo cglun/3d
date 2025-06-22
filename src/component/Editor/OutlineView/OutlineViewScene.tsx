@@ -2,8 +2,8 @@ import ListGroup from "react-bootstrap/esm/ListGroup";
 
 import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
-import { editorInstance } from "@/three/EditorInstance";
-import sceneGUI from "../PropertyGUI/sceneGUI";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import sceneGUI from "@/component/Editor/PropertyGUI/sceneGUI";
 
 export function OutlineViewScene() {
   return (

@@ -17,23 +17,24 @@ import {
 import { Dispatch } from "react";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
-import { Three3d } from "@/three/Three3d";
+
 import { TransformControls } from "three/addons/controls/TransformControls.js";
-import { BackgroundHDR, SceneUserData } from "@/three/Three3dConfig";
-import { addMonkey } from "@/threeUtils/util4Scene";
+import { BackgroundHDR, SceneUserData } from "@/three/config/Three3dConfig";
+import { addMonkey } from "@/three/utils/util4Scene";
 
 import { TourWindow } from "@/app/MyContext";
 import { GlbModel } from "@/app/type";
 import {
   createDirectionalLight,
   createGridHelper,
-} from "@/threeUtils/factory3d";
+} from "@/three/utils/factory3d";
 import directionalLightGUI from "@/component/Editor/PropertyGUI/lightGUI/directionalLightGUI";
 
 import { GROUP } from "@/three/GLOBAL_CONSTANT";
 import cameraGUI from "@/component/Editor/PropertyGUI/cameraGUI";
 import meshGroupGUI from "@/component/Editor/PropertyGUI/meshGroupGUI";
 import css3CSS3DSpriteGUI from "@/component/Editor/PropertyGUI/css3CSS3DSpriteGUI";
+import { Three3d } from "@/three/threeObj/Three3d";
 
 export class Three3dEditor extends Three3d {
   static divElement: HTMLDivElement;

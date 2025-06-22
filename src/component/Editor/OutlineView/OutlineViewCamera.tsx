@@ -6,11 +6,11 @@ import { useUpdateCamera } from "@/app/hooks";
 import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 
-import { editorInstance } from "@/three/EditorInstance";
-import { SceneUserData } from "@/three/Three3dConfig";
-import { getButtonColor } from "@/threeUtils/util4UI";
-import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
-import cameraGUI from "../PropertyGUI/cameraGUI";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { SceneUserData } from "@/three/config/Three3dConfig";
+import { getButtonColor } from "@/three/utils/util4UI";
+import { cameraEnterAnimation } from "@/three/utils/util4Camera";
+import cameraGUI from "@/component/Editor/PropertyGUI/cameraGUI";
 
 export function OutlineViewCamera() {
   const { camera } = useUpdateCamera();

@@ -4,8 +4,8 @@
 
 import { Object3D, Scene } from "three";
 import { APP_COLOR } from "@/app/type";
-import { editorInstance } from "@/three/EditorInstance";
-import sceneUserData from "@/three/Three3dConfig";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import sceneUserData from "@/three/config/Three3dConfig";
 
 export function getButtonColor(theme: APP_COLOR) {
   const color = theme === "dark" ? "light" : "dark";

@@ -1,8 +1,8 @@
 /** ============脚本开发调试=============== */
 /** ============调试完成后，把【开始】到【结束】之间的代码复制到脚本中保存，刷新！*/
 
-import { Three3dEditor } from "@/three/Three3dEditor";
-import { Three3dViewer } from "@/three/Three3dViewer";
+import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
+import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 
 export function runScriptDev(
   //@ts-ignore 忽略类型错误,  脚本开发调试   【开始】到【结束】之间的代码复制到脚本中保存，刷新！

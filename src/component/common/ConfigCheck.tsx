@@ -5,8 +5,8 @@ import InputGroup from "react-bootstrap/esm/InputGroup";
 
 import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
 import Tooltip from "react-bootstrap/esm/Tooltip";
-import { editorInstance } from "@/three/EditorInstance";
-import { Config3d } from "@/three/Three3dConfig";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { Config3d } from "@/three/config/Three3dConfig";
 import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 export function ConfigCheck({

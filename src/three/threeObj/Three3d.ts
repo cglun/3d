@@ -18,12 +18,17 @@ import {
 
 import TWEEN from "three/addons/libs/tween.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import ThreeObj from "@/three/ThreeObj";
+
 import { GlbModel, RecordItem } from "@/app/type";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
-import { runScriptDev } from "@/three/scriptDev";
+import { runScriptDev } from "@/three/script/scriptDev";
 
-import { ExtraParams, hdr, HdrKey, SceneUserData } from "@/three/Three3dConfig";
+import {
+  ExtraParams,
+  hdr,
+  HdrKey,
+  SceneUserData,
+} from "@/three/config/Three3dConfig";
 import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
@@ -32,16 +37,16 @@ import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import { CSS3DRenderer } from "three/addons/renderers/CSS3DRenderer.js";
 import { Curves, GLTF, ShaderPass } from "three/addons/Addons.js";
-import sceneUserData from "@/three/Three3dConfig";
+import sceneUserData from "@/three/config/Three3dConfig";
 
-import { getObjectWorldPosition } from "@/viewer3d/viewer3dUtils";
+import { getObjectWorldPosition } from "@/three/utils/utils";
 import { TourWindow } from "@/app/MyContext";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
 import {
   createLabelRenderer,
   createPerspectiveCamera,
   createUnrealBloomPass,
-} from "@/threeUtils/factory3d";
+} from "@/three/utils/factory3d";
 import {
   clearOldLabel,
   getProjectData,
@@ -50,14 +55,15 @@ import {
   setAnimateClip,
   setGLTFTransform,
   strToJson,
-} from "@/threeUtils/util4Scene";
-import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
+} from "@/three/utils/util4Scene";
+import { cameraEnterAnimation } from "@/three/utils/util4Camera";
 import { Dispatch } from "react";
 import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelController";
-import { editorInstance } from "@/three/EditorInstance";
-import { viewerInstance } from "@/three/ViewerInstance";
-import { runScriptPro } from "@/three/scriptPro";
-import { GROUP } from "./GLOBAL_CONSTANT";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { viewerInstance } from "@/three/instance/ViewerInstance";
+import { runScriptPro } from "@/three/script/scriptPro";
+import { GROUP } from "@/three/GLOBAL_CONSTANT";
+import ThreeObj from "@/three/threeObj/ThreeObj";
 
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;

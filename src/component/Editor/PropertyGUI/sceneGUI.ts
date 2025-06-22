@@ -1,6 +1,6 @@
 import Toast3d from "@/component/common/Toast3d";
-import { editorInstance } from "@/three/EditorInstance";
-import { SceneUserData } from "@/three/Three3dConfig";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { SceneUserData } from "@/three/config/Three3dConfig";
 import { Color, FogExp2, Scene } from "three";
 
 export default function sceneGUI(scene: Scene) {

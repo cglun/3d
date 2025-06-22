@@ -7,7 +7,7 @@ export interface InfoPanelProps {
   position: Vector2; // 面板的位置
   info: RecordItem; // 面板的数据
 }
-export default function InfoPanel({
+export default function InfoPanel_xx({
   show = false,
   position = new Vector2(0, 0),
   info = {

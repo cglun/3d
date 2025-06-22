@@ -14,11 +14,11 @@ import {
   stretchModelBackHome,
 } from "@/viewer3d/buttonList/animateByButton";
 
-import { hasValueString } from "@/viewer3d/buttonList/utils";
 import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelController";
-import { CustomButtonList, SceneUserData } from "@/three/Three3dConfig";
-import { viewerInstance } from "@/three/ViewerInstance";
-import { editorInstance } from "@/three/EditorInstance";
+import { CustomButtonList, SceneUserData } from "@/three/config/Three3dConfig";
+import { viewerInstance } from "@/three/instance/ViewerInstance";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { hasValueString } from "@/three/utils/utils";
 
 function getActionItemByMap(
   item: ActionItemMap,

@@ -1,8 +1,12 @@
-import { TourWindow } from "@/app/MyContext";
-import { editorInstance } from "@/three/EditorInstance";
-import { SceneUserData } from "@/three/Three3dConfig";
 import { Dispatch } from "react";
-import { setLabelFontColor, setFontSize, createTestLabel } from "../utils";
+import { TourWindow } from "@/app/MyContext";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { SceneUserData } from "@/three/config/Three3dConfig";
+import {
+  setLabelFontColor,
+  setFontSize,
+  createTestLabel,
+} from "@/component/common/routes/effects/utils";
 export default function topCardGUI(dispatchTourWindow: Dispatch<TourWindow>) {
   const editor = editorInstance.getEditor();
 

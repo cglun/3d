@@ -16,9 +16,9 @@ import { ActionItemMap, APP_COLOR, RecordItem } from "@/app/type";
 import { resetListGroupIsClick } from "@/viewer3d/buttonList/buttonGroup";
 import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelController";
 
-import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
+import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import Icon from "@/component/common/Icon";
-import { Three3dViewer } from "@/three/Three3dViewer";
+import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 
 // 定义响应数据的类型
 interface PageListResponse {

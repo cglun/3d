@@ -20,10 +20,10 @@ import { Search3d } from "@/component/Editor/Search3d";
 
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import Icon from "@/component/common/Icon";
-import { editorInstance } from "@/three/EditorInstance";
-import { getThemeByScene } from "@/threeUtils/util4UI";
-import { stopRoam } from "../common/routes/effects/utils";
-import { SceneUserData } from "@/three/Three3dConfig";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { getThemeByScene } from "@/three/utils/util4UI";
+import { stopRoam } from "@/component/common/routes/effects/utils";
+import { SceneUserData } from "@/three/config/Three3dConfig";
 
 // 若 getThemeByScene 确实在该文件且正确导出，使用此导入语句
 

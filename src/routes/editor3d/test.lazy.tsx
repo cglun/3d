@@ -5,12 +5,12 @@ import { Scene, Vector3 } from "three";
 import Toast3d from "@/component/common/Toast3d";
 import { useUpdateScene } from "@/app/hooks";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
-import { editorInstance } from "@/three/EditorInstance";
-import { getButtonColor, getThemeByScene } from "@/threeUtils/util4UI";
-import { cameraEnterAnimation } from "@/threeUtils/util4Camera";
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
+import { cameraEnterAnimation } from "@/three/utils/util4Camera";
 import { useEffect } from "react";
-import { config3dInit } from "@/three/Three3dConfig";
-import { viewerInstance } from "@/three/ViewerInstance";
+import { config3dInit } from "@/three/config/Three3dConfig";
+import { viewerInstance } from "@/three/instance/ViewerInstance";
 export const Route = createLazyFileRoute("/editor3d/test")({
   component: RouteComponent,
 });

@@ -11,8 +11,7 @@ import {
   Row,
 } from "react-bootstrap";
 import { useContext, useEffect, useState } from "react";
-
-import { CSS2DObject, CSS3DSprite } from "three/examples/jsm/Addons.js";
+import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
 import Toast3d from "@/component/common/Toast3d";
 import { APP_COLOR, TourItem } from "@/app/type";
 import { useUpdateScene } from "@/app/hooks";
@@ -22,14 +21,14 @@ import _axios from "@/app/http";
 import { MyContext } from "@/app/MyContext";
 
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
-import { SceneUserData } from "@/three/Three3dConfig";
-import { editorInstance } from "@/three/EditorInstance";
+import { SceneUserData } from "@/three/config/Three3dConfig";
+import { editorInstance } from "@/three/instance/EditorInstance";
 import {
   getButtonColor,
   getThemeByScene,
   setClassName,
-} from "@/threeUtils/util4UI";
-import { clearOldLabel } from "@/threeUtils/util4Scene";
+} from "@/three/utils/util4UI";
+import { clearOldLabel } from "@/three/utils/util4Scene";
 
 export const Route = createLazyFileRoute("/editor3d/mark")({
   component: RouteComponent,
@@ -64,7 +63,7 @@ function RouteComponent() {
 
   if (!config3d) return;
 
-  function addMark(label: CSS3DSprite | CSS2DObject) {
+  function addMark(label: CSS3DSprite) {
     const editor = editorInstance.getEditor();
     editor.MARK_LABEL_GROUP.add(label);
     editor.scene.add(editor.MARK_LABEL_GROUP);
