@@ -93,60 +93,37 @@ export default function Index() {
           大纲
         </Accordion.Header>
         <Accordion.Body className="outline-view">
-          <Card>
-            <Card.Header className="text-center" style={styleHeader}>
-              <Icon iconName="camera-reels" gap={gap} title="相机" />
-
-              <Icon iconName="box2" gap={gap} title="场景" />
-            </Card.Header>
-            <Card.Body>
-              <ListGroup>
+          <CardItem
+            icon={
+              <>
+                <Icon iconName="camera-reels" gap={gap} title="相机" />
+                <Icon iconName="box2" gap={gap} title="场景" />
+              </>
+            }
+            groupBody={
+              <>
                 <OutlineViewCamera />
                 <OutlineViewScene />
-              </ListGroup>
-            </Card.Body>
-          </Card>
+              </>
+            }
+          />
 
-          <Card>
-            <Card.Header className="text-center" style={styleHeader}>
-              <Icon iconName="lightbulb" gap={gap} title="灯光" />
-            </Card.Header>
-            <Card.Body>
-              <ListGroup className="da-gang">
-                {TreeListShow(LIGHT_GROUP)}
-              </ListGroup>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Header className="text-center" style={styleHeader}>
-              <Icon iconName="box" gap={gap} title="几何体" />
-            </Card.Header>
-            <Card.Body>
-              <ListGroup className="da-gang">
-                {TreeListShow(GEOMETRY)}
-              </ListGroup>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Header className="text-center" style={styleHeader}>
-              <Icon iconName="bi bi-boxes" gap={gap} title="模型" />
-            </Card.Header>
-            <Card.Body>
-              <ListGroup className="da-gang">
-                {TreeListShow(MODEL_GROUP)}
-              </ListGroup>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Header className="text-center" style={styleHeader}>
-              <Icon iconName="pin-map" gap={gap} title="标签" />
-            </Card.Header>
-            <Card.Body>
-              <ListGroup className="da-gang">
-                {TreeListShow(MARK_LABEL_GROUP)}
-              </ListGroup>
-            </Card.Body>
-          </Card>
+          <CardItem
+            icon={<Icon iconName="lightbulb" gap={gap} title="灯光" />}
+            groupBody={TreeListShow(LIGHT_GROUP)}
+          />
+          <CardItem
+            icon={<Icon iconName="bi bi-boxes" gap={gap} title="模型" />}
+            groupBody={TreeListShow(MODEL_GROUP)}
+          />
+          <CardItem
+            icon={<Icon iconName="pin-map" gap={gap} title="标签" />}
+            groupBody={TreeListShow(MARK_LABEL_GROUP)}
+          />
+          <CardItem
+            icon={<Icon iconName="box" gap={gap} title="几何体" />}
+            groupBody={TreeListShow(GEOMETRY)}
+          />
         </Accordion.Body>
       </Accordion.Item>
       <Property3d />
@@ -162,5 +139,24 @@ function TreeListShow(group: Object3D[]) {
     <ListGroupItem style={{ cursor: "initial" }}>
       <span className={`text-${APP_COLOR.Secondary}`}> 空</span>
     </ListGroupItem>
+  );
+}
+
+function CardItem({
+  icon,
+  groupBody,
+}: {
+  icon: JSX.Element;
+  groupBody: JSX.Element;
+}) {
+  return (
+    <Card>
+      <Card.Header className="text-center" style={styleHeader}>
+        {icon}
+      </Card.Header>
+      <Card.Body>
+        <ListGroup>{groupBody}</ListGroup>
+      </Card.Body>
+    </Card>
   );
 }

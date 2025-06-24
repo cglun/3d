@@ -100,9 +100,9 @@ export default function EditorBottom() {
               >
                 <Nav.Link>
                   {showIcons ? (
-                    <Icon iconName="chevron-right" title="收起logo" />
+                    <Icon iconName="bi bi-chevron-right" title="收起logo" />
                   ) : (
-                    <Icon iconName="chevron-down" title="展开logo" />
+                    <Icon iconName="bi bi-chevron-down" title="展开logo" />
                   )}
                 </Nav.Link>
               </Nav.Item>

@@ -19,6 +19,7 @@ export default function markCommonGUI(
   editor.outlinePass.selectedObjects = [];
 
   const { style } = labelInfoDiv;
+
   parentFolder
     .add(object, "cardWidth", 30, 500)
     .name("宽度")
@@ -26,6 +27,7 @@ export default function markCommonGUI(
     .onChange(() => {
       style.width = `${object.cardWidth}px`;
     });
+
   parentFolder
     .add(object, "cardHeight", 20, 600)
     .name("高度")
