@@ -108,9 +108,11 @@ export function getMarkLabelTest(
       title: "title",
     },
   });
+
+  editor.TEST_GROUP.add(markLabel.css3DSprite);
   testLabel.markLabel = markLabel;
   testLabel.markLabel.css3DSprite.name = GROUP.TEST + "_markLabel";
-  editor.TEST_GROUP.add(testLabel.markLabel.css3DSprite);
+
   return testLabel.markLabel;
 }
 
@@ -123,7 +125,6 @@ export function getLabelInfo(
   }
 
   const cube = editor.addCube();
-
   testLabel.labelInfo = new LabelInfo(cube, editor.scene, dispatchTourWindow);
   testLabel.labelInfo.name = GROUP.TEST + "_labelInfo";
   editor.TEST_GROUP.add(testLabel.labelInfo.css3DSprite);
@@ -133,18 +134,17 @@ export function getLabelInfo(
 export function createTestLabel(
   editor: Three3dEditor,
   dispatchTourWindow: Dispatch<TourWindow>,
-  show: { mark: boolean; label: boolean; blender: boolean }
+  show: { markVisible: boolean; labelVisible: boolean; cubeVisible: boolean }
 ) {
-  const { mark, label, blender } = show;
+  const { markVisible, labelVisible, cubeVisible } = show;
   const marker = getMarkLabelTest(editor, dispatchTourWindow);
   const labelInfo = getLabelInfo(editor, dispatchTourWindow);
 
-  const bl = editor.scene.getObjectByName("blender");
-  if (bl) {
-    bl.visible = blender;
-  }
-  marker.css3DSprite.visible = mark;
-  labelInfo.css3DSprite.visible = label;
+  const cube = editor.scene.getObjectByName(GROUP.TEST + "_cube");
+  if (cube) cube.visible = cubeVisible;
+
+  marker.css3DSprite.visible = markVisible;
+  labelInfo.css3DSprite.visible = labelVisible;
   return { marker, labelInfo };
 }
 

@@ -18,9 +18,9 @@ export default function topCardGUI(dispatchTourWindow: Dispatch<TourWindow>) {
   const { topCard } = userData.userCssStyle;
 
   const { labelInfo } = createTestLabel(editor, dispatchTourWindow, {
-    mark: false,
-    label: true,
-    blender: false,
+    markVisible: false,
+    labelVisible: true,
+    cubeVisible: false,
   });
 
   //没有就创建，显示

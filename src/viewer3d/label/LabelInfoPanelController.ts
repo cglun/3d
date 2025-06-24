@@ -163,8 +163,8 @@ export class LabelInfoPanelController {
     viewer.getSelectedObjects().length = 0;
     this.allLabelInfo.filter((_item) => {
       return modelNameList.some((item) => {
-        const css3DSprite = _item.css3DSprite.name.replace("SPRITE-", "");
-        const isOk = this.boxName + "-" + css3DSprite === item;
+        // const css3DSprite = _item.css3DSprite.name.replace("SPRITE-", "");
+        const isOk = this.boxName + "-" + _item.css3DSprite.name === item;
         if (isOk) {
           this.canBeShowLabelInfo.push(_item);
         }
@@ -178,8 +178,8 @@ export class LabelInfoPanelController {
 
     const viewer = viewerInstance.getViewer();
     this.canBeShowLabelInfo.forEach((item) => {
-      const modelName = item.css3DSprite.name.replace("SPRITE-", "");
-      const model = scene.getObjectByName(modelName);
+      // const modelName = item.css3DSprite.name.replace("SPRITE-", "");
+      const model = scene.getObjectByName(item.css3DSprite.name);
       if (model) {
         viewer.getSelectedObjects().push(model);
       }

@@ -117,10 +117,10 @@ btn-group-sm>.btn,
   width: 100% !important;
 }
 
-#editor-right .accordion-item {
+  .accordion-item .accordion-body {
   overflow-y: scroll;
   scrollbar-width: thin;
-  height: 46vh;
+  height: 45vh;
 }
 
 .lil-gui.autoPlace {

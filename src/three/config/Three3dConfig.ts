@@ -209,7 +209,6 @@ const sceneUserData: SceneUserData = {
   userCssStyle: {
     topCard: {
       ...userCssStyle,
-      cardBackgroundColor: "#002e2e",
     } as UserCssStyle,
     markLabel: {
       ...userCssStyle,

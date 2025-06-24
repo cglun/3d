@@ -96,6 +96,11 @@ export class MarkLabel {
     labelStyle.top = offsetY + "px";
     labelStyle.left = offsetX + "px";
 
+    if (cardBackgroundUrl.trim().length === 0) {
+      labelStyle.backgroundColor = `${cardBackgroundColor}`;
+      labelStyle.backgroundImage = "";
+    }
+
     const header = document.createElement("div");
     header.className = "mark-label-header";
     header.style.fontSize = headerFontSize + "px";

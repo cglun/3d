@@ -15,9 +15,9 @@ export default function markLabelGUI(dispatchTourWindow: Dispatch<TourWindow>) {
   const folderGeometry = editor.createGUI("标签");
 
   const { marker } = createTestLabel(editor, dispatchTourWindow, {
-    mark: true,
-    label: false,
-    blender: false,
+    markVisible: true,
+    labelVisible: false,
+    cubeVisible: true,
   });
 
   markCommonGUI(folderGeometry, markLabel, marker);

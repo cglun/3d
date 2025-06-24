@@ -18,9 +18,9 @@ export default function modelHighlightGUI(
   outlinePass.selectedObjects = [editor.addCube()];
   editor.setOutLinePassColor();
   createTestLabel(editor, dispatchTourWindow, {
-    mark: false,
-    label: false,
-    blender: true,
+    markVisible: false,
+    labelVisible: false,
+    cubeVisible: true,
   });
 
   folderGeometry

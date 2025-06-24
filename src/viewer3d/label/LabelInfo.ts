@@ -53,7 +53,7 @@ export class LabelInfo {
   }
   private createCss3dLabel() {
     const css3DSprite = new CSS3DSprite(this.div);
-    css3DSprite.name = "SPRITE-" + this.tourObject.title;
+    css3DSprite.name = this.tourObject.title;
     const { x, y, z } = getObjectWorldPosition(this.mesh);
     css3DSprite.position.set(x, y, z);
     const { cardSize } = this.userDataStyles;
@@ -98,6 +98,10 @@ export class LabelInfo {
     labelStyle.backgroundColor = "transparent"; // 背景透明
     labelStyle.top = offsetY + "px";
     labelStyle.left = offsetX + "px";
+    if (cardBackgroundUrl.trim().length === 0) {
+      labelStyle.backgroundColor = `${cardBackgroundColor}`;
+      labelStyle.backgroundImage = "";
+    }
     // labelStyle.left = offsetX * this.size + "px";
 
     // labelStyle.zIndex = "9999"; // 确保标签在最上层

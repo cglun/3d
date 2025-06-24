@@ -64,6 +64,7 @@ import { viewerInstance } from "@/three/instance/ViewerInstance";
 import { runScriptPro } from "@/three/script/scriptPro";
 import { GROUP } from "@/three/config/CONSTANT";
 import ThreeObj from "@/three/threeObj/ThreeObj";
+import { testLabel } from "@/component/routes/effects/utils";
 
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;
@@ -275,6 +276,9 @@ export class Three3d extends ThreeObj {
     this.MARK_LABEL_GROUP.children = [];
     this.MODEL_GROUP.children = [];
     this.LIGHT_GROUP.children = [];
+    this.TEST_GROUP.children = [];
+    testLabel.markLabel = null;
+    testLabel.labelInfo = null;
 
     this.GEOMETRY.children = [];
     const { roamLine } = this.extraParams;
@@ -388,12 +392,13 @@ export class Three3d extends ThreeObj {
         if (markLabelGroup) {
           this.MARK_LABEL_GROUP.children = markLabelGroup.children;
         }
-        //清除掉helper  里的CSS3DSprite
 
+        //清除掉helper  里的CSS3DSprite
         this.scene.add(this.LIGHT_GROUP); //更新
         this.scene.add(this.GEOMETRY);
         this.scene.add(this.MARK_LABEL_GROUP);
         this.scene.add(this.MODEL_GROUP);
+        this.scene.add(this.TEST_GROUP);
         this.outlinePass.selectedObjects = [];
 
         this.scene.userData = {
@@ -584,7 +589,7 @@ export class Three3d extends ThreeObj {
       this.controls.update();
       if (roamLine) {
         const { userSetting } = customButtonList.roamButtonGroup;
-        manyou(roamLine, this.camera, userSetting, this.clock);
+        manyou(roamLine, this.camera, userSetting);
       }
 
       if (useComposer) {

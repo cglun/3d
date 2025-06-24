@@ -197,8 +197,9 @@ function EditorViewer3d() {
     <Container fluid>
       <Row>
         <Col xs="auto" className="d-flex flex-column">
-          <div style={{ flexGrow: 10 }}></div>
-          <ButtonGroup style={{ flexGrow: 1 }} size="sm" vertical>
+          {" "}
+          <>ss</>
+          <ButtonGroup size="sm" vertical>
             <Button
               variant={themeColor}
               onClick={() => {
@@ -209,7 +210,6 @@ function EditorViewer3d() {
                 iconName="bi bi-arrows-move"
                 style={{ width: "100%" }}
                 title="移动"
-                placement="right"
               />
             </Button>
             <Button
@@ -218,11 +218,7 @@ function EditorViewer3d() {
                 setMode("rotate");
               }}
             >
-              <Icon
-                iconName="bi bi-arrow-repeat"
-                title="旋转"
-                placement="right"
-              />
+              <Icon iconName="bi bi-arrow-repeat" title="旋转" />
             </Button>
             <Button
               variant={themeColor}
@@ -230,66 +226,49 @@ function EditorViewer3d() {
                 setMode("scale");
               }}
             >
-              <Icon
-                iconName="bi bi-arrows-angle-expand"
-                title="缩放"
-                placement="right"
-              />
+              <Icon iconName="bi bi-arrows-angle-expand" title="缩放" />
             </Button>
-
+            <Button variant={themeColor} onClick={() => {}}>
+              <Icon iconName="bi bi-align-top" title="撤销" />
+            </Button>
             {/* <Button
-                       variant={themeColor}
-                       onClick={() => {
-                         const editor = editorInstance.getEditor();
-                         editor.setCameraType(editor.camera, new Vector3(0, 1, 0));
-                       }}
-                     >
-                       <Icon iconName="bi bi-align-top" title="顶视" />
-                     </Button>
-                     <Button
-                       variant={themeColor}
-                       onClick={() => {
-                         const editor = editorInstance.getEditor();
-                         editor.setCameraType(editor.camera, new Vector3(0, 0, 1));
-                       }}
-                     >
-                       <Icon iconName="bi bi-align-middle" title="前视" />
-                     </Button>
-                     <Button
-                       variant={themeColor}
-                       onClick={() => {
-                         const editor = editorInstance.getEditor();
-                         editor.setCameraType(editor.camera, new Vector3(1, 0, 0));
-                       }}
-                     >
-                       <Icon iconName="bi bi-align-start" title="左视" />
-                     </Button>
-                     <Button
-                       variant={themeColor}
-                       onClick={() => {
-                         const editor = editorInstance.getEditor();
-                         editor.setCameraType(editor.camera, Object3D.DEFAULT_UP);
-                       }}
-                     >
-                       <Icon iconName="box" title="透视" />
-                     </Button> */}
-          </ButtonGroup>
-          <ButtonGroup style={{ flexGrow: 1 }} size="sm" vertical>
-            <Button variant={themeColor} onClick={() => {}}>
-              <Icon
-                iconName="bi bi-arrow-90deg-left"
-                title="上一步"
-                placement="right"
-              />
+              variant={themeColor}
+              onClick={() => {
+                const editor = editorInstance.getEditor();
+                editor.setCameraType(editor.camera, new Vector3(0, 1, 0));
+              }}
+            >
+              <Icon iconName="bi bi-align-top" title="顶视" />
             </Button>
-            <Button variant={themeColor} onClick={() => {}}>
-              <Icon
-                iconName="bi bi-arrow-90deg-right"
-                title="下一步"
-                placement="right"
-              />
+            <Button
+              variant={themeColor}
+              onClick={() => {
+                const editor = editorInstance.getEditor();
+                editor.setCameraType(editor.camera, new Vector3(0, 0, 1));
+              }}
+            >
+              <Icon iconName="bi bi-align-middle" title="前视" />
             </Button>
-          </ButtonGroup>
+            <Button
+              variant={themeColor}
+              onClick={() => {
+                const editor = editorInstance.getEditor();
+                editor.setCameraType(editor.camera, new Vector3(1, 0, 0));
+              }}
+            >
+              <Icon iconName="bi bi-align-start" title="左视" />
+            </Button>
+            <Button
+              variant={themeColor}
+              onClick={() => {
+                const editor = editorInstance.getEditor();
+                editor.setCameraType(editor.camera, Object3D.DEFAULT_UP);
+              }}
+            >
+              <Icon iconName="box" title="透视" />
+            </Button> */}
+          </ButtonGroup>{" "}
+          <>ss</>
         </Col>
         <Col
           style={{

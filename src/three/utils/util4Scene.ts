@@ -9,7 +9,6 @@ import {
   Object3DEventMap,
   Scene,
   Vector3,
-  Clock,
 } from "three";
 
 import { GLTF } from "three/addons/loaders/GLTFLoader.js";
@@ -185,8 +184,7 @@ export function removeCanvasChild(canvas3d: React.RefObject<HTMLDivElement>) {
 export function manyou(
   roamLine: RoamLine,
   camera: PerspectiveCamera,
-  params: typeof sceneUserData.customButtonList.roamButtonGroup.userSetting,
-  clock: Clock
+  params: typeof sceneUserData.customButtonList.roamButtonGroup.userSetting
 ) {
   const {
     tubeGeometry,
@@ -197,13 +195,12 @@ export function manyou(
     normal,
     roamIsRunning,
   } = roamLine;
-  const runTime = clock.getElapsedTime();
 
   if (!roamIsRunning) {
     return;
   }
 
-  const time = Date.now() - runTime * 1000;
+  const time = Date.now() - 1000;
   const loopTime = (20 * 1000) / params.speed;
   const t = (time % loopTime) / loopTime;
 

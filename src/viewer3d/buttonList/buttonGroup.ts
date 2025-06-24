@@ -211,12 +211,7 @@ export function getRoamListByRoamButtonMap(scene: Scene): ActionItemMap[] {
         }
         if (state.includes("_STOP")) {
           roamAnimation(false);
-          const { camera, controls, extraParams } = viewerInstance.getViewer();
-          const { roamLine } = extraParams;
-          if (roamLine) {
-            roamLine.position = new Vector3(0, 0, 0);
-          }
-          console.log(roamLine?.position);
+          const { camera, controls } = viewerInstance.getViewer();
 
           cameraBackHome(camera, controls, 1000);
         }

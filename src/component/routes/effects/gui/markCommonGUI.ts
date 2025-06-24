@@ -92,14 +92,14 @@ export default function markCommonGUI(
       setLabelFontColor(header, object.headerColor);
     });
   parentFolder
-    .add(object, "headerMarginTop", 0.1, 100)
+    .add(object, "headerMarginTop", 0, 100)
     .step(0.1)
     .name("上边距")
     .onChange(() => {
       style.paddingTop = `${object.headerMarginTop}px`;
     });
   parentFolder
-    .add(object, "headerMarginLeft", 0.1, 100)
+    .add(object, "headerMarginLeft", 0, 100)
     .step(0.1)
     .name("左边距")
     .onChange(() => {

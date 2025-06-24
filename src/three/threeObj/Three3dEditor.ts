@@ -5,7 +5,7 @@ import {
   DirectionalLight,
   Group,
   Mesh,
-  MeshBasicMaterial,
+  MeshLambertMaterial,
   Object3D,
   OrthographicCamera,
   PerspectiveCamera,
@@ -258,9 +258,12 @@ export class Three3dEditor extends Three3d {
     if (testCube) {
       return testCube;
     }
+
     const cube = new Mesh(
       new BoxGeometry(1, 1, 1),
-      new MeshBasicMaterial({ color: 0xff0000 })
+      new MeshLambertMaterial({
+        color: "#049ef4",
+      })
     );
     cube.name = GROUP.TEST + "_cube";
     cube.position.set(0, 0, 0);
