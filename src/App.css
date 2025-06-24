@@ -120,7 +120,11 @@ btn-group-sm>.btn,
   .accordion-item .accordion-body {
   overflow-y: scroll;
   scrollbar-width: thin;
-  height: 45vh;
+  height: 42vh;
+}
+.lil-gui.root>.children {
+     overflow-x: unset;  
+     overflow-y: unset;  
 }
 
 .lil-gui.autoPlace {

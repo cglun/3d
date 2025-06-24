@@ -37,9 +37,9 @@ export default function markCommonGUI(
     });
 
   parentFolder
-    .add(object, "cardSize", 0.01, 1)
+    .add(object, "cardSize", 0, 2)
     .name("缩放")
-    .step(0.01)
+    .step(0.001)
     .onChange(() => {
       labelInfo.css3DSprite.scale.set(
         object.cardSize,
@@ -92,14 +92,14 @@ export default function markCommonGUI(
       setLabelFontColor(header, object.headerColor);
     });
   parentFolder
-    .add(object, "headerMarginTop", 0, 100)
+    .add(object, "headerMarginTop", 0, 500)
     .step(0.1)
     .name("上边距")
     .onChange(() => {
       style.paddingTop = `${object.headerMarginTop}px`;
     });
   parentFolder
-    .add(object, "headerMarginLeft", 0, 100)
+    .add(object, "headerMarginLeft", 0, 500)
     .step(0.1)
     .name("左边距")
     .onChange(() => {

@@ -1,16 +1,10 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useUpdateScene } from "@/app/hooks";
-
 import { Button, ButtonGroup, ListGroup, ListGroupItem } from "react-bootstrap";
 import { useContext, useEffect } from "react";
-
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
-
 import Icon from "@/component/common/Icon";
-import markLabelGUI from "@/component/routes/effects/gui/markLabelGUI";
-
 import { MyContext } from "@/app/MyContext";
-import topCardGUI from "@/component/routes/effects/gui/topCardGUI";
 import modelHighlightGUI from "@/component/routes/effects/gui/modelHighlightGUI";
 import roamGUI from "@/component/routes/effects/gui/roamGUI";
 import { stopRoam } from "@/component/routes/effects/utils";
@@ -32,12 +26,17 @@ function RouteComponent() {
     const editor = editorInstance.getEditor();
     const testGroup = editor.scene.getObjectByName(GROUP.TEST);
     if (testGroup) testGroup.visible = true;
+
+    editor.TEST_GROUP.children.forEach((item) => {
+      item.visible = false;
+      if (item.type === "Mesh") {
+        item.visible = true;
+      }
+    });
+
     return () => {
       editor.outlinePass.selectedObjects = [];
 
-      // testGroup?.children.forEach((item) => {
-      //   item.visible = false;
-      // });
       if (testGroup) testGroup.visible = false;
       editor.destroyGUI();
       stopRoam();
@@ -73,27 +72,7 @@ function RouteComponent() {
   return (
     <ListGroup horizontal className="mt-2">
       <ListGroupItem>
-        <ButtonGroup size="sm">
-          <Button
-            variant={buttonColor}
-            onClick={() => {
-              stopRoam();
-              markLabelGUI(dispatchTourWindow);
-            }}
-          >
-            <Icon iconName="geo-alt" gap={1} />
-            标签
-          </Button>
-          <Button
-            variant={buttonColor}
-            onClick={() => {
-              stopRoam();
-              topCardGUI(dispatchTourWindow);
-            }}
-          >
-            <Icon iconName="credit-card-2-front" gap={1} />
-            顶牌
-          </Button>
+        <ButtonGroup>
           <Button
             variant={buttonColor}
             onClick={() => {
@@ -101,12 +80,10 @@ function RouteComponent() {
               modelHighlightGUI(dispatchTourWindow);
             }}
           >
-            <Icon iconName="bi bi-highlights" gap={1} title="设置模型高亮" />
+            <Icon iconName="bi bi-highlights" gap={1} title="模型选中高亮" />
             高亮
           </Button>
         </ButtonGroup>
-      </ListGroupItem>
-      <ListGroupItem>
         <ButtonGroup size="sm">
           <Button variant={buttonColor} onClick={roamGUI}>
             <Icon iconName=" bi bi-person-walking" gap={1} />

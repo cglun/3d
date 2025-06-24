@@ -50,7 +50,7 @@ export default function Index_xx() {
         <Icon iconName="menu-button" gap={1} />
         属性
       </Accordion.Header>
-      <Accordion.Body id="gui-container-property" className="py-0">
+      <Accordion.Body id="gui-container-property">
         {/* {select && (
           <ListGroup>
             <ListGroupItem>{select.name}</ListGroupItem>

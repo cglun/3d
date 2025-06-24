@@ -13,6 +13,8 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
 import Toast3d from "@/component/common/Toast3d";
+import markLabelGUI from "@/component/routes/effects/gui/markLabelGUI";
+import topCardGUI from "@/component/routes/effects/gui/topCardGUI";
 import { APP_COLOR, TourItem } from "@/app/type";
 import { useUpdateScene } from "@/app/hooks";
 import { ConfigCheck } from "@/component/common/ConfigCheck";
@@ -29,6 +31,9 @@ import {
   setClassName,
 } from "@/three/utils/util4UI";
 import { clearOldLabel } from "@/three/utils/util4Scene";
+import { stopRoam } from "@/component/routes/effects/utils";
+import Icon from "@/component/common/Icon";
+import { GROUP } from "@/three/config/CONSTANT";
 
 export const Route = createLazyFileRoute("/editor3d/mark")({
   component: RouteComponent,
@@ -41,9 +46,15 @@ function RouteComponent() {
   const { dispatchTourWindow } = useContext(MyContext);
   const { scene, updateScene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
+  const buttonColor = getButtonColor(themeColor);
+
   const userData = scene.userData as SceneUserData;
   const { config3d } = userData as SceneUserData;
   useEffect(() => {
+    const editor = editorInstance.getEditor();
+    const testGroup = editor.scene.getObjectByName(GROUP.TEST);
+    if (testGroup) testGroup.visible = true;
+
     _axios
       .get("/pano/page?size=1000")
       .then((res) => {
@@ -59,6 +70,16 @@ function RouteComponent() {
         Toast3d("看控制台", "提示", APP_COLOR.Danger);
         console.error(err);
       });
+    return () => {
+      editor.outlinePass.selectedObjects = [];
+      const markLabel = editor.scene.getObjectByName(GROUP.TEST + "_markLabel");
+      if (markLabel) markLabel.visible = false;
+      const labelInfo = editor.scene.getObjectByName(GROUP.TEST + "_cube");
+      if (markLabel) markLabel.visible = false;
+      if (labelInfo) labelInfo.visible = false;
+      if (testGroup) testGroup.visible = false;
+      editor.destroyGUI();
+    };
   }, []);
 
   if (!config3d) return;
@@ -90,6 +111,32 @@ function RouteComponent() {
                 callBack={clearOldLabel}
               />
             </ListGroup.Item>
+            <ListGroup.Item>
+              <ButtonGroup size="sm">
+                <Button
+                  variant={buttonColor}
+                  disabled={!config3d.css3d}
+                  onClick={() => {
+                    stopRoam();
+                    markLabelGUI(dispatchTourWindow);
+                  }}
+                >
+                  <Icon iconName="geo-alt" gap={1} />
+                  标签
+                </Button>
+                <Button
+                  variant={buttonColor}
+                  disabled={!config3d.css3d}
+                  onClick={() => {
+                    stopRoam();
+                    topCardGUI(dispatchTourWindow);
+                  }}
+                >
+                  <Icon iconName="credit-card-2-front" gap={1} />
+                  顶牌
+                </Button>
+              </ButtonGroup>
+            </ListGroup.Item>
           </ListGroup>
         </Col>
       </Row>
@@ -104,6 +151,7 @@ function RouteComponent() {
               <Form.Select
                 size="sm"
                 aria-label="logo"
+                disabled={!config3d.css3d}
                 onChange={(e) => {
                   setLogo(e.target.value);
                 }}
@@ -118,6 +166,7 @@ function RouteComponent() {
             <Form.Control
               size="sm"
               placeholder="名称"
+              disabled={!config3d.css3d}
               onChange={(e) => {
                 setMarkName(e.target.value);
               }}
