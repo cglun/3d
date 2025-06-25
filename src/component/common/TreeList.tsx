@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 
 import {
   AmbientLight,
@@ -37,12 +37,11 @@ function TreeNode({
   node: Object3D<Object3DEventMap>;
   onToggle: (uuid: string, isExpanded: boolean) => void;
 }) {
-  const hasChildren = node.children && node.children.length > 0;
   // 确保所有的 useState 调用和 useUpdateScene 调用都在条件返回之前
-  const [isExpanded, setIsExpanded] = React.useState(false);
-  const [delBtn, setDelBtn] = React.useState(false);
-
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [delBtn, setDelBtn] = useState(false);
   const { updateScene } = useUpdateScene();
+  const hasChildren = node.children.length > 0;
 
   if (node.userData.isHelper) {
     return null;
@@ -71,41 +70,17 @@ function TreeNode({
     }
 
     if (editorObject instanceof CSS3DSprite) {
-      //editor.HELPER_GROUP.add(editorObject);
-      // editor.MARK_LABEL_GROUP.add(editorObject);
-      // editor.scene.add(editor.MARK_LABEL_GROUP);
-      // const editorObject1 = editor.scene.getObjectByName(
-      //   GROUP.MARK_LABEL_GROUP
-      // );
-      // if (editorObject1) {
-      //   editorObject1.add(editorObject);
-      // }
       css3CSS3DSpriteGUI(editorObject);
-      const group = editor.scene.getObjectByName(GROUP.MARK_LABEL);
+      const group = editor.scene.getObjectByName(GROUP.MARK_LABEL)?.clone();
       group?.remove(editorObject);
       group?.add(editorObject);
-
-      // editor.transformControl.detach();
-
       editor.transformControl.attach(editorObject);
     }
 
-    if (editorObject?.parent?.parent?.name === GROUP.ROAM) {
-      editor.transformControl.attach(editorObject);
-    }
-    if (editorObject?.parent?.name.includes("_GROUP")) {
-      editorObject.userData.isSelected = !editorObject.userData.isSelected;
-    }
-
-    // resetTextWarning(node);
-
-    const { scene } = editor;
-    //setTransformControls(node);
     if (editorObject) {
       onToggle(editorObject.uuid, !isExpanded);
     }
-
-    updateScene(scene);
+    updateScene(editor.scene);
   };
 
   const delMesh = (e: React.MouseEvent<HTMLButtonElement>, item: Object3D) => {
@@ -154,7 +129,10 @@ function TreeNode({
 
   const light = `d-flex justify-content-between`;
   // const light = `d-flex justify-content-between ${node.userData.isSelected && "text-warning"}`;
-
+  let showDelBtn = delBtn && node?.parent?.name.includes("_GROUP");
+  if (node instanceof CSS3DSprite) {
+    showDelBtn = delBtn && true;
+  }
   return (
     <ListGroupItem>
       <Container
@@ -170,7 +148,7 @@ function TreeNode({
           {getObjectNameByName(node)}
         </div>
         <div>
-          {delBtn && node?.parent?.name.includes("_GROUP") && (
+          {showDelBtn && (
             <Button
               className="me-1"
               size="sm"

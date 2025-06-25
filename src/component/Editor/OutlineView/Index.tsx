@@ -31,34 +31,8 @@ export default function Index() {
   let MARK_LABEL_GROUP: Object3D[] = [];
   let GEOMETRY: Object3D[] = [];
 
-  // if (scene.getObjectByName instanceof Function) {
-  //   LIGHT_GROUP = scene.getObjectByName("LIGHT_GROUP")?.children || [];
-  //   MODEL_GROUP = scene.getObjectByName("MODEL_GROUP")?.children || [];
-  // }
-
   const array = scene.children;
 
-  // for (let index = 0; index < array.length; index++) {
-  //   const { name, children } = array[index];
-  //   if (name === GROUP.LIGHT_GROUP) {
-  //     LIGHT_GROUP = getGroupByName(children);
-  //   }
-  //   if (name === GROUP.MODEL) {
-  //     children.forEach((item) => {
-  //       MODEL_GROUP.push(item);
-  //     });
-  //   }
-  //   if (name === GROUP.MARK_LABEL_GROUP) {
-  //     children.forEach((item) => {
-  //       MARK_LABEL_GROUP.push(item);
-  //     });
-  //   }
-  //   if (name === GROUP.GEOMETRY) {
-  //     children.forEach((item) => {
-  //       GEOMETRY.push(item);
-  //     });
-  //   }
-  // }
   for (let index = 0; index < array.length; index++) {
     const { name, children } = array[index];
     switch (name) {
