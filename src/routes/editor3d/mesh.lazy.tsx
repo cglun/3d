@@ -8,11 +8,10 @@ import {
   MeshLambertMaterial,
   PlaneGeometry,
 } from "three";
-
-import { ButtonGroup, Card, Container } from "react-bootstrap";
-
+import Container from "react-bootstrap/esm/Container";
+import Card from "react-bootstrap/esm/Card";
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import { useUpdateScene } from "@/app/hooks";
-
 import Icon from "@/component/common/Icon";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { getThemeByScene, setClassName } from "@/three/utils/util4UI";

@@ -1,14 +1,12 @@
 import React, { memo, useContext, useEffect, useRef } from "react";
 import { useLocation } from "@tanstack/react-router";
+import ProgressBar from "react-bootstrap/esm/ProgressBar";
+import Container from "react-bootstrap/esm/Container";
+import Row from "react-bootstrap/esm/Row";
+import Col from "react-bootstrap/esm/Col";
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
+import Button from "react-bootstrap/esm/Button";
 
-import {
-  Button,
-  ButtonGroup,
-  Col,
-  Container,
-  ProgressBar,
-  Row,
-} from "react-bootstrap";
 //import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
 
 import { TransformControlsMode } from "three/addons/controls/TransformControls.js";
@@ -197,7 +195,6 @@ function EditorViewer3d() {
     <Container fluid>
       <Row>
         <Col xs="auto" className="d-flex flex-column">
-          {" "}
           <>ss</>
           <ButtonGroup size="sm" vertical>
             <Button
@@ -267,7 +264,7 @@ function EditorViewer3d() {
             >
               <Icon iconName="box" title="透视" />
             </Button> */}
-          </ButtonGroup>{" "}
+          </ButtonGroup>
           <>ss</>
         </Col>
         <Col

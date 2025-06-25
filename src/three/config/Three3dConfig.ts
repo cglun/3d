@@ -17,20 +17,20 @@ const spruit_sunrise_1k = new URL(
 ).href;
 
 export const userCssStyle = {
-  cardWidth: 130,
-  cardHeight: 150,
-  cardRadius: 0.8,
+  cardWidth: 296,
+  cardHeight: 378,
+  cardRadius: 0,
   cardBackgroundColor: "#502626",
-  cardBackgroundUrl: "",
+  cardBackgroundUrl: "/editor3d/static/images/topCard.png",
   headerFontSize: 16,
   headerColor: "#e18989",
   bodyFontSize: 12,
   bodyColor: "#48db4a",
   offsetX: 0,
   offsetY: 0,
-  cardSize: 0.03,
+  cardSize: 0.0116,
   headerMarginTop: 0,
-  headerMarginLeft: 18,
+  headerMarginLeft: 0,
   opacity: 1,
 };
 export const modelEdgeHighlight = {
@@ -173,6 +173,7 @@ export interface RoamLine {
   position: Vector3;
   lookAt: Vector3;
   tubeGeometry: TubeGeometry;
+  startTime: number;
 }
 
 export type HdrKey = keyof typeof hdr;
@@ -212,9 +213,6 @@ const sceneUserData: SceneUserData = {
     } as UserCssStyle,
     markLabel: {
       ...userCssStyle,
-      cardHeight: 18,
-      cardWidth: 140,
-      bodyFontSize: 16,
     } as UserCssStyle,
     modelEdgeHighlight: {
       ...modelEdgeHighlight,

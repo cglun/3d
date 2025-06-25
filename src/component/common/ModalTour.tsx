@@ -1,6 +1,6 @@
-import { Modal } from "react-bootstrap";
 import { MyContext } from "@/app/MyContext";
 import { useContext } from "react";
+import Modal from "react-bootstrap/esm/Modal";
 export default function ModalTour() {
   const { tourWindow, dispatchTourWindow } = useContext(MyContext);
   const { show, tourSrc, title } = tourWindow.payload;

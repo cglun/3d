@@ -1,6 +1,6 @@
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
+import Tooltip from "react-bootstrap/esm/Tooltip";
 import { setClassName } from "@/three/utils/util4UI";
-
 interface IconProps extends React.HTMLAttributes<HTMLSpanElement> {
   iconName: string; // 给 iconName 设置默认值 "search-heart"
   children?: React.ReactNode;

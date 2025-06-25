@@ -1,5 +1,7 @@
-import { ButtonGroup, ListGroupItem, ProgressBar } from "react-bootstrap";
 import Button from "react-bootstrap/esm/Button";
+import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
+import ProgressBar from "react-bootstrap/esm/ProgressBar";
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import Form from "react-bootstrap/esm/Form";
 import { Euler, Vector3 } from "three";
 

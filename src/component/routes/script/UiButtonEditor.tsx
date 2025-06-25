@@ -1,19 +1,17 @@
-import {
-  Badge,
-  Form,
-  InputGroup,
-  ListGroup,
-  ListGroupItem,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+import Icon from "@/component/common/Icon";
+import ListGroup from "react-bootstrap/esm/ListGroup";
+import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
+import InputGroup from "react-bootstrap/esm/InputGroup";
+import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
+import Tooltip from "react-bootstrap/esm/Tooltip";
+import Form from "react-bootstrap/esm/Form";
+import Badge from "react-bootstrap/esm/Badge";
 import { ActionItemMap, APP_COLOR, CustomButtonType } from "@/app/type";
 
 import {
   CustomButtonList,
   customButtonListInit,
 } from "@/three/config/Three3dConfig";
-import Icon from "@/component/common/Icon";
 
 export default function UiButtonEditor({
   value,

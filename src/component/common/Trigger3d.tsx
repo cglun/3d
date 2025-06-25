@@ -1,4 +1,5 @@
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
+import Tooltip from "react-bootstrap/esm/Tooltip";
 
 // 修改为正确的类型合并语法
 function Trigger3d({

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
+import ListGroup from "react-bootstrap/esm/ListGroup";
+import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
+import Button from "react-bootstrap/esm/Button";
+import Modal from "react-bootstrap/esm/Modal";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import {
-  Button,
-  ButtonGroup,
-  ListGroup,
-  ListGroupItem,
-  Modal,
-} from "react-bootstrap";
+
 import { APP_COLOR } from "@/app/type";
 import AlertBase from "@/component/common/AlertBase";
 

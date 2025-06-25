@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Button, ButtonGroup, Modal, Tab, Tabs } from "react-bootstrap";
+import Tabs from "react-bootstrap/esm/Tabs";
+import Tab from "react-bootstrap/esm/Tab";
+import Modal from "react-bootstrap/esm/Modal";
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
+import Button from "react-bootstrap/esm/Button";
+
 import Editor from "@monaco-editor/react";
 import { monaco } from "react-monaco-editor";
 

@@ -194,13 +194,15 @@ export function manyou(
     direction,
     normal,
     roamIsRunning,
+    startTime,
   } = roamLine;
 
   if (!roamIsRunning) {
+    roamLine.startTime = Date.now();
     return;
   }
 
-  const time = Date.now() - 1000;
+  const time = Date.now() - startTime;
   const loopTime = (20 * 1000) / params.speed;
   const t = (time % loopTime) / loopTime;
 

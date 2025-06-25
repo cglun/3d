@@ -1,5 +1,4 @@
-import { Accordion } from "react-bootstrap";
-
+import Accordion from "react-bootstrap/esm/Accordion";
 import Icon from "@/component/common/Icon";
 
 /**

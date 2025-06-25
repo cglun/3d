@@ -1,11 +1,9 @@
-import {
-  Button,
-  ButtonGroup,
-  Container,
-  ListGroup,
-  ListGroupItem,
-  Modal,
-} from "react-bootstrap";
+import ListGroup from "react-bootstrap/esm/ListGroup";
+import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
+import Button from "react-bootstrap/esm/Button";
+import Container from "react-bootstrap/esm/Container";
+import Modal from "react-bootstrap/esm/Modal";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import Viewer3d from "@/viewer3d/Viewer3d";
 import { useEffect, useRef, useState } from "react";

@@ -2,7 +2,6 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { createRoot } from "react-dom/client";
 import { useEffect, useState } from "react";
-import { ButtonGroup } from "react-bootstrap";
 
 import { ConfirmButton } from "@/app/type";
 // 从新文件中引入常量
@@ -13,6 +12,7 @@ import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { getButtonColor } from "@/three/utils/util4UI";
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 
 let container = document.getElementById("toast");
 if (container === null) {

@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import { Button, Container, ListGroupItem } from "react-bootstrap";
 
 import { APP_COLOR } from "@/app/type";
 import {
@@ -11,9 +10,10 @@ import {
   Object3D,
   Object3DEventMap,
 } from "three";
-
+import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
+import Container from "react-bootstrap/esm/Container";
+import Button from "react-bootstrap/esm/Button";
 import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
-
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import AlertBase from "@/component/common/AlertBase";
 import Toast3d from "@/component/common/Toast3d";

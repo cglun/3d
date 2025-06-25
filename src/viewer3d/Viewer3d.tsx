@@ -1,6 +1,5 @@
 import { useReducer, useEffect, useRef, useState } from "react";
 
-import { Container, ProgressBar } from "react-bootstrap";
 import { APP_COLOR, RecordItem } from "@/app/type";
 import Toast3d from "@/component/common/Toast3d";
 import {
@@ -15,6 +14,8 @@ import { reducerCamera, reducerScene, reducerTour } from "@/app/reducer";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
 import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 import { getProjectData } from "@/three/utils/util4Scene";
+import Container from "react-bootstrap/esm/Container";
+import ProgressBar from "react-bootstrap/esm/ProgressBar";
 
 /**
  * 其他应用可以调用此组件，

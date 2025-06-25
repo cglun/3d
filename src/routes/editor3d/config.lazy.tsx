@@ -1,8 +1,9 @@
+import ListGroup from "react-bootstrap/esm/ListGroup";
+import InputGroup from "react-bootstrap/esm/InputGroup";
+import Form from "react-bootstrap/esm/Form";
+import Button from "react-bootstrap/esm/Button";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { Button, Form, InputGroup, ListGroup } from "react-bootstrap";
-
 import { ConfigCheck } from "@/component/common/ConfigCheck";
-
 import { useUpdateScene } from "@/app/hooks";
 import Toast3d from "@/component/common/Toast3d";
 

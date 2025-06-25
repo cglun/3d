@@ -3,11 +3,14 @@ import { LabelInfo } from "@/viewer3d/label/LabelInfo";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import {
+  hexToRgb,
   setFontSize,
   setLabelFontColor,
 } from "@/component/routes/effects/utils";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
 import { editorInstance } from "@/three/instance/EditorInstance";
+import Toast3d from "@/component/common/Toast3d";
+import { APP_COLOR } from "@/app/type";
 export default function markCommonGUI(
   parentFolder: GUI,
   object: UserCssStyle,
@@ -20,18 +23,38 @@ export default function markCommonGUI(
 
   const { style } = labelInfoDiv;
 
+  const lockXY = {
+    isLock: true,
+    size: {
+      width: object.cardWidth,
+      height: object.cardHeight,
+    },
+  };
+
   parentFolder
-    .add(object, "cardWidth", 30, 500)
+    .add(lockXY, "isLock")
+    .name("使用背景图宽高比")
+    .onChange((value) => {
+      imgHeight.disable(value);
+      imgWidth.disable(value);
+      if (lockXY.isLock) {
+        imgHeight.setValue(lockXY.size.height);
+        imgWidth.setValue(lockXY.size.width);
+      }
+    });
+
+  const imgWidth = parentFolder
+    .add(object, "cardWidth", 30, 500, 0.01)
     .name("宽度")
-    .step(0.1)
+    .disable(lockXY.isLock)
     .onChange(() => {
       style.width = `${object.cardWidth}px`;
     });
 
-  parentFolder
-    .add(object, "cardHeight", 20, 600)
+  const imgHeight = parentFolder
+    .add(object, "cardHeight", 30, 500, 0.01)
     .name("高度")
-    .step(0.1)
+    .disable(lockXY.isLock)
     .onChange(() => {
       style.height = `${object.cardHeight}px`;
     });
@@ -49,7 +72,7 @@ export default function markCommonGUI(
     });
 
   parentFolder
-    .add(object, "cardRadius", 0.01, 100)
+    .add(object, "cardRadius", 0, 100)
     .name("圆角")
     .step(0.01)
     .onChange(() => {
@@ -59,21 +82,42 @@ export default function markCommonGUI(
     .addColor(object, "cardBackgroundColor")
     .name("背景颜色")
     .onChange(() => {
-      style.backgroundColor = `${object.cardBackgroundColor}`;
+      // 将颜色值和透明度结合为 rgba 格式
+      const rgbaColor = `rgba(${hexToRgb(object.cardBackgroundColor)}, ${object.opacity})`;
+      style.backgroundColor = rgbaColor;
       style.backgroundImage = "";
+    });
+
+  parentFolder
+    .add(object, "opacity", 0.01, 1)
+    .step(0.01)
+    .name("背景色透明度")
+    .onChange(() => {
+      const rgbaColor = `rgba(${hexToRgb(object.cardBackgroundColor)}, ${object.opacity})`;
+      style.backgroundColor = rgbaColor;
     });
   parentFolder
     .add(object, "cardBackgroundUrl")
     .name("背景URL")
     .onChange(() => {
       style.backgroundImage = `url("${object.cardBackgroundUrl}")`;
-    });
-  parentFolder
-    .add(object, "opacity", 0.01, 1)
-    .step(0.01)
-    .name("透明度")
-    .onChange(() => {
-      style.opacity = object.opacity.toString();
+      // 创建 Image 对象
+      const img = new Image();
+      img.src = object.cardBackgroundUrl;
+
+      img.onload = () => {
+        // 图片加载完成后获取宽高
+        const width = img.naturalWidth;
+        const height = img.naturalHeight;
+        imgHeight.setValue((imgWidth.getValue() * height) / width);
+        lockXY.size.width = width;
+        lockXY.size.height = height;
+      };
+
+      img.onerror = () => {
+        Toast3d("图片加载失败", "提示", APP_COLOR.Danger);
+        console.error("图片加载失败");
+      };
     });
 
   parentFolder

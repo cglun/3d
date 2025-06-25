@@ -1,7 +1,8 @@
 import { Object3D } from "three";
-
-import { Accordion, Card, ListGroup, ListGroupItem } from "react-bootstrap";
-
+import Accordion from "react-bootstrap/esm/Accordion";
+import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
+import Card from "react-bootstrap/esm/Card";
+import ListGroup from "react-bootstrap/esm/ListGroup";
 import Property3d from "@/component/Editor/PropertyGUI/Index";
 import TreeList from "@/component/common/TreeList";
 import { useUpdateScene } from "@/app/hooks";
@@ -13,6 +14,7 @@ import { styleHeader } from "@/component/Editor/OutlineView/fontColor";
 
 import { GROUP } from "@/three/config/CONSTANT";
 import { APP_COLOR } from "@/app/type";
+
 // import { editor } from "monaco-editor";
 // import { editorInstance } from "@/three/EditorInstance";
 

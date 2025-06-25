@@ -1,6 +1,6 @@
 import { useReducer } from "react";
+import Alert from "react-bootstrap/esm/Alert";
 import { createRootRoute } from "@tanstack/react-router";
-import { Alert } from "react-bootstrap";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import EditorTop from "@/component/Editor/EditorTop";

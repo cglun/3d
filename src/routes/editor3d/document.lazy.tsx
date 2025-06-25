@@ -1,17 +1,16 @@
-import {
-  Badge,
-  Button,
-  ButtonGroup,
-  ListGroup,
-  ListGroupItem,
-  Modal,
-} from "react-bootstrap";
+import ListGroup from "react-bootstrap/esm/ListGroup";
+import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
+import Button from "react-bootstrap/esm/Button";
+import Modal from "react-bootstrap/esm/Modal";
+import Badge from "react-bootstrap/esm/Badge";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useUpdateScene } from "@/app/hooks";
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import Icon from "@/component/common/Icon";
 import { APP_COLOR } from "@/app/type";
+
 export const Route = createLazyFileRoute("/editor3d/document")({
   component: RouteComponent,
 });
@@ -21,6 +20,40 @@ function RouteComponent() {
   const { themeColor } = getThemeByScene(scene);
   const buttonColor = getButtonColor(themeColor);
   const log = [
+    {
+      list: [
+        {
+          logoName: "pin-map",
+          position: "底部栏",
+          buttonName: "标签",
+          des: "标签宽高可以根据图片，自动计算。",
+        },
+        {
+          logoName: "bi bi-stars",
+          position: "底部栏",
+          buttonName: "特效",
+          des: "漫游路线重置到起点。",
+        },
+      ],
+      updateTime: "2025年6月25日",
+    },
+    {
+      list: [
+        {
+          logoName: "bi bi-stars",
+          position: "底部栏",
+          buttonName: "特效",
+          des: "标签和顶牌移动到标签栏。",
+        },
+        {
+          logoName: "bi bi-arrows-move",
+          position: "左侧栏",
+          buttonName: "控制器",
+          des: "即将增加撤销功能。",
+        },
+      ],
+      updateTime: "2025年6月24日",
+    },
     {
       list: [
         {
@@ -136,7 +169,13 @@ function RouteComponent() {
               <Modal.Header closeButton>
                 <Modal.Title>更新日志</Modal.Title>
               </Modal.Header>
-              <Modal.Body style={{ minHeight: "50vh" }}>
+              <Modal.Body
+                style={{
+                  height: "76vh",
+                  overflowY: "scroll",
+                  scrollbarWidth: "thin",
+                }}
+              >
                 {log.map((item, index) => {
                   const { updateTime, list } = item;
                   return (
@@ -145,9 +184,9 @@ function RouteComponent() {
                         {/* <AlertBase text={updateTime} type={APP_COLOR.Warning} /> */}
                         <Badge
                           bg={getButtonColor(APP_COLOR.Dark)}
-                          text={APP_COLOR.Warning}
+                          text={APP_COLOR.Secondary}
                         >
-                          {/* <Icon iconName={_item.logoName} /> */}
+                          <Icon iconName="clock" gap={1} />
                           更新时间：{updateTime}
                         </Badge>
                       </ListGroupItem>

@@ -140,6 +140,7 @@ export class Three3d extends ThreeObj {
       normal: new Vector3(),
       position: new Vector3(),
       lookAt: new Vector3(),
+      startTime: 0,
       tubeGeometry: new TubeGeometry(new Curves.GrannyKnot(), 100, 2, 3, true),
     },
   };

@@ -158,3 +158,19 @@ export function stopRoam() {
     cameraEnterAnimation(editor);
   }
 }
+// 辅助函数：将十六进制颜色值转换为 RGB 值
+export function hexToRgb(hex: string): string {
+  hex = hex.replace(/^#/, "");
+  let hexCode =
+    hex.length === 3
+      ? hex
+          .split("")
+          .map((c) => c + c)
+          .join("")
+      : hex;
+  const bigint = parseInt(hexCode, 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `${r}, ${g}, ${b}`;
+}

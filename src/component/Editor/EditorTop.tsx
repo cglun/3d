@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  Button,
-  ButtonGroup,
-  Dropdown,
-  Offcanvas,
-  Navbar,
-  Nav,
-  Badge,
-} from "react-bootstrap";
+import Navbar from "react-bootstrap/esm/Navbar";
+import Nav from "react-bootstrap/esm/Nav";
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
+import Button from "react-bootstrap/esm/Button";
+import Dropdown from "react-bootstrap/esm/Dropdown";
+import Offcanvas from "react-bootstrap/esm/Offcanvas";
+import Badge from "react-bootstrap/esm/Badge";
+
 import { Color } from "three";
 import ListCard from "@/component/common/ListCard";
 import Toast3d from "@/component/common/Toast3d";

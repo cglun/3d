@@ -1,5 +1,10 @@
 import { memo } from "react";
-import { Button, ButtonGroup, Card, Container, Spinner } from "react-bootstrap";
+import Spinner from "react-bootstrap/esm/Spinner";
+import Container from "react-bootstrap/esm/Container";
+import Card from "react-bootstrap/esm/Card";
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
+import Button from "react-bootstrap/esm/Button";
+
 import AlertBase from "@/component/common/AlertBase";
 
 import { APP_COLOR, RecordItem } from "@/app/type";

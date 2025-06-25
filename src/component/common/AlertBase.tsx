@@ -1,8 +1,7 @@
-import { Alert } from "react-bootstrap";
-
 import { APP_COLOR } from "@/app/type";
 import Icon from "@/component/common/Icon";
 import { setClassName } from "@/three/utils/util4UI";
+import Alert from "react-bootstrap/esm/Alert";
 
 export default function AlertBase({
   text = "内容",

@@ -1,11 +1,10 @@
 import { useState } from "react";
-import {
-  Button,
-  ButtonGroup,
-  Container,
-  Form,
-  ListGroup,
-} from "react-bootstrap";
+import ListGroup from "react-bootstrap/esm/ListGroup";
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
+import Button from "react-bootstrap/esm/Button";
+import Form from "react-bootstrap/esm/Form";
+import Container from "react-bootstrap/esm/Container";
+
 import { createLazyFileRoute } from "@tanstack/react-router";
 import CodeEditor from "@/component/routes/script/CodeEditor";
 import { useUpdateScene } from "@/app/hooks";

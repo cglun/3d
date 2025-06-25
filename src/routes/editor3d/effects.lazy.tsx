@@ -1,6 +1,10 @@
+import ListGroup from "react-bootstrap/esm/ListGroup";
+import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
+import Button from "react-bootstrap/esm/Button";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useUpdateScene } from "@/app/hooks";
-import { Button, ButtonGroup, ListGroup, ListGroupItem } from "react-bootstrap";
+
 import { useContext, useEffect } from "react";
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import Icon from "@/component/common/Icon";
@@ -72,7 +76,7 @@ function RouteComponent() {
   return (
     <ListGroup horizontal className="mt-2">
       <ListGroupItem>
-        <ButtonGroup>
+        <ButtonGroup size="sm">
           <Button
             variant={buttonColor}
             onClick={() => {
@@ -84,7 +88,7 @@ function RouteComponent() {
             高亮
           </Button>
         </ButtonGroup>
-        <ButtonGroup size="sm">
+        <ButtonGroup className="ms-2" size="sm">
           <Button variant={buttonColor} onClick={roamGUI}>
             <Icon iconName=" bi bi-person-walking" gap={1} />
             漫游

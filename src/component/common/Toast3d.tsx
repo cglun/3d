@@ -1,49 +1,49 @@
 import { useEffect, useState } from "react";
-import { Toast as BootToast } from "react-bootstrap";
+import Toast from "react-bootstrap/esm/Toast";
 import { createRoot } from "react-dom/client";
 import { APP_COLOR, DELAY } from "@/app/type";
 
 import Icon from "@/component/common/Icon";
 /**
  * 消息提示
- * 用法：Toast3d("成功添加");
+ * 用法：Toast3d3d("成功添加");
  */
-interface Toast {
+interface Toast3d {
   title: string;
   content: string | JSX.Element;
   type: APP_COLOR;
   delay: DELAY;
   show: boolean;
 }
-function App116({ update, _toast }: { update: number; _toast: Toast }) {
-  const [toast, setToast] = useState<Toast>(_toast);
+function App116({ update, _toast }: { update: number; _toast: Toast3d }) {
+  const [toast, setToast3d] = useState<Toast3d>(_toast);
   const { show, delay, type, title, content } = toast;
   // 修改部分：将 _toast 添加到依赖数组中
   useEffect(() => {
-    setToast({ ..._toast, show: true });
+    setToast3d({ ..._toast, show: true });
   }, [update, _toast]);
   return (
-    <BootToast
+    <Toast
       className="fixed-top mt-2 mx-auto"
       style={{ zIndex: 116116 }}
       onClose={() => {
-        setToast({ ...toast, show: false });
+        setToast3d({ ...toast, show: false });
       }}
       show={show}
       delay={delay}
       bg={type}
       autohide
     >
-      <BootToast.Header>
+      <Toast.Header>
         <Icon iconName="info-circle" gap={1} />
         <strong className="me-auto ">{title}</strong>
-      </BootToast.Header>
-      <BootToast.Body
+      </Toast.Header>
+      <Toast.Body
         className={type.toString() === APP_COLOR.Warning ? "text-dark" : ""}
       >
         {content}
-      </BootToast.Body>
-    </BootToast>
+      </Toast.Body>
+    </Toast>
   );
 }
 let container = document.getElementById("toast");

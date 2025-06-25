@@ -1,7 +1,7 @@
-import { Container } from "react-bootstrap";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import React, { useEffect } from "react";
 import ListGroup from "react-bootstrap/esm/ListGroup";
+import Container from "react-bootstrap/esm/Container";
 import { Search3d } from "@/component/common/Search3d";
 import { UploadModel } from "@/component/common/UploadModel";
 import ListCard from "@/component/common/ListCard";

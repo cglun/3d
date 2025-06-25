@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { Button, ButtonGroup } from "react-bootstrap";
-
+import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
+import Button from "react-bootstrap/esm/Button";
 import { Scene, Vector3 } from "three";
 import Toast3d from "@/component/common/Toast3d";
 import { useUpdateScene } from "@/app/hooks";
@@ -11,6 +11,7 @@ import { cameraEnterAnimation } from "@/three/utils/util4Camera";
 import { useEffect } from "react";
 import { config3dInit } from "@/three/config/Three3dConfig";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
+
 export const Route = createLazyFileRoute("/editor3d/test")({
   component: RouteComponent,
 });

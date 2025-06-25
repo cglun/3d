@@ -1,7 +1,9 @@
 import { useNavigate, Outlet, useLocation } from "@tanstack/react-router";
-import { Container, Nav } from "react-bootstrap";
+import Container from "react-bootstrap/esm/Container";
+import Nav from "react-bootstrap/esm/Nav";
 import Icon from "@/component/common/Icon";
 import { useState } from "react";
+
 export default function EditorBottom() {
   const navigate = useNavigate();
   const location = useLocation();
