@@ -654,6 +654,7 @@ export class Three3d extends ThreeObj {
     this.camera.aspect = offsetWidth / offsetHeight;
     this.camera.updateProjectionMatrix(); // 更新相机的投影矩阵
     this.renderer.setSize(offsetWidth, offsetHeight); // 更新渲染器的大小
+    this.labelRenderer3d.setSize(offsetWidth, offsetHeight);
     this.controls.update(0); // 更新控制器的状态，传递 delta 参数
   }
   setOutLinePassColor() {

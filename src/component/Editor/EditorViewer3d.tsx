@@ -86,18 +86,7 @@ function EditorViewer3d() {
 
               editor.destroyGUI();
               editor.scene.add(editor.HELPER_GROUP);
-              //拿到helper 里的所有元素
-              //   const helper = editor.HELPER_GROUP;
-              //item instanceof CSS3DSprite
-              // 反向循环移除所有 CSS3DSprite 实例
 
-              // for (let i = helper.children.length - 1; i >= 0; i--) {
-              //   const css3DSprite = helper.children[i];
-              //   if (css3DSprite instanceof CSS3DSprite) {
-              //     helper.remove(css3DSprite);
-              //   }
-              // }
-              // debugger;
               setTimeout(() => {
                 ModalConfirm3d({
                   title: "提示",
