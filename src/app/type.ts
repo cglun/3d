@@ -110,3 +110,12 @@ export interface UserCssStyle_xx {
   offsetY: number;
   opacity: number;
 }
+export interface MessageError {
+  status: number;
+  response: {
+    data: {
+      code: number;
+      message: string;
+    };
+  };
+}

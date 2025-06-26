@@ -2,14 +2,14 @@
   "projectId": 219,
   "cameraPosition": {
     "start": {
-      "x": -16.56217243450651,
-      "y": 13.605900294611196,
-      "z": -1.7593239668844025
+      "x": -19,
+      "y": 13,
+      "z": -0.68
     },
     "end": {
-      "x": -9.852735292410301,
-      "y": 4.875383650450651,
-      "z": -0.15265027260019443
+      "x": -10,
+      "y": 7,
+      "z": -0.36
     }
   },
   "config3d": {
@@ -155,13 +155,14 @@
       },
       "userSetting": {
         "scale": 1,
-        "extrusionSegments": 505,
-        "radiusSegments": 3,
+        "extrusionSegments": 1050,
+        "radiusSegments": 6,
         "closed": true,
         "lookAhead": false,
-        "speed": 0.6,
+        "speed": 0.4,
         "offset": -0.1,
-        "radius": 0.01
+        "radius": 0.01,
+        "tension": 0.25
       }
     },
     "panelControllerButtonGroup": {
@@ -216,7 +217,8 @@
       "cardHeight": 150,
       "cardRadius": 0.8,
       "cardBackgroundColor": "#002e2e",
-      "cardBackgroundUrl": "",
+      "cardBackgroundUrl": "/editor3d/static/images/topCard.png",
+      "enableCardBackgroundUrl": true,
       "headerFontSize": 16,
       "headerColor": "#e18989",
       "bodyFontSize": 12,
@@ -233,7 +235,8 @@
       "cardHeight": 18,
       "cardRadius": 0.8,
       "cardBackgroundColor": "#502626",
-      "cardBackgroundUrl": "",
+      "cardBackgroundUrl": "/editor3d/static/images/topMark.png",
+      "enableCardBackgroundUrl": true,
       "headerFontSize": 16,
       "headerColor": "#e18989",
       "bodyFontSize": 16,

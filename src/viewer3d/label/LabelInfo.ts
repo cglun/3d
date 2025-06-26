@@ -19,6 +19,7 @@ import {
 } from "@/three/utils/util4UI";
 import { getTourSrc } from "@/three/utils/util4Scene";
 import { LineGeometry, LineMaterial, Line2 } from "three/addons/Addons.js";
+import { hexToRgb } from "@/component/routes/effects/utils";
 
 export class LabelInfo {
   mesh;
@@ -78,6 +79,8 @@ export class LabelInfo {
       headerMarginLeft,
       offsetX,
       offsetY,
+      enableCardBackgroundUrl,
+      opacity,
     } = this.userDataStyles;
 
     labelStyle.width = cardWidth + "px";
@@ -87,15 +90,18 @@ export class LabelInfo {
 
     //labelStyle.paddingLeft = headerMarginTop + "px " + headerMarginLeft + "px";
     labelStyle.borderRadius = cardRadius + "px";
-    labelStyle.backgroundColor = cardBackgroundColor;
-    labelStyle.backgroundImage = getCardBackgroundUrl(cardBackgroundUrl);
+    labelStyle.backgroundColor = `rgba(${hexToRgb(cardBackgroundColor)}, ${opacity})`;
+
+    enableCardBackgroundUrl &&
+      (labelStyle.backgroundImage = getCardBackgroundUrl(cardBackgroundUrl));
+    enableCardBackgroundUrl && (labelStyle.backgroundColor = "transparent"); // 背景透明
     labelStyle.backgroundRepeat = "no-repeat";
     labelStyle.backgroundPosition = "center center";
     labelStyle.backgroundSize = "cover";
     labelStyle.fontSize = bodyFontSize + "px";
     labelStyle.color = headerColor;
     //const { x, y, z } = getObjectWorldPosition(this.mesh);
-    labelStyle.backgroundColor = "transparent"; // 背景透明
+
     labelStyle.top = offsetY + "px";
     labelStyle.left = offsetX + "px";
     if (cardBackgroundUrl.trim().length === 0) {

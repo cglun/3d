@@ -5,7 +5,7 @@ import Viewer3d from "@/viewer3d/Viewer3d";
 import Toast3d from "@/component/common/Toast3d";
 
 import axios, { loadAssets } from "@/app/http";
-import { APP_COLOR, RecordItem } from "@/app/type";
+import { APP_COLOR, MessageError, RecordItem } from "@/app/type";
 
 import Icon from "@/component/common/Icon";
 import { editorInstance } from "@/three/instance/EditorInstance";
@@ -20,6 +20,7 @@ import Card from "react-bootstrap/esm/Card";
 import Container from "react-bootstrap/esm/Container";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import Button from "react-bootstrap/esm/Button";
+import { errorMessage } from "@/app/utils";
 
 export default function EditorForm({
   item,
@@ -61,8 +62,8 @@ export default function EditorForm({
         _setItem(item);
         Toast3d(res.data.message, "提示", APP_COLOR.Success);
       })
-      .catch((err) => {
-        Toast3d(err.message, "错误", APP_COLOR.Danger);
+      .catch((error: MessageError) => {
+        errorMessage(error);
       });
   }
   const defaultImage3dUrl = new URL(

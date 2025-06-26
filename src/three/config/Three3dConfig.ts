@@ -22,8 +22,9 @@ export const userCssStyle = {
   cardRadius: 0,
   cardBackgroundColor: "#502626",
   cardBackgroundUrl: "/editor3d/static/images/topCard.png",
+  enableCardBackgroundUrl: true,
   headerFontSize: 16,
-  headerColor: "#e18989",
+  headerColor: "#67ebeb",
   bodyFontSize: 12,
   bodyColor: "#48db4a",
   offsetX: 0,
@@ -210,9 +211,18 @@ const sceneUserData: SceneUserData = {
   userCssStyle: {
     topCard: {
       ...userCssStyle,
+      headerFontSize: 24,
+      bodyFontSize: 20,
+      headerMarginTop: 20,
+      headerMarginLeft: 20,
     } as UserCssStyle,
     markLabel: {
       ...userCssStyle,
+      cardWidth: 123,
+      cardHeight: 25,
+      headerMarginLeft: 40,
+      headerColor: "#a30000",
+      cardBackgroundUrl: "/editor3d/static/images/topMark.png",
     } as UserCssStyle,
     modelEdgeHighlight: {
       ...modelEdgeHighlight,

@@ -9,9 +9,10 @@ import { useRef, useState } from "react";
 import Toast3d from "@/component/common/Toast3d";
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import axios from "@/app/http";
-import { APP_COLOR, GlbModel } from "@/app/type";
+import { APP_COLOR, GlbModel, MessageError } from "@/app/type";
 import { useUpdateScene } from "@/app/hooks";
 import Icon from "@/component/common/Icon";
+import { errorMessage } from "@/app/utils";
 
 export function UploadModel({ updateList = () => {} }) {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -45,8 +46,8 @@ export function UploadModel({ updateList = () => {} }) {
               Toast3d(res.data.message, "提示", APP_COLOR.Warning);
             }
           })
-          .catch((error) => {
-            Toast3d(error, "提示", APP_COLOR.Warning);
+          .catch((error: MessageError) => {
+            errorMessage(error);
           })
           .finally(() => {
             setBtn(true);
@@ -97,10 +98,10 @@ export function UploadModel({ updateList = () => {} }) {
 
           resolve(model);
         })
-        .catch((err) => {
-          reject(err);
+        .catch((error: MessageError) => {
+          reject(error);
           setProgress(100);
-          Toast3d(err.message, "错误", APP_COLOR.Danger);
+          errorMessage(error);
         });
     });
   }

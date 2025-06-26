@@ -11,7 +11,7 @@ import { Color } from "three";
 import ListCard from "@/component/common/ListCard";
 import Toast3d from "@/component/common/Toast3d";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
-import { APP_COLOR, RecordItem } from "@/app/type";
+import { APP_COLOR, DELAY, MessageError, RecordItem } from "@/app/type";
 import axios from "@/app/http";
 import InputBase from "@/component/common/InputBase";
 import { useUpdateScene } from "@/app/hooks";
@@ -23,6 +23,7 @@ import { editorInstance } from "@/three/instance/EditorInstance";
 import { getThemeByScene } from "@/three/utils/util4UI";
 import { stopRoam } from "@/component/routes/effects/utils";
 import { SceneUserData } from "@/three/config/Three3dConfig";
+import { errorMessage } from "@/app/utils";
 
 // 若 getThemeByScene 确实在该文件且正确导出，使用此导入语句
 
@@ -121,11 +122,12 @@ export default function EditorTop() {
               // setSceneIsSave(false);
               Toast3d("保存成功");
             } else {
-              Toast3d(res.data.message, "提示", APP_COLOR.Warning);
+              Toast3d(res.data.message, "提示", APP_COLOR.Danger, DELAY.LONG);
+              console.error(res.data);
             }
           })
-          .catch((error) => {
-            Toast3d(error, "提示", APP_COLOR.Warning);
+          .catch((error: MessageError) => {
+            errorMessage(error);
           });
       }
     );
@@ -154,9 +156,8 @@ export default function EditorTop() {
           setFilterList(sceneList);
         }
       })
-      .catch((error) => {
-        console.error(error);
-        Toast3d("error", error, APP_COLOR.Danger);
+      .catch((error: MessageError) => {
+        errorMessage(error);
       });
   }, [showScene]);
 

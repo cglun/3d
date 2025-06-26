@@ -61,7 +61,7 @@ h5 {
   padding: 0.5rem;
 }
 
- 
+
 
 btn-group-sm>.btn,
 .btn-sm {
@@ -117,14 +117,15 @@ btn-group-sm>.btn,
   width: 100% !important;
 }
 
-  .accordion-item .accordion-body {
+.accordion-item .accordion-body {
   overflow-y: scroll;
   scrollbar-width: thin;
   height: 42vh;
 }
+
 .lil-gui.root>.children {
-     overflow-x: unset;  
-     overflow-y: unset;  
+  overflow-x: unset;
+  overflow-y: unset;
 }
 
 .lil-gui.autoPlace {
@@ -133,7 +134,7 @@ btn-group-sm>.btn,
 
 .lil-gui .controller .name {
   color: var(--bs-secondary-text-emphasis);
- 
+
 }
 
 .lil-gui,
@@ -141,4 +142,10 @@ btn-group-sm>.btn,
   font-size: 1.3cap;
   background-color: var(--bs-body-bg);
   color: var(--bs-accordion-active-color);
+}
+
+.left-btn-group>div .btn {
+  flex: unset;
+  --bs-btn-padding-y: 0.15rem;
+  --bs-btn-padding-x: 0.16rem;
 }

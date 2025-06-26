@@ -20,13 +20,14 @@ import {
 } from "@/three/instance/EditorInstance";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import AlertBase from "@/component/common/AlertBase";
-import { APP_COLOR, DELAY, RecordItem } from "@/app/type";
+import { APP_COLOR, MessageError, RecordItem } from "@/app/type";
 import { getThemeByScene } from "@/three/utils/util4UI";
 import { getProjectData } from "@/three/utils/util4Scene";
 import { MyContext } from "@/app/MyContext";
-import Toast3d from "@/component/common/Toast3d";
+
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
+import { errorMessage } from "@/app/utils";
 
 function EditorViewer3d() {
   const editorCanvas: React.RefObject<HTMLDivElement> =
@@ -152,15 +153,8 @@ function EditorViewer3d() {
               });
             };
           })
-          .catch((error: unknown) => {
-            console.error(error);
-
-            Toast3d(
-              "加载失败，查看控制台",
-              "错误",
-              APP_COLOR.Danger,
-              DELAY.LONG
-            );
+          .catch((error: MessageError) => {
+            errorMessage(error);
           });
       }
     }
@@ -183,7 +177,7 @@ function EditorViewer3d() {
   return (
     <Container fluid>
       <Row>
-        <Col xs="auto" className="d-flex flex-column">
+        <Col xs="auto" className="d-flex flex-column left-btn-group">
           <div style={{ flexGrow: 10 }}></div>
           <ButtonGroup style={{ flexGrow: 1 }} size="sm" vertical>
             <Button

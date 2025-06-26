@@ -1,5 +1,8 @@
 import { TourWindow } from "@/app/MyContext";
+import { APP_COLOR } from "@/app/type";
+import Toast3d from "@/component/common/Toast3d";
 import { GROUP } from "@/three/config/CONSTANT";
+import { UserCssStyle } from "@/three/config/Three3dConfig";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
 
@@ -9,6 +12,7 @@ import { LabelInfo } from "@/viewer3d/label/LabelInfo";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
 import { Dispatch } from "react";
 import { Vector3 } from "three";
+import { NumberController } from "three/examples/jsm/libs/lil-gui.module.min.js";
 
 export function rgbaToHex_xx(rgba: string): string {
   if (rgba === undefined || rgba === null) {
@@ -173,4 +177,40 @@ export function hexToRgb(hex: string): string {
   const g = (bigint >> 8) & 255;
   const b = bigint & 255;
   return `${r}, ${g}, ${b}`;
+}
+
+export function useBackgroundColor(
+  object: UserCssStyle,
+  style: CSSStyleDeclaration
+) {
+  const rgbaColor = `rgba(${hexToRgb(object.cardBackgroundColor)}, ${object.opacity})`;
+  style.backgroundColor = rgbaColor;
+  style.backgroundImage = "";
+}
+
+export function useBackgroundImage(
+  object: UserCssStyle,
+  style: CSSStyleDeclaration,
+  imgHeight: NumberController<UserCssStyle, "cardHeight">,
+  imgWidth: NumberController<UserCssStyle, "cardWidth">
+) {
+  const rgbaColor = `rgba(${hexToRgb(object.cardBackgroundColor)}, 0)`;
+  style.backgroundColor = rgbaColor;
+  style.backgroundImage = `url("${object.cardBackgroundUrl}")`;
+  // 创建 Image 对象
+  const img = new Image();
+  img.src = object.cardBackgroundUrl;
+
+  img.onload = () => {
+    // 图片加载完成后获取宽高
+    const width = img.naturalWidth;
+    const height = img.naturalHeight;
+    imgWidth.setValue(width);
+    imgHeight.setValue(height);
+  };
+
+  img.onerror = () => {
+    Toast3d("图片加载失败", "提示", APP_COLOR.Danger);
+    console.error("图片加载失败");
+  };
 }

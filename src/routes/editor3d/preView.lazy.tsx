@@ -10,13 +10,14 @@ import { useEffect, useRef, useState } from "react";
 import _axios from "@/app/http";
 import { useUpdateScene } from "@/app/hooks";
 
-import { ActionItemMap, APP_COLOR, RecordItem } from "@/app/type";
+import { ActionItemMap, APP_COLOR, MessageError, RecordItem } from "@/app/type";
 import { resetListGroupIsClick } from "@/viewer3d/buttonList/buttonGroup";
 import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelController";
 
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import Icon from "@/component/common/Icon";
 import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
+import { errorMessage } from "@/app/utils";
 
 // 定义响应数据的类型
 interface PageListResponse {
@@ -84,6 +85,9 @@ function RouteComponent() {
           }
           _setItem(sceneList[0]);
         }
+      })
+      .catch((error: MessageError) => {
+        errorMessage(error);
       });
   }, []);
 

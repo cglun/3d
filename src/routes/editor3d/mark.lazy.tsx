@@ -14,7 +14,7 @@ import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
 import Toast3d from "@/component/common/Toast3d";
 import markLabelGUI from "@/component/routes/effects/gui/markLabelGUI";
 import topCardGUI from "@/component/routes/effects/gui/topCardGUI";
-import { APP_COLOR, TourItem } from "@/app/type";
+import { APP_COLOR, MessageError, TourItem } from "@/app/type";
 import { useUpdateScene } from "@/app/hooks";
 import { ConfigCheck } from "@/component/common/ConfigCheck";
 import _axios from "@/app/http";
@@ -33,6 +33,7 @@ import { clearOldLabel } from "@/three/utils/util4Scene";
 import { stopRoam } from "@/component/routes/effects/utils";
 import Icon from "@/component/common/Icon";
 import { GROUP } from "@/three/config/CONSTANT";
+import { errorMessage } from "@/app/utils";
 
 export const Route = createLazyFileRoute("/editor3d/mark")({
   component: RouteComponent,
@@ -65,9 +66,8 @@ function RouteComponent() {
           console.error(res.data);
         }
       })
-      .catch((err) => {
-        Toast3d("看控制台", "提示", APP_COLOR.Danger);
-        console.error(err);
+      .catch((error: MessageError) => {
+        errorMessage(error);
       });
     return () => {
       editor.outlinePass.selectedObjects = [];

@@ -1,7 +1,7 @@
 import { useReducer, useEffect, useRef, useState } from "react";
 
-import { APP_COLOR, RecordItem } from "@/app/type";
-import Toast3d from "@/component/common/Toast3d";
+import { MessageError, RecordItem } from "@/app/type";
+
 import {
   initEditorCamera,
   initEditorScene,
@@ -16,6 +16,7 @@ import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 import { getProjectData } from "@/three/utils/util4Scene";
 import Container from "react-bootstrap/esm/Container";
 import ProgressBar from "react-bootstrap/esm/ProgressBar";
+import { errorMessage } from "@/app/utils";
 
 /**
  * 其他应用可以调用此组件，
@@ -107,10 +108,8 @@ export default function Viewer3d({
         setProgress(100);
       }
     };
-    viewer.onLoadError = (error: string) => {
-      Toast3d("有错误,看控制台", "提示", APP_COLOR.Danger);
-      //用Antd的组件显示
-      console.error(error);
+    viewer.onLoadError = (error: MessageError) => {
+      errorMessage(error);
     };
 
     if (showProgress) {

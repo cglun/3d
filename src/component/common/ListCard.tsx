@@ -7,7 +7,7 @@ import Button from "react-bootstrap/esm/Button";
 
 import AlertBase from "@/component/common/AlertBase";
 
-import { APP_COLOR, RecordItem } from "@/app/type";
+import { APP_COLOR, MessageError, RecordItem } from "@/app/type";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import Toast3d from "@/component/common/Toast3d";
 import EditorForm from "@/component/common/EditorForm";
@@ -20,6 +20,7 @@ import Icon from "@/component/common/Icon";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { getThemeByScene } from "@/three/utils/util4UI";
 import sceneUserData from "@/three/config/Three3dConfig";
+import { errorMessage } from "@/app/utils";
 
 interface Props {
   list: RecordItem[];
@@ -73,11 +74,11 @@ function RecordItemCard(props: Props) {
                 updateScene(editor.scene);
               }
             } else {
-              Toast3d(res.data, "提示", APP_COLOR.Warning);
+              Toast3d(res.data, "提示", APP_COLOR.Danger);
             }
           })
-          .catch((error) => {
-            Toast3d(error, "提示", APP_COLOR.Warning);
+          .catch((error: MessageError) => {
+            errorMessage(error);
           });
       }
     );
@@ -116,8 +117,8 @@ function RecordItemCard(props: Props) {
               Toast3d(res.data, "提示", APP_COLOR.Warning);
             }
           })
-          .catch((error) => {
-            Toast3d(error, "提示", APP_COLOR.Warning);
+          .catch((error: MessageError) => {
+            errorMessage(error);
           });
 
         Toast3d(`【${item.name}】已修改 `);
@@ -134,7 +135,7 @@ function RecordItemCard(props: Props) {
     editor.scene.userData = mergedData;
 
     const dataSrc = editor.sceneSerialization();
-
+    debugger;
     ModalConfirm3d(
       {
         title: "修复",
@@ -158,8 +159,8 @@ function RecordItemCard(props: Props) {
               Toast3d(res.data, "提示", APP_COLOR.Warning);
             }
           })
-          .catch((error) => {
-            Toast3d(error, "提示", APP_COLOR.Warning);
+          .catch((error: MessageError) => {
+            errorMessage(error);
           });
 
         Toast3d(`【${item.name}】已修复`);

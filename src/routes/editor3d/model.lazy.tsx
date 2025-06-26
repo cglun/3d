@@ -6,8 +6,8 @@ import { Search3d } from "@/component/common/Search3d";
 import { UploadModel } from "@/component/common/UploadModel";
 import ListCard from "@/component/common/ListCard";
 import _axios from "@/app/http";
-
-import { RecordItem } from "@/app/type";
+import { MessageError, RecordItem } from "@/app/type";
+import { errorMessage } from "@/app/utils";
 
 // 定义响应数据的类型
 interface ResponseData {
@@ -56,6 +56,9 @@ function ModelList() {
           setFilterList(sceneList);
           setIsLoading(false);
         }
+      })
+      .catch((error: MessageError) => {
+        errorMessage(error);
       });
   }, [updateTime]);
 

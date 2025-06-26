@@ -45,9 +45,8 @@ export default function roamGUI() {
     });
   folderGeometry.add(userSetting, "speed", 0.01, 20).name("速度").step(0.01);
   folderGeometry
-    .add(userSetting, "tension", -1, 1)
+    .add(userSetting, "tension", -1, 1, 0.001)
     .name("张力")
-    .step(0.001)
     .onChange(() => {
       addTube(userSetting);
     });
