@@ -165,7 +165,7 @@ export function stopRoam() {
 // 辅助函数：将十六进制颜色值转换为 RGB 值
 export function hexToRgb(hex: string): string {
   hex = hex.replace(/^#/, "");
-  let hexCode =
+  const hexCode =
     hex.length === 3
       ? hex
           .split("")

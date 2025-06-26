@@ -3,7 +3,6 @@ import Button from "react-bootstrap/esm/Button";
 import {
   AmbientLight,
   BoxGeometry,
-  Group,
   Mesh,
   MeshLambertMaterial,
   PlaneGeometry,
@@ -71,13 +70,7 @@ function RouteComponent() {
     getEditor().GEOMETRY.add(plane);
     updateScene(getEditor().scene);
   }
-  //@ts-expect-error 组
-  function addGroup() {
-    const group = new Group();
 
-    getEditor().scene.add(group);
-    updateScene(getEditor().scene);
-  }
   function addDirectionalLight() {
     const editor = editorInstance.getEditor();
     const { useShadow } = editor.scene.userData.config3d;

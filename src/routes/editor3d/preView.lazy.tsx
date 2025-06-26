@@ -109,7 +109,6 @@ function RouteComponent() {
   }
   const modalBody = useRef<HTMLDivElement>(null);
   const beiShu = window.innerHeight / window.innerWidth; // 将 beiShu 计算移到这里
-  //@ts-ignore 忽略类型检查，暂时不清楚 Context116 完整类型定义
   const [size3d, setSize3d] = useState({
     w: 1138,
     h: 1138 * beiShu,

@@ -90,8 +90,8 @@ function ModalConfirm({
 
 export default function ModalConfirm3d(
   {
-    title = "提示",
-    body = "内容",
+    title = "ModalConfirm3d提示",
+    body = "ModalConfirm3d内容",
     confirmButton = _confirmButton,
   }: {
     title: string;

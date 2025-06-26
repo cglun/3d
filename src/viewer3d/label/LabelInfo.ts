@@ -92,9 +92,11 @@ export class LabelInfo {
     labelStyle.borderRadius = cardRadius + "px";
     labelStyle.backgroundColor = `rgba(${hexToRgb(cardBackgroundColor)}, ${opacity})`;
 
-    enableCardBackgroundUrl &&
-      (labelStyle.backgroundImage = getCardBackgroundUrl(cardBackgroundUrl));
-    enableCardBackgroundUrl && (labelStyle.backgroundColor = "transparent"); // 背景透明
+    if (enableCardBackgroundUrl) {
+      labelStyle.backgroundImage = getCardBackgroundUrl(cardBackgroundUrl);
+      labelStyle.backgroundColor = "transparent";
+    }
+
     labelStyle.backgroundRepeat = "no-repeat";
     labelStyle.backgroundPosition = "center center";
     labelStyle.backgroundSize = "cover";

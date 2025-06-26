@@ -624,18 +624,16 @@ export class Three3d extends ThreeObj {
   }
 
   runJavascript(): void {
+    const editorIns = editorInstance?.getEditor();
+    const viewerIns = viewerInstance?.getViewer();
+
     if (import.meta.env.MODE === "development") {
-      const editorIns = editorInstance?.getEditor();
-      runScriptDev(editorIns);
+      runScriptDev(editorIns, viewerIns);
     }
 
     const { javascript } = this.scene.userData;
 
     if (javascript) {
-      //@ts-ignore注意：在执行代码时，确保 this 指向正确的 ,对象在这里执行 javascript 代码
-      const editorIns = editorInstance?.getEditor();
-      //@ts-ignore注意：在执行代码时，确保 this 指向正确的 ,对象在这里执行 javascript 代码
-      const viewerIns = viewerInstance?.getViewer();
       runScriptPro(editorIns, viewerIns);
       // eval(javascript);
     }
@@ -644,9 +642,9 @@ export class Three3d extends ThreeObj {
   loadedModelsEnd(): void {
     console.log("loadedModelsEnd");
   }
-  //移除未使用的 @ts-expect-error 注释
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onLoadProgress(_process: number) {}
-  // 移除未使用的 @ts-expect-error 注释
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onLoadError(_error: unknown) {}
 
   onWindowResize() {

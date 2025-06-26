@@ -135,7 +135,7 @@ function RecordItemCard(props: Props) {
     editor.scene.userData = mergedData;
 
     const dataSrc = editor.sceneSerialization();
-    debugger;
+
     ModalConfirm3d(
       {
         title: "修复",

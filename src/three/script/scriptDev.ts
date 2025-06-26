@@ -5,11 +5,15 @@ import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
 import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 
 export function runScriptDev(
-  //@ts-ignore 忽略类型错误,  脚本开发调试   【开始】到【结束】之间的代码复制到脚本中保存，刷新！
   editorIns: Three3dEditor,
-  //@ts-ignore 忽略类型错误,  脚本开发调试   【开始】到【结束】之间的代码复制到脚本中保存，刷新！
-  viewerIns?: Three3dViewer
+  viewerIns: Three3dViewer
 ) {
+  if (viewerIns) {
+    console.log("在预览中生效");
+  }
+  if (editorIns) {
+    console.log("在编辑器中生效");
+  }
   // ===============开始==================//
   // if (viewerIns) {
   //   const { labelInfoPanelController } = viewerIns;

@@ -4,7 +4,7 @@ import { setClassName } from "@/three/utils/util4UI";
 import Alert from "react-bootstrap/esm/Alert";
 
 export default function AlertBase({
-  text = "内容",
+  text = "AlertBase内容",
   type = APP_COLOR.Danger,
   className = "",
 }: {
