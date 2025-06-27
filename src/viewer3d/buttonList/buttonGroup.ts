@@ -212,8 +212,8 @@ export function getRoamListByRoamButtonMap(scene: Scene): ActionItemMap[] {
         if (state.includes("_STOP")) {
           roamAnimation(false);
           const { camera, controls } = viewerInstance.getViewer();
-
-          cameraBackHome(camera, controls, 1000);
+          const { userSetting } = toggleButtonGroup;
+          cameraBackHome(camera, controls, userSetting.animationTime);
         }
 
         showModelBackHome(toggleButtonGroup);

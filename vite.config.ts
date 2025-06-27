@@ -4,7 +4,6 @@ import tanstackRouter from "@tanstack/router-plugin/vite";
 // 修改为默认导入
 import federation from "@originjs/vite-plugin-federation";
 import { visualizer } from "rollup-plugin-visualizer";
-
 import { resolve } from "path";
 
 declare module "@originjs/vite-plugin-federation" {

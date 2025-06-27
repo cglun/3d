@@ -100,8 +100,9 @@ export function drawerBackHome(toggleButtonGroup: ToggleButtonGroup) {
   if (type === "DRAWER") {
     const { userSetting } = toggleButtonGroup;
     listGroup.forEach((_item: ActionItemMap) => {
-      const _d = _item.data;
-      if (_item.data?.isSelected && !_d?.isRunning) {
+      const { isRunning, isSelected } = _item.data;
+
+      if (isSelected && !isRunning) {
         const model = _getViewer().scene.getObjectByName(_item.NAME_ID);
 
         _item.data = {
@@ -116,7 +117,7 @@ export function drawerBackHome(toggleButtonGroup: ToggleButtonGroup) {
           meshTween(
             model,
             new Vector3(mp.x - x, mp.y - y, mp.z - z),
-            userSetting?.animationTime ?? 1000
+            userSetting.animationTime
           )
             .start()
             .onComplete(() => {
@@ -127,6 +128,9 @@ export function drawerBackHome(toggleButtonGroup: ToggleButtonGroup) {
               };
             });
         }
+      }
+      if (_item.NAME_ID === GROUP.MODEL) {
+        cameraBackHome(getCamera(), getControls(), userSetting.animationTime);
       }
     });
   }
@@ -404,9 +408,10 @@ export function animateDRAWER(
     ...item,
     handler: () => {
       commonHandler(item);
-
       drawerBackHome(toggleButtonGroup);
-      if (!item.data?.isSelected && !item.data?.isRunning) {
+      const { NAME_ID } = item;
+      const { isSelected, isRunning } = item.data;
+      if (!isSelected && !isRunning && NAME_ID !== GROUP.MODEL) {
         drawerOutByNameId(item, toggleButtonGroup);
         moveCameraDRAWER(item, toggleButtonGroup);
       }
