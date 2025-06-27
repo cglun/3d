@@ -20,6 +20,8 @@ import { viewerInstance } from "@/three/instance/ViewerInstance";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { hasValueString } from "@/three/utils/utils";
 
+export const cameraViewerPosition = new Vector3(0, 0, 0);
+
 function getActionItemByMap(
   item: ActionItemMap,
   customButtonType: CustomButtonType
@@ -28,7 +30,7 @@ function getActionItemByMap(
     item.data = {
       isSelected: false,
       isRunning: false,
-      cameraOffsetStretch: new Vector3(0, 0, 0),
+      cameraViewerPosition,
     };
   }
   return item;
@@ -56,7 +58,7 @@ export function generateToggleButtonGroup(
           data: {
             isSelected: false,
             isRunning: false,
-            cameraOffsetStretch: new Vector3(0, 0, 0),
+            cameraViewerPosition,
           },
         },
         customButtonType
@@ -79,7 +81,7 @@ export function generateToggleButtonGroup(
                 data: {
                   isSelected: false,
                   isRunning: false,
-                  cameraOffsetStretch: new Vector3(0, 0, 0),
+                  cameraViewerPosition,
                 },
               },
               customButtonType
@@ -115,7 +117,7 @@ export function generateToggleButtonGroup(
                   data: {
                     isSelected: false,
                     isRunning: false,
-                    cameraOffsetStretch: new Vector3(0, 0, 0),
+                    cameraViewerPosition,
                   },
                 },
                 customButtonType
@@ -185,7 +187,7 @@ export function generateRoamButtonGroup() {
         data: {
           isSelected: false,
           isRunning: false,
-          cameraOffsetStretch: new Vector3(0, 0, 0),
+          cameraViewerPosition,
         },
       });
     });
@@ -255,7 +257,7 @@ export function generatePanelControllerButtonGroup() {
     data: {
       isSelected: false,
       isRunning: false,
-      cameraOffsetStretch: new Vector3(0, 0, 0),
+      cameraViewerPosition,
     },
   });
   panelControllerButtonGroup.push({
@@ -267,7 +269,7 @@ export function generatePanelControllerButtonGroup() {
     data: {
       isSelected: false,
       isRunning: false,
-      cameraOffsetStretch: new Vector3(0, 0, 0),
+      cameraViewerPosition,
     },
   });
   return panelControllerButtonGroup;

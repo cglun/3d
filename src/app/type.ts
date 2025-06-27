@@ -59,12 +59,12 @@ export interface ActionItemMap {
   showButton: boolean; //是否显示按钮
   isClick: boolean; //是否点击, 改变选中状态
   groupCanBeRaycast: boolean; //射线检测是否选中组的children
-  handler?: (nameId?: string) => void;
   data: {
     isSelected: boolean;
     isRunning: boolean;
-    cameraOffsetStretch: Vector3; // 拉伸时的相机偏移
+    cameraViewerPosition: Vector3; // 拉伸时的相机偏移
   };
+  handler?: (nameId?: string) => void;
 }
 // 使用 = 定义类型，并且明确成员类型为字符串字面量类型
 export type CustomButtonType =

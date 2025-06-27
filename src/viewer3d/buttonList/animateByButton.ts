@@ -8,13 +8,14 @@ import {
   Vector3,
 } from "three";
 import { ActionItemMap } from "@/app/type";
-
 import { GROUP } from "@/three/config/CONSTANT";
-
 import { cameraTween, meshTween } from "@/three/animate";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { getObjectWorldPosition } from "@/three/utils/utils";
-import { roamAnimation } from "@/viewer3d/buttonList/buttonGroup";
+import {
+  cameraViewerPosition,
+  roamAnimation,
+} from "@/viewer3d/buttonList/buttonGroup";
 
 import { SceneUserData, ToggleButtonGroup } from "@/three/config/Three3dConfig";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
@@ -72,7 +73,7 @@ export function drawerOutByNameId(
   item.data = {
     isSelected: true,
     isRunning: true,
-    cameraOffsetStretch: new Vector3(0, 0, 0),
+    cameraViewerPosition,
   };
   if (MODEL_GROUP) {
     const { x, y, z } = MODEL_GROUP.position;
@@ -88,7 +89,7 @@ export function drawerOutByNameId(
         item.data = {
           isSelected: true,
           isRunning: false,
-          cameraOffsetStretch: new Vector3(0, 0, 0),
+          cameraViewerPosition,
         };
       });
   }
@@ -108,7 +109,7 @@ export function drawerBackHome(toggleButtonGroup: ToggleButtonGroup) {
         _item.data = {
           isRunning: true,
           isSelected: true,
-          cameraOffsetStretch: new Vector3(0, 0, 0),
+          cameraViewerPosition,
         };
 
         if (model) {
@@ -124,7 +125,7 @@ export function drawerBackHome(toggleButtonGroup: ToggleButtonGroup) {
               _item.data = {
                 isRunning: false,
                 isSelected: false,
-                cameraOffsetStretch: new Vector3(0, 0, 0),
+                cameraViewerPosition,
               };
             });
         }
@@ -261,10 +262,7 @@ export function moveCameraSTRETCH(
     if (isMoveCamera) {
       cameraBackHome(camera, controls, animationTime);
     } else {
-      // const offSet = item.data.cameraOffsetStretch;
-      //相机位置
-      const { x, y, z } = item.data.cameraOffsetStretch;
-      // const { x, y, z } = getObjectWorldPosition(MODEL_GROUP);
+      const { x, y, z } = item.data.cameraViewerPosition;
       const cameraPositionSTRETCH = new Vector3(
         x + cameraOffset.x,
         y + cameraOffset.y,
