@@ -22,18 +22,26 @@ import { hasValueString } from "@/three/utils/utils";
 
 export const cameraViewerPosition = new Vector3(0, 0, 0);
 
-function getActionItemByMap(
-  item: ActionItemMap,
+//设置模型和相机的偏移
+export function setUserSettingByType(
+  userSetting: {
+    modelOffset: Vector3;
+    cameraOffset: Vector3;
+    animationTime: number;
+  },
   customButtonType: CustomButtonType
-): ActionItemMap {
-  if (customButtonType === "DRAWER") {
-    item.data = {
-      isSelected: false,
-      isRunning: false,
-      cameraViewerPosition,
-    };
+) {
+  if (customButtonType === "TOGGLE") {
+    userSetting.cameraOffset.x = 26;
   }
-  return item;
+  if (customButtonType === "DRAWER") {
+    userSetting.modelOffset.z = 5;
+    userSetting.cameraOffset.y = 4;
+    userSetting.cameraOffset.z = 1;
+  }
+  if (customButtonType === "STRETCH") {
+    userSetting.modelOffset.y = 1;
+  }
 }
 
 // 生成切换按钮组
@@ -44,49 +52,33 @@ export function generateToggleButtonGroup(
 ): ActionItemMap[] {
   const actionList: ActionItemMap[] = [];
   const MODEL_GROUP = sceneContext.getObjectByName(GROUP.MODEL);
+  const actionItemMap: ActionItemMap = {
+    showName: "全景",
+    NAME_ID: GROUP.MODEL,
+    showButton: true,
+    isClick: false,
+    groupCanBeRaycast: false,
+    data: {
+      isSelected: false,
+      isRunning: false,
+      cameraViewerPosition,
+    },
+  };
 
   if (MODEL_GROUP) {
     const { children } = MODEL_GROUP;
-    actionList.push(
-      getActionItemByMap(
-        {
-          showName: "全景",
-          NAME_ID: MODEL_GROUP.name,
-          showButton: true,
-          isClick: false,
-          groupCanBeRaycast: false,
-          data: {
-            isSelected: false,
-            isRunning: false,
-            cameraViewerPosition,
-          },
-        },
-        customButtonType
-      )
-    );
+    actionList.push({
+      ...actionItemMap,
+      showName: "全景",
+      NAME_ID: GROUP.MODEL,
+    });
     //二层
     children.forEach((item) => {
       const level2 = item.children;
       level2.forEach((item) => {
         if (!hasValueString(item, GROUP.ENV)) {
           const { name } = item;
-          actionList.push(
-            getActionItemByMap(
-              {
-                showName: name,
-                NAME_ID: name,
-                showButton: true,
-                isClick: false,
-                groupCanBeRaycast: false,
-                data: {
-                  isSelected: false,
-                  isRunning: false,
-                  cameraViewerPosition,
-                },
-              },
-              customButtonType
-            )
-          );
+          actionList.push({ ...actionItemMap, showName: name, NAME_ID: name });
         }
       });
     });
@@ -106,23 +98,11 @@ export function generateToggleButtonGroup(
         if (!hasValueString(item, GROUP.ENV)) {
           level3.forEach((item) => {
             const { name } = item;
-            actionList.push(
-              getActionItemByMap(
-                {
-                  showName: name,
-                  NAME_ID: name,
-                  showButton: true,
-                  isClick: false,
-                  groupCanBeRaycast: false,
-                  data: {
-                    isSelected: false,
-                    isRunning: false,
-                    cameraViewerPosition,
-                  },
-                },
-                customButtonType
-              )
-            );
+            actionList.push({
+              ...actionItemMap,
+              showName: name,
+              NAME_ID: name,
+            });
           });
         }
       });

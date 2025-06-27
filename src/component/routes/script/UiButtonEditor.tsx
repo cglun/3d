@@ -192,7 +192,7 @@ export default function UiButtonEditor({
     const name = "按钮组-";
     const typeName = {
       TOGGLE: `${name}切换`,
-      DRAWER: `${name}拉伸`,
+      DRAWER: `${name}抽屉`,
       STRETCH: `${name}拉伸`,
       ROAM: `${name}漫游`,
       PANEL_CONTROLLER: `${name}面板控制器`,

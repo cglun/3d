@@ -18,6 +18,7 @@ import {
   generatePanelControllerButtonGroup,
   generateRoamButtonGroup,
   generateToggleButtonGroup,
+  setUserSettingByType,
 } from "@/viewer3d/buttonList/buttonGroup";
 import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
@@ -69,6 +70,7 @@ function RouteComponent() {
       editor.scene,
       buttonType
     );
+    setUserSettingByType(toggleButtonGroup.userSetting, buttonType);
     roamButtonGroup.customButtonItem.listGroup = generateRoamButtonGroup();
     panelControllerButtonGroup.customButtonItem.listGroup =
       generatePanelControllerButtonGroup();
