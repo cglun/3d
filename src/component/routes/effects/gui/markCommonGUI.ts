@@ -24,25 +24,6 @@ export default function markCommonGUI(
 
   const { style } = labelInfoDiv;
 
-  // const lockXY = {
-  //   isLock: true,
-  //   size: {
-  //     width: object.cardWidth,
-  //     height: object.cardHeight,
-  //   },
-  // };
-
-  // parentFolder
-  //   .add(lockXY, "isLock")
-  //   .name("使用背景图宽高比")
-  //   .onChange((value) => {
-  //     imgHeight.disable(value);
-  //     imgWidth.disable(value);
-  //     if (lockXY.isLock) {
-  //       imgHeight.setValue(lockXY.size.height);
-  //       imgWidth.setValue(lockXY.size.width);
-  //     }
-  //   });
   parentFolder
     .add(object, "enableCardBackgroundUrl")
     .name("使用背景图")

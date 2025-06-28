@@ -43,7 +43,7 @@
             "data": {
               "isSelected": false,
               "isRunning": false,
-              "cameraViewerPosition": {
+              "cameraOffsetStretch": {
                 "x": 0,
                 "y": 0,
                 "z": 0
@@ -59,7 +59,7 @@
             "data": {
               "isSelected": false,
               "isRunning": false,
-              "cameraViewerPosition": {
+              "cameraOffsetStretch": {
                 "x": 20,
                 "y": 0,
                 "z": 0
@@ -75,7 +75,7 @@
             "data": {
               "isSelected": false,
               "isRunning": false,
-              "cameraViewerPosition": {
+              "cameraOffsetStretch": {
                 "x": 20,
                 "y": 0,
                 "z": 0

@@ -35,6 +35,7 @@ import cameraGUI from "@/component/Editor/PropertyGUI/cameraGUI";
 import meshGroupGUI from "@/component/Editor/PropertyGUI/meshGroupGUI";
 import css3CSS3DSpriteGUI from "@/component/Editor/PropertyGUI/css3CSS3DSpriteGUI";
 import { Three3d } from "@/three/threeObj/Three3d";
+import { transformCMD } from "../command/cmd";
 
 export class Three3dEditor extends Three3d {
   static divElement: HTMLDivElement;
@@ -74,10 +75,11 @@ export class Three3dEditor extends Three3d {
     this.LIGHT_GROUP.add(light);
     this.transformControl = this.initTransformControl();
     this.controls.addEventListener("end", () => {
-      if (this.currentSelected3d.type === "PerspectiveCamera") {
+      const curSelected = this.currentSelected3d;
+      if (curSelected.type === "PerspectiveCamera") {
         cameraGUI(this.currentSelected3d as PerspectiveCamera);
+        transformCMD(curSelected, cameraGUI);
       }
-
       //、 if (this.currentSelected3d.type === "PerspectiveCamera") {
       // // 获取编辑器实例
       // const editor = editorInstance.getEditor();
@@ -102,12 +104,22 @@ export class Three3dEditor extends Three3d {
 
     transformControl.addEventListener("dragging-changed", (event) => {
       _controls.enabled = !event.value;
-      const curSelected = this.currentSelected3d;
-      if (curSelected instanceof Group) {
-        meshGroupGUI(curSelected);
-      }
-      if (curSelected instanceof CSS3DSprite) {
-        css3CSS3DSpriteGUI(curSelected);
+      if (_controls.enabled) {
+        const curSelected = this.currentSelected3d;
+
+        if (curSelected instanceof Mesh || curSelected instanceof Group) {
+          meshGroupGUI(curSelected);
+          transformCMD(curSelected, meshGroupGUI);
+        }
+        if (curSelected instanceof DirectionalLight) {
+          directionalLightGUI(curSelected as DirectionalLight);
+          transformCMD(curSelected, directionalLightGUI);
+        }
+
+        if (curSelected instanceof CSS3DSprite) {
+          css3CSS3DSpriteGUI(curSelected);
+          transformCMD(curSelected, css3CSS3DSpriteGUI);
+        }
       }
     });
     transformControl.setMode("translate");

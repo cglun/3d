@@ -1,13 +1,18 @@
+import { DirectionalLight } from "three";
 import { editorInstance } from "@/three/instance/EditorInstance";
 
-import { DirectionalLight } from "three";
-import { lightGUI } from "./lightGUI";
+import { lightGUI } from "@/component/Editor/PropertyGUI/lightGUI/lightGUI";
+import { transformCMD } from "@/three/command/cmd";
 
 export default function directionalLightGUI(light: DirectionalLight) {
   const editor = editorInstance.getEditor();
 
   const folder = editor.createGUI("平行光");
-  lightGUI(light, folder);
+  const positionFolder = lightGUI(light, folder);
+  positionFolder.onFinishChange(() => {
+    transformCMD(light, directionalLightGUI);
+  });
+
   const shadowFolder = folder.addFolder("阴影");
   const { mapSize, camera } = light.shadow;
 

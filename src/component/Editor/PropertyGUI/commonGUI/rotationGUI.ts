@@ -6,7 +6,9 @@ export default function rotationGUI(parentFolder: GUI, object: Object3D) {
   const step = 0.001;
   const lastToken = "轴";
   const pi = Math.PI;
+
   const rotationFolder = parentFolder.addFolder("旋转");
+
   rotationFolder
     .add(object.rotation, "x", min * pi, max * pi, step * pi)
     .name(`X${lastToken}`);

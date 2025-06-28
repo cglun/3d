@@ -8,4 +8,5 @@ export enum GROUP {
   ENV = "_ENV_",
   ROAM = "_ROAM_",
   TEST = "TEST_GROUP",
+  NONE = "NONE",
 }

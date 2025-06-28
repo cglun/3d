@@ -23,6 +23,23 @@ function RouteComponent() {
     {
       list: [
         {
+          logoName: "bi bi-arrow-90deg-left",
+          position: "左侧栏",
+          buttonName: "上一步",
+          des: "增加上一步功能，移动，旋转，缩放。",
+        },
+        {
+          logoName: "bi bi-arrow-90deg-right",
+          position: "左侧栏",
+          buttonName: "下一步",
+          des: "增加下一步功能，移动，旋转，缩放。",
+        },
+      ],
+      updateTime: "2025年6月27日",
+    },
+    {
+      list: [
+        {
           logoName: "pin-map",
           position: "底部栏",
           buttonName: "标签",

@@ -8,14 +8,17 @@ export default function positionGUI(
   step: number
 ) {
   const lastToken = "轴";
+
   const positionFolder = parentFolder.addFolder("位置");
   positionFolder
     .add(object.position, "x", min, max, step)
     .name(`X${lastToken}`);
+
   positionFolder
     .add(object.position, "y", min, max, step)
     .name(`Y${lastToken}`);
   positionFolder
     .add(object.position, "z", min, max, step)
     .name(`Z${lastToken}`);
+  return positionFolder;
 }

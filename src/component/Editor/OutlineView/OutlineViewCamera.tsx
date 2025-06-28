@@ -11,6 +11,7 @@ import { SceneUserData } from "@/three/config/Three3dConfig";
 import { getButtonColor } from "@/three/utils/util4UI";
 import { cameraEnterAnimation } from "@/three/utils/util4Camera";
 import cameraGUI from "@/component/Editor/PropertyGUI/cameraGUI";
+import { transformCMD } from "@/three/command/cmd";
 
 export function OutlineViewCamera() {
   const { camera } = useUpdateCamera();
@@ -22,6 +23,7 @@ export function OutlineViewCamera() {
         onClick={() => {
           const editor = editorInstance.getEditor();
           editor.currentSelected3d = editor.camera;
+          transformCMD(editor.camera, cameraGUI);
           editor.transformControl?.detach();
           cameraGUI(editor.camera);
         }}
@@ -42,6 +44,7 @@ export function OutlineViewCamera() {
               const { camera, scene } = editorInstance.getEditor();
               const userData = scene.userData as SceneUserData;
               userData.cameraPosition.start = camera.position.clone();
+
               Toast3d("设置成功");
             }}
           >

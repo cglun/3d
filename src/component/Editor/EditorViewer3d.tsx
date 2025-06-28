@@ -4,30 +4,18 @@ import ProgressBar from "react-bootstrap/esm/ProgressBar";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
-import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
-import Button from "react-bootstrap/esm/Button";
-
-//import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
-
-import { TransformControlsMode } from "three/addons/controls/TransformControls.js";
 import { useUpdateCamera, useUpdateScene } from "@/app/hooks";
 import ModalTour from "@/component/common/ModalTour";
-import Icon from "@/component/common/Icon";
-
-import {
-  editorInstance,
-  EditorInstance,
-} from "@/three/instance/EditorInstance";
+import { editorInstance } from "@/three/instance/EditorInstance";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import AlertBase from "@/component/common/AlertBase";
 import { APP_COLOR, MessageError, RecordItem } from "@/app/type";
-import { getThemeByScene } from "@/three/utils/util4UI";
 import { getProjectData } from "@/three/utils/util4Scene";
 import { MyContext } from "@/app/MyContext";
-
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
 import { errorMessage } from "@/app/utils";
+import TransformControl from "./TransformControl/TransformControl";
 
 function EditorViewer3d() {
   const editorCanvas: React.RefObject<HTMLDivElement> =
@@ -38,7 +26,6 @@ function EditorViewer3d() {
 
   const { scene, updateScene } = useUpdateScene();
   const { updateCamera } = useUpdateCamera();
-  const { themeColor } = getThemeByScene(scene);
   const { dispatchTourWindow } = useContext(MyContext);
   const location = useLocation().search; // 获取 sceneId 参数
   const searchParams = new URLSearchParams(location);
@@ -73,6 +60,7 @@ function EditorViewer3d() {
 
       if (item.id !== -1) {
         const editor = editorInstance.getEditor();
+        editorInstance.resetUndo();
         editor.resetScene();
         getProjectData(item.id)
           .then((data: string) => {
@@ -168,110 +156,10 @@ function EditorViewer3d() {
     };
   }, [sceneId, refreshTime]);
 
-  function setMode(modeName: TransformControlsMode) {
-    const editor = EditorInstance.getInstance().getEditor();
-    const transfControls = editor.transformControl;
-    transfControls.setMode(modeName);
-  }
-
   return (
     <Container fluid>
       <Row>
-        <Col xs="auto" className="d-flex flex-column left-btn-group">
-          <div style={{ flexGrow: 10 }}></div>
-          <ButtonGroup style={{ flexGrow: 1 }} size="sm" vertical>
-            <Button
-              variant={themeColor}
-              onClick={() => {
-                setMode("translate");
-              }}
-            >
-              <Icon
-                iconName="bi bi-arrows-move"
-                style={{ width: "100%" }}
-                title="移动"
-                placement="right"
-              />
-            </Button>
-            <Button
-              variant={themeColor}
-              onClick={() => {
-                setMode("rotate");
-              }}
-            >
-              <Icon
-                iconName="bi bi-arrow-repeat"
-                title="旋转"
-                placement="right"
-              />
-            </Button>
-            <Button
-              variant={themeColor}
-              onClick={() => {
-                setMode("scale");
-              }}
-            >
-              <Icon
-                iconName="bi bi-arrows-angle-expand"
-                title="缩放"
-                placement="right"
-              />
-            </Button>
-
-            {/* <Button
-                       variant={themeColor}
-                       onClick={() => {
-                         const editor = editorInstance.getEditor();
-                         editor.setCameraType(editor.camera, new Vector3(0, 1, 0));
-                       }}
-                     >
-                       <Icon iconName="bi bi-align-top" title="顶视" />
-                     </Button>
-                     <Button
-                       variant={themeColor}
-                       onClick={() => {
-                         const editor = editorInstance.getEditor();
-                         editor.setCameraType(editor.camera, new Vector3(0, 0, 1));
-                       }}
-                     >
-                       <Icon iconName="bi bi-align-middle" title="前视" />
-                     </Button>
-                     <Button
-                       variant={themeColor}
-                       onClick={() => {
-                         const editor = editorInstance.getEditor();
-                         editor.setCameraType(editor.camera, new Vector3(1, 0, 0));
-                       }}
-                     >
-                       <Icon iconName="bi bi-align-start" title="左视" />
-                     </Button>
-                     <Button
-                       variant={themeColor}
-                       onClick={() => {
-                         const editor = editorInstance.getEditor();
-                         editor.setCameraType(editor.camera, Object3D.DEFAULT_UP);
-                       }}
-                     >
-                       <Icon iconName="box" title="透视" />
-                     </Button> */}
-          </ButtonGroup>
-          <ButtonGroup style={{ flexGrow: 1 }} size="sm" vertical>
-            <Button variant={themeColor} onClick={() => {}}>
-              <Icon
-                iconName="bi bi-arrow-90deg-left"
-                title="上一步"
-                placement="right"
-              />
-            </Button>
-            <Button variant={themeColor} onClick={() => {}}>
-              <Icon
-                iconName="bi bi-arrow-90deg-right"
-                title="下一步"
-                placement="right"
-              />
-            </Button>
-          </ButtonGroup>
-        </Col>
+        <TransformControl />
         <Col
           style={{
             height: "70vh",

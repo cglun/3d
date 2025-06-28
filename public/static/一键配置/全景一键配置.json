@@ -43,7 +43,7 @@
             "data": {
               "isSelected": false,
               "isRunning": false,
-              "cameraViewerPosition": {
+              "cameraOffsetStretch": {
                 "x": 0,
                 "y": 0,
                 "z": 0
@@ -59,7 +59,7 @@
             "data": {
               "isSelected": false,
               "isRunning": false,
-              "cameraViewerPosition": {
+              "cameraOffsetStretch": {
                 "x": 0,
                 "y": 0,
                 "z": 0
@@ -75,7 +75,7 @@
             "data": {
               "isSelected": false,
               "isRunning": false,
-              "cameraViewerPosition": {
+              "cameraOffsetStretch": {
                 "x": 0,
                 "y": 0,
                 "z": 0
@@ -91,7 +91,7 @@
             "data": {
               "isSelected": false,
               "isRunning": false,
-              "cameraViewerPosition": {
+              "cameraOffsetStretch": {
                 "x": 0,
                 "y": 0,
                 "z": 0
@@ -107,7 +107,7 @@
             "data": {
               "isSelected": false,
               "isRunning": false,
-              "cameraViewerPosition": {
+              "cameraOffsetStretch": {
                 "x": 0,
                 "y": 0,
                 "z": 0
@@ -120,12 +120,12 @@
         "modelOffset": {
           "x": 0,
           "y": 0,
-          "z": 10
+          "z": 5
         },
         "cameraOffset": {
           "x": 0,
           "y": 4,
-          "z": 0
+          "z": 1
         },
         "animationTime": 1160
       }
@@ -144,7 +144,7 @@
             "data": {
               "isSelected": false,
               "isRunning": false,
-              "cameraViewerPosition": {
+              "cameraOffsetStretch": {
                 "x": 0,
                 "y": 0,
                 "z": 0
@@ -179,7 +179,7 @@
             "data": {
               "isSelected": false,
               "isRunning": false,
-              "cameraViewerPosition": {
+              "cameraOffsetStretch": {
                 "x": 0,
                 "y": 0,
                 "z": 0
@@ -195,7 +195,7 @@
             "data": {
               "isSelected": false,
               "isRunning": false,
-              "cameraViewerPosition": {
+              "cameraOffsetStretch": {
                 "x": 0,
                 "y": 0,
                 "z": 0

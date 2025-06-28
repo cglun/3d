@@ -29,6 +29,7 @@ import meshGroupGUI from "../Editor/PropertyGUI/meshGroupGUI";
 
 import css3CSS3DSpriteGUI from "../Editor/PropertyGUI/css3CSS3DSpriteGUI";
 import { GROUP } from "@/three/config/CONSTANT";
+import { transformCMD } from "@/three/command/cmd";
 
 function TreeNode({
   node,
@@ -56,30 +57,49 @@ function TreeNode({
     }
 
     editor.destroyGUI();
-    if (editorObject instanceof DirectionalLight) {
-      editor.transformControl.attach(editorObject);
-      directionalLightGUI(editorObject);
+    const parentGroup = editorObject?.parent?.name;
+    if (parentGroup === GROUP.LIGHT) {
+      if (editorObject instanceof DirectionalLight) {
+        editor.transformControl.attach(editorObject);
+        directionalLightGUI(editorObject);
+        transformCMD(editorObject, directionalLightGUI);
+      }
+      if (editorObject instanceof AmbientLight) {
+        ambientLightGUI(editorObject);
+      }
+      return;
     }
-    if (editorObject instanceof AmbientLight) {
-      ambientLightGUI(editorObject);
-    }
-    if (editorObject instanceof Group || editorObject instanceof Mesh) {
-      meshGroupGUI(editorObject);
 
-      editor.transformControl.attach(editorObject);
+    if (parentGroup === GROUP.MODEL) {
+      const isGroup = editorObject?.parent?.name.includes(GROUP.MODEL);
+      if (isGroup) {
+        meshGroupGUI(editorObject as Group);
+        transformCMD(editorObject as Group, meshGroupGUI);
+        editor.transformControl.attach(editorObject as Group);
+      }
+      return;
+    }
+    if (parentGroup === GROUP.GEOMETRY) {
+      meshGroupGUI(editorObject as Mesh);
+      transformCMD(editorObject as Mesh, meshGroupGUI);
+      editor.transformControl.attach(editorObject as Mesh);
+      return;
     }
 
     if (editorObject instanceof CSS3DSprite) {
-      css3CSS3DSpriteGUI(editorObject);
       const group = editor.scene.getObjectByName(GROUP.MARK_LABEL)?.clone();
       group?.remove(editorObject);
       group?.add(editorObject);
+      css3CSS3DSpriteGUI(editorObject);
+      transformCMD(editorObject, css3CSS3DSpriteGUI);
       editor.transformControl.attach(editorObject);
+      return;
     }
 
     if (editorObject) {
       onToggle(editorObject.uuid, !isExpanded);
     }
+    editor.transformControl.detach();
     updateScene(editor.scene);
   };
 

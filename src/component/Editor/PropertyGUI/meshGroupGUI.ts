@@ -3,11 +3,15 @@ import { Group, Mesh } from "three";
 import positionGUI from "@/component/Editor/PropertyGUI/commonGUI/positionGUI";
 import scaleGUI from "@/component/Editor/PropertyGUI/commonGUI/scaleGUI";
 import rotationGUI from "@/component/Editor/PropertyGUI/commonGUI/rotationGUI";
+import { transformCMD } from "@/three/command/cmd";
 
 export default function meshGroupGUI(group: Group | Mesh) {
   const editor = editorInstance.getEditor();
-  const folder = editor.createGUI("模型组"); // 添加旋转控件，将度转换为弧度
+  const folder = editor.createGUI("模型组").onFinishChange(() => {
+    transformCMD(group, meshGroupGUI);
+  }); // 添加旋转控件，将度转换为弧度
   folder.add(group, "name").name("模型名称");
+
   positionGUI(folder, group, -50, 50, 0.01);
   rotationGUI(folder, group);
   scaleGUI(folder, group, -50, 50, 0.001);

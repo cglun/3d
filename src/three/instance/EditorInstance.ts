@@ -1,9 +1,15 @@
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
+import { Command } from "../command/Command";
 
 export class EditorInstance {
   // 存储单例实例
   private static instance: EditorInstance;
   three3dEditor!: Three3dEditor;
+
+  private undoStep: number = 0;
+
+  // 撤销栈，存储已执行的命令
+  private undoStack: Command[] = [];
 
   // 将构造函数设为私有，防止外部实例化
   private constructor() {}
@@ -24,6 +30,45 @@ export class EditorInstance {
   // 设置 Three3dEditor 实例
   setEditor(three3dEditor: Three3dEditor) {
     this.three3dEditor = three3dEditor;
+  } // 执行命令并将其添加到撤销栈
+  executeCommand(command: Command) {
+    command.execute();
+    this.undoStack.push(command);
+    const canDo = this.undoStep > 0;
+    if (canDo) {
+      this.undoStep--;
+    }
+    // 执行新命令后，清空重做栈
+  }
+
+  // 执行撤销操作
+  undo() {
+    const canDo = this.undoStep < this.undoStack.length - 1;
+    if (canDo) {
+      const index = this.undoStack.length - this.undoStep - 2;
+      const command = this.undoStack[index];
+      command.execute();
+      this.undoStep++;
+    }
+    return canDo;
+  }
+
+  // 执行重做操作
+  redo() {
+    const canDo = this.undoStep > 0;
+    if (canDo) {
+      // const command = this.undoStack.pop()!;
+      const index = this.undoStack.length - this.undoStep;
+      const command = this.undoStack[index];
+      command.execute();
+      this.undoStep--;
+    }
+
+    return canDo;
+  }
+  resetUndo() {
+    this.undoStep = 0;
+    this.undoStack = [];
   }
 }
 
