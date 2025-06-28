@@ -4,11 +4,12 @@ import { GROUP } from "@/three/config/CONSTANT";
 type Action = () => void;
 export enum CMD {
   "transform" = "变换",
-  "rename" = "重命名",
-  "mesh" = "网格",
-  "sprite" = "精灵",
 }
-
+/**
+ * 命令类
+ * 用于存储命令的相关信息
+ * 包括命令类型、物体名称、物体父级、执行操作
+ */
 export class Command {
   private cmd: CMD;
   private objectName: string;
@@ -19,7 +20,7 @@ export class Command {
     [GROUP.MODEL]: "模型",
     [GROUP.HELPER]: "辅助",
     [GROUP.MARK_LABEL]: "标签",
-    [GROUP.LIGHT]: "光源",
+    [GROUP.LIGHT]: "灯光",
     [GROUP.GEOMETRY]: "几何体",
     [GROUP.BOX]: "盒子",
     [GROUP.ENV]: "环境",
@@ -45,15 +46,18 @@ export class Command {
   execute() {
     this.action();
     // 检查 objectParent 是否为 GROUP 枚举中的值
+    const name = this.buttonName();
+    console.log(name);
+  }
+  buttonName() {
     const groupKeys = Object.values(GROUP);
     const parentLabel = groupKeys.includes(this.objectParent as GROUP)
       ? this.objectParentString[this.objectParent as GROUP]
       : GROUP.NONE;
 
     if (parentLabel === GROUP.NONE) {
-      console.log(`${this.objectName}->${this.cmd}`);
-      return;
+      return `${this.objectName}->${this.cmd}`;
     }
-    console.log(`${parentLabel}->${this.objectName}->${this.cmd}`);
+    return `${parentLabel}->${this.objectName}->${this.cmd}`;
   }
 }

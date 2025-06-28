@@ -6,10 +6,10 @@ export class EditorInstance {
   private static instance: EditorInstance;
   three3dEditor!: Three3dEditor;
 
-  private undoStep: number = 0;
+  private _undoStep: number = 0;
 
   // 撤销栈，存储已执行的命令
-  private undoStack: Command[] = [];
+  private _undoStack: Command[] = [];
 
   // 将构造函数设为私有，防止外部实例化
   private constructor() {}
@@ -20,6 +20,18 @@ export class EditorInstance {
       EditorInstance.instance = new EditorInstance();
     }
     return EditorInstance.instance;
+  }
+  get undoStack() {
+    return this._undoStack;
+  }
+  set undoStack(undoStack: Command[]) {
+    this._undoStack = undoStack;
+  }
+  get undoStep() {
+    return this._undoStep;
+  }
+  set undoStep(undoStep: number) {
+    this._undoStep = undoStep;
   }
 
   // 获取 Three3dEditor 实例
@@ -39,6 +51,16 @@ export class EditorInstance {
       this.undoStep--;
     }
     // 执行新命令后，清空重做栈
+    const event = new CustomEvent("commandLengthChange", {
+      detail: {
+        flag: this.undoStack.length - 1,
+      },
+    });
+    document.dispatchEvent(event);
+  }
+  do(index: number) {
+    const command = this.undoStack[index];
+    command.execute();
   }
 
   // 执行撤销操作
@@ -50,6 +72,8 @@ export class EditorInstance {
       command.execute();
       this.undoStep++;
     }
+    console.log("第" + this.undoStep + "位");
+
     return canDo;
   }
 

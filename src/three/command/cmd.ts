@@ -2,7 +2,7 @@ import { Object3D } from "three";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { CMD, Command } from "@/three/command/Command";
 import { GROUP } from "@/three/config/CONSTANT";
-
+//物体变换命令，针对物体的位置、旋转、缩放进行变换
 export function transformCMD(value: Object3D, guiUpdate: Function) {
   const lastTransform = {
     position: value.position.clone(),

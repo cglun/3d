@@ -23,6 +23,17 @@ function RouteComponent() {
     {
       list: [
         {
+          logoName: "bi bi-clock-history",
+          position: "左侧栏",
+          buttonName: "历史记录",
+          des: "增加历史记录功能，记录用户操作。",
+        },
+      ],
+      updateTime: "2025年6月28日",
+    },
+    {
+      list: [
+        {
           logoName: "bi bi-arrow-90deg-left",
           position: "左侧栏",
           buttonName: "上一步",
@@ -196,7 +207,7 @@ function RouteComponent() {
                 {log.map((item, index) => {
                   const { updateTime, list } = item;
                   return (
-                    <ListGroup key={index}>
+                    <ListGroup key={index} className="mb-3">
                       <ListGroupItem>
                         {/* <AlertBase text={updateTime} type={APP_COLOR.Warning} /> */}
                         <Badge
