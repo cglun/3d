@@ -100,7 +100,7 @@ export interface SceneUserData {
   GOD_TIME: {
     reloadScene: number;
     clearHistory: number;
-  };
+  }; // 刷新场景时间和清空历史
   cameraPosition: {
     start: Vector3;
     end: Vector3;
