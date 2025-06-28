@@ -56,7 +56,7 @@ export class Command {
       : GROUP.NONE;
 
     if (parentLabel === GROUP.NONE) {
-      return `${this.objectName}->${this.cmd}`;
+      return `相机->${this.objectName}->${this.cmd}`;
     }
     return `${parentLabel}->${this.objectName}->${this.cmd}`;
   }

@@ -97,6 +97,10 @@ export const config3dInit = {
 
 export interface SceneUserData {
   projectId: number;
+  GOD_TIME: {
+    reloadScene: number;
+    clearHistory: number;
+  };
   cameraPosition: {
     start: Vector3;
     end: Vector3;
@@ -109,7 +113,6 @@ export interface SceneUserData {
     themeColor: APP_COLOR;
     iconFill: string;
     sceneCanSave: boolean;
-    refreshTime: number;
   };
   userCssStyle: {
     topCard: UserCssStyle;
@@ -193,6 +196,10 @@ export type BackgroundHDR = typeof backgroundHDR;
 
 const sceneUserData: SceneUserData = {
   projectId: -1,
+  GOD_TIME: {
+    reloadScene: new Date().getTime(),
+    clearHistory: new Date().getTime(),
+  },
   cameraPosition: {
     start: new Vector3(15, 16, 17),
     end: new Vector3(5, 6, 7),
@@ -206,7 +213,6 @@ const sceneUserData: SceneUserData = {
     themeColor: APP_COLOR.Dark, // 若 APP_COLOR 有具体结构，需按需填充
     iconFill: "",
     sceneCanSave: false,
-    refreshTime: 0,
   },
   userCssStyle: {
     topCard: {

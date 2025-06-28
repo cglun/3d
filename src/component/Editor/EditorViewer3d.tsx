@@ -30,8 +30,9 @@ function EditorViewer3d() {
   const location = useLocation().search; // 获取 sceneId 参数
   const searchParams = new URLSearchParams(location);
   const sceneId = searchParams.get("sceneId") ?? "-1";
-  const userData = scene.userData as SceneUserData;
-  const refreshTime = userData.APP_THEME?.refreshTime || 0;
+  const { GOD_TIME } = scene.userData as SceneUserData;
+  const reloadScene = GOD_TIME?.reloadScene || 0;
+
   useEffect(() => {
     // let editor: Three3dEditor;
     if (editorCanvas.current && !isInitialized.current) {
@@ -154,7 +155,7 @@ function EditorViewer3d() {
         window.removeEventListener("resize", editor.onWindowResize);
       }
     };
-  }, [sceneId, refreshTime]);
+  }, [sceneId, reloadScene]);
 
   return (
     <Container fluid>

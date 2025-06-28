@@ -1,20 +1,24 @@
+import { useEffect, useState } from "react";
+import { TransformControlsMode } from "three/examples/jsm/controls/TransformControls.js";
 import { useUpdateScene } from "@/app/hooks";
 import Icon from "@/component/common/Icon";
 import Toast3d from "@/component/common/Toast3d";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { getThemeByScene } from "@/three/utils/util4UI";
-import { useEffect, useState } from "react";
-
 import Button from "react-bootstrap/esm/Button";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import Col from "react-bootstrap/esm/Col";
-import { TransformControlsMode } from "three/examples/jsm/controls/TransformControls.js";
+import ModalConfirm3d from "@/component/common/ModalConfirm3d";
+import { SceneUserData } from "@/three/config/Three3dConfig";
 
 export default function TransformControl() {
   const { scene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
   const [preStep, setPreStep] = useState("上一步");
   const [nextStep, setNextStep] = useState("下一步");
+  const [undoStackLen, setUndoStackLen] = useState(0);
+  const { GOD_TIME } = scene.userData as SceneUserData;
+  const clearHistoryTime = GOD_TIME?.clearHistory || 0;
 
   const [flag, setFlag] = useState(0);
   function setMode(modeName: TransformControlsMode) {
@@ -26,17 +30,21 @@ export default function TransformControl() {
   useEffect(() => {
     const lengthChange = ((e: CustomEvent) => {
       setFlag(e.detail.flag);
+      setUndoStackLen(e.detail.flag + 1);
     }) as EventListener;
     document.addEventListener("commandLengthChange", lengthChange);
     return () => {
       document.removeEventListener("commandLengthChange", lengthChange);
     };
   }, []);
+  useEffect(() => {
+    clearHistory();
+  }, [clearHistoryTime]);
   // 实现上一步
   const handleLeft = () => {
-    setPreStep(`第${flag}步`);
-    editorInstance.do(flag);
     if (flag > 0) {
+      setPreStep(`第${flag}步`);
+      editorInstance.do(flag);
       setFlag(flag - 1);
     }
     if (flag === 0) {
@@ -46,12 +54,13 @@ export default function TransformControl() {
   };
   // 实现下一步
   const handleRight = () => {
-    setNextStep(`第${flag + 2}步`);
-    editorInstance.do(flag);
-    if (flag < editorInstance.undoStack.length - 1) {
+    const len = editorInstance.undoStack.length;
+    if (flag < len - 1) {
+      setNextStep(`第${flag + 2}步`);
+      editorInstance.do(flag);
       setFlag(flag + 1);
     }
-    if (flag === editorInstance.undoStack.length - 1) {
+    if (flag === len - 1 || len === 0) {
       setNextStep("已到底");
       Toast3d("已到底");
     }
@@ -61,17 +70,8 @@ export default function TransformControl() {
   const handleHistory = () => {
     const { undoStack } = editorInstance;
     const editor = editorInstance.getEditor();
-    let history = editor.createGUI("历史记录");
+    const history = editor.createGUI("历史记录");
 
-    const clear = {
-      history: () => {
-        editorInstance.undoStack = [];
-        history = editor.createGUI("历史记录");
-        historyButton();
-      },
-    };
-
-    historyButton();
     undoStack.forEach((item, index) => {
       // 添加 execute 按钮并获取其 DOM 元素
       const historyItem = history
@@ -90,21 +90,25 @@ export default function TransformControl() {
         setFlag(index);
       });
     });
-
-    function historyButton() {
-      let historyTitle = "清空历史";
-      if (editorInstance.undoStack.length === 0) {
-        historyTitle = "暂无历史";
-      }
-      history
-        .add(clear, "history")
-        .name(historyTitle)
-        .disable(editorInstance.undoStack.length === 0)
-        .domElement.children[0].children[0].children[0].classList.add(
-          "text-info"
-        );
-    }
   };
+  const handleClear = () => {
+    ModalConfirm3d(
+      {
+        title: "清空历史？",
+        body: "清空后，您将无法恢复之前的操作!",
+      },
+      () => {
+        clearHistory();
+      }
+    );
+  };
+  function clearHistory() {
+    editorInstance.undoStack = [];
+    setUndoStackLen(0);
+    setFlag(0);
+    const editor = editorInstance.getEditor();
+    editor?.destroyGUI();
+  }
 
   return (
     <Col xs="auto" className="d-flex flex-column left-btn-group">
@@ -181,6 +185,7 @@ export default function TransformControl() {
                        <Icon iconName="box" title="透视" />
                      </Button> */}
       </ButtonGroup>
+
       <ButtonGroup style={{ flexGrow: 1 }} size="sm" vertical>
         <Button
           variant={themeColor}
@@ -195,6 +200,7 @@ export default function TransformControl() {
             placement="right"
           />
         </Button>
+
         <Button
           variant={themeColor}
           onClick={handleRight}
@@ -208,9 +214,20 @@ export default function TransformControl() {
             placement="right"
           />
         </Button>
-        <Button variant={themeColor} onClick={handleHistory}>
-          <Icon iconName="bi bi-clock-history" title="历史" placement="right" />
-        </Button>
+        {undoStackLen > 0 && (
+          <>
+            <Button variant={themeColor} onClick={handleHistory}>
+              <Icon
+                iconName="bi bi-clock-history"
+                title="历史"
+                placement="right"
+              />
+            </Button>
+            <Button variant={themeColor} onClick={handleClear}>
+              <Icon iconName="trash2" title="清空历史" placement="right" />
+            </Button>
+          </>
+        )}
       </ButtonGroup>
     </Col>
   );

@@ -182,9 +182,9 @@ export default function EditorTop() {
               onClick={() => {
                 const { scene } = editorInstance.getEditor();
                 const userData = scene.userData as SceneUserData;
-                const refreshTime = userData.APP_THEME?.refreshTime || 0;
-                userData.APP_THEME.refreshTime = refreshTime + 1;
 
+                userData.GOD_TIME.reloadScene = new Date().getTime();
+                userData.GOD_TIME.clearHistory = new Date().getTime();
                 updateScene(scene);
               }}
             >
@@ -205,6 +205,10 @@ export default function EditorTop() {
                 const editor = editorInstance.getEditor();
                 editor.resetScene();
                 stopRoam();
+                const userData = scene.userData as SceneUserData;
+
+                userData.GOD_TIME.reloadScene = new Date().getTime();
+                userData.GOD_TIME.clearHistory = new Date().getTime();
                 updateScene(editor.scene);
                 Toast3d("场景已新建");
               }}
