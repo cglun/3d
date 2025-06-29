@@ -60,14 +60,19 @@ export default function EditorBottom() {
       icon: "gear",
     },
     {
-      title: "预览",
-      path: "preView",
-      icon: "eye",
+      title: "扩展",
+      path: "extend",
+      icon: "x-diamond",
     },
     {
       title: "测试",
       path: "test",
       icon: "triangle",
+    },
+    {
+      title: "预览",
+      path: "preView",
+      icon: "eye",
     },
 
     {

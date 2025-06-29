@@ -1,7 +1,7 @@
 {
   "projectId": 219,
   "GOD_NUMBER": {
-    "clearHistory": 116
+    "clearHistory": 1751193482974
   },
   "cameraPosition": {
     "start": {
@@ -36,88 +36,7 @@
       "customButtonItem": {
         "name": "切换",
         "type": "DRAWER",
-        "listGroup": [
-          {
-            "showName": "全景",
-            "NAME_ID": "MODEL_GROUP",
-            "showButton": true,
-            "isClick": false,
-            "groupCanBeRaycast": false,
-            "data": {
-              "isSelected": false,
-              "isRunning": false,
-              "cameraOffsetStretch": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              }
-            }
-          },
-          {
-            "showName": "F3",
-            "NAME_ID": "F3",
-            "showButton": true,
-            "isClick": false,
-            "groupCanBeRaycast": false,
-            "data": {
-              "isSelected": false,
-              "isRunning": false,
-              "cameraOffsetStretch": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              }
-            }
-          },
-          {
-            "showName": "F4",
-            "NAME_ID": "F4",
-            "showButton": true,
-            "isClick": false,
-            "groupCanBeRaycast": false,
-            "data": {
-              "isSelected": false,
-              "isRunning": false,
-              "cameraOffsetStretch": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              }
-            }
-          },
-          {
-            "showName": "F5",
-            "NAME_ID": "F5",
-            "showButton": true,
-            "isClick": false,
-            "groupCanBeRaycast": false,
-            "data": {
-              "isSelected": false,
-              "isRunning": false,
-              "cameraOffsetStretch": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              }
-            }
-          },
-          {
-            "showName": "F6",
-            "NAME_ID": "F6",
-            "showButton": true,
-            "isClick": false,
-            "groupCanBeRaycast": false,
-            "data": {
-              "isSelected": false,
-              "isRunning": false,
-              "cameraOffsetStretch": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              }
-            }
-          }
-        ]
+        "listGroup": []
       },
       "userSetting": {
         "modelOffset": {
@@ -165,7 +84,7 @@
         "speed": 0.4,
         "offset": -0.1,
         "radius": 0.01,
-        "tension": 0.25
+        "tension": 0.2
       }
     },
     "panelControllerButtonGroup": {
