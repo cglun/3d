@@ -10,7 +10,7 @@ export default function directionalLightGUI(light: DirectionalLight) {
   const folder = editor.createGUI("平行光");
   const positionFolder = lightGUI(light, folder);
   positionFolder.onFinishChange(() => {
-    transformCMD(light, directionalLightGUI);
+    transformCMD(light, () => directionalLightGUI(light));
   });
 
   const shadowFolder = folder.addFolder("阴影");

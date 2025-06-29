@@ -12,7 +12,7 @@ export default function cameraGUI(camera: PerspectiveCamera) {
   const step = 0.01;
 
   positionGUI(folder, camera, min, max, step).onFinishChange(() => {
-    transformCMD(camera, cameraGUI);
+    transformCMD(camera, () => cameraGUI(camera));
   });
   const otherFolder = folder.addFolder("其他");
   otherFolder.add(camera, "fov").step(step).min(1).max(100).name("FOV");

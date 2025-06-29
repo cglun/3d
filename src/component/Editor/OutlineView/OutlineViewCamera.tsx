@@ -23,9 +23,8 @@ export function OutlineViewCamera() {
         onClick={() => {
           const editor = editorInstance.getEditor();
           editor.currentSelected3d = editor.camera;
-          transformCMD(editor.camera, cameraGUI);
+          transformCMD(editor.camera, () => cameraGUI(editor.camera));
           editor.transformControl?.detach();
-          cameraGUI(editor.camera);
         }}
       >
         <div>

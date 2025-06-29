@@ -43,8 +43,8 @@ export default defineConfig({
     }),
     visualizer({
       open: false, // 打包完成后自动打开可视化页面
-      gzipSize: true,
-      brotliSize: true,
+      gzipSize: false,
+      brotliSize: false,
     }),
   ],
   base: "/editor3d/",

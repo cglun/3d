@@ -9,6 +9,6 @@ export default function css3CSS3DSpriteGUI(object: CSS3DSprite) {
   folder.add(object, "name").name("标签名");
 
   positionGUI(folder, object, -50, 50, 0.01).onFinishChange(() => {
-    transformCMD(object, css3CSS3DSpriteGUI);
+    transformCMD(object, () => css3CSS3DSpriteGUI(object));
   });
 }

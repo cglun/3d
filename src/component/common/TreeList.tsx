@@ -61,8 +61,7 @@ function TreeNode({
     if (parentGroup === GROUP.LIGHT) {
       if (editorObject instanceof DirectionalLight) {
         editor.transformControl.attach(editorObject);
-        directionalLightGUI(editorObject);
-        transformCMD(editorObject, directionalLightGUI);
+        transformCMD(editorObject, () => directionalLightGUI(editorObject));
       }
       if (editorObject instanceof AmbientLight) {
         ambientLightGUI(editorObject);
@@ -73,15 +72,17 @@ function TreeNode({
     if (parentGroup === GROUP.MODEL) {
       const isGroup = editorObject?.parent?.name.includes(GROUP.MODEL);
       if (isGroup) {
-        meshGroupGUI(editorObject as Group);
-        transformCMD(editorObject as Group, meshGroupGUI);
+        transformCMD(editorObject as Group, () =>
+          meshGroupGUI(editorObject as Group)
+        );
         editor.transformControl.attach(editorObject as Group);
       }
       return;
     }
     if (parentGroup === GROUP.GEOMETRY) {
-      meshGroupGUI(editorObject as Mesh);
-      transformCMD(editorObject as Mesh, meshGroupGUI);
+      transformCMD(editorObject as Mesh, () =>
+        meshGroupGUI(editorObject as Mesh)
+      );
       editor.transformControl.attach(editorObject as Mesh);
       return;
     }
@@ -91,7 +92,7 @@ function TreeNode({
       group?.remove(editorObject);
       group?.add(editorObject);
       css3CSS3DSpriteGUI(editorObject);
-      transformCMD(editorObject, css3CSS3DSpriteGUI);
+      transformCMD(editorObject, () => css3CSS3DSpriteGUI(editorObject));
       editor.transformControl.attach(editorObject);
       return;
     }
