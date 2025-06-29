@@ -1,5 +1,9 @@
 {
   "projectId": 219,
+  "GOD_NUMBER": {
+    "reloadScene": 116,
+    "clearHistory": 116
+  },
   "cameraPosition": {
     "start": {
       "x": -19,

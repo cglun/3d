@@ -365,6 +365,7 @@ export class Three3d extends ThreeObj {
   //反序列化
   deserialize(data: string, item: RecordItem) {
     const { scene, models, loader } = strToJson(data);
+
     loader.parse(scene, (object: Object3D<Object3DEventMap>) => {
       if (object instanceof Scene) {
         // 处理选中

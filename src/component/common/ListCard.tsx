@@ -127,6 +127,7 @@ function RecordItemCard(props: Props) {
   }
   function fixProject(item: RecordItem) {
     const editor = editorInstance.getEditor();
+
     //合并
     const mergedData = Object.assign({}, editor.scene.userData, {
       ...sceneUserData,

@@ -17,8 +17,8 @@ export default function TransformControl() {
   const [preStep, setPreStep] = useState("上一步");
   const [nextStep, setNextStep] = useState("下一步");
   const [undoStackLen, setUndoStackLen] = useState(0);
-  const { GOD_TIME } = scene.userData as SceneUserData;
-  const clearHistoryTime = GOD_TIME?.clearHistory || 0;
+  const { GOD_NUMBER } = scene.userData as SceneUserData;
+  const clearHistoryTime = GOD_NUMBER?.clearHistory || 116;
 
   const [flag, setFlag] = useState(0);
   function setMode(modeName: TransformControlsMode) {

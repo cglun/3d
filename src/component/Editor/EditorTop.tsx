@@ -24,6 +24,7 @@ import { getThemeByScene } from "@/three/utils/util4UI";
 import { stopRoam } from "@/component/routes/effects/utils";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { errorMessage } from "@/app/utils";
+import { SceneReload, SceneReloadEvent } from "@/app/customEvents/sceneEvent";
 
 // 若 getThemeByScene 确实在该文件且正确导出，使用此导入语句
 
@@ -180,12 +181,17 @@ export default function EditorTop() {
             <Button
               variant={themeColor}
               onClick={() => {
-                const { scene } = editorInstance.getEditor();
-                const userData = scene.userData as SceneUserData;
+                const editor = editorInstance.getEditor();
+                const { GOD_NUMBER } = editor.scene.userData as SceneUserData;
+                GOD_NUMBER.clearHistory = new Date().getTime();
 
-                userData.GOD_TIME.reloadScene = new Date().getTime();
-                userData.GOD_TIME.clearHistory = new Date().getTime();
-                updateScene(scene);
+                // 触发自定义事件示例
+                const detail: SceneReload = {
+                  sceneId: new Date().getTime(),
+                  sceneName: "Example Scene",
+                };
+                document.dispatchEvent(SceneReloadEvent(detail));
+                updateScene(editor.scene);
               }}
             >
               <Icon
@@ -205,10 +211,11 @@ export default function EditorTop() {
                 const editor = editorInstance.getEditor();
                 editor.resetScene();
                 stopRoam();
-                const userData = scene.userData as SceneUserData;
+                const userData = editor.scene.userData as SceneUserData;
+                userData.GOD_NUMBER = {
+                  clearHistory: new Date().getTime(),
+                };
 
-                userData.GOD_TIME.reloadScene = new Date().getTime();
-                userData.GOD_TIME.clearHistory = new Date().getTime();
                 updateScene(editor.scene);
                 Toast3d("场景已新建");
               }}

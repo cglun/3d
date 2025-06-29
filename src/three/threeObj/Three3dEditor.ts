@@ -76,9 +76,9 @@ export class Three3dEditor extends Three3d {
     this.transformControl = this.initTransformControl();
     this.controls.addEventListener("end", () => {
       const curSelected = this.currentSelected3d;
-      if (curSelected.type === "PerspectiveCamera") {
-        cameraGUI(this.currentSelected3d as PerspectiveCamera);
-        transformCMD(curSelected, cameraGUI);
+      if (curSelected instanceof PerspectiveCamera) {
+        // cameraGUI(this.currentSelected3d as PerspectiveCamera);
+        transformCMD(curSelected, () => cameraGUI(curSelected));
       }
       //、 if (this.currentSelected3d.type === "PerspectiveCamera") {
       // // 获取编辑器实例
@@ -107,18 +107,19 @@ export class Three3dEditor extends Three3d {
       if (_controls.enabled) {
         const curSelected = this.currentSelected3d;
 
-        if (curSelected instanceof Mesh || curSelected instanceof Group) {
-          meshGroupGUI(curSelected);
-          transformCMD(curSelected, meshGroupGUI);
+        if (curSelected instanceof Mesh) {
+          // meshGroupGUI(curSelected);
+          transformCMD(curSelected, () => meshGroupGUI(curSelected));
+        }
+        if (curSelected instanceof Group) {
+          transformCMD(curSelected, () => meshGroupGUI(curSelected));
         }
         if (curSelected instanceof DirectionalLight) {
-          directionalLightGUI(curSelected as DirectionalLight);
-          transformCMD(curSelected, directionalLightGUI);
+          transformCMD(curSelected, () => directionalLightGUI(curSelected));
         }
 
         if (curSelected instanceof CSS3DSprite) {
-          css3CSS3DSpriteGUI(curSelected);
-          transformCMD(curSelected, css3CSS3DSpriteGUI);
+          transformCMD(curSelected, () => css3CSS3DSpriteGUI(curSelected));
         }
       }
     });
@@ -142,6 +143,9 @@ export class Three3dEditor extends Three3d {
 
   // 场景序列化
   sceneSerialization(): string {
+    this.scene.userData.GOD_NUMBER = {
+      clearHistory: 116,
+    };
     const sceneCopy = this.scene.clone();
 
     // this.destroyGUI();

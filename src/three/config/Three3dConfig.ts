@@ -97,8 +97,7 @@ export const config3dInit = {
 
 export interface SceneUserData {
   projectId: number;
-  GOD_TIME: {
-    reloadScene: number;
+  GOD_NUMBER: {
     clearHistory: number;
   }; // 刷新场景时间和清空历史
   cameraPosition: {
@@ -196,16 +195,14 @@ export type BackgroundHDR = typeof backgroundHDR;
 
 const sceneUserData: SceneUserData = {
   projectId: -1,
-  GOD_TIME: {
-    reloadScene: new Date().getTime(),
-    clearHistory: new Date().getTime(),
+  GOD_NUMBER: {
+    clearHistory: 116,
   },
   cameraPosition: {
     start: new Vector3(15, 16, 17),
     end: new Vector3(5, 6, 7),
   },
   config3d: { ...config3dInit },
-
   backgroundHDR: { ...backgroundHDR },
   javascript: "console.log(116)",
   customButtonList: { ...customButtonListInit } as CustomButtonList,

@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useRef } from "react";
+import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import { useLocation } from "@tanstack/react-router";
 import ProgressBar from "react-bootstrap/esm/ProgressBar";
 import Container from "react-bootstrap/esm/Container";
@@ -12,10 +12,12 @@ import AlertBase from "@/component/common/AlertBase";
 import { APP_COLOR, MessageError, RecordItem } from "@/app/type";
 import { getProjectData } from "@/three/utils/util4Scene";
 import { MyContext } from "@/app/MyContext";
-import { SceneUserData } from "@/three/config/Three3dConfig";
+
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
 import { errorMessage } from "@/app/utils";
 import TransformControl from "./TransformControl/TransformControl";
+import { SceneReload } from "@/app/customEvents/sceneEvent";
+import { SceneUserData } from "@/three/config/Three3dConfig";
 
 function EditorViewer3d() {
   const editorCanvas: React.RefObject<HTMLDivElement> =
@@ -24,14 +26,13 @@ function EditorViewer3d() {
   const isInitialized = useRef(false);
   // const isLoaded = useRef(false);
 
-  const { scene, updateScene } = useUpdateScene();
+  const { updateScene } = useUpdateScene();
   const { updateCamera } = useUpdateCamera();
+  const [godTime, setGodTime] = useState(116); //用于刷新
   const { dispatchTourWindow } = useContext(MyContext);
   const location = useLocation().search; // 获取 sceneId 参数
   const searchParams = new URLSearchParams(location);
   const sceneId = searchParams.get("sceneId") ?? "-1";
-  const { GOD_TIME } = scene.userData as SceneUserData;
-  const reloadScene = GOD_TIME?.reloadScene || 0;
 
   useEffect(() => {
     // let editor: Three3dEditor;
@@ -42,6 +43,7 @@ function EditorViewer3d() {
       );
 
       isInitialized.current = true; // 标记为已初始化
+
       updateScene(editor.scene);
       updateCamera(editor.camera);
       editorInstance.setEditor(editor);
@@ -61,6 +63,7 @@ function EditorViewer3d() {
 
       if (item.id !== -1) {
         const editor = editorInstance.getEditor();
+
         editorInstance.resetUndo();
         editor.resetScene();
         getProjectData(item.id)
@@ -69,9 +72,8 @@ function EditorViewer3d() {
             editor.deserialize(data, item);
 
             editor.loadedModelsEnd = () => {
-              //这里为什么不有执行  debugger; // 在模型加载完成后更新场景
-
-              //  editor.addGridHelper();=[]
+              // 在模型加载完成后更新场景
+              // //  editor.addGridHelper();=[]
               editor.runJavascript();
 
               editor.destroyGUI();
@@ -100,7 +102,8 @@ function EditorViewer3d() {
                   },
                 });
               }, 1998);
-
+              const { GOD_NUMBER } = editor.scene.userData as SceneUserData;
+              GOD_NUMBER.clearHistory = new Date().getTime(); //清除历史记录
               updateScene(editor.scene);
               updateCamera(editor.camera);
               document.title = `【id:${item.id}】`;
@@ -123,8 +126,6 @@ function EditorViewer3d() {
                     show: false,
                   },
                 });
-                updateScene(editor.scene);
-                updateCamera(editor.camera);
               }
             };
 
@@ -147,15 +148,26 @@ function EditorViewer3d() {
           });
       }
     }
-    initScene();
+    initScene(); // 添加事件监听器
+    document.addEventListener(
+      "sceneReload",
+      handleSceneReload as EventListener
+    );
 
     return () => {
       const editor = editorInstance.getEditor();
       if (editor) {
         window.removeEventListener("resize", editor.onWindowResize);
       }
+      document.removeEventListener(
+        "sceneReload",
+        handleSceneReload as EventListener
+      );
     };
-  }, [sceneId, reloadScene]);
+  }, [sceneId, godTime]);
+  function handleSceneReload(e: CustomEvent<SceneReload>) {
+    setGodTime(e.detail.sceneId);
+  }
 
   return (
     <Container fluid>
