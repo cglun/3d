@@ -118,7 +118,14 @@ function TreeNode({
         const editor = editorInstance.getEditor();
         const { scene, transformControl } = editor;
         const targetItem = scene.getObjectByProperty("uuid", item.uuid);
+
         if (targetItem === undefined) {
+          return;
+        }
+        if (targetItem instanceof CSS3DSprite) {
+          editor.MARK_LABEL_GROUP.remove(targetItem);
+          editor.destroyGUI();
+          updateScene(scene);
           return;
         }
         if (targetItem.parent === null) {

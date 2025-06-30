@@ -105,7 +105,7 @@ function RouteComponent() {
                 setShowJavaScript(true);
               }}
             >
-              <Icon iconName="pencil" gap={1} />
+              <Icon iconName="file-code" gap={1} />
               代码
             </Button>
             <Button
@@ -115,7 +115,7 @@ function RouteComponent() {
                 setShowButtonList(true);
               }}
             >
-              <Icon iconName="pencil" gap={1} />
+              <Icon iconName="menu-button" gap={1} />
               按钮
             </Button>
             <Button
