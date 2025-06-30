@@ -11,16 +11,28 @@ declare module "@originjs/vite-plugin-federation" {
     singleton?: boolean;
     eager?: boolean;
   }
-} // 提取 manualChunks 配置
+}
 const manualChunksConfig = {
   // 将 React 相关依赖打包到一个单独的 chunk 中
   react: ["react", "react-dom"],
   // 将第三方库打包到一个单独的 chunk 中
-  vendor: ["axios", "bootstrap", "three"],
+  // vendor: ["axios", "bootstrap", "three"],
+  three: ["three"],
+  bootstrap: ["bootstrap"],
+  axios: ["axios"],
   // 将 monaco-editor 相关依赖打包到一个单独的 chunk 中
   monaco: ["react-monaco-editor", "@monaco-editor/react"],
+  // 可以根据需要添加更多的 chunk
 };
-
+const excludeFile = [
+  "@static/css/github-dark.min.css",
+  // "@react-monaco-editor",
+  // "@monaco-editor/react",
+  "bootstrap",
+  // "three",
+  // "axios",
+  // "@static/file3d/hdr/spruit_sunrise_1k.hdr?url",
+];
 export default defineConfig({
   plugins: [
     react(),
@@ -36,12 +48,12 @@ export default defineConfig({
         react: { singleton: true, requiredVersion: "^18.3.1" },
         "react-dom": { singleton: true, requiredVersion: "^18.3.1" },
         bootstrap: { singleton: true, requiredVersion: "^5.3.6" },
-        three: { singleton: true, requiredVersion: "^0.177.0" },
-        axios: { singleton: true, requiredVersion: "^1.10.0" },
-        "@monaco-editor/react": { singleton: true },
-        "react-monaco-editor": { singleton: true },
+        // three: { singleton: true, requiredVersion: "^0.177.0" },
+        // axios: { singleton: true, requiredVersion: "^1.10.0" },
+        // "@monaco-editor/react": { singleton: true },
+        // "react-monaco-editor": { singleton: true },
         "@static/css/github-dark.min.css": { singleton: true },
-        //  "@static/extends/components/testComponent/index": { singleton: true },
+
         // "@static/file3d/hdr/venice_sunset_1k.hdr?url": {
         //   singleton: false,
         // },
@@ -54,8 +66,6 @@ export default defineConfig({
       open: false, // 打包完成后自动打开可视化页面
       gzipSize: false,
       brotliSize: false,
-      //关闭打包
-      emitFile: true,
     }),
   ],
   base: "/editor3d/",
@@ -77,35 +87,31 @@ export default defineConfig({
 
     rollupOptions: {
       external: [
-        "@static/css/github-dark.min.css",
-        "@react-monaco-editor",
-        "@monaco-editor/react",
-
+        ...excludeFile,
         // "@static/file3d/hdr/spruit_sunrise_1k.hdr?url",
         // "@static/file3d/hdr/venice_sunset_1k.hdr?url",
         //new RegExp(".hdr"),
       ],
       //  external: [new RegExp(".hdr")],
       output: {
-        assetFileNames: "assets/[name].[ext]",
+        assetFileNames: "assets/static/css/[name].[ext]",
         // chunkFileNames: "assets/[name]-[hash].js",
         entryFileNames: "assets/[name].js",
         manualChunks: manualChunksConfig,
-        // 自定义 manualChunks 的文件名格式，去掉 hash
         chunkFileNames: (chunkInfo) => {
           if (Object.keys(manualChunksConfig).includes(chunkInfo.name)) {
-            return `assets/${chunkInfo.name}.js`;
+            return `assets/static/js/vendor/${chunkInfo.name}.js`;
           }
-          return `assets/${chunkInfo.name}-[hash].js`;
+          if (chunkInfo.name.includes("__federation")) {
+            return `assets/static/js/federation/${chunkInfo.name}.js`;
+          }
+          return `assets/static/js/chunks/${chunkInfo.name}-[hash].js`;
         },
       },
     },
   },
   optimizeDeps: {
-    exclude: [
-      "@react-monaco-editor",
-      "@monaco-editor/react", // 添加该模块
-    ], // 排除该模块打包,
+    exclude: excludeFile,
   },
   server: {
     proxy: {
