@@ -88,10 +88,6 @@ function TreeNode({
     }
 
     if (editorObject instanceof CSS3DSprite) {
-      const group = editor.scene.getObjectByName(GROUP.MARK_LABEL)?.clone();
-      group?.remove(editorObject);
-      group?.add(editorObject);
-      css3CSS3DSpriteGUI(editorObject);
       transformCMD(editorObject, () => css3CSS3DSpriteGUI(editorObject));
       editor.transformControl.attach(editorObject);
       return;

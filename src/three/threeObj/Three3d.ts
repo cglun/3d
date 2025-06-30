@@ -35,7 +35,10 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
-import { CSS3DRenderer } from "three/addons/renderers/CSS3DRenderer.js";
+import {
+  CSS3DRenderer,
+  CSS3DSprite,
+} from "three/addons/renderers/CSS3DRenderer.js";
 import { Curves, GLTF, ShaderPass } from "three/addons/Addons.js";
 import sceneUserData from "@/three/config/Three3dConfig";
 
@@ -391,8 +394,25 @@ export class Three3d extends ThreeObj {
         }
 
         const markLabelGroup = object.getObjectByName(GROUP.MARK_LABEL);
+
         if (markLabelGroup) {
-          this.MARK_LABEL_GROUP.children = markLabelGroup.children;
+          // this.MARK_LABEL_GROUP.children = this.setLabelGroup(markLabelGroup);
+          // const array = this.setLabelGroup(markLabelGroup);
+          // for (let index = 0; index < array.length; index++) {
+          //   this.MARK_LABEL_GROUP.add(array[index]);
+          // }
+          // const array = markLabelGroup.children;
+          // for (let index = 0; index < array.length; index++) {
+          //   const element = array[index];
+          //   this.MARK_LABEL_GROUP.add(element);
+          // }
+          const array = this.setLabelGroup(markLabelGroup);
+          for (let index = 0; index < array.length; index++) {
+            const element = array[index];
+            this.MARK_LABEL_GROUP.add(element);
+          }
+
+          // this.MARK_LABEL_GROUP.children = markLabelGroup.children;
         }
 
         //清除掉helper  里的CSS3DSprite
@@ -463,11 +483,9 @@ export class Three3d extends ThreeObj {
   }
 
   //加载模型后，要设置标签
-  private setLabelGroup(
-    labelGroup: Object3D<Object3DEventMap>
-  ): Object3D<Object3DEventMap>[] {
-    const group: Object3D<Object3DEventMap>[] = [];
-    labelGroup.children.forEach((item: Object3D<Object3DEventMap>) => {
+  private setLabelGroup(labelGroup: Object3D) {
+    const group: CSS3DSprite[] = [];
+    labelGroup.children.forEach((item: Object3D) => {
       const mark = new MarkLabel(this.scene, this.dispatchTourWindow, {
         markName: item.name,
         logo: item.userData.logo,
@@ -478,6 +496,7 @@ export class Three3d extends ThreeObj {
 
       const { x, y, z } = item.position;
       label.position.set(x, y, z);
+      // group.push(label);
       // item.userData.needDelete = true;
       group.push(label);
     });
@@ -614,12 +633,12 @@ export class Three3d extends ThreeObj {
     this.enableShadow(this.LIGHT_GROUP);
     this.enableShadow(this.MODEL_GROUP);
 
-    const labelGroup = this.scene.getObjectByName(GROUP.MARK_LABEL);
+    // const labelGroup = this.scene.getObjectByName(GROUP.MARK_LABEL);
 
-    if (labelGroup) {
-      const _labelGroup = this.setLabelGroup(labelGroup);
-      labelGroup.children = _labelGroup;
-    }
+    // if (labelGroup) {
+    //   const _labelGroup = this.setLabelGroup(labelGroup);
+    //   labelGroup.children = _labelGroup;
+    // }
 
     this.loadedModelsEnd();
   }
