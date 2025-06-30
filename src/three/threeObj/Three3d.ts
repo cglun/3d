@@ -372,50 +372,20 @@ export class Three3d extends ThreeObj {
     loader.parse(scene, (object: Object3D<Object3DEventMap>) => {
       if (object instanceof Scene) {
         // 处理选中
-
         this.scene.children = [];
-        //在编辑器里增加灯光辅助
+        //在编辑器里增加灯光
         const light = object.getObjectByName(GROUP.LIGHT);
         if (light) {
           this.LIGHT_GROUP.children = light.children;
         }
 
-        // light?.children.forEach((item) => {
-        //   //  加上helper
-        //   if (item instanceof DirectionalLight) {
-        //     this.LIGHT_GROUP.add(item);
-        //   }
-        // });
-
-        //加入标签
+        //加入几何体
         const geometry = object.getObjectByName(GROUP.GEOMETRY);
-        if (geometry) {
-          this.GEOMETRY.children = geometry.children;
-        }
-
+        if (geometry) this.GEOMETRY.children = geometry.children;
+        //加入标签
         const markLabelGroup = object.getObjectByName(GROUP.MARK_LABEL);
+        if (markLabelGroup) this.setLabelGroup(markLabelGroup);
 
-        if (markLabelGroup) {
-          // this.MARK_LABEL_GROUP.children = this.setLabelGroup(markLabelGroup);
-          // const array = this.setLabelGroup(markLabelGroup);
-          // for (let index = 0; index < array.length; index++) {
-          //   this.MARK_LABEL_GROUP.add(array[index]);
-          // }
-          // const array = markLabelGroup.children;
-          // for (let index = 0; index < array.length; index++) {
-          //   const element = array[index];
-          //   this.MARK_LABEL_GROUP.add(element);
-          // }
-          const array = this.setLabelGroup(markLabelGroup);
-          for (let index = 0; index < array.length; index++) {
-            const element = array[index];
-            this.MARK_LABEL_GROUP.add(element);
-          }
-
-          // this.MARK_LABEL_GROUP.children = markLabelGroup.children;
-        }
-
-        //清除掉helper  里的CSS3DSprite
         this.scene.add(this.LIGHT_GROUP); //更新
         this.scene.add(this.GEOMETRY);
         this.scene.add(this.MARK_LABEL_GROUP);
@@ -484,7 +454,6 @@ export class Three3d extends ThreeObj {
 
   //加载模型后，要设置标签
   private setLabelGroup(labelGroup: Object3D) {
-    const group: CSS3DSprite[] = [];
     labelGroup.children.forEach((item: Object3D) => {
       const mark = new MarkLabel(this.scene, this.dispatchTourWindow, {
         markName: item.name,
@@ -493,14 +462,10 @@ export class Three3d extends ThreeObj {
         tourObject: item.userData.tourObject,
       });
       const label = mark.css3DSprite;
-
       const { x, y, z } = item.position;
       label.position.set(x, y, z);
-      // group.push(label);
-      // item.userData.needDelete = true;
-      group.push(label);
+      this.MARK_LABEL_GROUP.add(label);
     });
-    return group;
   }
 
   // 添加 private 修饰符
