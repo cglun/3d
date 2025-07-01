@@ -46,10 +46,10 @@ function RouteComponent() {
 
   function addAmbientLight() {
     const editor = editorInstance.getEditor();
-    const light = new AmbientLight(0xffffff, 0.5);
+    const light = new AmbientLight(0x404040);
     light.name = "环境光【不能投射阴影】";
     editor.LIGHT_GROUP.add(light);
-    editor.scene.add(editor.LIGHT_GROUP);
+    //editor.scene.add(editor.LIGHT_GROUP);
     updateScene(getEditor().scene);
   }
   function addPlane() {

@@ -3,9 +3,7 @@ import react from "@vitejs/plugin-react";
 import tanstackRouter from "@tanstack/router-plugin/vite";
 // 修改为默认导入
 import federation from "@originjs/vite-plugin-federation";
-import { visualizer } from "rollup-plugin-visualizer";
 import { resolve } from "path";
-
 declare module "@originjs/vite-plugin-federation" {
   interface SharedConfig {
     singleton?: boolean;
@@ -47,7 +45,7 @@ export default defineConfig({
       shared: {
         react: { singleton: true, requiredVersion: "^18.3.1" },
         "react-dom": { singleton: true, requiredVersion: "^18.3.1" },
-        bootstrap: { singleton: true, requiredVersion: "^5.3.6" },
+        bootstrap: { singleton: true, requiredVersion: "^5.3.7" },
         // three: { singleton: true, requiredVersion: "^0.177.0" },
         // axios: { singleton: true, requiredVersion: "^1.10.0" },
         // "@monaco-editor/react": { singleton: true },
@@ -61,11 +59,9 @@ export default defineConfig({
         //   singleton: false,
         // },
       },
-    }),
-    visualizer({
-      open: false, // 打包完成后自动打开可视化页面
-      gzipSize: false,
-      brotliSize: false,
+      remotes: {
+        parasite: "http://localhost:4173/assets/parasite.js",
+      },
     }),
   ],
   base: "/editor3d/",

@@ -3,13 +3,14 @@ import { editorInstance } from "@/three/instance/EditorInstance";
 
 import { lightGUI } from "@/component/Editor/PropertyGUI/lightGUI/lightGUI";
 import { transformCMD } from "@/three/command/cmd";
+import positionGUI from "../commonGUI/positionGUI";
 
 export default function directionalLightGUI(light: DirectionalLight) {
   const editor = editorInstance.getEditor();
 
   const folder = editor.createGUI("平行光");
-  const positionFolder = lightGUI(light, folder);
-  positionFolder.onFinishChange(() => {
+  lightGUI(light, folder);
+  positionGUI(folder, light, -40, 40, 0.01).onFinishChange(() => {
     transformCMD(light, () => directionalLightGUI(light));
   });
 

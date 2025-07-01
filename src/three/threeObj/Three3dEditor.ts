@@ -132,7 +132,6 @@ export class Three3dEditor extends Three3d {
       const curSelected = this.currentSelected3d;
       if (curSelected instanceof DirectionalLight) {
         curSelected.lookAt(0, 0, 0);
-        directionalLightGUI(curSelected as DirectionalLight);
       }
     });
     return transformControl;

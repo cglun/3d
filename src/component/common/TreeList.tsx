@@ -52,10 +52,11 @@ function TreeNode({
     setIsExpanded(!isExpanded);
     const editor = editorInstance.getEditor();
     const editorObject = editor.scene.getObjectByProperty("uuid", node.uuid);
-    if (editorObject) {
-      editor.currentSelected3d = editorObject;
+    if (editorObject === undefined) {
+      return;
     }
 
+    editor.currentSelected3d = editorObject;
     editor.destroyGUI();
     const parentGroup = editorObject?.parent?.name;
     if (parentGroup === GROUP.LIGHT) {
@@ -65,6 +66,7 @@ function TreeNode({
       }
       if (editorObject instanceof AmbientLight) {
         ambientLightGUI(editorObject);
+        transformCMD(editorObject, () => ambientLightGUI(editorObject));
       }
       return;
     }
@@ -72,17 +74,13 @@ function TreeNode({
     if (parentGroup === GROUP.MODEL) {
       const isGroup = editorObject?.parent?.name.includes(GROUP.MODEL);
       if (isGroup) {
-        transformCMD(editorObject as Group, () =>
-          meshGroupGUI(editorObject as Group)
-        );
+        transformCMD(editorObject, () => meshGroupGUI(editorObject as Group));
         editor.transformControl.attach(editorObject as Group);
       }
       return;
     }
     if (parentGroup === GROUP.GEOMETRY) {
-      transformCMD(editorObject as Mesh, () =>
-        meshGroupGUI(editorObject as Mesh)
-      );
+      transformCMD(editorObject, () => meshGroupGUI(editorObject as Mesh));
       editor.transformControl.attach(editorObject as Mesh);
       return;
     }

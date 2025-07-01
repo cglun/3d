@@ -35,10 +35,7 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
-import {
-  CSS3DRenderer,
-  CSS3DSprite,
-} from "three/addons/renderers/CSS3DRenderer.js";
+import { CSS3DRenderer } from "three/addons/renderers/CSS3DRenderer.js";
 import { Curves, GLTF, ShaderPass } from "three/addons/Addons.js";
 import sceneUserData from "@/three/config/Three3dConfig";
 
@@ -371,14 +368,18 @@ export class Three3d extends ThreeObj {
 
     loader.parse(scene, (object: Object3D<Object3DEventMap>) => {
       if (object instanceof Scene) {
+        this.scene.userData = {
+          ...(object.userData as SceneUserData),
+          projectName: item.name,
+          projectId: item.id,
+        };
+        this.scene.userData.APP_THEME.sceneCanSave = true;
+
         // 处理选中
         this.scene.children = [];
         //在编辑器里增加灯光
         const light = object.getObjectByName(GROUP.LIGHT);
-        if (light) {
-          this.LIGHT_GROUP.children = light.children;
-        }
-
+        if (light) this.LIGHT_GROUP.children = light.children;
         //加入几何体
         const geometry = object.getObjectByName(GROUP.GEOMETRY);
         if (geometry) this.GEOMETRY.children = geometry.children;
@@ -393,12 +394,6 @@ export class Three3d extends ThreeObj {
         this.scene.add(this.TEST_GROUP);
         this.outlinePass.selectedObjects = [];
 
-        this.scene.userData = {
-          ...(object.userData as SceneUserData),
-          projectName: item.name,
-          projectId: item.id,
-        };
-        this.scene.userData.APP_THEME.sceneCanSave = true;
         this.setTextureBackground_test(object);
       }
     });
