@@ -5,7 +5,7 @@ import { SceneUserData } from "@/three/config/Three3dConfig";
 import { Dispatch } from "react";
 
 import { createTestLabel } from "@/component/routes/effects/utils";
-import markCommonGUI from "./markCommonGUI";
+import markCommonGUI from "@/component/routes/effects/gui/markCommonGUI";
 
 export default function markLabelGUI(dispatchTourWindow: Dispatch<TourWindow>) {
   const editor = editorInstance.getEditor();

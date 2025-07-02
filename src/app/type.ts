@@ -64,6 +64,7 @@ export interface ActionItemMap {
     isRunning: boolean;
     cameraViewerPosition: Vector3; // 拉伸时的相机偏移
   };
+
   handler?: (nameId?: string) => void;
 }
 // 使用 = 定义类型，并且明确成员类型为字符串字面量类型

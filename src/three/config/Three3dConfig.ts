@@ -64,10 +64,35 @@ export interface ToggleButtonGroup {
     animationTime: number;
   };
 }
+
+export const buttonGroupStyleInit = {
+  top: 0,
+  left: 0,
+  width: 80,
+  height: 30,
+  borderColor: "#red",
+  borderWidth: 1,
+  direction: "row",
+  opacity: 1,
+  borderRadius: 0,
+  fontSize: 20,
+  color: "#eee",
+  offsetX: 0,
+  offsetY: 0,
+  marginTop: 0,
+  marginLeft: 0,
+  backgroundColor: "#67ebeb",
+  backgroundColorIsClick: "",
+  backgroundUrl: "/editor3d/static/images/topMark.png",
+  backgroundUrlIsClick: "/editor3d/static/images/topMark.png",
+};
+export type ButtonGroupStyle = typeof buttonGroupStyleInit;
 export interface CustomButtonItem {
   name: string;
   type: CustomButtonType;
   listGroup: ActionItemMap[];
+  showGroup: boolean;
+  buttonGroupStyle: ButtonGroupStyle;
 }
 export interface CustomButtonList {
   toggleButtonGroup: ToggleButtonGroup;
@@ -113,6 +138,7 @@ export interface SceneUserData {
   config3d: Config3d;
   backgroundHDR: BackgroundHDR;
   javascript: string;
+  customJavaScript: string;
   customButtonList: typeof customButtonListInit;
   APP_THEME: {
     themeColor: APP_COLOR;
@@ -215,6 +241,7 @@ const sceneUserData: SceneUserData = {
   config3d: { ...config3dInit },
   backgroundHDR: { ...backgroundHDR },
   javascript: "console.log(116)",
+  customJavaScript: "console.log('实现自定义按钮！')",
   customButtonList: { ...customButtonListInit } as CustomButtonList,
   APP_THEME: {
     themeColor: APP_COLOR.Dark, // 若 APP_COLOR 有具体结构，需按需填充
