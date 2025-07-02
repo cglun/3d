@@ -94,24 +94,6 @@ declare global {
   }
 }
 
-export interface UserCssStyle_xx {
-  cardWidth: number;
-  cardHeight: number;
-  cardSize: number;
-  cardRadius: number;
-  cardBackgroundColor: string;
-  cardBackgroundUrl: string;
-  headerFontSize: number;
-  headerColor: string;
-  headerMarginTop: number;
-  headerMarginLeft: number;
-  bodyFontSize: number;
-  bodyColor: string;
-  modelHighlightColor: string;
-  offsetX: number;
-  offsetY: number;
-  opacity: number;
-}
 export interface MessageError {
   status: number;
   response: {

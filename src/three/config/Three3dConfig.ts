@@ -94,12 +94,6 @@ export interface CustomButtonItem {
   showGroup: boolean;
   buttonGroupStyle: ButtonGroupStyle;
 }
-export interface CustomButtonList {
-  toggleButtonGroup: ToggleButtonGroup;
-  roamButtonGroup: RoamButtonGroup;
-  panelControllerButtonGroup: PanelControllerButtonGroup;
-  userButton: UserButton;
-}
 
 export interface RoamButtonGroup {
   customButtonItem: CustomButtonItem;
@@ -151,25 +145,34 @@ export interface SceneUserData {
     modelEdgeHighlight: ModelEdgeHighlight;
   };
 }
-
-export const customButtonListInit = {
+export type CustomButtonList = {
+  toggleButtonGroup: ToggleButtonGroup;
+  roamButtonGroup: RoamButtonGroup;
+  panelControllerButtonGroup: PanelControllerButtonGroup;
+  userButton: UserButton;
+};
+export const customButtonListInit: CustomButtonList = {
   toggleButtonGroup: {
     customButtonItem: {
       name: "切换",
       type: "TOGGLE" as CustomButtonType,
       listGroup: [] as ActionItemMap[],
+      showGroup: true, // 补充缺失属性
+      buttonGroupStyle: { ...buttonGroupStyleInit }, // 补充缺失属性
     },
     userSetting: {
       modelOffset: new Vector3(0, 0, 0),
       cameraOffset: new Vector3(0, 0, 0),
       animationTime: 1160,
     },
-  } as ToggleButtonGroup,
+  },
   roamButtonGroup: {
     customButtonItem: {
       name: "漫游",
       type: "ROAM" as CustomButtonType,
       listGroup: [] as ActionItemMap[],
+      showGroup: true, // 补充缺失属性
+      buttonGroupStyle: { ...buttonGroupStyleInit }, // 补充缺失属性
     },
     userSetting: {
       scale: 1,
@@ -182,19 +185,22 @@ export const customButtonListInit = {
       radius: 1,
       tension: 0.25,
     },
-  } as RoamButtonGroup,
+  },
   panelControllerButtonGroup: {
     customButtonItem: {
       name: "面板",
       type: "PANEL_CONTROLLER" as CustomButtonType,
       listGroup: [] as ActionItemMap[],
+      showGroup: false,
+      buttonGroupStyle: { ...buttonGroupStyleInit },
     },
-  } as PanelControllerButtonGroup,
+  },
   userButton: {
     name: "用户自定义",
     group: [] as CustomButtonItem[],
-  } as UserButton,
+  },
 };
+
 export interface ExtraParams {
   mixer: AnimationMixer[];
   selectedMesh: Mesh[];
@@ -242,7 +248,7 @@ const sceneUserData: SceneUserData = {
   backgroundHDR: { ...backgroundHDR },
   javascript: "console.log(116)",
   customJavaScript: "console.log('实现自定义按钮！')",
-  customButtonList: { ...customButtonListInit } as CustomButtonList,
+  customButtonList: { ...customButtonListInit },
   APP_THEME: {
     themeColor: APP_COLOR.Dark, // 若 APP_COLOR 有具体结构，需按需填充
     iconFill: "",

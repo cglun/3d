@@ -18,6 +18,14 @@ export default function buttonGUI(
     item.isClick = false;
   });
 
+  const funcDel = {
+    deleteButton: () => {
+      group[groupIndex].listGroup.splice(index, 1);
+      editor.destroyGUI();
+      updateScene(editor.scene);
+    },
+  };
+  folder.add(funcDel, "deleteButton").name("删除按钮");
   if (typeof button.showName === "string") {
     const anyButton = button as Record<string, any>;
     folder
@@ -27,6 +35,5 @@ export default function buttonGUI(
         updateScene(editor.scene);
       });
   }
-
   folder.add(button, "NAME_ID").name("按钮Id").disable(true);
 }

@@ -10,7 +10,18 @@ export default function buttonGroupGUI(
     .userData as SceneUserData;
   const { group } = customButtonList.userButton;
   const editor = editorInstance.getEditor();
+
+  const funcDel = {
+    deleteButtonGroup: () => {
+      group.splice(index, 1);
+      editor.destroyGUI();
+
+      updateScene(editor.scene);
+    },
+  };
+
   const folder = editor.createGUI("按钮组");
+  folder.add(funcDel, "deleteButtonGroup").name("删除按钮组");
   const groupStyle = group[index].buttonGroupStyle;
   folder
     .add(group[index], "name")

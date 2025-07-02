@@ -55,6 +55,7 @@ export function generateToggleButtonGroup(
   const actionItemMap: ActionItemMap = {
     showName: "全景",
     NAME_ID: GROUP.MODEL,
+
     showButton: true,
     isClick: false,
     groupCanBeRaycast: false,

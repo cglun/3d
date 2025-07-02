@@ -36,10 +36,7 @@ function RouteComponent() {
   const [buttonIndex, setButtonIndex] = useState(0);
   const [showCodeWindow, setShowCodeWindow] = useState(false);
   const [showFuncButton, setShowFuncButton] = useState(false);
-
-  useEffect(() => {
-    setButton();
-  }, [userButton.group]); // 依赖项为 userButton.group，当它变化时重新执行
+  const [showAddButton, setShowAddButton] = useState(false);
 
   function setButton() {
     let num = 0;
@@ -48,14 +45,20 @@ function RouteComponent() {
         num++;
       }
     });
-    if (num > 0) {
-      setShowFuncButton(true);
+
+    if (num === 0) {
+      setShowAddButton(false);
+      setShowFuncButton(false);
+      return;
     }
+    setShowAddButton(true);
+    setShowFuncButton(true);
   }
+  useEffect(() => {
+    setButton();
+  }, [scene]); // 依赖项为 userButton.group，当它变化时重新执行
 
-  let buttonGroup = userButton.group[buttonIndex];
-
-  const [showAddButton, setShowAddButton] = useState(false);
+  const buttonGroup = userButton.group[buttonIndex];
   const editor = editorInstance.getEditor();
   function getCustomButtonList() {
     const { customButtonList } = editor.scene.userData as SceneUserData;
@@ -109,7 +112,6 @@ function RouteComponent() {
                 active={buttonIndex === index}
                 onClick={() => {
                   // setButtonGroup(item.listGroup);
-
                   setButtonIndex(index);
                   setShowAddButton(true);
                   buttonGroupGUI(updateScene, index);
@@ -129,7 +131,6 @@ function RouteComponent() {
               onClick={() => {
                 const button: ActionItemMap = {
                   showName: "按钮",
-
                   NAME_ID: MathUtils.generateUUID(),
                   showButton: false,
                   isClick: false,
@@ -151,7 +152,7 @@ function RouteComponent() {
               按钮
             </Button>
           </ButtonGroup>
-          <ButtonGroup>
+          <ButtonGroup size="sm">
             {buttonGroup?.listGroup?.map((item, index) => {
               return (
                 <Button
@@ -173,7 +174,7 @@ function RouteComponent() {
             })}
           </ButtonGroup>
         </ListGroupItem>
-      )}{" "}
+      )}
       <CodeEditor
         tipsTitle="自定义按钮实现"
         code={customJavaScript}
