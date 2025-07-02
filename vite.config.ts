@@ -23,7 +23,6 @@ const manualChunksConfig = {
   // 可以根据需要添加更多的 chunk
 };
 const excludeFile = [
-  "@static/css/github-dark.min.css",
   // "@react-monaco-editor",
   // "@monaco-editor/react",
   "bootstrap",
@@ -45,22 +44,18 @@ export default defineConfig({
       shared: {
         react: { singleton: true, requiredVersion: "^18.3.1" },
         "react-dom": { singleton: true, requiredVersion: "^18.3.1" },
-        bootstrap: { singleton: true, requiredVersion: "^5.3.7" },
+        //  bootstrap: { singleton: true, requiredVersion: "^5.3.7" },
         // three: { singleton: true, requiredVersion: "^0.177.0" },
         // axios: { singleton: true, requiredVersion: "^1.10.0" },
         // "@monaco-editor/react": { singleton: true },
         // "react-monaco-editor": { singleton: true },
-        "@static/css/github-dark.min.css": { singleton: true },
-
+        // "@static/css/github-dark.min.css": { singleton: true },
         // "@static/file3d/hdr/venice_sunset_1k.hdr?url": {
         //   singleton: false,
         // },
         // "@static/file3d/hdr/spruit_sunrise_1k.hdr?url": {
         //   singleton: false,
         // },
-      },
-      remotes: {
-        parasite: "http://localhost:4173/assets/parasite.js",
       },
     }),
   ],
@@ -73,7 +68,7 @@ export default defineConfig({
     //minify: false,
     cssCodeSplit: false,
     outDir: "../ArgDataV.Designer.V2.Vite/editor3d",
-    //outDir: "dist/editor3d",
+    // outDir: "dist/editor3d",
     assetsDir: "assets",
     assetsInlineLimit: 2048,
     chunkSizeWarningLimit: 1024,

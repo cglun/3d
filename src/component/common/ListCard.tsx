@@ -239,10 +239,10 @@ function RecordItemCard(props: Props) {
                     });
                     return;
                   }
-
                   editor.addOneModel(item);
-                  //editor.loadedModelsEnd();
-                  updateScene(editor.scene);
+                  editor.loadedModelsEnd = () => {
+                    updateScene(editor.scene);
+                  };
                 }}
               >
                 {cardBody}

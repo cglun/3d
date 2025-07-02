@@ -149,23 +149,17 @@ function EditorViewer3d() {
       }
     }
     initScene(); // 添加事件监听器
-    document.addEventListener(
-      "sceneReload",
-      handleSceneReload as EventListener
-    );
+    document.addEventListener("sceneReload", sceneReload as EventListener);
 
     return () => {
       const editor = editorInstance.getEditor();
       if (editor) {
         window.removeEventListener("resize", editor.onWindowResize);
       }
-      document.removeEventListener(
-        "sceneReload",
-        handleSceneReload as EventListener
-      );
+      document.removeEventListener("sceneReload", sceneReload as EventListener);
     };
   }, [sceneId, godTime]);
-  function handleSceneReload(e: CustomEvent<SceneReload>) {
+  function sceneReload(e: CustomEvent<SceneReload>) {
     setGodTime(e.detail.sceneId);
   }
 

@@ -27,7 +27,7 @@ export default function Icon({
       <OverlayTrigger
         placement={placement}
         delay={{ show: 116, hide: 250 }}
-        overlay={title ? <Tooltip>{title}</Tooltip> : <></>}
+        overlay={title ? <Tooltip>{title}</Tooltip> : <Tooltip></Tooltip>}
       >
         <i
           className={iconClass}

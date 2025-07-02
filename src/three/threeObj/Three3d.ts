@@ -522,6 +522,7 @@ export class Three3d extends ThreeObj {
 
           this.MODEL_GROUP.add(group);
           this.onLoadProgress(100);
+          this.loadedModelsEnd();
         },
         (xhr: { loaded: number }) => {
           const progress = parseFloat(

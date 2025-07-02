@@ -72,7 +72,8 @@ export type CustomButtonType =
   | "DRAWER"
   | "STRETCH"
   | "ROAM"
-  | "PANEL_CONTROLLER";
+  | "PANEL_CONTROLLER"
+  | "USER_BUTTON";
 
 // 定义 item 的类型
 export type TourItem = {

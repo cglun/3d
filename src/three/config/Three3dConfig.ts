@@ -73,6 +73,7 @@ export interface CustomButtonList {
   toggleButtonGroup: ToggleButtonGroup;
   roamButtonGroup: RoamButtonGroup;
   panelControllerButtonGroup: PanelControllerButtonGroup;
+  userButton: UserButton;
 }
 
 export interface RoamButtonGroup {
@@ -81,6 +82,11 @@ export interface RoamButtonGroup {
 }
 export interface PanelControllerButtonGroup {
   customButtonItem: CustomButtonItem;
+}
+
+export interface UserButton {
+  name: string;
+  group: CustomButtonItem[];
 }
 
 export type Config3dKey = keyof Config3d;
@@ -158,6 +164,10 @@ export const customButtonListInit = {
       listGroup: [] as ActionItemMap[],
     },
   } as PanelControllerButtonGroup,
+  userButton: {
+    name: "用户自定义",
+    group: [] as CustomButtonItem[],
+  } as UserButton,
 };
 export interface ExtraParams {
   mixer: AnimationMixer[];
