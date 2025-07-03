@@ -21,6 +21,7 @@ import { editorInstance } from "@/three/instance/EditorInstance";
 import { getThemeByScene } from "@/three/utils/util4UI";
 import sceneUserData from "@/three/config/Three3dConfig";
 import { errorMessage } from "@/app/utils";
+import ProgressBar from "react-bootstrap/esm/ProgressBar";
 
 interface Props {
   list: RecordItem[];
@@ -240,8 +241,40 @@ function RecordItemCard(props: Props) {
                     return;
                   }
                   editor.addOneModel(item);
+                  editor.onLoadProgress = (progress: number) => {
+                    ModalConfirm3d({
+                      title: "加载……",
+                      body: (
+                        <ProgressBar now={progress} label={`${progress}%`} />
+                      ),
+                      confirmButton: {
+                        show: true,
+                      },
+                    });
+                  };
+
                   editor.loadedModelsEnd = () => {
-                    updateScene(editor.scene);
+                    ModalConfirm3d({
+                      title: "加载完成",
+                      body: (
+                        <AlertBase type={APP_COLOR.Success} text="加载完成" />
+                      ),
+                      confirmButton: {
+                        show: true,
+                      },
+                    });
+                    setTimeout(() => {
+                      ModalConfirm3d({
+                        title: "加载完成",
+                        body: (
+                          <AlertBase type={APP_COLOR.Success} text="加载完成" />
+                        ),
+                        confirmButton: {
+                          show: false,
+                        },
+                      });
+                      updateScene(editor.scene);
+                    }, 1160);
                   };
                 }}
               >

@@ -132,7 +132,6 @@ export interface SceneUserData {
   config3d: Config3d;
   backgroundHDR: BackgroundHDR;
   javascript: string;
-  customJavaScript: string;
   customButtonList: typeof customButtonListInit;
   APP_THEME: {
     themeColor: APP_COLOR;
@@ -247,7 +246,6 @@ const sceneUserData: SceneUserData = {
   config3d: { ...config3dInit },
   backgroundHDR: { ...backgroundHDR },
   javascript: "console.log(116)",
-  customJavaScript: "console.log('实现自定义按钮！')",
   customButtonList: { ...customButtonListInit },
   APP_THEME: {
     themeColor: APP_COLOR.Dark, // 若 APP_COLOR 有具体结构，需按需填充

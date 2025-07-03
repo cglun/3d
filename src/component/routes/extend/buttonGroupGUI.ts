@@ -1,6 +1,7 @@
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { Scene } from "three";
+import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 
 export default function buttonGroupGUI(
   updateScene: (scene: Scene) => void,
@@ -13,15 +14,24 @@ export default function buttonGroupGUI(
 
   const funcDel = {
     deleteButtonGroup: () => {
-      group.splice(index, 1);
-      editor.destroyGUI();
-
-      updateScene(editor.scene);
+      ModalConfirm3d(
+        {
+          title: "删除按钮组",
+          body: `删除【${group[index].name}】吗？`,
+        },
+        () => {
+          group.splice(index, 1);
+          editor.destroyGUI();
+          updateScene(editor.scene);
+        }
+      );
     },
   };
 
   const folder = editor.createGUI("按钮组");
-  folder.add(funcDel, "deleteButtonGroup").name("删除按钮组");
+  const delFolder = folder.add(funcDel, "deleteButtonGroup").name("删除按钮组")
+    .domElement.children[0].children[0].children[0] as HTMLElement;
+  delFolder.style.color = "rgb(220, 53, 69)";
   const groupStyle = group[index].buttonGroupStyle;
   folder
     .add(group[index], "name")

@@ -66,6 +66,7 @@ export interface ActionItemMap {
   };
 
   handler?: (nameId?: string) => void;
+  codeString?: string;
 }
 // 使用 = 定义类型，并且明确成员类型为字符串字面量类型
 export type CustomButtonType =

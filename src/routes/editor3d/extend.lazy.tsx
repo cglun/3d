@@ -26,17 +26,20 @@ export const Route = createLazyFileRoute("/editor3d/extend")({
 
 function RouteComponent() {
   const { scene, updateScene } = useUpdateScene();
-  const { customButtonList, customJavaScript } =
-    scene.userData as SceneUserData;
+  const { customButtonList } = scene.userData as SceneUserData;
   const { themeColor } = getThemeByScene(scene);
   const buttonColor = getButtonColor(themeColor);
 
   const { userButton } = customButtonList || { ...customButtonListInit };
 
-  const [buttonIndex, setButtonIndex] = useState(0);
+  const [buttonGroupIndex, setButtonGroupIndex] = useState(0);
+  const [childButtonIndex, setChildButtonIndex] = useState(0);
   const [showCodeWindow, setShowCodeWindow] = useState(false);
-  const [showFuncButton, setShowFuncButton] = useState(false);
+
   const [showAddButton, setShowAddButton] = useState(false);
+  const codeString =
+    userButton.group[buttonGroupIndex]?.listGroup[childButtonIndex]
+      ?.codeString || "";
 
   function setButton() {
     let num = 0;
@@ -48,17 +51,16 @@ function RouteComponent() {
 
     if (num === 0) {
       setShowAddButton(false);
-      setShowFuncButton(false);
+
       return;
     }
     setShowAddButton(true);
-    setShowFuncButton(true);
   }
   useEffect(() => {
     setButton();
   }, [scene]); // 依赖项为 userButton.group，当它变化时重新执行
 
-  const buttonGroup = userButton.group[buttonIndex];
+  const buttonGroup = userButton.group[buttonGroupIndex];
   const editor = editorInstance.getEditor();
   function getCustomButtonList() {
     const { customButtonList } = editor.scene.userData as SceneUserData;
@@ -92,27 +94,16 @@ function RouteComponent() {
             <Icon iconName="plus-circle" gap={1} />
             按钮组
           </Button>
-          {showFuncButton && (
-            <Button
-              variant={APP_COLOR.Success}
-              onClick={() => {
-                setShowCodeWindow(true);
-              }}
-            >
-              <Icon iconName="file-code" gap={1} />
-              实现方法
-            </Button>
-          )}
         </ButtonGroup>
         {userButton.group.map((item, index) => {
           return (
             <ButtonGroup key={index} size="sm">
               <Button
                 variant={buttonColor}
-                active={buttonIndex === index}
+                active={buttonGroupIndex === index}
                 onClick={() => {
                   // setButtonGroup(item.listGroup);
-                  setButtonIndex(index);
+                  setButtonGroupIndex(index);
                   setShowAddButton(true);
                   buttonGroupGUI(updateScene, index);
                 }}
@@ -129,10 +120,12 @@ function RouteComponent() {
             <Button
               variant={APP_COLOR.Success}
               onClick={() => {
+                const showName = "按钮";
+                const NAME_ID = MathUtils.generateUUID();
                 const button: ActionItemMap = {
-                  showName: "按钮",
-                  NAME_ID: MathUtils.generateUUID(),
-                  showButton: false,
+                  showName,
+                  NAME_ID,
+                  showButton: true,
                   isClick: false,
                   groupCanBeRaycast: false,
                   data: {
@@ -140,9 +133,10 @@ function RouteComponent() {
                     isRunning: false,
                     cameraViewerPosition: new Vector3(0, 0, 0),
                   },
+                  codeString: ` //实现NAME_ID:${NAME_ID} `,
                 };
                 const { userButton, editor } = getCustomButtonList();
-                userButton.group[buttonIndex].listGroup.push(button);
+                userButton.group[buttonGroupIndex].listGroup.push(button);
                 // setButtonGroup(buttonGroup);
                 setButton();
                 updateScene(editor.scene);
@@ -160,7 +154,13 @@ function RouteComponent() {
                   variant={buttonColor}
                   active={item.isClick}
                   onClick={() => {
-                    buttonGUI(updateScene, buttonIndex, index);
+                    buttonGUI(
+                      updateScene,
+                      buttonGroupIndex,
+                      index,
+                      setShowCodeWindow
+                    );
+                    setChildButtonIndex(index);
                     item.isClick = true;
 
                     item.handler?.(item.NAME_ID);
@@ -177,13 +177,16 @@ function RouteComponent() {
       )}
       <CodeEditor
         tipsTitle="自定义按钮实现"
-        code={customJavaScript}
+        code={codeString}
         isValidate={true}
         show={showCodeWindow}
         setShow={setShowCodeWindow}
         callback={function (value): void {
           const { scene } = editorInstance.getEditor();
-          scene.userData.customJavaScript = value;
+          const { customButtonList } = scene.userData as SceneUserData;
+          customButtonList.userButton.group[buttonGroupIndex].listGroup[
+            childButtonIndex
+          ].codeString = value;
           updateScene(scene);
         }}
       />

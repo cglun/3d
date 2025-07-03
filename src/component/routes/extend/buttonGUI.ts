@@ -2,11 +2,14 @@ import { editorInstance } from "@/three/instance/EditorInstance";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { Scene } from "three";
 import { ActionItemMap } from "@/app/type";
+import ModalConfirm3d from "@/component/common/ModalConfirm3d";
+import { _confirmButton } from "@/component/common/ModalConfirmUtils";
 
 export default function buttonGUI(
   updateScene: (scene: Scene) => void,
   groupIndex: number,
-  index: number
+  index: number,
+  setShowCodeWindow: (show: boolean) => void
 ) {
   const { customButtonList } = editorInstance.getEditor().scene
     .userData as SceneUserData;
@@ -20,12 +23,29 @@ export default function buttonGUI(
 
   const funcDel = {
     deleteButton: () => {
-      group[groupIndex].listGroup.splice(index, 1);
-      editor.destroyGUI();
-      updateScene(editor.scene);
+      ModalConfirm3d(
+        {
+          title: "删除按钮",
+          body: `删除【${button.showName}】吗？`,
+        },
+        () => {
+          group[groupIndex].listGroup.splice(index, 1);
+          editor.destroyGUI();
+          updateScene(editor.scene);
+        }
+      );
+    },
+    openCodeWindow: () => {
+      setShowCodeWindow(true);
     },
   };
-  folder.add(funcDel, "deleteButton").name("删除按钮");
+  const delFolder = folder.add(funcDel, "deleteButton").name("删除按钮")
+    .domElement.children[0].children[0].children[0] as HTMLElement;
+  delFolder.style.color = "rgb(220, 53, 69)";
+
+  if (button.codeString) {
+    folder.add(funcDel, "openCodeWindow").name("实现方法");
+  }
   if (typeof button.showName === "string") {
     const anyButton = button as Record<string, any>;
     folder

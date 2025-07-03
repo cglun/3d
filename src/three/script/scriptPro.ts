@@ -6,11 +6,13 @@ export function runScriptPro(
   viewerIns?: Three3dViewer
 ) {
   if (editorIns) {
-    const { javascript } = editorIns.scene.userData;
-    eval(javascript);
+    common(editorIns);
   }
   if (viewerIns) {
-    const { javascript } = viewerIns.scene.userData;
+    common(viewerIns);
+  }
+  function common(contextIns: Three3dEditor | Three3dViewer) {
+    const { javascript } = contextIns.scene.userData;
     eval(javascript);
   }
 }

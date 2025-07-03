@@ -23,6 +23,17 @@ function RouteComponent() {
     {
       list: [
         {
+          logoName: "x-diamond",
+          position: "底部栏",
+          buttonName: "扩展",
+          des: "扩展功能，增加自定义按钮，样式自定义等。",
+        },
+      ],
+      updateTime: "2025年7月3日",
+    },
+    {
+      list: [
+        {
           logoName: "bi bi-clock-history",
           position: "左侧栏",
           buttonName: "历史记录",
