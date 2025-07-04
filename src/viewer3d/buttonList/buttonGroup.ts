@@ -1,5 +1,5 @@
 import { Scene, Vector3 } from "three";
-import { ActionItemMap, CustomButtonType } from "@/app/type";
+import { actionItemMap, ActionItemMap, CustomButtonType } from "@/app/type";
 
 import { GROUP } from "@/three/config/CONSTANT";
 
@@ -52,24 +52,16 @@ export function generateToggleButtonGroup(
 ): ActionItemMap[] {
   const actionList: ActionItemMap[] = [];
   const MODEL_GROUP = sceneContext.getObjectByName(GROUP.MODEL);
-  const actionItemMap: ActionItemMap = {
+  const overallViewer: ActionItemMap = {
+    ...actionItemMap,
     showName: "全景",
     NAME_ID: GROUP.MODEL,
-
-    showButton: true,
-    isClick: false,
-    groupCanBeRaycast: false,
-    data: {
-      isSelected: false,
-      isRunning: false,
-      cameraViewerPosition,
-    },
   };
 
   if (MODEL_GROUP) {
     const { children } = MODEL_GROUP;
     actionList.push({
-      ...actionItemMap,
+      ...overallViewer,
       showName: "全景",
       NAME_ID: GROUP.MODEL,
     });
@@ -79,7 +71,7 @@ export function generateToggleButtonGroup(
       level2.forEach((item) => {
         if (!hasValueString(item, GROUP.ENV)) {
           const { name } = item;
-          actionList.push({ ...actionItemMap, showName: name, NAME_ID: name });
+          actionList.push({ ...overallViewer, showName: name, NAME_ID: name });
         }
       });
     });
@@ -100,7 +92,7 @@ export function generateToggleButtonGroup(
           level3.forEach((item) => {
             const { name } = item;
             actionList.push({
-              ...actionItemMap,
+              ...overallViewer,
               showName: name,
               NAME_ID: name,
             });
@@ -160,17 +152,15 @@ export function generateRoamButtonGroup() {
     roam.children.forEach((item) => {
       const { name } = item;
       roamButtonGroup.push({
-        showName: [name + "_开始", name + "_停止"],
+        ...actionItemMap,
+        showName: name + "_开始",
         NAME_ID: name + "_AN_START",
-        showButton: true,
-        isClick: false,
-        groupCanBeRaycast: false,
-        data: {
-          isSelected: false,
-          isRunning: false,
-          cameraViewerPosition,
-        },
       });
+      // roamButtonGroup.push({
+      //   ...actionItemMap,
+      //   showName: name + "_停止",
+      //   NAME_ID: name + "_AN_STOP",
+      // });
     });
   }
 
@@ -230,28 +220,14 @@ export function generatePanelControllerButtonGroup() {
   const panelControllerButtonGroup: ActionItemMap[] = [];
 
   panelControllerButtonGroup.push({
+    ...actionItemMap,
     showName: "展开",
     NAME_ID: "expandLabelInfo",
-    showButton: true,
-    isClick: false,
-    groupCanBeRaycast: false,
-    data: {
-      isSelected: false,
-      isRunning: false,
-      cameraViewerPosition,
-    },
   });
   panelControllerButtonGroup.push({
+    ...actionItemMap,
     showName: "收起",
     NAME_ID: "foldLabelInfo",
-    showButton: true,
-    isClick: false,
-    groupCanBeRaycast: false,
-    data: {
-      isSelected: false,
-      isRunning: false,
-      cameraViewerPosition,
-    },
   });
   return panelControllerButtonGroup;
 }

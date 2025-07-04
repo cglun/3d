@@ -52,22 +52,55 @@ export interface ProjectListResponse {
     records: RecordItem[];
   };
 }
-
-export interface ActionItemMap {
-  showName: string | string[];
+export interface ActionItemBase {
+  showName: string;
   NAME_ID: string;
   showButton: boolean; //是否显示按钮
   isClick: boolean; //是否点击, 改变选中状态
+  style: {
+    offsetWidth: number;
+    offsetHeight: number;
+    x: number;
+    y: number;
+  };
+}
+
+export interface ActionItemMap extends ActionItemBase {
   groupCanBeRaycast: boolean; //射线检测是否选中组的children
   data: {
     isSelected: boolean;
     isRunning: boolean;
     cameraViewerPosition: Vector3; // 拉伸时的相机偏移
   };
-
-  handler?: (nameId?: string) => void;
-  codeString?: string;
+  handler: (nameId: string) => void;
 }
+
+export interface ButtonItemMap extends ActionItemBase {
+  codeString: string;
+}
+
+export const actionItemMap: ActionItemMap = {
+  showName: "名称",
+  NAME_ID: "NAME_ID",
+  showButton: true,
+  isClick: false,
+  groupCanBeRaycast: false,
+  data: {
+    isSelected: false,
+    isRunning: false,
+    cameraViewerPosition: new Vector3(),
+  },
+  style: {
+    offsetWidth: 0,
+    offsetHeight: 0,
+    x: 0,
+    y: 0,
+  },
+  handler: function (nameId: string): void {
+    throw new Error("Function not implemented." + nameId);
+  },
+};
+
 // 使用 = 定义类型，并且明确成员类型为字符串字面量类型
 export type CustomButtonType =
   | "TOGGLE"

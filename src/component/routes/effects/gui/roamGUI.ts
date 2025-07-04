@@ -4,26 +4,27 @@ import {
   MeshLambertMaterial,
   TubeGeometry,
 } from "three";
+import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import {
   RoamButtonUserSetting,
   SceneUserData,
 } from "@/three/config/Three3dConfig";
 import { cameraEnterAnimation } from "@/three/utils/util4Camera";
 import { editorInstance } from "@/three/instance/EditorInstance";
-export default function roamGUI() {
+export default function roamGUI(folder: GUI) {
   const editor = editorInstance.getEditor();
   editor.outlinePass.selectedObjects = [];
 
   const { customButtonList } = editorInstance.getEditor().scene
     .userData as SceneUserData;
   const { userSetting } = customButtonList.roamButtonGroup;
-  const folderGeometry = editor.createGUI("漫游");
-
+  //const roamFolder = editor.createGUI("漫游");
+  const roamFolder = folder.addFolder("设置");
   const { roamLine } = editorInstance.getEditor().extraParams;
   if (roamLine) {
     roamLine.roamIsRunning = true;
     addTube(userSetting);
-    folderGeometry
+    roamFolder
       .add(roamLine, "roamIsRunning")
       .name("启动/停止")
       .onChange(function () {
@@ -36,56 +37,56 @@ export default function roamGUI() {
         }
       });
   }
-  folderGeometry
+  roamFolder
     .add(userSetting, "scale", 0.1, 10)
     .name("缩放比例")
     .step(0.1)
     .onChange(function () {
       setScale(editorInstance.getEditor().tubeMesh!, userSetting);
     });
-  folderGeometry.add(userSetting, "speed", 0.01, 20).name("速度").step(0.01);
-  folderGeometry
+  roamFolder.add(userSetting, "speed", 0.01, 20).name("速度").step(0.01);
+  roamFolder
     .add(userSetting, "tension", -1, 1, 0.001)
     .name("张力")
     .onChange(() => {
       addTube(userSetting);
     });
-  folderGeometry
+  roamFolder
     .add(userSetting, "extrusionSegments", 5, 1160)
     .name("曲线分段")
     .step(5)
     .onChange(function () {
       addTube(userSetting);
     });
-  folderGeometry
+  roamFolder
     .add(userSetting, "radiusSegments", 1, 12)
     .name("半径分段")
     .step(1)
     .onChange(function () {
       addTube(userSetting);
     });
-  folderGeometry
+  roamFolder
     .add(userSetting, "offset", -20, 20)
     .name("偏移量")
     .step(0.01)
     .onChange(function () {
       addTube(userSetting);
     });
-  folderGeometry
+  roamFolder
     .add(userSetting, "radius", 0.01, 20)
     .name("半径")
     .step(0.01)
     .onChange(function () {
       addTube(userSetting);
     });
-  folderGeometry
+  roamFolder
     .add(userSetting, "closed")
     .name("是否闭合")
     .onChange(function () {
       addTube(userSetting);
     });
 
-  folderGeometry.add(userSetting, "lookAhead").name("向前看");
+  roamFolder.add(userSetting, "lookAhead").name("向前看");
 
   function addTube(params: RoamButtonUserSetting) {
     const { tubeMesh } = editorInstance.getEditor();
