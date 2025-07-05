@@ -3,8 +3,12 @@ import { CustomButtonList, SceneUserData } from "@/three/config/Three3dConfig";
 
 import buttonGroupBaseGUI from "@/component/routes/extend/extendButtonGui/buttonGroupBaseGUI";
 import roamGUI from "../effects/gui/roamGUI";
+import { Scene } from "three";
 
-export default function generateButtonGroupGUI(key: keyof CustomButtonList) {
+export default function generateButtonGroupGUI(
+  key: keyof CustomButtonList,
+  updateScene: (scene: Scene) => void
+) {
   if (key === "userButton") {
     return;
   }
@@ -19,7 +23,7 @@ export default function generateButtonGroupGUI(key: keyof CustomButtonList) {
   const folder = editor.createGUI(customButtonItem.name);
   folder.add(customButtonItem, "name").name("名称").disable(true);
   folder.add(customButtonItem, "showGroup").name("显示");
-  buttonGroupBaseGUI(folder, buttonGroupStyle);
+  buttonGroupBaseGUI(folder, buttonGroupStyle, updateScene);
 
   if (key === "toggleButtonGroup") {
     const { userSetting } = customButtonList[key];

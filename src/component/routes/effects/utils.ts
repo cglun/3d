@@ -1,8 +1,8 @@
 import { TourWindow } from "@/app/MyContext";
-import { APP_COLOR } from "@/app/type";
+import { ActionItemBase, APP_COLOR } from "@/app/type";
 import Toast3d from "@/component/common/Toast3d";
 import { GROUP } from "@/three/config/CONSTANT";
-import { UserCssStyle } from "@/three/config/Three3dConfig";
+import { ButtonGroupStyle, UserCssStyle } from "@/three/config/Three3dConfig";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
 
@@ -11,7 +11,7 @@ import { cameraEnterAnimation } from "@/three/utils/util4Camera";
 import { LabelInfo } from "@/viewer3d/label/LabelInfo";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
 import { Dispatch } from "react";
-import { Vector3 } from "three";
+
 import { NumberController } from "three/examples/jsm/libs/lil-gui.module.min.js";
 
 export function rgbaToHex_xx(rgba: string): string {
@@ -157,7 +157,7 @@ export function stopRoam() {
   const { roamLine } = editor.extraParams;
 
   if (roamLine && roamLine.roamIsRunning) {
-    roamLine.position = new Vector3(0, 0, 0);
+    // roamLine.position = new Vector3(0, 0, 0);
     roamLine.roamIsRunning = false;
     cameraEnterAnimation(editor);
   }
@@ -213,4 +213,128 @@ export function useBackgroundImage(
     Toast3d("图片加载失败", "提示", APP_COLOR.Danger);
     console.error("图片加载失败");
   };
+}
+
+export function showButtonGroupDiv(groupStyle: ButtonGroupStyle) {
+  const div = document.querySelector("#buttonGroupDiv") as HTMLElement;
+  const editor = editorInstance.getEditor();
+  const { offsetWidth, offsetHeight } = editor.divElement;
+  const { gap, direction } = groupStyle;
+  const divStyle = div.style;
+  divStyle.left = `${(groupStyle.left * offsetWidth) / 100}px`;
+  divStyle.top = `${(groupStyle.top * offsetHeight) / 100}px`;
+
+  divStyle.visibility = "visible";
+  divStyle.display = "flex";
+  divStyle.position = "absolute";
+  divStyle.rowGap = `${gap}px`;
+  divStyle.columnGap = `${gap}px`;
+  divStyle.flexDirection = direction;
+  divStyle.backgroundColor = "transparent";
+  //  position: "absolute",
+  //   zIndex: 1000,
+  //   top: `${buttonPanel?.positionY || 0}px`,
+  //   left: `${buttonPanel?.positionX || 0}px`,
+  //   // 使用 gap 对应的标准 CSS 属性 rowGap 和 columnGap
+  //   rowGap: `${buttonPanel?.marginLeft || 0}px`,
+  //   columnGap: `${buttonPanel?.marginLeft || 0}px`,
+  //   flexDirection: buttonPanel.direction,
+  return div;
+}
+
+//生成按钮
+export function generatePreviewButton(
+  listGroup: ActionItemBase[],
+  groupStyle: ButtonGroupStyle
+) {
+  const {
+    width,
+    height,
+    borderColor,
+    borderWidth,
+    opacity,
+    borderRadius,
+    fontSize,
+    color,
+    colorIsClick,
+    marginTop,
+    marginLeft,
+    backgroundColor,
+    backgroundColorIsClick,
+    backgroundUrl,
+    backgroundUrlIsClick,
+    useBackgroundUrl,
+    borderColorIsClick,
+  } = groupStyle;
+
+  const div = document.getElementById("buttonGroupDiv") as HTMLElement;
+
+  if (div) {
+    div.innerHTML = "";
+    if (listGroup.length === 0) {
+      div.style.visibility = "hidden";
+      return;
+    }
+
+    listGroup.forEach((item) => {
+      const button = document.createElement("button");
+      button.innerHTML = item.showName;
+      const btnStyle = button.style;
+      btnStyle.backgroundColor = "transparent";
+      btnStyle.color = item.isClick ? colorIsClick : color;
+      console.log(item.isClick, item.showName);
+
+      if (!useBackgroundUrl) {
+        const bgColor = item.isClick ? backgroundColorIsClick : backgroundColor;
+        const rgbaColor = `rgba(${hexToRgb(bgColor)}, ${opacity})`;
+        btnStyle.backgroundColor = rgbaColor;
+        btnStyle.backgroundImage = "";
+      }
+
+      if (useBackgroundUrl) {
+        const bgUrl = item.isClick ? backgroundUrlIsClick : backgroundUrl;
+        btnStyle.backgroundImage = `url(${bgUrl})`;
+      }
+      btnStyle.marginTop = marginTop + "px";
+      btnStyle.marginLeft = marginLeft + "px";
+      btnStyle.width = width + "px";
+      btnStyle.height = height + "px";
+      btnStyle.borderColor = item.isClick ? borderColorIsClick : borderColor;
+      btnStyle.borderWidth = borderWidth + "px";
+      btnStyle.borderRadius = borderRadius + "px";
+      btnStyle.fontSize = fontSize + "px";
+      btnStyle.backgroundSize = `${width}px ${height}px`;
+      btnStyle.backgroundRepeat = "no-repeat";
+
+      div.appendChild(button);
+    });
+  }
+
+  // const background = isClick
+  //   ? buttonPanel?.backgroundUrl || ""
+  //   : buttonPanel?.backgroundUrlNotSelect || "";
+  // const backgroundColor = isClick
+  //   ? buttonPanel?.backgroundColor || "rgb(255, 255, 255)"
+  //   : buttonPanel?.backgroundColorNotSelect || "rgb(116, 116, 116)";
+
+  // const color = isClick
+  //   ? buttonPanel?.color || "rgb(255, 255, 255)"
+  //   : buttonPanel.colorNotSelect || "rgb(255, 255, 255)";
+  // return {
+  //   // top: buttonPanel?.positionY || 0 + "px",
+  //   // left: buttonPanel?.positionX || 0 + "px",
+  //   width: (buttonPanel?.width || 100) + "px",
+  //   lineHeight: (buttonPanel?.height || 30) + "px",
+  //   marginLeft: (buttonPanel?.marginLeft || 0) + "px",
+  //   fontSize: (buttonPanel?.fontSize || 22) + "px",
+  //   color: `${color}`,
+  //   backgroundImage: `url(${background})`,
+  //   backgroundSize: `${buttonPanel?.width || 100}px ${
+  //     buttonPanel?.height || 30
+  //   }px`,
+  //   borderColor: buttonPanel?.borderColor || "rgb(5, 145, 145)",
+  //   borderWidth: (buttonPanel?.borderWidth || 0) + "px",
+  //   backgroundColor,
+  //   backgroundRepeat: "no-repeat",
+  //   borderRadius: (buttonPanel?.borderRadius || 4) + "px",
 }

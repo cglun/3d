@@ -149,3 +149,7 @@ btn-group-sm>.btn,
   --bs-btn-padding-y: 0.15rem;
   --bs-btn-padding-x: 0.16rem;
 }
+
+#buttonGroupDiv {
+  visibility: hidden;
+}

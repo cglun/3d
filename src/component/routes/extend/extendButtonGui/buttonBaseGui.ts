@@ -42,16 +42,7 @@ export default function buttonBaseGui(
       updateScene(editor.scene);
     });
   const styleFolder = folder.addFolder("样式");
-  styleFolder.add(button.style, "offsetHeight").name("高度偏移");
-  styleFolder.add(button.style, "offsetWidth").name("宽度偏移");
+  styleFolder.add(button.style, "offsetHeight", -100, 100, 1).name("增加高度");
+  styleFolder.add(button.style, "offsetWidth", -100, 100, 1).name("增加宽度");
   folder.add(button, "NAME_ID").name("按钮Id").disable(true);
 }
-
-// const userSettingFolder = folder.addFolder("用户设置");
-// userSettingFolder.add(item.userSetting, "animationTime").name("动画时间");
-// userSettingFolder.add(item.userSetting, "modelOffset").name("模型偏移");
-// userSettingFolder.add(item.userSetting, "cameraOffset").name("相机偏移");
-// userSettingFolder.add(item.userSetting, "speed").name("速度");
-// userSettingFolder.add(item.userSetting, "offset").name("偏移");
-// userSettingFolder.add(item.userSetting, "radius").name("半径");
-// userSettingFolder.add(item.userSetting, "tension").name("张力");

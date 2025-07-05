@@ -26,6 +26,8 @@ import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import generateButtonGroupGUI from "../generateButtonGroupGUI";
 import AlertBase from "@/component/common/AlertBase";
 import generateButtonGUI from "../generateButtonGUI";
+import { generatePreviewButton } from "../../effects/utils";
+
 export default function GenerateButtonGroup() {
   const { scene, updateScene } = useUpdateScene(); // const [javaScriptCode, setJavaScriptCode] = useState<string>(javascript);
   const [isSet, setIsSet] = useState(false);
@@ -63,6 +65,17 @@ export default function GenerateButtonGroup() {
   function getScene() {
     const { scene } = editorInstance.getEditor();
     return scene;
+  }
+
+  function bbSet(key: keyof CustomButtonList) {
+    if (key == "userButton") {
+      return;
+    }
+    setCustomButtonKey(key);
+    generateButtonGroupGUI(key, updateScene);
+    const { buttonGroupStyle, listGroup } = customButtonList[key]
+      .customButtonItem as CustomButtonItem;
+    generatePreviewButton(listGroup, buttonGroupStyle);
   }
 
   return (
@@ -141,28 +154,19 @@ export default function GenerateButtonGroup() {
           <ButtonGroup className="ms-2" size="sm">
             <Button
               variant={buttonColor}
-              onClick={() => {
-                setCustomButtonKey("toggleButtonGroup");
-                generateButtonGroupGUI("toggleButtonGroup");
-              }}
+              onClick={() => bbSet("toggleButtonGroup")}
             >
               切换
             </Button>
             <Button
               variant={buttonColor}
-              onClick={() => {
-                setCustomButtonKey("roamButtonGroup");
-                generateButtonGroupGUI("roamButtonGroup");
-              }}
+              onClick={() => bbSet("roamButtonGroup")}
             >
               漫游
             </Button>
             <Button
               variant={buttonColor}
-              onClick={() => {
-                setCustomButtonKey("panelControllerButtonGroup");
-                generateButtonGroupGUI("panelControllerButtonGroup");
-              }}
+              onClick={() => bbSet("panelControllerButtonGroup")}
             >
               标签控制
             </Button>
@@ -198,6 +202,7 @@ function ShowGenerateButtonGroup({
   const item = customButtonList[customButtonKey]
     .customButtonItem as CustomButtonItem;
   const { listGroup } = item;
+
   if (listGroup.length === 0) {
     return (
       <AlertBase text={`${item.name}组，按钮为空！`} type={APP_COLOR.Warning} />

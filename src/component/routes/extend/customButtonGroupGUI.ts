@@ -41,5 +41,5 @@ export default function customButtonGroupGUI(
       updateScene(editor.scene);
     });
   //公用的样式代码
-  buttonGroupBaseGUI(folder, groupStyle);
+  buttonGroupBaseGUI(folder, groupStyle, updateScene);
 }

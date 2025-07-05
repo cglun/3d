@@ -21,6 +21,7 @@ import CodeEditor from "@/component/routes/script/CodeEditor";
 
 import customButtonGUI from "@/component/routes/extend/customButtonGUI";
 import customButtonGroupGUI from "../customButtonGroupGUI";
+import { generatePreviewButton } from "../../effects/utils";
 
 export default function CustomButtonGroup() {
   const { scene, updateScene } = useUpdateScene();
@@ -55,12 +56,16 @@ export default function CustomButtonGroup() {
   }, [scene.userData.customButtonList]); // 依赖项为 userButton.group，当它变化时重新执行
 
   const buttonGroup = userButton.group[buttonGroupIndex];
+  if (buttonGroup) {
+    generatePreviewButton(buttonGroup.listGroup, buttonGroup.buttonGroupStyle);
+  }
   const editor = editorInstance.getEditor();
   function getCustomButtonList() {
     const { customButtonList } = editor.scene.userData as SceneUserData;
     const { userButton } = customButtonList;
     return { userButton, editor };
   }
+
   return (
     <ListGroup>
       <ListGroupItem>

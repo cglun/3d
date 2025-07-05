@@ -18,8 +18,11 @@ export default function generateButtonGUI(
   const { name } = customButtonList[groupName].customButtonItem;
   const folder = editor.createGUI(name);
   buttonBaseGui(folder, updateScene, listGroup, index);
+
   const button = listGroup[index] as ActionItemMap;
-  folder.add(button, "groupCanBeRaycast").name("是否可被射线选中");
+  folder.add(button, "showButton").name("是否显示按钮");
+  folder.add(button, "groupCanBeRaycast").name("是否被射线选中");
+
   if (customButtonList[groupName].customButtonItem.type === "STRETCH") {
     const settingFolder = folder.addFolder("相机位置");
     const { cameraViewerPosition } = button.data;
