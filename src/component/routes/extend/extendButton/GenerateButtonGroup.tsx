@@ -23,10 +23,13 @@ import {
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { ListGroupItem } from "react-bootstrap";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
-import generateButtonGroupGUI from "../generateButtonGroupGUI";
+import generateButtonGroupGUI from "@/component/routes/extend/generateButtonGroupGUI";
 import AlertBase from "@/component/common/AlertBase";
-import generateButtonGUI from "../generateButtonGUI";
-import { generatePreviewButton } from "../../effects/utils";
+import generateButtonGUI from "@/component/routes/extend/generateButtonGUI";
+import {
+  getContainer,
+  getGenerateButton,
+} from "@/component/routes/effects/utils";
 
 export default function GenerateButtonGroup() {
   const { scene, updateScene } = useUpdateScene(); // const [javaScriptCode, setJavaScriptCode] = useState<string>(javascript);
@@ -75,7 +78,12 @@ export default function GenerateButtonGroup() {
     generateButtonGroupGUI(key, updateScene);
     const { buttonGroupStyle, listGroup } = customButtonList[key]
       .customButtonItem as CustomButtonItem;
-    generatePreviewButton(listGroup, buttonGroupStyle);
+    // generatePreviewButton(listGroup, buttonGroupStyle);
+
+    const container = getContainer(listGroup);
+    if (container) {
+      getGenerateButton(listGroup, buttonGroupStyle, container);
+    }
   }
 
   return (

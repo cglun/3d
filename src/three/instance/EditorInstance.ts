@@ -1,5 +1,5 @@
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
-import { Command } from "../command/Command";
+import { Command } from "@/three/command/Command";
 
 export class EditorInstance {
   // 存储单例实例

@@ -1,5 +1,6 @@
 import { AnimationMixer, Mesh, TubeGeometry, Vector3 } from "three";
 import {
+  ActionItemBase,
   ActionItemMap,
   APP_COLOR,
   ButtonItemMap,
@@ -73,7 +74,7 @@ export const buttonGroupStyleInit = {
   height: 30,
   borderColor: "#ff0000",
   borderColorIsClick: "#ff00ff",
-  borderWidth: 1,
+  borderWidth: 0,
   direction: "row",
   opacity: 1,
   borderRadius: 0,
@@ -90,12 +91,21 @@ export const buttonGroupStyleInit = {
   backgroundUrlIsClick: "/editor3d/static/images/topMark.png",
 };
 export type ButtonGroupStyle = typeof buttonGroupStyleInit;
-export interface CustomButtonItem {
+
+export interface CustomButtonItemBase {
   name: string;
   type: CustomButtonType;
-  listGroup: ActionItemMap[];
+  listGroup: ActionItemBase[];
   showGroup: boolean;
   buttonGroupStyle: ButtonGroupStyle;
+}
+
+export interface CustomButtonItem extends CustomButtonItemBase {
+  listGroup: ActionItemMap[];
+}
+
+export interface CustomButtonItem2 extends CustomButtonItemBase {
+  listGroup: ButtonItemMap[];
 }
 
 export interface RoamButtonGroup {
@@ -106,15 +116,11 @@ export interface PanelControllerButtonGroup {
   customButtonItem: CustomButtonItem;
 }
 export interface UserButtonGroup {
-  name: string;
-  type: CustomButtonType;
-  listGroup: ButtonItemMap[];
-  showGroup: boolean;
-  buttonGroupStyle: ButtonGroupStyle;
+  customButtonItem: CustomButtonItem;
 }
 export interface UserButton {
   name: string;
-  group: UserButtonGroup[];
+  group: CustomButtonItem2[];
 }
 
 export type Config3dKey = keyof Config3d;
@@ -205,7 +211,7 @@ export const customButtonListInit: CustomButtonList = {
   },
   userButton: {
     name: "用户自定义",
-    group: [] as UserButtonGroup[],
+    group: [] as CustomButtonItem2[],
   },
 };
 

@@ -1,8 +1,17 @@
 import { TourWindow } from "@/app/MyContext";
-import { ActionItemBase, APP_COLOR } from "@/app/type";
+import {
+  ActionItemBase,
+  ActionItemMap,
+  APP_COLOR,
+  ButtonItemMap,
+} from "@/app/type";
 import Toast3d from "@/component/common/Toast3d";
 import { GROUP } from "@/three/config/CONSTANT";
-import { ButtonGroupStyle, UserCssStyle } from "@/three/config/Three3dConfig";
+import {
+  ButtonGroupStyle,
+  CustomButtonItemBase,
+  UserCssStyle,
+} from "@/three/config/Three3dConfig";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
 
@@ -215,36 +224,44 @@ export function useBackgroundImage(
   };
 }
 
-export function showButtonGroupDiv(groupStyle: ButtonGroupStyle) {
-  const div = document.querySelector("#buttonGroupDiv") as HTMLElement;
+// export function showButtonGroupDiv(groupStyle: ButtonGroupStyle) {
+//   const div = document.querySelector("#buttonGroupDiv") as HTMLElement;
+//   return getButtonGroupByButtonGroupStyle(groupStyle, div, true);
+// }
+export function getButtonGroupByButtonGroupStyle(
+  customButtonItem: CustomButtonItemBase,
+  buttonGroupStyle: ButtonGroupStyle,
+  container: HTMLElement
+) {
   const editor = editorInstance.getEditor();
   const { offsetWidth, offsetHeight } = editor.divElement;
-  const { gap, direction } = groupStyle;
-  const divStyle = div.style;
-  divStyle.left = `${(groupStyle.left * offsetWidth) / 100}px`;
-  divStyle.top = `${(groupStyle.top * offsetHeight) / 100}px`;
-
-  divStyle.visibility = "visible";
+  const { gap, direction } = buttonGroupStyle;
+  const divStyle = container.style;
+  divStyle.left = `${(buttonGroupStyle.left * offsetWidth) / 100}px`;
+  divStyle.top = `${(buttonGroupStyle.top * offsetHeight) / 100}px`;
+  divStyle.visibility = customButtonItem.showGroup ? "visible" : "hidden";
   divStyle.display = "flex";
   divStyle.position = "absolute";
   divStyle.rowGap = `${gap}px`;
   divStyle.columnGap = `${gap}px`;
   divStyle.flexDirection = direction;
   divStyle.backgroundColor = "transparent";
-  //  position: "absolute",
-  //   zIndex: 1000,
-  //   top: `${buttonPanel?.positionY || 0}px`,
-  //   left: `${buttonPanel?.positionX || 0}px`,
-  //   // 使用 gap 对应的标准 CSS 属性 rowGap 和 columnGap
-  //   rowGap: `${buttonPanel?.marginLeft || 0}px`,
-  //   columnGap: `${buttonPanel?.marginLeft || 0}px`,
-  //   flexDirection: buttonPanel.direction,
-  return div;
+  return container;
 }
 
-//生成按钮
-export function generatePreviewButton(
-  listGroup: ActionItemBase[],
+export function getContainer(listGroup: ActionItemBase[]) {
+  const div = document.getElementById("buttonGroupDiv") as HTMLElement;
+  if (div) {
+    div.innerHTML = "";
+    if (listGroup.length === 0) {
+      div.style.visibility = "hidden";
+      return;
+    }
+    return div;
+  }
+}
+function generateButtonGroupItem<T extends ActionItemBase>(
+  buttonBase: T,
   groupStyle: ButtonGroupStyle
 ) {
   const {
@@ -267,74 +284,66 @@ export function generatePreviewButton(
     borderColorIsClick,
   } = groupStyle;
 
-  const div = document.getElementById("buttonGroupDiv") as HTMLElement;
+  const { showName, isClick } = buttonBase;
+  const button = document.createElement("button");
+  button.innerHTML = showName;
+  const btnStyle = button.style;
+  btnStyle.backgroundColor = "transparent";
+  btnStyle.color = isClick ? colorIsClick : color;
 
-  if (div) {
-    div.innerHTML = "";
-    if (listGroup.length === 0) {
-      div.style.visibility = "hidden";
-      return;
-    }
-
-    listGroup.forEach((item) => {
-      const button = document.createElement("button");
-      button.innerHTML = item.showName;
-      const btnStyle = button.style;
-      btnStyle.backgroundColor = "transparent";
-      btnStyle.color = item.isClick ? colorIsClick : color;
-      console.log(item.isClick, item.showName);
-
-      if (!useBackgroundUrl) {
-        const bgColor = item.isClick ? backgroundColorIsClick : backgroundColor;
-        const rgbaColor = `rgba(${hexToRgb(bgColor)}, ${opacity})`;
-        btnStyle.backgroundColor = rgbaColor;
-        btnStyle.backgroundImage = "";
-      }
-
-      if (useBackgroundUrl) {
-        const bgUrl = item.isClick ? backgroundUrlIsClick : backgroundUrl;
-        btnStyle.backgroundImage = `url(${bgUrl})`;
-      }
-      btnStyle.marginTop = marginTop + "px";
-      btnStyle.marginLeft = marginLeft + "px";
-      btnStyle.width = width + "px";
-      btnStyle.height = height + "px";
-      btnStyle.borderColor = item.isClick ? borderColorIsClick : borderColor;
-      btnStyle.borderWidth = borderWidth + "px";
-      btnStyle.borderRadius = borderRadius + "px";
-      btnStyle.fontSize = fontSize + "px";
-      btnStyle.backgroundSize = `${width}px ${height}px`;
-      btnStyle.backgroundRepeat = "no-repeat";
-
-      div.appendChild(button);
-    });
+  if (!useBackgroundUrl) {
+    const bgColor = isClick ? backgroundColorIsClick : backgroundColor;
+    const rgbaColor = `rgba(${hexToRgb(bgColor)}, ${opacity})`;
+    btnStyle.backgroundColor = rgbaColor;
+    btnStyle.backgroundImage = "";
   }
 
-  // const background = isClick
-  //   ? buttonPanel?.backgroundUrl || ""
-  //   : buttonPanel?.backgroundUrlNotSelect || "";
-  // const backgroundColor = isClick
-  //   ? buttonPanel?.backgroundColor || "rgb(255, 255, 255)"
-  //   : buttonPanel?.backgroundColorNotSelect || "rgb(116, 116, 116)";
-
-  // const color = isClick
-  //   ? buttonPanel?.color || "rgb(255, 255, 255)"
-  //   : buttonPanel.colorNotSelect || "rgb(255, 255, 255)";
-  // return {
-  //   // top: buttonPanel?.positionY || 0 + "px",
-  //   // left: buttonPanel?.positionX || 0 + "px",
-  //   width: (buttonPanel?.width || 100) + "px",
-  //   lineHeight: (buttonPanel?.height || 30) + "px",
-  //   marginLeft: (buttonPanel?.marginLeft || 0) + "px",
-  //   fontSize: (buttonPanel?.fontSize || 22) + "px",
-  //   color: `${color}`,
-  //   backgroundImage: `url(${background})`,
-  //   backgroundSize: `${buttonPanel?.width || 100}px ${
-  //     buttonPanel?.height || 30
-  //   }px`,
-  //   borderColor: buttonPanel?.borderColor || "rgb(5, 145, 145)",
-  //   borderWidth: (buttonPanel?.borderWidth || 0) + "px",
-  //   backgroundColor,
-  //   backgroundRepeat: "no-repeat",
-  //   borderRadius: (buttonPanel?.borderRadius || 4) + "px",
+  if (useBackgroundUrl) {
+    const bgUrl = isClick ? backgroundUrlIsClick : backgroundUrl;
+    btnStyle.backgroundImage = `url(${bgUrl})`;
+  }
+  btnStyle.marginTop = marginTop + "px";
+  btnStyle.marginLeft = marginLeft + "px";
+  btnStyle.width = width + "px";
+  btnStyle.height = height + "px";
+  btnStyle.borderColor = isClick ? borderColorIsClick : borderColor;
+  btnStyle.borderWidth = borderWidth + "px";
+  btnStyle.borderRadius = borderRadius + "px";
+  btnStyle.fontSize = fontSize + "px";
+  btnStyle.backgroundSize = `${width}px ${height}px`;
+  btnStyle.backgroundRepeat = "no-repeat";
+  return button;
+}
+export function getCustomButton(
+  listGroup: ButtonItemMap[],
+  groupStyle: ButtonGroupStyle,
+  container: HTMLElement
+) {
+  // const groupDiv = generateButtonGroup(listGroup);
+  if (container) {
+    listGroup.forEach((_item) => {
+      const btn = generateButtonGroupItem(_item, groupStyle);
+      container.appendChild(btn);
+      btn.addEventListener("click", () => {
+        console.log(`名称：${_item.showName},ID：${_item.NAME_ID} `);
+        new Function(_item.codeString)();
+      });
+    });
+  }
+}
+export function getGenerateButton(
+  listGroup: ActionItemMap[],
+  groupStyle: ButtonGroupStyle,
+  container: HTMLElement
+) {
+  if (container) {
+    listGroup.forEach((_item) => {
+      const btn = generateButtonGroupItem(_item, groupStyle);
+      container.appendChild(btn);
+      btn.addEventListener("click", () => {
+        console.log(`名称：${_item.showName},ID：${_item.NAME_ID} `);
+        _item.handler(_item.NAME_ID);
+      });
+    });
+  }
 }

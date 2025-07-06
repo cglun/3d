@@ -35,7 +35,7 @@ import cameraGUI from "@/component/Editor/PropertyGUI/cameraGUI";
 import meshGroupGUI from "@/component/Editor/PropertyGUI/meshGroupGUI";
 import css3CSS3DSpriteGUI from "@/component/Editor/PropertyGUI/css3CSS3DSpriteGUI";
 import { Three3d } from "@/three/threeObj/Three3d";
-import { transformCMD } from "../command/cmd";
+import { transformCMD } from "@/three/command/cmd";
 
 export class Three3dEditor extends Three3d {
   static divElement: HTMLDivElement;

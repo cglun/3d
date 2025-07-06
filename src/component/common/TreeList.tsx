@@ -23,11 +23,11 @@ import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { getObjectNameByName } from "@/three/utils/util4UI";
 
-import directionalLightGUI from "../Editor/PropertyGUI/lightGUI/directionalLightGUI";
-import ambientLightGUI from "../Editor/PropertyGUI/lightGUI/ambientLightGUI";
-import meshGroupGUI from "../Editor/PropertyGUI/meshGroupGUI";
+import directionalLightGUI from "@/component/Editor/PropertyGUI/lightGUI/directionalLightGUI";
+import ambientLightGUI from "@/component/Editor/PropertyGUI/lightGUI/ambientLightGUI";
+import meshGroupGUI from "@/component/Editor/PropertyGUI/meshGroupGUI";
 
-import css3CSS3DSpriteGUI from "../Editor/PropertyGUI/css3CSS3DSpriteGUI";
+import css3CSS3DSpriteGUI from "@/component/Editor/PropertyGUI/css3CSS3DSpriteGUI";
 import { GROUP } from "@/three/config/CONSTANT";
 import { transformCMD } from "@/three/command/cmd";
 

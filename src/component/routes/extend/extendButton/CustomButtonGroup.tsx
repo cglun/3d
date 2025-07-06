@@ -6,6 +6,7 @@ import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
 import { useUpdateScene } from "@/app/hooks";
 import {
   buttonGroupStyleInit,
+  CustomButtonItem2,
   customButtonListInit,
   SceneUserData,
   UserButtonGroup,
@@ -20,8 +21,11 @@ import { MathUtils } from "three";
 import CodeEditor from "@/component/routes/script/CodeEditor";
 
 import customButtonGUI from "@/component/routes/extend/customButtonGUI";
-import customButtonGroupGUI from "../customButtonGroupGUI";
-import { generatePreviewButton } from "../../effects/utils";
+import customButtonGroupGUI from "@/component/routes/extend/customButtonGroupGUI";
+import {
+  getContainer,
+  getCustomButton,
+} from "@/component/routes/effects/utils";
 
 export default function CustomButtonGroup() {
   const { scene, updateScene } = useUpdateScene();
@@ -57,7 +61,14 @@ export default function CustomButtonGroup() {
 
   const buttonGroup = userButton.group[buttonGroupIndex];
   if (buttonGroup) {
-    generatePreviewButton(buttonGroup.listGroup, buttonGroup.buttonGroupStyle);
+    const container = getContainer(buttonGroup.listGroup);
+    if (container) {
+      getCustomButton(
+        buttonGroup.listGroup,
+        buttonGroup.buttonGroupStyle,
+        container
+      );
+    }
   }
   const editor = editorInstance.getEditor();
   function getCustomButtonList() {
@@ -83,7 +94,7 @@ export default function CustomButtonGroup() {
                 buttonGroupStyle: {
                   ...buttonGroupStyleInit,
                 },
-              } as UserButtonGroup;
+              } as CustomButtonItem2;
               userButton.group.push(customButton);
               setShowAddButton(false);
               updateScene(editor.scene);
@@ -103,7 +114,11 @@ export default function CustomButtonGroup() {
                   // setButtonGroup(item.listGroup);
                   setButtonGroupIndex(index);
                   setShowAddButton(true);
-                  customButtonGroupGUI(updateScene, index);
+                  customButtonGroupGUI(
+                    customButtonList.userButton.group[index],
+                    updateScene,
+                    index
+                  );
                 }}
               >
                 <Icon iconName="pencil" gap={1} /> {item.name}

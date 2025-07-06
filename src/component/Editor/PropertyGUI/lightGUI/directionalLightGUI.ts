@@ -1,9 +1,8 @@
 import { DirectionalLight } from "three";
 import { editorInstance } from "@/three/instance/EditorInstance";
-
 import { lightGUI } from "@/component/Editor/PropertyGUI/lightGUI/lightGUI";
 import { transformCMD } from "@/three/command/cmd";
-import positionGUI from "../commonGUI/positionGUI";
+import positionGUI from "@/component/Editor/PropertyGUI/commonGUI/positionGUI";
 
 export default function directionalLightGUI(light: DirectionalLight) {
   const editor = editorInstance.getEditor();
