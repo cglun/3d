@@ -52,7 +52,7 @@ export interface ProjectListResponse {
     records: RecordItem[];
   };
 }
-export interface ActionItemBase {
+export interface ButtonItemBase {
   showName: string;
   NAME_ID: string;
   showButton: boolean; //是否显示按钮
@@ -60,12 +60,10 @@ export interface ActionItemBase {
   style: {
     offsetWidth: number;
     offsetHeight: number;
-    x: number;
-    y: number;
   };
 }
 
-export interface ActionItemMap extends ActionItemBase {
+export interface GenerateButtonItemMap extends ButtonItemBase {
   groupCanBeRaycast: boolean; //射线检测是否选中组的children
   data: {
     isSelected: boolean;
@@ -75,11 +73,11 @@ export interface ActionItemMap extends ActionItemBase {
   handler: (nameId: string) => void;
 }
 
-export interface ButtonItemMap extends ActionItemBase {
+export interface CustomButtonItemMap extends ButtonItemBase {
   codeString: string;
 }
 
-export const actionItemMap: ActionItemMap = {
+export const generateButtonItemMap: GenerateButtonItemMap = {
   showName: "名称",
   NAME_ID: "NAME_ID",
   showButton: true,
@@ -93,8 +91,6 @@ export const actionItemMap: ActionItemMap = {
   style: {
     offsetWidth: 0,
     offsetHeight: 0,
-    x: 0,
-    y: 0,
   },
   handler: function (nameId: string): void {
     throw new Error("Function not implemented." + nameId);
@@ -110,6 +106,14 @@ export type CustomButtonType =
   | "PANEL_CONTROLLER"
   | "USER_BUTTON";
 
+export enum ContainerName {
+  toggleButtonGroup = "toggleButtonGroup",
+  roamButtonGroup = "roamButtonGroup",
+  markButtonGroup = "markButtonGroup",
+  userButtonGroup = "userButtonGroup",
+  panelControllerButtonGroup = "panelControllerButtonGroup",
+}
+
 // 定义 item 的类型
 export type TourItem = {
   id: number; // 假设 id 是数字类型
@@ -124,7 +128,7 @@ export interface ConfirmButton {
 
 declare global {
   interface Document {
-    getCurrentActionItemMap: (item: ActionItemMap) => void;
+    getCurrentGenerateButtonItemMap: (item: GenerateButtonItemMap) => void;
   }
 }
 

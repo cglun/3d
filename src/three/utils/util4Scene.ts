@@ -16,8 +16,9 @@ import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import axios from "@/app/http";
-import sceneUserData, {
+import {
   ExtraParams,
+  RoamButtonUserSetting,
   RoamLine,
   SceneUserData,
 } from "@/three/config/Three3dConfig";
@@ -184,7 +185,7 @@ export function removeCanvasChild(canvas3d: React.RefObject<HTMLDivElement>) {
 export function manyou(
   roamLine: RoamLine,
   camera: PerspectiveCamera,
-  params: typeof sceneUserData.customButtonList.roamButtonGroup.userSetting
+  params: RoamButtonUserSetting
 ) {
   const {
     tubeGeometry,

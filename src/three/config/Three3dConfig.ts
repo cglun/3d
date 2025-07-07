@@ -1,12 +1,13 @@
 import { AnimationMixer, Mesh, TubeGeometry, Vector3 } from "three";
 import {
-  ActionItemBase,
-  ActionItemMap,
+  ButtonItemBase,
+  GenerateButtonItemMap,
   APP_COLOR,
-  ButtonItemMap,
+  CustomButtonItemMap,
   CustomButtonType,
   GlbModel,
 } from "@/app/type";
+
 //import venice_sunset_1k from "@static/file3d/hdr/venice_sunset_1k.hdr?url";
 //import spruit_sunrise_1k from "@static/file3d/hdr/spruit_sunrise_1k.hdr?url";
 const venice_sunset_1k = new URL(
@@ -58,14 +59,6 @@ export interface RoamButtonUserSetting {
   radius: number;
   tension: number;
 }
-export interface ToggleButtonGroup {
-  customButtonItem: CustomButtonItem;
-  userSetting: {
-    modelOffset: Vector3;
-    cameraOffset: Vector3;
-    animationTime: number;
-  };
-}
 
 export const buttonGroupStyleInit = {
   top: 0,
@@ -95,19 +88,27 @@ export type ButtonGroupStyle = typeof buttonGroupStyleInit;
 export interface CustomButtonItemBase {
   name: string;
   type: CustomButtonType;
-  listGroup: ActionItemBase[];
+  listGroup: ButtonItemBase[];
   showGroup: boolean;
   buttonGroupStyle: ButtonGroupStyle;
 }
 
 export interface CustomButtonItem extends CustomButtonItemBase {
-  listGroup: ActionItemMap[];
+  listGroup: GenerateButtonItemMap[];
 }
 
 export interface CustomButtonItem2 extends CustomButtonItemBase {
-  listGroup: ButtonItemMap[];
+  listGroup: CustomButtonItemMap[];
 }
 
+export interface ToggleButtonGroup {
+  customButtonItem: CustomButtonItem;
+  userSetting: {
+    modelOffset: Vector3;
+    cameraOffset: Vector3;
+    animationTime: number;
+  };
+}
 export interface RoamButtonGroup {
   customButtonItem: CustomButtonItem;
   userSetting: RoamButtonUserSetting;
@@ -147,7 +148,7 @@ export interface SceneUserData {
   config3d: Config3d;
   backgroundHDR: BackgroundHDR;
   javascript: string;
-  customButtonList: typeof customButtonListInit;
+  customButtonGroupList: typeof customButtonGroupListInit;
   APP_THEME: {
     themeColor: APP_COLOR;
     iconFill: string;
@@ -159,58 +160,70 @@ export interface SceneUserData {
     modelEdgeHighlight: ModelEdgeHighlight;
   };
 }
-export type CustomButtonList = {
-  toggleButtonGroup: ToggleButtonGroup;
-  roamButtonGroup: RoamButtonGroup;
-  panelControllerButtonGroup: PanelControllerButtonGroup;
-  userButton: UserButton;
+
+export interface GenerateButtonGroup {
+  des: "生成按钮组";
+  group: [ToggleButtonGroup, RoamButtonGroup, PanelControllerButtonGroup];
+}
+export interface CustomButtonGroup {
+  des: "用户自定义";
+  group: CustomButtonItem2[];
+}
+export type CustomButtonGroupList = {
+  generateButtonGroup: GenerateButtonGroup;
+  customButtonGroup: CustomButtonGroup;
 };
-export const customButtonListInit: CustomButtonList = {
-  toggleButtonGroup: {
-    customButtonItem: {
-      name: "切换",
-      type: "TOGGLE" as CustomButtonType,
-      listGroup: [] as ActionItemMap[],
-      showGroup: true, // 补充缺失属性
-      buttonGroupStyle: { ...buttonGroupStyleInit }, // 补充缺失属性
-    },
-    userSetting: {
-      modelOffset: new Vector3(0, 0, 0),
-      cameraOffset: new Vector3(0, 0, 0),
-      animationTime: 1160,
-    },
+export const customButtonGroupListInit: CustomButtonGroupList = {
+  generateButtonGroup: {
+    des: "生成按钮组",
+    group: [
+      {
+        customButtonItem: {
+          name: "切换",
+          type: "TOGGLE" as CustomButtonType,
+          listGroup: [] as GenerateButtonItemMap[],
+          showGroup: true, // 补充缺失属性
+          buttonGroupStyle: { ...buttonGroupStyleInit }, // 补充缺失属性
+        },
+        userSetting: {
+          modelOffset: new Vector3(0, 0, 0),
+          cameraOffset: new Vector3(0, 0, 0),
+          animationTime: 1160,
+        },
+      },
+      {
+        customButtonItem: {
+          name: "漫游",
+          type: "ROAM" as CustomButtonType,
+          listGroup: [] as GenerateButtonItemMap[],
+          showGroup: true, // 补充缺失属性
+          buttonGroupStyle: { ...buttonGroupStyleInit }, // 补充缺失属性
+        },
+        userSetting: {
+          scale: 1,
+          extrusionSegments: 100,
+          radiusSegments: 3,
+          closed: true,
+          lookAhead: true,
+          speed: 2,
+          offset: 1,
+          radius: 1,
+          tension: 0.25,
+        },
+      },
+      {
+        customButtonItem: {
+          name: "标签控制",
+          type: "PANEL_CONTROLLER" as CustomButtonType,
+          listGroup: [] as GenerateButtonItemMap[],
+          showGroup: true,
+          buttonGroupStyle: { ...buttonGroupStyleInit },
+        },
+      },
+    ],
   },
-  roamButtonGroup: {
-    customButtonItem: {
-      name: "漫游",
-      type: "ROAM" as CustomButtonType,
-      listGroup: [] as ActionItemMap[],
-      showGroup: true, // 补充缺失属性
-      buttonGroupStyle: { ...buttonGroupStyleInit }, // 补充缺失属性
-    },
-    userSetting: {
-      scale: 1,
-      extrusionSegments: 100,
-      radiusSegments: 3,
-      closed: true,
-      lookAhead: true,
-      speed: 2,
-      offset: 1,
-      radius: 1,
-      tension: 0.25,
-    },
-  },
-  panelControllerButtonGroup: {
-    customButtonItem: {
-      name: "标签控制",
-      type: "PANEL_CONTROLLER" as CustomButtonType,
-      listGroup: [] as ActionItemMap[],
-      showGroup: false,
-      buttonGroupStyle: { ...buttonGroupStyleInit },
-    },
-  },
-  userButton: {
-    name: "用户自定义",
+  customButtonGroup: {
+    des: "用户自定义",
     group: [] as CustomButtonItem2[],
   },
 };
@@ -261,7 +274,7 @@ const sceneUserData: SceneUserData = {
   config3d: { ...config3dInit },
   backgroundHDR: { ...backgroundHDR },
   javascript: "console.log(116)",
-  customButtonList: { ...customButtonListInit },
+  customButtonGroupList: { ...customButtonGroupListInit },
   APP_THEME: {
     themeColor: APP_COLOR.Dark, // 若 APP_COLOR 有具体结构，需按需填充
     iconFill: "",

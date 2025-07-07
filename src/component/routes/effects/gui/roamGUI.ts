@@ -15,9 +15,9 @@ export default function roamGUI(folder: GUI) {
   const editor = editorInstance.getEditor();
   editor.outlinePass.selectedObjects = [];
 
-  const { customButtonList } = editorInstance.getEditor().scene
+  const { customButtonGroupList } = editorInstance.getEditor().scene
     .userData as SceneUserData;
-  const { userSetting } = customButtonList.roamButtonGroup;
+  const { userSetting } = customButtonGroupList.generateButtonGroup.group[1];
   //const roamFolder = editor.createGUI("漫游");
   const roamFolder = folder.addFolder("设置");
   const { roamLine } = editorInstance.getEditor().extraParams;

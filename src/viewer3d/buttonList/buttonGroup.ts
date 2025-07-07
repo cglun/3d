@@ -1,9 +1,15 @@
 import { Scene, Vector3 } from "three";
-import { actionItemMap, ActionItemMap, CustomButtonType } from "@/app/type";
+import {
+  APP_COLOR,
+  CustomButtonType,
+  generateButtonItemMap,
+  GenerateButtonItemMap,
+} from "@/app/type";
 
 import { GROUP } from "@/three/config/CONSTANT";
 
 import {
+  _getViewer,
   animateDRAWER,
   animateROAM,
   animateSTRETCH,
@@ -14,11 +20,12 @@ import {
   stretchModelBackHome,
 } from "@/viewer3d/buttonList/animateByButton";
 
-import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelController";
-import { CustomButtonList, SceneUserData } from "@/three/config/Three3dConfig";
-import { viewerInstance } from "@/three/instance/ViewerInstance";
-import { editorInstance } from "@/three/instance/EditorInstance";
+import {
+  SceneUserData,
+  GenerateButtonGroup,
+} from "@/three/config/Three3dConfig";
 import { hasValueString } from "@/three/utils/utils";
+import Toast3d from "@/component/common/Toast3d";
 
 export const cameraViewerPosition = new Vector3(0, 0, 0);
 
@@ -46,14 +53,14 @@ export function setUserSettingByType(
 
 // 生成切换按钮组
 export function generateToggleButtonGroup(
-  // originalCodeArr: ActionItemMap[],
+  // originalCodeArr: GenerateButtonItemMap[],
   sceneContext: Scene,
   customButtonType: CustomButtonType
-): ActionItemMap[] {
-  const actionList: ActionItemMap[] = [];
+): GenerateButtonItemMap[] {
+  const actionList: GenerateButtonItemMap[] = [];
   const MODEL_GROUP = sceneContext.getObjectByName(GROUP.MODEL);
-  const overallViewer: ActionItemMap = {
-    ...actionItemMap,
+  const overallViewer: GenerateButtonItemMap = {
+    ...generateButtonItemMap,
     showName: "全景",
     NAME_ID: GROUP.MODEL,
   };
@@ -111,8 +118,8 @@ export function generateToggleButtonGroup(
 }
 
 //重置按钮组的isClick为false
-export function resetListGroupIsClick(listGroup: ActionItemMap[]) {
-  return listGroup.map((item: ActionItemMap) => {
+export function resetListGroupIsClick(listGroup: GenerateButtonItemMap[]) {
+  return listGroup.map((item: GenerateButtonItemMap) => {
     return {
       ...item,
       isClick: false,
@@ -121,70 +128,71 @@ export function resetListGroupIsClick(listGroup: ActionItemMap[]) {
 }
 
 // 获取切换按钮组
-export function getToggleButtonGroup(scene: Scene): ActionItemMap[] {
-  const customButtonList = scene.userData.customButtonList as CustomButtonList;
-  const { listGroup, type } =
-    customButtonList.toggleButtonGroup.customButtonItem;
-  return listGroup
-    .map((item: ActionItemMap) => {
-      const { toggleButtonGroup } = customButtonList;
-      if (type === "TOGGLE") {
-        return animateTOGGLE(item, toggleButtonGroup);
-      }
+export function getToggleButtonGroup(
+  index: number,
+  generateButtonGroup: GenerateButtonGroup
+): GenerateButtonItemMap[] {
+  const { customButtonItem } = generateButtonGroup.group[index];
+  const { listGroup, type } = customButtonItem;
 
+  return listGroup
+    .map((item: GenerateButtonItemMap) => {
+      if (type === "TOGGLE") {
+        return animateTOGGLE(item, generateButtonGroup.group[0]);
+      }
       if (type === "STRETCH") {
-        return animateSTRETCH(item, toggleButtonGroup);
+        return animateSTRETCH(item, generateButtonGroup.group[0]);
       }
       if (type === "DRAWER") {
-        return animateDRAWER(item, toggleButtonGroup);
+        return animateDRAWER(item, generateButtonGroup.group[0]);
       }
     })
-    .filter((item) => item !== undefined) as ActionItemMap[];
+    .filter((item) => item !== undefined) as GenerateButtonItemMap[];
 }
 
 //生成漫游动画按钮组
 export function generateRoamButtonGroup() {
-  const roamButtonGroup: ActionItemMap[] = [];
-  const { scene } = editorInstance.getEditor();
+  const roamButtonGroup: GenerateButtonItemMap[] = [];
+  const { scene } = _getViewer();
 
   const roam = scene.getObjectByName("_ROAM_");
   if (roam) {
     roam.children.forEach((item) => {
       const { name } = item;
       roamButtonGroup.push({
-        ...actionItemMap,
+        ...generateButtonItemMap,
         showName: name + "_开始",
         NAME_ID: name + "_AN_START",
       });
-      // roamButtonGroup.push({
-      //   ...actionItemMap,
-      //   showName: name + "_停止",
-      //   NAME_ID: name + "_AN_STOP",
-      // });
+      roamButtonGroup.push({
+        ...generateButtonItemMap,
+        showName: name + "_停止",
+        NAME_ID: name + "_AN_STOP",
+      });
     });
   }
 
   return roamButtonGroup;
 }
 //获取漫游动画按钮组
-export function getRoamListByRoamButtonMap(scene: Scene): ActionItemMap[] {
-  const { customButtonList } = scene.userData as SceneUserData;
-  const { toggleButtonGroup, roamButtonGroup } = customButtonList;
+export function getRoamListByRoamButtonMap(): GenerateButtonItemMap[] {
+  const { scene } = _getViewer();
+  const { customButtonGroupList } = scene.userData as SceneUserData;
+
+  const [toggleButtonGroup, roamButtonGroup] =
+    customButtonGroupList.generateButtonGroup.group;
   const { listGroup } = roamButtonGroup.customButtonItem;
-
-  return listGroup.map((item: ActionItemMap) => {
-    const { NAME_ID, showName } = item;
-
+  return listGroup.map((item) => {
     return {
-      showName: showName,
-      NAME_ID: NAME_ID,
+      ...item,
       handler: (state: string) => {
+        item.isClick = !item.isClick;
         if (state.includes("_START")) {
           roamAnimation(true);
         }
         if (state.includes("_STOP")) {
           roamAnimation(false);
-          const { camera, controls } = viewerInstance.getViewer();
+          const { camera, controls } = _getViewer();
           const { userSetting } = toggleButtonGroup;
           cameraBackHome(camera, controls, userSetting.animationTime);
         }
@@ -193,19 +201,20 @@ export function getRoamListByRoamButtonMap(scene: Scene): ActionItemMap[] {
         stretchModelBackHome(toggleButtonGroup);
         drawerBackHome(toggleButtonGroup);
       },
-    } as ActionItemMap;
+    } as GenerateButtonItemMap;
   });
 }
 
 export function roamAnimation(isRunning: boolean) {
-  const { scene, controls } = viewerInstance.getViewer();
-  const listGroup = getRoamListByRoamButtonMap(scene);
+  const { scene, controls } = _getViewer();
+  const { customButtonGroupList } = scene.userData as SceneUserData;
+
+  const listGroup = getRoamListByRoamButtonMap();
   // 获取用户数据并进行类型断言
 
-  const { customButtonList } = scene.userData as SceneUserData;
-
+  const [roamButtonGroup] = customButtonGroupList.generateButtonGroup.group;
   // 进行空值检查
-  if (customButtonList && customButtonList.roamButtonGroup) {
+  if (customButtonGroupList && roamButtonGroup) {
     listGroup.map((item) => {
       const { NAME_ID } = item;
       const NAME = NAME_ID.split("_AN_")[0];
@@ -217,41 +226,42 @@ export function roamAnimation(isRunning: boolean) {
 }
 
 export function generatePanelControllerButtonGroup() {
-  const panelControllerButtonGroup: ActionItemMap[] = [];
+  const panelControllerButtonGroup: GenerateButtonItemMap[] = [];
 
   panelControllerButtonGroup.push({
-    ...actionItemMap,
+    ...generateButtonItemMap,
     showName: "展开",
     NAME_ID: "expandLabelInfo",
   });
   panelControllerButtonGroup.push({
-    ...actionItemMap,
+    ...generateButtonItemMap,
     showName: "收起",
     NAME_ID: "foldLabelInfo",
   });
   return panelControllerButtonGroup;
 }
 
-export function getPanelControllerButtonGroup(
-  scene: Scene,
-  panelController: LabelInfoPanelController
-): ActionItemMap[] {
-  const { customButtonList } = scene.userData as SceneUserData;
-  const { listGroup } =
-    customButtonList.panelControllerButtonGroup.customButtonItem;
-  return listGroup.map((item: ActionItemMap) => {
+export function getPanelControllerButtonGroup(): GenerateButtonItemMap[] {
+  const { customButtonGroupList } = _getViewer().scene
+    .userData as SceneUserData;
+  const panelController = _getViewer().scene.userData.labelInfoPanelController;
+  const { customButtonItem } =
+    customButtonGroupList.generateButtonGroup.group[2];
+  const { listGroup } = customButtonItem;
+  return listGroup.map((item: GenerateButtonItemMap) => {
     const { NAME_ID } = item;
-
     return {
       ...item, // 保留原有的属性
       handler: () => {
+        item.isClick = !item.isClick;
         if (NAME_ID === "expandLabelInfo") {
           panelController?.expandLabelInfo(); // 调用 expandLabelInfo 方法
         }
         if (NAME_ID === "foldLabelInfo") {
           panelController?.foldLabelInfo(); // 调用 foldLabelInfo 方法
         }
+        Toast3d("预览模式生效", "提示", APP_COLOR.Warning);
       },
-    } as ActionItemMap; // 显式类型断言
+    } as GenerateButtonItemMap; // 显式类型断言
   });
 }

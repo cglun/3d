@@ -1,25 +1,23 @@
 import { Scene } from "three";
 import { editorInstance } from "@/three/instance/EditorInstance";
-import { CustomButtonList, SceneUserData } from "@/three/config/Three3dConfig";
+import { SceneUserData } from "@/three/config/Three3dConfig";
 import buttonGroupBaseGUI from "@/component/routes/extend/extendButtonGui/buttonGroupBaseGUI";
 import roamGUI from "@/component/routes/effects/gui/roamGUI";
 
 export default function generateButtonGroupGUI(
-  key: keyof CustomButtonList,
+  key: number,
   updateScene: (scene: Scene) => void
 ) {
-  if (key === "userButton") {
-    return;
-  }
-
-  const { customButtonList } = editorInstance.getEditor().scene
+  const { customButtonGroupList } = editorInstance.getEditor().scene
     .userData as SceneUserData;
-  const { customButtonItem } = customButtonList[key];
+  const { generateButtonGroup } = customButtonGroupList;
+  const { customButtonItem } = generateButtonGroup.group[key];
+
   const editor = editorInstance.getEditor();
   const folder = editor.createGUI(customButtonItem.name);
   buttonGroupBaseGUI(folder, customButtonItem, updateScene);
-  if (key === "toggleButtonGroup") {
-    const { userSetting } = customButtonList[key];
+  if (key === 0) {
+    const { userSetting } = generateButtonGroup.group[key];
     const dataFolder = folder.addFolder("数据");
     dataFolder.add(userSetting, "animationTime").name("动画时间");
     const min = 100,
@@ -35,7 +33,7 @@ export default function generateButtonGroupGUI(
     modelFolder.add(userSetting.modelOffset, "y", min, max, step).name("Y");
     modelFolder.add(userSetting.modelOffset, "z", min, max, step).name("Z");
   }
-  if (key === "roamButtonGroup") {
+  if (key === 1) {
     roamGUI(folder);
   }
 }

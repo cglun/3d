@@ -1,7 +1,5 @@
 import { Object3D, Object3DEventMap, Raycaster, Vector2, Vector3 } from "three";
-
 import { SceneUserData } from "@/three/config/Three3dConfig";
-
 import { TourWindow } from "@/app/MyContext";
 import {
   getPanelControllerButtonGroup,
@@ -9,8 +7,8 @@ import {
   getToggleButtonGroup,
 } from "@/viewer3d/buttonList/buttonGroup";
 
-import { viewerInstance } from "@/three/instance/ViewerInstance";
 import { Three3d } from "./Three3d";
+import { _getViewer } from "@/viewer3d/buttonList/animateByButton";
 
 /**
  * Three3dViewer 类，继承自 Three3d 类，用于创建一个 3D 视图器。
@@ -57,20 +55,17 @@ export class Three3dViewer extends Three3d {
   }
 
   getToggleButtonGroup() {
-    const { scene } = viewerInstance.getViewer();
-
-    return getToggleButtonGroup(scene);
+    const { scene } = _getViewer();
+    const { customButtonGroupList } = scene.userData as SceneUserData;
+    return getToggleButtonGroup(0, customButtonGroupList.generateButtonGroup);
   }
   getRoamListByRoamButtonMap() {
-    const { scene } = viewerInstance.getViewer();
-
-    return getRoamListByRoamButtonMap(scene);
+    return getRoamListByRoamButtonMap();
   }
   getPanelControllerButtonGroup() {
-    const { scene } = viewerInstance.getViewer();
-    const controller = viewerInstance.getViewer().labelInfoPanelController;
-    return getPanelControllerButtonGroup(scene, controller);
+    return getPanelControllerButtonGroup();
   }
+
   onPointerClick(event: MouseEvent) {
     const { offsetX, offsetY } = event;
     console.log("onPointerClick", offsetX, offsetY);
@@ -93,10 +88,12 @@ export class Three3dViewer extends Three3d {
     }
   }
   setCanBeRaycast() {
-    const { customButtonList } = this.scene.userData as SceneUserData;
+    const { customButtonGroupList } = this.scene.userData as SceneUserData;
     const canBeRaycast = [] as Object3D<Object3DEventMap>[];
-    customButtonList.toggleButtonGroup.customButtonItem.listGroup.map(
-      (item) => {
+    const { listGroup, type } =
+      customButtonGroupList.generateButtonGroup.group[0].customButtonItem;
+    if (type === "TOGGLE") {
+      listGroup.map((item) => {
         if (item.groupCanBeRaycast) {
           const group = this.scene.getObjectByName(item.NAME_ID);
 
@@ -108,8 +105,8 @@ export class Three3dViewer extends Three3d {
             }
           }
         }
-      }
-    );
+      });
+    }
 
     this.canBeRaycast = canBeRaycast;
   }

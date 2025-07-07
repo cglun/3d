@@ -13,8 +13,8 @@ export default function customButtonGroupGUI(
   index: number
 ) {
   const editor = editorInstance.getEditor();
-  const { customButtonList } = editor.scene.userData as SceneUserData;
-  const { group } = customButtonList.userButton;
+  const { customButtonGroupList } = editor.scene.userData as SceneUserData;
+  const { group } = customButtonGroupList.customButtonGroup;
 
   const folder = editor.createGUI("按钮组");
   const funcDel = {

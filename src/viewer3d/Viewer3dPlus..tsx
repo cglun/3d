@@ -10,7 +10,12 @@ import { useEffect, useRef, useState } from "react";
 import _axios from "@/app/http";
 import { useUpdateScene } from "@/app/hooks";
 
-import { ActionItemMap, APP_COLOR, MessageError, RecordItem } from "@/app/type";
+import {
+  GenerateButtonItemMap,
+  APP_COLOR,
+  MessageError,
+  RecordItem,
+} from "@/app/type";
 
 import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelController";
 
@@ -31,10 +36,13 @@ interface PageListResponse {
 
 export default function Viewer3dPlus() {
   const [listScene, setListScene] = useState<RecordItem[]>([]);
-  const [toggleButtonList, setToggleButtonList] = useState<ActionItemMap[]>();
-  const [roamButtonList, setRoamButtonList] = useState<ActionItemMap[]>([]);
+  const [toggleButtonList, setToggleButtonList] =
+    useState<GenerateButtonItemMap[]>();
+  const [roamButtonList, setRoamButtonList] = useState<GenerateButtonItemMap[]>(
+    []
+  );
   const [panelControllerButtonList, setPanelControllerButtonList] = useState<
-    ActionItemMap[]
+    GenerateButtonItemMap[]
   >([]);
   const [show, setShow] = useState(false);
   const [controller, setController] = useState<LabelInfoPanelController>();
@@ -87,26 +95,20 @@ export default function Viewer3dPlus() {
         errorMessage(error);
       });
   }, []);
-
+  const modalBody = useRef<HTMLDivElement>(null);
   // 忽略类型检查，暂时不清楚 Context116 完整类型定义
   function callBack(viewer: Three3dViewer) {
-    //const viewer = viewerInstance.getViewer();
+    const { toggle } = viewer.buttonGroup();
 
-    // 检查 getToggleButtonGroup 方法是否存在
-    setToggleButtonList(viewer.getToggleButtonGroup);
-    setRoamButtonList(viewer.getRoamListByRoamButtonMap || []);
-    setPanelControllerButtonList(viewer.getPanelControllerButtonGroup || []);
-    if (viewer.labelInfoPanelController) {
-      setController(viewer.labelInfoPanelController);
-    }
+    modalBody.current?.appendChild(toggle);
   }
 
   function handleClose() {
     setShow(false);
   }
-  const modalBody = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    const viewer = viewerInstance.getViewer();
+    const viewer = _getViewer();
     setShow(true);
     window.addEventListener("resize", viewer?.onWindowResize);
     return () => {
@@ -143,28 +145,7 @@ export default function Viewer3dPlus() {
             <Container
               className="position-absolute top-0 right-0"
               style={{ zIndex: 1 }}
-            >
-              <ButtonGroup size="sm">
-                {listScene.map((item: RecordItem) => {
-                  return (
-                    <Button
-                      variant={buttonColor}
-                      key={item.id}
-                      // Bug 修复：添加 _item 判空检查
-                      disabled={_item && item.id === _item.id}
-                      onClick={() => {
-                        _setItem(item);
-                      }}
-                    >
-                      id_{item.id}_{item.name}
-                    </Button>
-                  );
-                })}
-                <Button variant={APP_COLOR.Danger} onClick={handleClose}>
-                  关闭
-                </Button>
-              </ButtonGroup>
-            </Container>
+            ></Container>
             {_item.id !== -1 && (
               <Viewer3d
                 item={_item}

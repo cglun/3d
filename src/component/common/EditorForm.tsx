@@ -10,7 +10,6 @@ import { APP_COLOR, MessageError, RecordItem } from "@/app/type";
 import Icon from "@/component/common/Icon";
 import { editorInstance } from "@/three/instance/EditorInstance";
 
-import { viewerInstance } from "@/three/instance/ViewerInstance";
 import {
   base64ToBlob,
   blobToFile,
@@ -21,6 +20,8 @@ import Container from "react-bootstrap/esm/Container";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import Button from "react-bootstrap/esm/Button";
 import { errorMessage } from "@/app/utils";
+
+import { viewerInstance } from "@/three/instance/ViewerInstance";
 
 export default function EditorForm({
   item,

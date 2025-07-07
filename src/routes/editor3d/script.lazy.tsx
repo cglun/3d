@@ -2,30 +2,16 @@ import { useState } from "react";
 import ListGroup from "react-bootstrap/esm/ListGroup";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import Button from "react-bootstrap/esm/Button";
-import Form from "react-bootstrap/esm/Form";
 import Container from "react-bootstrap/esm/Container";
-
 import { createLazyFileRoute } from "@tanstack/react-router";
 import CodeEditor from "@/component/routes/script/CodeEditor";
 import { useUpdateScene } from "@/app/hooks";
 import AlertBase from "@/component/common/AlertBase";
-import { APP_COLOR, CustomButtonType } from "@/app/type";
+import { APP_COLOR } from "@/app/type";
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
-import Toast3d from "@/component/common/Toast3d";
-import ModalConfirm3d from "@/component/common/ModalConfirm3d";
-
-import {
-  generatePanelControllerButtonGroup,
-  generateRoamButtonGroup,
-  generateToggleButtonGroup,
-  setUserSettingByType,
-} from "@/viewer3d/buttonList/buttonGroup";
 import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
-import {
-  customButtonListInit,
-  SceneUserData,
-} from "@/three/config/Three3dConfig";
+import { SceneUserData } from "@/three/config/Three3dConfig";
 import { editorInstance } from "@/three/instance/EditorInstance";
 
 export const Route = createLazyFileRoute("/editor3d/script")({
@@ -35,20 +21,8 @@ export const Route = createLazyFileRoute("/editor3d/script")({
 function RouteComponent() {
   const { scene, updateScene } = useUpdateScene(); // const [javaScriptCode, setJavaScriptCode] = useState<string>(javascript);
   const [showJavaScript, setShowJavaScript] = useState(false); // 是否为调试场景[调试场景不允许修改代码]
-  const [showButtonList, setShowButtonList] = useState(false); // 使用可选属性和类型断言
-
   const [showAllConfig, setShowAllConfig] = useState(false); // 使用可选属性和类型断言
-  const [isSet, setIsSet] = useState(false);
-
-  //const  = scene.userData as SceneUserData;
-  //const userData = JSON.stringify(ud, null, 3);
-
-  const { javascript, projectId, customButtonList } =
-    scene.userData as SceneUserData;
-
-  const buttonList = JSON.stringify(customButtonList, null, 5);
-
-  const [buttonType, setButtonType] = useState<CustomButtonType>("TOGGLE");
+  const { javascript, projectId } = scene.userData as SceneUserData;
 
   // 获取主题颜色
   const { themeColor } = getThemeByScene(scene);
@@ -58,26 +32,6 @@ function RouteComponent() {
 
   const userDataString = JSON.stringify(scene.userData, null, 3);
 
-  // 生成按钮组
-  function generateButton() {
-    setIsSet(false);
-    const editor = editorInstance.getEditor();
-    const { customButtonList } = editor.scene.userData as SceneUserData;
-    const { toggleButtonGroup, roamButtonGroup, panelControllerButtonGroup } =
-      customButtonList;
-    toggleButtonGroup.customButtonItem.type = buttonType;
-    toggleButtonGroup.customButtonItem.listGroup = generateToggleButtonGroup(
-      editor.scene,
-      buttonType
-    );
-    setUserSettingByType(toggleButtonGroup.userSetting, buttonType);
-    roamButtonGroup.customButtonItem.listGroup = generateRoamButtonGroup();
-    panelControllerButtonGroup.customButtonItem.listGroup =
-      generatePanelControllerButtonGroup();
-
-    updateScene(editor.scene);
-    Toast3d("已生成按钮组");
-  }
   function getScene() {
     const { scene } = editorInstance.getEditor();
     return scene;
@@ -108,16 +62,7 @@ function RouteComponent() {
               <Icon iconName="file-code" gap={1} />
               代码
             </Button>
-            <Button
-              variant={buttonColor}
-              style={{ borderColor: styleBody.color }}
-              onClick={() => {
-                setShowButtonList(true);
-              }}
-            >
-              <Icon iconName="menu-button" gap={1} />
-              按钮
-            </Button>
+
             <Button
               variant={buttonColor}
               style={{ borderColor: styleBody.color }}
@@ -140,90 +85,7 @@ function RouteComponent() {
               updateScene(scene);
             }}
           />
-          <CodeEditor
-            tipsTitle="按钮组编辑"
-            isValidate={true}
-            language="json"
-            code={buttonList}
-            show={showButtonList}
-            setShow={setShowButtonList}
-            callback={(value) => {
-              try {
-                getScene().userData.customButtonList = JSON.parse(value);
-                updateScene(getScene());
-              } catch (error) {
-                if (error instanceof Error) {
-                  ModalConfirm3d({
-                    title: "提示",
-                    body: error.message,
-                    confirmButton: {
-                      show: true,
-                      closeButton: true,
-                      hasButton: true,
-                    },
-                  });
-                }
-              }
-            }}
-          >
-            <ButtonGroup size="sm">
-              {isSet ? (
-                <>
-                  <Form key={"inline-radio-2"}>
-                    <Form.Check
-                      defaultChecked={buttonType === "TOGGLE"}
-                      inline
-                      label="切换"
-                      name="buttonType"
-                      type={"radio"}
-                      id={`inline-radio-1`}
-                      onClick={() => {
-                        setButtonType("TOGGLE");
-                      }}
-                    />
-                    <Form.Check
-                      defaultChecked={buttonType === "STRETCH"}
-                      inline
-                      label="拉伸"
-                      name="buttonType"
-                      type={"radio"}
-                      id={`inline-radio-2`}
-                      onClick={() => {
-                        setButtonType("STRETCH");
-                      }}
-                    />
-                    <Form.Check
-                      defaultChecked={buttonType === "DRAWER"}
-                      inline
-                      label="抽屉"
-                      name="buttonType"
-                      type={"radio"}
-                      id={`inline-radio-3`}
-                      onClick={() => {
-                        setButtonType("DRAWER");
-                      }}
-                    />
-                  </Form>
-                  <Button variant={buttonColor} onClick={generateButton}>
-                    生成按钮
-                  </Button>
-                </>
-              ) : (
-                <Button
-                  variant={buttonColor}
-                  onClick={() => {
-                    getScene().userData.customButtonList = customButtonListInit;
-                    updateScene(getScene());
-                    setButtonType(buttonType);
-                    setIsSet(true);
-                    Toast3d("已重置按钮组");
-                  }}
-                >
-                  <Icon iconName="recycle" /> 重置
-                </Button>
-              )}
-            </ButtonGroup>
-          </CodeEditor>
+
           <CodeEditor
             tipsTitle="一键配置"
             language="json"

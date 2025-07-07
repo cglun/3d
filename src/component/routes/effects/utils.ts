@@ -1,10 +1,5 @@
 import { TourWindow } from "@/app/MyContext";
-import {
-  ActionItemBase,
-  ActionItemMap,
-  APP_COLOR,
-  ButtonItemMap,
-} from "@/app/type";
+import { ButtonItemBase, APP_COLOR } from "@/app/type";
 import Toast3d from "@/component/common/Toast3d";
 import { GROUP } from "@/three/config/CONSTANT";
 import {
@@ -14,13 +9,11 @@ import {
 } from "@/three/config/Three3dConfig";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
-
 import { cameraEnterAnimation } from "@/three/utils/util4Camera";
-
+import { _getViewer } from "@/viewer3d/buttonList/animateByButton";
 import { LabelInfo } from "@/viewer3d/label/LabelInfo";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
 import { Dispatch } from "react";
-
 import { NumberController } from "three/examples/jsm/libs/lil-gui.module.min.js";
 
 export function rgbaToHex_xx(rgba: string): string {
@@ -224,43 +217,26 @@ export function useBackgroundImage(
   };
 }
 
-// export function showButtonGroupDiv(groupStyle: ButtonGroupStyle) {
-//   const div = document.querySelector("#buttonGroupDiv") as HTMLElement;
-//   return getButtonGroupByButtonGroupStyle(groupStyle, div, true);
-// }
-export function getButtonGroupByButtonGroupStyle(
-  customButtonItem: CustomButtonItemBase,
-  buttonGroupStyle: ButtonGroupStyle,
-  container: HTMLElement
-) {
-  const editor = editorInstance.getEditor();
-  const { offsetWidth, offsetHeight } = editor.divElement;
-  const { gap, direction } = buttonGroupStyle;
-  const divStyle = container.style;
-  divStyle.left = `${(buttonGroupStyle.left * offsetWidth) / 100}px`;
-  divStyle.top = `${(buttonGroupStyle.top * offsetHeight) / 100}px`;
-  divStyle.visibility = customButtonItem.showGroup ? "visible" : "hidden";
-  divStyle.display = "flex";
-  divStyle.position = "absolute";
-  divStyle.rowGap = `${gap}px`;
-  divStyle.columnGap = `${gap}px`;
-  divStyle.flexDirection = direction;
-  divStyle.backgroundColor = "transparent";
-  return container;
+export function getButtonGroupStyle(customButtonItem: CustomButtonItemBase) {
+  const { offsetWidth, offsetHeight } = _getViewer()?.divElement || {
+    offsetWidth: window.innerWidth,
+    offsetHeight: window.innerHeight,
+  };
+  const { buttonGroupStyle } = customButtonItem;
+  const { gap } = buttonGroupStyle;
+
+  const allStyle = {
+    left: `${(buttonGroupStyle.left * offsetWidth) / 100}px`,
+    top: `${(buttonGroupStyle.top * offsetHeight) / 100}px`,
+    display: "flex",
+    rowGap: `${gap}px`,
+    columnGap: `${gap}px`,
+    backgroundColor: "transparent",
+  };
+  return allStyle;
 }
 
-export function getContainer(listGroup: ActionItemBase[]) {
-  const div = document.getElementById("buttonGroupDiv") as HTMLElement;
-  if (div) {
-    div.innerHTML = "";
-    if (listGroup.length === 0) {
-      div.style.visibility = "hidden";
-      return;
-    }
-    return div;
-  }
-}
-function generateButtonGroupItem<T extends ActionItemBase>(
+export function generateButtonGroupItem<T extends ButtonItemBase>(
   buttonBase: T,
   groupStyle: ButtonGroupStyle
 ) {
@@ -284,10 +260,10 @@ function generateButtonGroupItem<T extends ActionItemBase>(
     borderColorIsClick,
   } = groupStyle;
 
-  const { showName, isClick } = buttonBase;
-  const button = document.createElement("button");
-  button.innerHTML = showName;
-  const btnStyle = button.style;
+  const { isClick } = buttonBase;
+  const { offsetHeight, offsetWidth } = buttonBase.style;
+
+  const btnStyle = {} as CSSStyleDeclaration;
   btnStyle.backgroundColor = "transparent";
   btnStyle.color = isClick ? colorIsClick : color;
 
@@ -297,53 +273,25 @@ function generateButtonGroupItem<T extends ActionItemBase>(
     btnStyle.backgroundColor = rgbaColor;
     btnStyle.backgroundImage = "";
   }
-
   if (useBackgroundUrl) {
     const bgUrl = isClick ? backgroundUrlIsClick : backgroundUrl;
     btnStyle.backgroundImage = `url(${bgUrl})`;
   }
-  btnStyle.marginTop = marginTop + "px";
-  btnStyle.marginLeft = marginLeft + "px";
-  btnStyle.width = width + "px";
-  btnStyle.height = height + "px";
   btnStyle.borderColor = isClick ? borderColorIsClick : borderColor;
-  btnStyle.borderWidth = borderWidth + "px";
-  btnStyle.borderRadius = borderRadius + "px";
-  btnStyle.fontSize = fontSize + "px";
-  btnStyle.backgroundSize = `${width}px ${height}px`;
-  btnStyle.backgroundRepeat = "no-repeat";
-  return button;
-}
-export function getCustomButton(
-  listGroup: ButtonItemMap[],
-  groupStyle: ButtonGroupStyle,
-  container: HTMLElement
-) {
-  // const groupDiv = generateButtonGroup(listGroup);
-  if (container) {
-    listGroup.forEach((_item) => {
-      const btn = generateButtonGroupItem(_item, groupStyle);
-      container.appendChild(btn);
-      btn.addEventListener("click", () => {
-        console.log(`名称：${_item.showName},ID：${_item.NAME_ID} `);
-        new Function(_item.codeString)();
-      });
-    });
-  }
-}
-export function getGenerateButton(
-  listGroup: ActionItemMap[],
-  groupStyle: ButtonGroupStyle,
-  container: HTMLElement
-) {
-  if (container) {
-    listGroup.forEach((_item) => {
-      const btn = generateButtonGroupItem(_item, groupStyle);
-      container.appendChild(btn);
-      btn.addEventListener("click", () => {
-        console.log(`名称：${_item.showName},ID：${_item.NAME_ID} `);
-        _item.handler(_item.NAME_ID);
-      });
-    });
-  }
+  return {
+    width: width + offsetWidth + "px",
+    height: height + offsetHeight + "px",
+    borderWidth: borderWidth + "px",
+    opacity: opacity.toString(),
+    borderRadius: borderRadius + "px",
+    fontSize: fontSize + "px",
+    color: btnStyle.color,
+    marginTop: marginTop + "px",
+    marginLeft: marginLeft + "px",
+    backgroundRepeat: "no-repeat",
+    backgroundImage: btnStyle.backgroundImage,
+    borderColor: btnStyle.borderColor + "px",
+    backgroundColor: btnStyle.backgroundColor,
+    backgroundSize: `${width + offsetWidth}px ${height + offsetHeight}px`,
+  };
 }

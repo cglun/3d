@@ -1,4 +1,4 @@
-import { APP_COLOR } from "@/app/type";
+import { APP_COLOR, ContainerName, generateButtonItemMap } from "@/app/type";
 import Button from "react-bootstrap/esm/Button";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import ListGroup from "react-bootstrap/esm/ListGroup";
@@ -7,43 +7,40 @@ import { useUpdateScene } from "@/app/hooks";
 import {
   buttonGroupStyleInit,
   CustomButtonItem2,
-  customButtonListInit,
+  customButtonGroupListInit,
   SceneUserData,
-  UserButtonGroup,
 } from "@/three/config/Three3dConfig";
 import Icon from "@/component/common/Icon";
 import { editorInstance } from "@/three/instance/EditorInstance";
-import { actionItemMap } from "@/app/type";
+
 import { useEffect, useState } from "react";
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import { MathUtils } from "three";
 
 import CodeEditor from "@/component/routes/script/CodeEditor";
 
-import customButtonGUI from "@/component/routes/extend/customButtonGUI";
 import customButtonGroupGUI from "@/component/routes/extend/customButtonGroupGUI";
-import {
-  getContainer,
-  getCustomButton,
-} from "@/component/routes/effects/utils";
 
 export default function CustomButtonGroup() {
   const { scene, updateScene } = useUpdateScene();
-  const { customButtonList } = scene.userData as SceneUserData;
+  const { customButtonGroupList } = scene.userData as SceneUserData;
   const { themeColor } = getThemeByScene(scene);
   const buttonColor = getButtonColor(themeColor);
-  const { userButton } = customButtonList || { ...customButtonListInit };
+  const { customButtonGroup } = customButtonGroupList || {
+    ...customButtonGroupListInit,
+  };
+
   const [buttonGroupIndex, setButtonGroupIndex] = useState(0);
   const [childButtonIndex, setChildButtonIndex] = useState(0);
   const [showCodeWindow, setShowCodeWindow] = useState(false);
   const [showAddButton, setShowAddButton] = useState(false);
   const codeString =
-    userButton.group[buttonGroupIndex]?.listGroup[childButtonIndex]
+    customButtonGroup.group[buttonGroupIndex]?.listGroup[childButtonIndex]
       ?.codeString || "";
 
   function setButton() {
     let num = 0;
-    userButton.group.forEach((item) => {
+    customButtonGroup.group.forEach((item) => {
       if (item.listGroup.length > 0) {
         num++;
       }
@@ -57,24 +54,13 @@ export default function CustomButtonGroup() {
   }
   useEffect(() => {
     setButton();
-  }, [scene.userData.customButtonList]); // 依赖项为 userButton.group，当它变化时重新执行
+  }, [scene.userData.CustomButtonGroupList]); // 依赖项为 customButtonGroup.group，当它变化时重新执行
 
-  const buttonGroup = userButton.group[buttonGroupIndex];
-  if (buttonGroup) {
-    const container = getContainer(buttonGroup.listGroup);
-    if (container) {
-      getCustomButton(
-        buttonGroup.listGroup,
-        buttonGroup.buttonGroupStyle,
-        container
-      );
-    }
-  }
   const editor = editorInstance.getEditor();
-  function getCustomButtonList() {
-    const { customButtonList } = editor.scene.userData as SceneUserData;
-    const { userButton } = customButtonList;
-    return { userButton, editor };
+  function getCustomButtonGroupList() {
+    const { customButtonGroupList } = editor.scene.userData as SceneUserData;
+    const { customButtonGroup } = customButtonGroupList;
+    return { customButtonGroup, editor };
   }
 
   return (
@@ -85,7 +71,7 @@ export default function CustomButtonGroup() {
             variant={APP_COLOR.Success}
             onClick={() => {
               //添加自定义按钮组
-              const { userButton } = getCustomButtonList();
+              const { customButtonGroup } = getCustomButtonGroupList();
               const customButton = {
                 name: "按钮组",
                 type: "USER_BUTTON",
@@ -95,7 +81,7 @@ export default function CustomButtonGroup() {
                   ...buttonGroupStyleInit,
                 },
               } as CustomButtonItem2;
-              userButton.group.push(customButton);
+              customButtonGroup.group.push(customButton);
               setShowAddButton(false);
               updateScene(editor.scene);
             }}
@@ -104,7 +90,7 @@ export default function CustomButtonGroup() {
             按钮组
           </Button>
         </ButtonGroup>
-        {userButton.group.map((item, index) => {
+        {customButtonGroup.group.map((item, index) => {
           return (
             <ButtonGroup key={index} size="sm">
               <Button
@@ -115,7 +101,7 @@ export default function CustomButtonGroup() {
                   setButtonGroupIndex(index);
                   setShowAddButton(true);
                   customButtonGroupGUI(
-                    customButtonList.userButton.group[index],
+                    customButtonGroupList.customButtonGroup.group[index],
                     updateScene,
                     index
                   );
@@ -135,13 +121,16 @@ export default function CustomButtonGroup() {
               onClick={() => {
                 const NAME_ID = MathUtils.generateUUID();
                 const button = {
-                  ...actionItemMap,
+                  ...generateButtonItemMap,
                   showName: "按钮",
                   NAME_ID,
                   codeString: `//实现方法，NAME_ID:${NAME_ID}`,
                 };
-                const { userButton, editor } = getCustomButtonList();
-                userButton.group[buttonGroupIndex].listGroup.push(button);
+                const { customButtonGroup, editor } =
+                  getCustomButtonGroupList();
+                customButtonGroup.group[buttonGroupIndex].listGroup.push(
+                  button
+                );
                 // setButtonGroup(buttonGroup);
                 setButton();
                 updateScene(editor.scene);
@@ -150,32 +139,6 @@ export default function CustomButtonGroup() {
               <Icon iconName="plus-circle" gap={1} />
               按钮
             </Button>
-          </ButtonGroup>
-          <ButtonGroup size="sm">
-            {buttonGroup?.listGroup?.map((item, index) => {
-              return (
-                <Button
-                  key={index}
-                  variant={buttonColor}
-                  active={item.isClick}
-                  onClick={() => {
-                    customButtonGUI(
-                      updateScene,
-                      buttonGroupIndex,
-                      index,
-                      setShowCodeWindow
-                    );
-                    setChildButtonIndex(index);
-                    item.isClick = true;
-
-                    updateScene(editor.scene);
-                  }}
-                >
-                  <Icon iconName="pencil " gap={1} title="编辑按钮" />
-                  {item.showName}
-                </Button>
-              );
-            })}
           </ButtonGroup>
         </ListGroupItem>
       )}
@@ -187,10 +150,10 @@ export default function CustomButtonGroup() {
         setShow={setShowCodeWindow}
         callback={function (value): void {
           const { scene } = editorInstance.getEditor();
-          const { customButtonList } = scene.userData as SceneUserData;
-          customButtonList.userButton.group[buttonGroupIndex].listGroup[
-            childButtonIndex
-          ].codeString = value;
+          const { customButtonGroupList } = scene.userData as SceneUserData;
+          customButtonGroupList.customButtonGroup.group[
+            buttonGroupIndex
+          ].listGroup[childButtonIndex].codeString = value;
           updateScene(scene);
         }}
       />

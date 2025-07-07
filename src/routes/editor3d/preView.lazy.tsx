@@ -10,7 +10,12 @@ import { useEffect, useRef, useState } from "react";
 import _axios from "@/app/http";
 import { useUpdateScene } from "@/app/hooks";
 
-import { ActionItemMap, APP_COLOR, MessageError, RecordItem } from "@/app/type";
+import {
+  GenerateButtonItemMap,
+  APP_COLOR,
+  MessageError,
+  RecordItem,
+} from "@/app/type";
 import { resetListGroupIsClick } from "@/viewer3d/buttonList/buttonGroup";
 import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelController";
 
@@ -19,6 +24,7 @@ import Icon from "@/component/common/Icon";
 import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 import { errorMessage } from "@/app/utils";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
+import Viewer3dPlus from "@/viewer3d/Viewer3dPlus.";
 
 // 定义响应数据的类型
 interface PageListResponse {
@@ -35,10 +41,13 @@ export const Route = createLazyFileRoute("/editor3d/preView")({
 
 function RouteComponent() {
   const [listScene, setListScene] = useState<RecordItem[]>([]);
-  const [toggleButtonList, setToggleButtonList] = useState<ActionItemMap[]>();
-  const [roamButtonList, setRoamButtonList] = useState<ActionItemMap[]>([]);
+  const [toggleButtonList, setToggleButtonList] =
+    useState<GenerateButtonItemMap[]>();
+  const [roamButtonList, setRoamButtonList] = useState<GenerateButtonItemMap[]>(
+    []
+  );
   const [panelControllerButtonList, setPanelControllerButtonList] = useState<
-    ActionItemMap[]
+    GenerateButtonItemMap[]
   >([]);
   const [show, setShow] = useState(false);
   const [controller, setController] = useState<LabelInfoPanelController>();
@@ -94,7 +103,7 @@ function RouteComponent() {
 
   // 忽略类型检查，暂时不清楚 Context116 完整类型定义
   function callBack(viewer: Three3dViewer) {
-    //const viewer = viewerInstance.getViewer();
+    //const viewer = _getViewer();
 
     // 检查 getToggleButtonGroup 方法是否存在
     setToggleButtonList(viewer.getToggleButtonGroup);
@@ -110,7 +119,7 @@ function RouteComponent() {
   }
   const modalBody = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const viewer = viewerInstance.getViewer();
+    const viewer = _getViewer();
     setShow(true);
     window.addEventListener("resize", viewer?.onWindowResize);
     return () => {
@@ -169,17 +178,7 @@ function RouteComponent() {
                 </Button>
               </ButtonGroup>
             </Container>
-            {_item.id !== -1 && (
-              <Viewer3d
-                item={_item}
-                canvasStyle={{
-                  width: window.innerWidth + "px",
-                  height: window.innerHeight + "px",
-                }}
-                callBack={callBack}
-                showProgress={true}
-              />
-            )}
+            <Viewer3dPlus />
           </Modal.Body>
         </Modal>
       </ListGroupItem>

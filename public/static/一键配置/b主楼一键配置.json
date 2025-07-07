@@ -31,7 +31,7 @@
     "HDRName": "venice_sunset_1k.hdr"
   },
   "javascript": "console.log(116)",
-  "customButtonList": {
+  "CustomButtonGroupList": {
     "toggleButtonGroup": {
       "customButtonItem": {
         "name": "切换",

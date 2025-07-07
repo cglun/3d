@@ -50,7 +50,7 @@ function RouteComponent() {
         <Button
           variant={btnColor}
           onClick={() => {
-            console.log(viewerInstance.getViewer());
+            console.log(_getViewer());
           }}
         >
           viewerIns

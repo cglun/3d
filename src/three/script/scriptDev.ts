@@ -20,7 +20,7 @@ export function runScriptDev(
   //   if (labelInfoPanelController) {
   //     labelInfoPanelController.isShow = true; // 设置面板显示状态
   //     labelInfoPanelController.createLabelInfoPanelByModelGroupName("huojia");
-  //     document.getCurrentActionItemMap = function (item) {
+  //     document.getCurrentGenerateButtonItemMap = function (item) {
   //       if (labelInfoPanelController) {
   //         if (item.NAME_ID === "全景") {
   //           labelInfoPanelController.resetHighLightModel();

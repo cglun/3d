@@ -1,20 +1,18 @@
 import { Scene } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { editorInstance } from "@/three/instance/EditorInstance";
-import { ActionItemBase } from "@/app/type";
-import { _confirmButton } from "@/component/common/ModalConfirmUtils";
+import { ButtonItemBase } from "@/app/type";
+
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 export default function buttonBaseGui(
   folder: GUI,
   updateScene: (scene: Scene) => void,
-  listGroup: ActionItemBase[],
+  listGroup: ButtonItemBase[],
   index: number
 ) {
   const editor = editorInstance.getEditor();
   const button = listGroup[index];
-  listGroup.forEach((item: ActionItemBase) => {
-    item.isClick = false;
-  });
+
   const funcDel = {
     deleteButton: () => {
       ModalConfirm3d(
@@ -42,7 +40,17 @@ export default function buttonBaseGui(
       updateScene(editor.scene);
     });
   const styleFolder = folder.addFolder("样式");
-  styleFolder.add(button.style, "offsetHeight", -100, 100, 1).name("增加高度");
-  styleFolder.add(button.style, "offsetWidth", -100, 100, 1).name("增加宽度");
+  styleFolder
+    .add(button.style, "offsetHeight", -100, 100, 1)
+    .name("增加高度")
+    .onChange(() => {
+      updateScene(editor.scene);
+    });
+  styleFolder
+    .add(button.style, "offsetWidth", -100, 100, 1)
+    .name("增加宽度")
+    .onChange(() => {
+      updateScene(editor.scene);
+    });
   folder.add(button, "NAME_ID").name("按钮Id").disable(true);
 }

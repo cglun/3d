@@ -6,7 +6,7 @@ import Tab from "react-bootstrap/esm/Tab";
 import Tabs from "react-bootstrap/esm/Tabs";
 import { useUpdateScene } from "@/app/hooks";
 import {
-  customButtonListInit,
+  customButtonGroupListInit,
   SceneUserData,
 } from "@/three/config/Three3dConfig";
 import Icon from "@/component/common/Icon";
@@ -15,15 +15,16 @@ import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import CodeEditor from "@/component/routes/script/CodeEditor";
 import CustomButtonGroup from "@/component/routes/extend/extendButton/CustomButtonGroup";
 import GenerateButtonGroup from "@/component/routes/extend/extendButton/GenerateButtonGroup";
+import { editorInstance } from "@/three/instance/EditorInstance";
 
 export default function Index() {
   const { scene } = useUpdateScene();
-  const { customButtonList } = scene.userData as SceneUserData;
+  const { customButtonGroupList } = scene.userData as SceneUserData;
   const { themeColor } = getThemeByScene(scene);
   const buttonColor = getButtonColor(themeColor);
 
-  const customButtonListString = JSON.stringify(
-    customButtonList || { ...customButtonListInit },
+  const customButtonGroupListString = JSON.stringify(
+    customButtonGroupList || { ...customButtonGroupListInit },
     null,
     2
   );
@@ -51,10 +52,15 @@ export default function Index() {
           <CodeEditor
             tipsTitle="代码编辑"
             language="json"
-            code={customButtonListString}
+            code={customButtonGroupListString}
             isValidate={true}
             show={showCodeWindow}
             setShow={setShowCodeWindow}
+            callback={(code) => {
+              const _userData = editorInstance.getEditor().scene
+                .userData as SceneUserData;
+              _userData.customButtonGroupList = JSON.parse(code);
+            }}
           />
         ) : (
           <ListGroup>

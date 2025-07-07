@@ -66,7 +66,7 @@ export default function Viewer3d({
     }
 
     return () => {
-      const viewer = viewerInstance.getViewer();
+      const viewer = _getViewer();
 
       if (viewer) {
         window.removeEventListener("resize", viewer.onWindowResize);
@@ -77,7 +77,7 @@ export default function Viewer3d({
   }, [item]);
 
   function loadScene() {
-    const viewer = viewerInstance.getViewer();
+    const viewer = _getViewer();
     getProjectData(item.id).then((data: string) => {
       // console.log("loadScene,要清空原来的哦");
       viewer.resetScene();
@@ -88,7 +88,7 @@ export default function Viewer3d({
   }
   // 加载模型
   function loadMesh() {
-    const viewer = viewerInstance.getViewer();
+    const viewer = _getViewer();
     viewer.addOneModel(item);
     setLoadProgress(viewer);
   }

@@ -1,9 +1,6 @@
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { CustomButtonItemBase } from "@/three/config/Three3dConfig";
-import {
-  getButtonGroupByButtonGroupStyle,
-  stopRoam,
-} from "@/component/routes/effects/utils";
+import { stopRoam } from "@/component/routes/effects/utils";
 import { Scene } from "three";
 import { editorInstance } from "@/three/instance/EditorInstance";
 
@@ -17,7 +14,7 @@ export default function buttonGroupBaseGUI(
   folderBase
     .add(customButtonItem, "name")
     .name("名称")
-    .disable(true)
+    .disable(customButtonItem.type !== "USER_BUTTON")
     .onChange(() => {
       updateScene(editorInstance.getEditor().scene);
     });
@@ -25,21 +22,19 @@ export default function buttonGroupBaseGUI(
     .add(customButtonItem, "showGroup")
     .name("显示")
     .onFinishChange(() => {
-      const { buttonGroupStyle } = customButtonItem;
-      const div = document.querySelector("#buttonGroupDiv") as HTMLElement;
-      getButtonGroupByButtonGroupStyle(customButtonItem, buttonGroupStyle, div);
+      //生成div
+      updateScene(editorInstance.getEditor().scene);
     });
   const direction = {
     横向: "row",
     纵向: "column",
   };
   const { buttonGroupStyle } = customButtonItem;
-  const div = document.querySelector("#buttonGroupDiv") as HTMLElement;
-  getButtonGroupByButtonGroupStyle(customButtonItem, buttonGroupStyle, div);
+  //生成div
 
   stopRoam();
   const styleFolder = folder.addFolder("样式").onChange(() => {
-    getButtonGroupByButtonGroupStyle(customButtonItem, buttonGroupStyle, div);
+    //生成div
     updateScene(editorInstance.getEditor().scene);
   });
 

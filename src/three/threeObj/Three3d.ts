@@ -24,6 +24,7 @@ import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { runScriptDev } from "@/three/script/scriptDev";
 
 import {
+  customButtonGroupListInit,
   ExtraParams,
   hdr,
   HdrKey,
@@ -545,7 +546,8 @@ export class Three3d extends ThreeObj {
     1000
   );
   animate(): void {
-    const { config3d, customButtonList } = this.scene.userData as SceneUserData;
+    const { config3d, customButtonGroupList } = this.scene
+      .userData as SceneUserData;
     const { css2d, css3d, useTween, FPS, useKeyframe, useComposer } = config3d;
 
     const { mixer, roamLine } = this.extraParams;
@@ -570,7 +572,11 @@ export class Three3d extends ThreeObj {
       }
       this.controls.update();
       if (roamLine) {
-        const { userSetting } = customButtonList.roamButtonGroup;
+        const { userSetting } = (
+          customButtonGroupList || {
+            ...customButtonGroupListInit,
+          }
+        ).generateButtonGroup.group[1];
         manyou(roamLine, this.camera, userSetting);
       }
 
