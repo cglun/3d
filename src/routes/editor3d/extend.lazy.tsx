@@ -21,7 +21,7 @@ function RouteComponent() {
   return (
     <>
       <CustomButton />
-      <PreButtonGroup dev={"editor3d"} />
+      <PreButtonGroup />
     </>
   );
 }

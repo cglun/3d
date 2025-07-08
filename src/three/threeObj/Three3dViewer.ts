@@ -57,7 +57,8 @@ export class Three3dViewer extends Three3d {
   getToggleButtonGroup() {
     const { scene } = _getViewer();
     const { customButtonGroupList } = scene.userData as SceneUserData;
-    return getToggleButtonGroup(0, customButtonGroupList.generateButtonGroup);
+    const [toggleButtonGroup] = customButtonGroupList.generateButtonGroup.group;
+    return getToggleButtonGroup(toggleButtonGroup);
   }
   getRoamListByRoamButtonMap() {
     return getRoamListByRoamButtonMap();

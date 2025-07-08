@@ -1,165 +1,145 @@
-import ListGroup from "react-bootstrap/esm/ListGroup";
-import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
-import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
-import Button from "react-bootstrap/esm/Button";
-import Container from "react-bootstrap/esm/Container";
-import Modal from "react-bootstrap/esm/Modal";
+import { useReducer, useEffect, useRef, useState } from "react";
 
-import Viewer3d from "@/viewer3d/Viewer3d";
-import { useEffect, useRef, useState } from "react";
-import _axios from "@/app/http";
-import { useUpdateScene } from "@/app/hooks";
+import { MessageError, RecordItem } from "@/app/type";
 
 import {
-  GenerateButtonItemMap,
-  APP_COLOR,
-  MessageError,
-  RecordItem,
-} from "@/app/type";
+  initEditorCamera,
+  initEditorScene,
+  initTourWindow,
+  MyContext,
+} from "@/app/MyContext";
+import ModalTour from "@/component/common/ModalTour";
+import { reducerCamera, reducerScene, reducerTour } from "@/app/reducer";
 
-import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelController";
-
-import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
-import Icon from "@/component/common/Icon";
-import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
-import { errorMessage } from "@/app/utils";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
+import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
+import { getProjectData } from "@/three/utils/util4Scene";
+import Container from "react-bootstrap/esm/Container";
+import ProgressBar from "react-bootstrap/esm/ProgressBar";
+import { errorMessage } from "@/app/utils";
 
-// 定义响应数据的类型
-interface PageListResponse {
-  code: number;
-  message: string;
-  data: {
-    records: RecordItem[];
-  };
-}
+/**
+ * 其他应用可以调用此组件，
+ * @returns
+ */
 
-export default function Viewer3dPlus() {
-  const [listScene, setListScene] = useState<RecordItem[]>([]);
-  const [toggleButtonList, setToggleButtonList] =
-    useState<GenerateButtonItemMap[]>();
-  const [roamButtonList, setRoamButtonList] = useState<GenerateButtonItemMap[]>(
-    []
+export default function Viewer3dPlus({
+  item,
+  canvasStyle = { height: "100vh", width: "100vw" },
+  showProgress = true,
+  callBack,
+}: {
+  item: RecordItem;
+  showProgress?: boolean;
+  dev?: "editor3d" | "viewer3d";
+  canvasStyle?: { height: string; width: string } & React.CSSProperties;
+  callBack: (viewer: Three3dViewer) => void;
+}) {
+  // 修改为明确指定 HTMLDivElement 类型
+  const canvas3d = useRef(null);
+  const isInitialized = useRef(false);
+  const [progress, setProgress] = useState(0);
+  const [scene, dispatchScene] = useReducer(reducerScene, initEditorScene);
+  const [tourWindow, dispatchTourWindow] = useReducer(
+    reducerTour,
+    initTourWindow
   );
-  const [panelControllerButtonList, setPanelControllerButtonList] = useState<
-    GenerateButtonItemMap[]
-  >([]);
-  const [show, setShow] = useState(false);
-  const [controller, setController] = useState<LabelInfoPanelController>();
-  const [showControllerButton, setShowControllerButton] = useState(false);
-  const { scene } = useUpdateScene();
-  const { themeColor } = getThemeByScene(scene);
-  const buttonColor = getButtonColor(themeColor);
-  const [_item, _setItem] = useState<RecordItem>({
-    id: -1,
-    name: "",
-    des: "",
-    cover: "",
-  });
+  const [camera, dispatchCamera] = useReducer(reducerCamera, initEditorCamera);
 
   useEffect(() => {
-    // 指定响应数据的类型
-    _axios
-      .post<PageListResponse>("/project/pageList/", { size: 1000 })
-      .then((res) => {
-        if (res.data.code === 200) {
-          const message = res.data.message;
-          if (message) {
-            return;
-          }
-          const records: RecordItem[] = res.data.data.records;
-          const sceneList = records.filter((item) => {
-            if (item.des === "Scene") {
-              item.id = parseInt(item.id.toString());
-              return item;
-            }
-          });
+    if (canvas3d.current && !isInitialized.current) {
+      isInitialized.current = true; // 标记为已初始化
+      console.log("Viewer3d", item.id);
+      const viewer = new Three3dViewer(canvas3d.current, dispatchTourWindow);
+      viewerInstance.setViewer(viewer);
+      viewer.controls.enabled = true;
+      viewer.divElement.addEventListener("click", (event) =>
+        viewer.onPointerClick(event)
+      );
+      window.addEventListener("resize", () => viewer.onWindowResize());
+    }
 
-          setListScene(sceneList);
-          //获取url的参数 值
-          const urlParams = new URLSearchParams(window.location.search);
-          const sceneId = urlParams.get("sceneId");
-          if (sceneId) {
-            _setItem({
-              id: parseInt(sceneId),
-              name: "场景预览",
-              des: "Scene",
-              cover: "",
-            });
-            return;
-          }
-          _setItem(sceneList[0]);
-        }
-      })
-      .catch((error: MessageError) => {
-        errorMessage(error);
-      });
-  }, []);
-  const modalBody = useRef<HTMLDivElement>(null);
-  // 忽略类型检查，暂时不清楚 Context116 完整类型定义
-  function callBack(viewer: Three3dViewer) {
-    const { toggle } = viewer.buttonGroup();
+    if (item.des === "Scene") {
+      loadScene();
+    }
+    if (item.des === "Mesh") {
+      loadMesh();
+    }
 
-    modalBody.current?.appendChild(toggle);
-  }
-
-  function handleClose() {
-    setShow(false);
-  }
-
-  useEffect(() => {
-    const viewer = _getViewer();
-    setShow(true);
-    window.addEventListener("resize", viewer?.onWindowResize);
     return () => {
-      window.removeEventListener("resize", viewer?.onWindowResize);
+      const viewer = viewerInstance.getViewer();
+      if (viewer) {
+        window.removeEventListener("resize", viewer.onWindowResize);
+        viewer.divElement.removeEventListener("click", viewer.onPointerClick);
+      }
+      canvas3d.current = null;
     };
-  }, []);
+  }, [item]);
+
+  function loadScene() {
+    const viewer = viewerInstance.getViewer();
+    getProjectData(item.id).then((data: string) => {
+      // console.log("loadScene,要清空原来的哦");
+      viewer.resetScene();
+      viewer.deserialize(data, item);
+
+      setLoadProgress(viewer);
+    });
+  }
+  // 加载模型
+  function loadMesh() {
+    const viewer = viewerInstance.getViewer();
+    viewer.addOneModel(item);
+    setLoadProgress(viewer);
+  }
+
+  function setLoadProgress(viewer: Three3dViewer) {
+    // 在模型加载完成后更新场景
+    viewer.loadedModelsEnd = () => {
+      if (item.des === "Scene") {
+        viewer.runJavascript();
+        viewer.setCanBeRaycast();
+        viewer.setOutLinePassColor();
+        callBack(viewer);
+      }
+
+      //关了进度条
+      if (showProgress) {
+        setProgress(100);
+        // 添加场景加载完成事件
+      }
+    };
+    viewer.onLoadError = (error: MessageError) => {
+      errorMessage(error);
+    };
+
+    if (showProgress) {
+      viewer.onLoadProgress = (progress: number) => {
+        setProgress(progress);
+      };
+    }
+  }
 
   return (
-    <ListGroup>
-      <ListGroupItem>
-        <ButtonGroup size="sm">
-          {!show && (
-            <Button
-              variant={buttonColor}
-              onClick={() => {
-                setShow(true);
-              }}
-            >
-              <Icon iconName="eye" gap={1} title="预览场景" />
-              场景
-            </Button>
-          )}
-        </ButtonGroup>
-        <Modal fullscreen show={show} onHide={handleClose}>
-          {/* <Modal.Header closeButton>
-            <Modal.Title>场景预览</Modal.Title>
-          </Modal.Header>*/}
-
-          <Modal.Body
-            ref={modalBody}
-            style={{ padding: 0 }}
-            className="position-relative"
-          >
-            <Container
-              className="position-absolute top-0 right-0"
-              style={{ zIndex: 1 }}
-            ></Container>
-            {_item.id !== -1 && (
-              <Viewer3d
-                item={_item}
-                canvasStyle={{
-                  width: window.innerWidth + "px",
-                  height: window.innerHeight + "px",
-                }}
-                callBack={callBack}
-                showProgress={true}
-              />
-            )}
-          </Modal.Body>
-        </Modal>
-      </ListGroupItem>
-    </ListGroup>
+    <MyContext.Provider
+      value={{
+        scene,
+        dispatchScene,
+        tourWindow,
+        dispatchTourWindow,
+        camera,
+        dispatchCamera,
+      }}
+    >
+      <Container fluid className="position-relative">
+        {showProgress && progress < 100 && (
+          <div className="mb-1 mx-auto" style={{ width: "300px" }}>
+            <ProgressBar now={progress} label={`${progress}%`} />
+          </div>
+        )}
+        <div style={canvasStyle} ref={canvas3d}></div>
+        <ModalTour />
+      </Container>
+    </MyContext.Provider>
   );
 }

@@ -5,25 +5,18 @@ import Button from "react-bootstrap/esm/Button";
 import Container from "react-bootstrap/esm/Container";
 import Modal from "react-bootstrap/esm/Modal";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import Viewer3d from "@/viewer3d/Viewer3d";
+
 import { useEffect, useRef, useState } from "react";
 import _axios from "@/app/http";
 import { useUpdateScene } from "@/app/hooks";
 
-import {
-  GenerateButtonItemMap,
-  APP_COLOR,
-  MessageError,
-  RecordItem,
-} from "@/app/type";
-import { resetListGroupIsClick } from "@/viewer3d/buttonList/buttonGroup";
-import { LabelInfoPanelController } from "@/viewer3d/label/LabelInfoPanelController";
+import { APP_COLOR, MessageError, RecordItem } from "@/app/type";
 
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import Icon from "@/component/common/Icon";
 import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 import { errorMessage } from "@/app/utils";
-import { viewerInstance } from "@/three/instance/ViewerInstance";
+
 import Viewer3dPlus from "@/viewer3d/Viewer3dPlus.";
 
 // 定义响应数据的类型
@@ -41,17 +34,9 @@ export const Route = createLazyFileRoute("/editor3d/preView")({
 
 function RouteComponent() {
   const [listScene, setListScene] = useState<RecordItem[]>([]);
-  const [toggleButtonList, setToggleButtonList] =
-    useState<GenerateButtonItemMap[]>();
-  const [roamButtonList, setRoamButtonList] = useState<GenerateButtonItemMap[]>(
-    []
-  );
-  const [panelControllerButtonList, setPanelControllerButtonList] = useState<
-    GenerateButtonItemMap[]
-  >([]);
+
   const [show, setShow] = useState(false);
-  const [controller, setController] = useState<LabelInfoPanelController>();
-  const [showControllerButton, setShowControllerButton] = useState(false);
+
   const { scene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
   const buttonColor = getButtonColor(themeColor);
@@ -103,29 +88,14 @@ function RouteComponent() {
 
   // 忽略类型检查，暂时不清楚 Context116 完整类型定义
   function callBack(viewer: Three3dViewer) {
-    //const viewer = _getViewer();
-
-    // 检查 getToggleButtonGroup 方法是否存在
-    setToggleButtonList(viewer.getToggleButtonGroup);
-    setRoamButtonList(viewer.getRoamListByRoamButtonMap || []);
-    setPanelControllerButtonList(viewer.getPanelControllerButtonGroup || []);
-    if (viewer.labelInfoPanelController) {
-      setController(viewer.labelInfoPanelController);
-    }
+    console.log("o");
   }
 
   function handleClose() {
     setShow(false);
   }
   const modalBody = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const viewer = _getViewer();
-    setShow(true);
-    window.addEventListener("resize", viewer?.onWindowResize);
-    return () => {
-      window.removeEventListener("resize", viewer?.onWindowResize);
-    };
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <ListGroup>
@@ -178,7 +148,7 @@ function RouteComponent() {
                 </Button>
               </ButtonGroup>
             </Container>
-            <Viewer3dPlus />
+            <Viewer3dPlus dev="viewer3d" item={_item} callBack={callBack} />
           </Modal.Body>
         </Modal>
       </ListGroupItem>
