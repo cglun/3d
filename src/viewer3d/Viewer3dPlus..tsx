@@ -17,6 +17,14 @@ import { getProjectData } from "@/three/utils/util4Scene";
 import Container from "react-bootstrap/esm/Container";
 import ProgressBar from "react-bootstrap/esm/ProgressBar";
 import { errorMessage } from "@/app/utils";
+import {
+  CustomButtonItem,
+  CustomButtonItem2,
+  PanelControllerButtonGroup,
+  RoamButtonGroup,
+  SceneUserData,
+  ToggleButtonGroup,
+} from "@/three/config/Three3dConfig";
 
 /**
  * 其他应用可以调用此组件，
@@ -45,6 +53,13 @@ export default function Viewer3dPlus({
     initTourWindow
   );
   const [camera, dispatchCamera] = useReducer(reducerCamera, initEditorCamera);
+  const [generateButtonList, setGenerateButtonList] =
+    useState<
+      [ToggleButtonGroup, RoamButtonGroup, PanelControllerButtonGroup]
+    >();
+  const [customButtonList, setCustomButtonList] = useState<CustomButtonItem2[]>(
+    []
+  );
 
   useEffect(() => {
     if (canvas3d.current && !isInitialized.current) {
@@ -100,6 +115,19 @@ export default function Viewer3dPlus({
         viewer.runJavascript();
         viewer.setCanBeRaycast();
         viewer.setOutLinePassColor();
+        const { customButtonGroupList } = viewer.scene
+          .userData as SceneUserData;
+        const { generateButtonGroup, customButtonGroup } =
+          customButtonGroupList;
+        const [toggleButtonGroup, roamButtonGroup, panelControllerButtonGroup] =
+          generateButtonGroup.group;
+
+        setGenerateButtonList([
+          toggleButtonGroup,
+          roamButtonGroup,
+          panelControllerButtonGroup,
+        ]);
+        setCustomButtonList(customButtonGroup.group);
         callBack(viewer);
       }
 
@@ -139,6 +167,9 @@ export default function Viewer3dPlus({
         )}
         <div style={canvasStyle} ref={canvas3d}></div>
         <ModalTour />
+        {generateButtonList?.map((item, index) => {
+          return <>{item.customButtonItem.name}</>;
+        })}
       </Container>
     </MyContext.Provider>
   );

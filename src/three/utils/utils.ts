@@ -1,3 +1,10 @@
+import { GenerateButtonItemMap } from "@/app/type";
+import { getButtonGroupStyle } from "@/component/routes/effects/utils";
+import {
+  getPanelControllerButtonGroup,
+  getRoamListByRoamButtonMap,
+  getToggleButtonGroup,
+} from "@/viewer3d/buttonList/buttonGroup";
 import {
   CatmullRomCurve3,
   Object3D,
@@ -5,6 +12,7 @@ import {
   Scene,
   Vector3,
 } from "three";
+import { CustomButtonItem, GenerateButtonGroup } from "../config/Three3dConfig";
 
 export function hasValueString(
   item: Object3D<Object3DEventMap>,
@@ -35,4 +43,18 @@ export function getObjectWorldPosition(model: Object3D) {
   const worldPosition = new Vector3();
   model.getWorldPosition(worldPosition);
   return worldPosition;
+}
+
+export function getListGroupByIndex(groupIndex: number) {
+  let listGroup = [] as GenerateButtonItemMap[];
+  if (groupIndex === 0) {
+    listGroup = getToggleButtonGroup();
+  }
+  if (groupIndex === 1) {
+    listGroup = getRoamListByRoamButtonMap();
+  }
+  if (groupIndex === 2) {
+    listGroup = getPanelControllerButtonGroup();
+  }
+  return listGroup;
 }

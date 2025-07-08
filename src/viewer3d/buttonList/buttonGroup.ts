@@ -128,23 +128,25 @@ export function resetListGroupIsClick(listGroup: GenerateButtonItemMap[]) {
 }
 
 // 获取切换按钮组
-export function getToggleButtonGroup(
-  index: number,
-  generateButtonGroup: GenerateButtonGroup
-): GenerateButtonItemMap[] {
-  const { customButtonItem } = generateButtonGroup.group[index];
-  const { listGroup, type } = customButtonItem;
+export function getToggleButtonGroup(): GenerateButtonItemMap[] {
+  // const { customButtonItem } = generateButtonGroup.group[index];
+
+  const { scene } = _getViewer();
+  const { customButtonGroupList } = scene.userData as SceneUserData;
+  const { generateButtonGroup } = customButtonGroupList;
+  const group = generateButtonGroup.group[0];
+  const { listGroup, type } = group.customButtonItem;
 
   return listGroup
     .map((item: GenerateButtonItemMap) => {
       if (type === "TOGGLE") {
-        return animateTOGGLE(item, generateButtonGroup.group[0]);
+        return animateTOGGLE(item, group);
       }
       if (type === "STRETCH") {
-        return animateSTRETCH(item, generateButtonGroup.group[0]);
+        return animateSTRETCH(item, group);
       }
       if (type === "DRAWER") {
-        return animateDRAWER(item, generateButtonGroup.group[0]);
+        return animateDRAWER(item, group);
       }
     })
     .filter((item) => item !== undefined) as GenerateButtonItemMap[];

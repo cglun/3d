@@ -9,12 +9,7 @@ import {
   getButtonGroupStyle,
 } from "@/component/routes/effects/utils";
 
-import {
-  getPanelControllerButtonGroup,
-  getRoamListByRoamButtonMap,
-  getToggleButtonGroup,
-} from "@/viewer3d/buttonList/buttonGroup";
-import { GenerateButtonItemMap } from "@/app/type";
+import { CustomButtonItemMap, GenerateButtonItemMap } from "@/app/type";
 
 import { memo, Suspense, useState } from "react";
 import generateButtonGUI from "../generateButtonGUI";
@@ -22,11 +17,11 @@ import { editorInstance } from "@/three/instance/EditorInstance";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
 import customButtonGUI from "../customButtonGUI";
 import CodeEditor from "../../script/CodeEditor";
+import { getListGroupByIndex } from "@/three/utils/utils";
 
 //生成按钮组
 export default function PreButtonGroup() {
   const { scene } = useUpdateScene();
-
   const { customButtonGroupList, projectId } = scene.userData as SceneUserData;
   const { generateButtonGroup } = customButtonGroupList || {
     ...customButtonGroupListInit,
@@ -63,22 +58,12 @@ function GenerateButtonGroupShow({
   generateButtonGroup: GenerateButtonGroup;
 }) {
   const { updateScene } = useUpdateScene();
-  const positionStyle = getButtonGroupStyle(
-    generateButtonGroup.group[groupIndex].customButtonItem
-  );
-  const { showGroup, buttonGroupStyle } =
-    generateButtonGroup.group[groupIndex].customButtonItem;
+  const { customButtonItem } = generateButtonGroup.group[groupIndex];
 
-  let listGroup = [] as GenerateButtonItemMap[];
-  if (groupIndex === 0) {
-    listGroup = getToggleButtonGroup(groupIndex, generateButtonGroup);
-  }
-  if (groupIndex === 1) {
-    listGroup = getRoamListByRoamButtonMap();
-  }
-  if (groupIndex === 2) {
-    listGroup = getPanelControllerButtonGroup();
-  }
+  const positionStyle = getButtonGroupStyle(customButtonItem);
+  const { showGroup, buttonGroupStyle } = customButtonItem;
+  const listGroup = getListGroupByIndex(groupIndex);
+
   return (
     <div
       style={{
@@ -90,13 +75,8 @@ function GenerateButtonGroupShow({
     >
       {listGroup.map((item, index) => {
         const buttonStyle = generateButtonGroupItem(item, buttonGroupStyle);
-        const showButtonStyle = {
-          opacity: item.showButton ? "initial" : 0.4,
-          // 拆分 border 属性
-          borderWidth: item.showButton ? "initial" : "1px",
-          borderStyle: item.showButton ? "initial" : "dashed",
-          borderColor: item.showButton ? "initial" : "#ff0000",
-        };
+
+        const showButtonStyle = getShowButtonStyle(item);
 
         return (
           <button
@@ -119,7 +99,6 @@ function GenerateButtonGroupShow({
               item.handler(item.NAME_ID);
               item.isClick = true;
               generateButtonGUI(updateScene, listGroup, groupIndex, index);
-
               updateScene(editor.scene);
             }}
           >
@@ -143,13 +122,12 @@ function CustomButtonGroupShow() {
 
   return group.map((item, index) => {
     const { listGroup, showGroup, buttonGroupStyle } = item;
-
-    const positionStyle = getButtonGroupStyle(
-      customButtonGroupList.customButtonGroup.group[index]
-    );
+    const { group } = customButtonGroupList.customButtonGroup;
+    const positionStyle = getButtonGroupStyle(group[index]);
     return (
       <>
         <div
+          key={index}
           style={{
             ...positionStyle,
             visibility: showGroup ? "visible" : "hidden",
@@ -163,16 +141,11 @@ function CustomButtonGroupShow() {
               _item,
               buttonGroupStyle
             );
-            const showButtonStyle = {
-              opacity: _item.showButton ? "initial" : 0.4,
-              // 拆分 border 属性
-              borderWidth: _item.showButton ? "initial" : "1px",
-              borderStyle: _item.showButton ? "initial" : "dashed",
-              borderColor: _item.showButton ? "initial" : "#ff0000",
-            };
+            const showButtonStyle = getShowButtonStyle(_item);
 
             return (
               <button
+                key={_index}
                 style={{ ...buttonStyle, ...showButtonStyle }}
                 onClick={() => {
                   console.log(`名称：${_item.showName},ID：${_item.NAME_ID} `);
@@ -229,4 +202,15 @@ function CustomButtonGroupShow() {
       </>
     );
   });
+}
+
+function getShowButtonStyle(
+  _item: CustomButtonItemMap | GenerateButtonItemMap
+) {
+  return {
+    opacity: _item.showButton ? "initial" : 0.4,
+    borderWidth: _item.showButton ? "initial" : "1px",
+    borderStyle: _item.showButton ? "initial" : "dashed",
+    borderColor: _item.showButton ? "initial" : "#ff0000",
+  };
 }
