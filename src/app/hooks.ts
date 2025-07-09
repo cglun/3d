@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 
 import { MyContext } from "@/app/MyContext";
 import { PerspectiveCamera, Scene } from "three";
+import { SceneUserData } from "@/three/config/Three3dConfig";
 
 export default function useFetch(url: string, type: string = "GET") {
   const [data, setData] = React.useState(null);
@@ -40,7 +41,8 @@ export function useUpdateScene() {
   function updateScene<T extends Scene>(payload: T) {
     dispatchScene({ type: "setScene", payload: payload });
   }
-  return { scene: scene.payload, updateScene };
+  const userData = scene.payload.userData as SceneUserData;
+  return { scene: scene.payload, updateScene, userData };
 }
 
 export function useUpdateCamera() {

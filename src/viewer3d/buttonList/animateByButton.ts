@@ -19,36 +19,27 @@ import {
 
 import { SceneUserData, ToggleButtonGroup } from "@/three/config/Three3dConfig";
 
-import { editorInstance } from "@/three/instance/EditorInstance";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
 
-export function _getViewer() {
-  const viewerIns = viewerInstance.getViewer();
-  const editorIns = editorInstance.getEditor();
-  if (viewerIns) {
-    return viewerIns;
-  }
-  if (editorIns) {
-    return editorIns;
-  }
-  throw new Error("Viewer or Editor instance not found");
+export function getViewerInstance() {
+  return viewerInstance.getViewer();
 }
 
 function getCamera() {
-  return _getViewer().camera;
+  return getViewerInstance().camera;
 }
 function getControls() {
-  return _getViewer().controls;
+  return getViewerInstance().controls;
 }
 // 显示模型-显示和隐藏
 export function showModelByNameId(NAME_ID: string) {
-  const MODEL_GROUP = _getViewer().MODEL_GROUP;
+  const MODEL_GROUP = getViewerInstance().MODEL_GROUP;
 
   MODEL_GROUP.traverse((item) => {
     item.layers.set(1);
   });
 
-  const groups = _getViewer().scene.getObjectByName(NAME_ID);
+  const groups = getViewerInstance().scene.getObjectByName(NAME_ID);
   if (groups) {
     groups.traverse((item) => {
       item.layers.set(0);
@@ -79,7 +70,7 @@ export function drawerOutByNameId(
 ) {
   // 使用可选链操作符和默认值确保解构安全
 
-  const MODEL_GROUP = _getViewer().scene.getObjectByName(item.NAME_ID);
+  const MODEL_GROUP = getViewerInstance().scene.getObjectByName(item.NAME_ID);
   item.data = {
     isSelected: true,
     isRunning: true,
@@ -114,7 +105,7 @@ export function drawerBackHome(toggleButtonGroup: ToggleButtonGroup) {
       const { isRunning, isSelected } = _item.data;
 
       if (isSelected && !isRunning) {
-        const model = _getViewer().scene.getObjectByName(_item.NAME_ID);
+        const model = getViewerInstance().scene.getObjectByName(_item.NAME_ID);
 
         _item.data = {
           isRunning: true,
@@ -151,7 +142,7 @@ export function stretchModelByNameId(
   NAME_ID: string,
   toggleButtonGroup: ToggleButtonGroup
 ) {
-  const MODEL_GROUP = _getViewer().scene.getObjectByName(NAME_ID);
+  const MODEL_GROUP = getViewerInstance().scene.getObjectByName(NAME_ID);
 
   if (MODEL_GROUP) {
     const isStretch = MODEL_GROUP.userData.childrenIsStretch;
@@ -173,7 +164,8 @@ export function stretchModelBackHome(toggleButtonGroup: ToggleButtonGroup) {
   const { type } = toggleButtonGroup.customButtonItem;
 
   if (type === "STRETCH") {
-    const MODEL_GROUP = _getViewer().MODEL_GROUP as Object3D<Object3DEventMap>;
+    const MODEL_GROUP = getViewerInstance()
+      .MODEL_GROUP as Object3D<Object3DEventMap>;
     MODEL_GROUP.children.forEach((_item) => {
       const { children } = _item;
       for (let index = 0; index < children.length; index++) {
@@ -261,7 +253,7 @@ export function moveCameraSTRETCH(
 ) {
   const { NAME_ID } = item;
 
-  const MODEL_GROUP = _getViewer().scene.getObjectByName(NAME_ID);
+  const MODEL_GROUP = getViewerInstance().scene.getObjectByName(NAME_ID);
 
   if (MODEL_GROUP) {
     // 移动相机到指定位置
@@ -293,7 +285,7 @@ export function moveCameraDRAWER(
   toggleButtonGroup: ToggleButtonGroup
 ) {
   const { NAME_ID } = item;
-  const MODEL_GROUP = _getViewer().scene.getObjectByName(NAME_ID);
+  const MODEL_GROUP = getViewerInstance().scene.getObjectByName(NAME_ID);
   if (MODEL_GROUP) {
     // 移动相机到指定位置
     const camera = getCamera();
@@ -338,7 +330,8 @@ export function cameraBackHome(
   controls: OrbitControls,
   animationTime: number
 ) {
-  const { cameraPosition } = _getViewer().scene.userData as SceneUserData;
+  const { cameraPosition } = getViewerInstance().scene
+    .userData as SceneUserData;
 
   cameraTween(camera, cameraPosition.end, animationTime)
     .start()
@@ -375,7 +368,6 @@ export function animateTOGGLE(
     ...item,
     handler: () => {
       commonHandler(item);
-      item.isClick = !item.isClick;
       const { cameraOffset, animationTime } = userSetting;
 
       if (NAME_ID === GROUP.MODEL) {
@@ -384,7 +376,7 @@ export function animateTOGGLE(
         return;
       }
       showModelByNameId(NAME_ID);
-      const model = _getViewer().scene.getObjectByName(NAME_ID);
+      const model = getViewerInstance().scene.getObjectByName(NAME_ID);
       if (model) {
         const { x, y, z } = getObjectWorldPosition(model);
         const camera = getCamera();
@@ -438,7 +430,7 @@ export function animateSTRETCH(
       commonHandler(item);
       //如果是全景按钮，
       if (NAME_ID === GROUP.MODEL) {
-        //const CustomButtonGroupList = _getViewer().userData
+        //const CustomButtonGroupList =   getViewerInstance()('viewer3d').userData
         stretchModelBackHome(toggleButton);
         return;
       }
@@ -469,7 +461,7 @@ export function animateROAM(
   });
 
   const curve = new CatmullRomCurve3(vector, true);
-  const { roamLine } = _getViewer().extraParams;
+  const { roamLine } = getViewerInstance().extraParams;
   if (roamLine) {
     roamLine.roamIsRunning = isRunning;
     roamLine.tubeGeometry = new TubeGeometry(curve, 100, 2, 3, true);

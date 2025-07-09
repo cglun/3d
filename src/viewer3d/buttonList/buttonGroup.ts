@@ -9,21 +9,18 @@ import {
 import { GROUP } from "@/three/config/CONSTANT";
 
 import {
-  _getViewer,
   animateDRAWER,
   animateROAM,
   animateSTRETCH,
   animateTOGGLE,
   cameraBackHome,
   drawerBackHome,
+  getViewerInstance,
   showModelBackHome,
   stretchModelBackHome,
 } from "@/viewer3d/buttonList/animateByButton";
 
-import {
-  SceneUserData,
-  GenerateButtonGroup,
-} from "@/three/config/Three3dConfig";
+import { SceneUserData } from "@/three/config/Three3dConfig";
 import { hasValueString } from "@/three/utils/utils";
 import Toast3d from "@/component/common/Toast3d";
 
@@ -131,7 +128,7 @@ export function resetListGroupIsClick(listGroup: GenerateButtonItemMap[]) {
 export function getToggleButtonGroup(): GenerateButtonItemMap[] {
   // const { customButtonItem } = generateButtonGroup.group[index];
 
-  const { scene } = _getViewer();
+  const { scene } = getViewerInstance();
   const { customButtonGroupList } = scene.userData as SceneUserData;
   const { generateButtonGroup } = customButtonGroupList;
   const group = generateButtonGroup.group[0];
@@ -155,7 +152,7 @@ export function getToggleButtonGroup(): GenerateButtonItemMap[] {
 //生成漫游动画按钮组
 export function generateRoamButtonGroup() {
   const roamButtonGroup: GenerateButtonItemMap[] = [];
-  const { scene } = _getViewer();
+  const { scene } = getViewerInstance();
 
   const roam = scene.getObjectByName("_ROAM_");
   if (roam) {
@@ -178,7 +175,7 @@ export function generateRoamButtonGroup() {
 }
 //获取漫游动画按钮组
 export function getRoamListByRoamButtonMap(): GenerateButtonItemMap[] {
-  const { scene } = _getViewer();
+  const { scene } = getViewerInstance();
   const { customButtonGroupList } = scene.userData as SceneUserData;
 
   const [toggleButtonGroup, roamButtonGroup] =
@@ -188,13 +185,12 @@ export function getRoamListByRoamButtonMap(): GenerateButtonItemMap[] {
     return {
       ...item,
       handler: (state: string) => {
-        item.isClick = !item.isClick;
         if (state.includes("_START")) {
           roamAnimation(true);
         }
         if (state.includes("_STOP")) {
           roamAnimation(false);
-          const { camera, controls } = _getViewer();
+          const { camera, controls } = getViewerInstance();
           const { userSetting } = toggleButtonGroup;
           cameraBackHome(camera, controls, userSetting.animationTime);
         }
@@ -208,7 +204,7 @@ export function getRoamListByRoamButtonMap(): GenerateButtonItemMap[] {
 }
 
 export function roamAnimation(isRunning: boolean) {
-  const { scene, controls } = _getViewer();
+  const { scene, controls } = getViewerInstance();
   const { customButtonGroupList } = scene.userData as SceneUserData;
 
   const listGroup = getRoamListByRoamButtonMap();
@@ -244,9 +240,10 @@ export function generatePanelControllerButtonGroup() {
 }
 
 export function getPanelControllerButtonGroup(): GenerateButtonItemMap[] {
-  const { customButtonGroupList } = _getViewer().scene
+  const { customButtonGroupList } = getViewerInstance().scene
     .userData as SceneUserData;
-  const panelController = _getViewer().scene.userData.labelInfoPanelController;
+  const panelController =
+    getViewerInstance().scene.userData.labelInfoPanelController;
   const { customButtonItem } =
     customButtonGroupList.generateButtonGroup.group[2];
   const { listGroup } = customButtonItem;

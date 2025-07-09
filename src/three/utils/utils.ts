@@ -1,5 +1,5 @@
-import { GenerateButtonItemMap } from "@/app/type";
-import { getButtonGroupStyle } from "@/component/routes/effects/utils";
+import { CustomButtonItemMap, GenerateButtonItemMap } from "@/app/type";
+
 import {
   getPanelControllerButtonGroup,
   getRoamListByRoamButtonMap,
@@ -12,7 +12,9 @@ import {
   Scene,
   Vector3,
 } from "three";
-import { CustomButtonItem, GenerateButtonGroup } from "../config/Three3dConfig";
+import { editorInstance } from "../instance/EditorInstance";
+import { SceneUserData } from "../config/Three3dConfig";
+import { viewerInstance } from "../instance/ViewerInstance";
 
 export function hasValueString(
   item: Object3D<Object3DEventMap>,
@@ -57,4 +59,34 @@ export function getListGroupByIndex(groupIndex: number) {
     listGroup = getPanelControllerButtonGroup();
   }
   return listGroup;
+}
+export function getShowButtonStyle(
+  _item: CustomButtonItemMap | GenerateButtonItemMap
+) {
+  return {
+    opacity: _item.showButton ? "initial" : 0.4,
+    borderWidth: _item.showButton ? "initial" : "1px",
+    borderStyle: _item.showButton ? "initial" : "dashed",
+    borderColor: _item.showButton ? "initial" : "#ff0000",
+  };
+}
+/**
+ * 获取编辑器实例及其相关数据
+ * @returns 包含编辑器实例、编辑器场景用户数据以及自定义按钮组列表的对象
+ */
+export function getEditorInstance() {
+  const editor = editorInstance.getEditor();
+  const userData = editor.scene.userData as SceneUserData;
+  const customButtonGroupList = userData.customButtonGroupList;
+  return { editor, userData, customButtonGroupList };
+}
+/**
+ * 获取查看器场景的用户数据和自定义按钮组列表
+ * 注意：此函数存在语法错误，需要修正
+ */
+export function getViewerInstance() {
+  const viewer = viewerInstance.getViewer();
+  const userData = viewer.scene.userData as SceneUserData;
+  const customButtonGroupList = userData.customButtonGroupList;
+  return { viewer, userData, customButtonGroupList };
 }

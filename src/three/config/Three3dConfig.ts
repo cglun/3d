@@ -61,8 +61,8 @@ export interface RoamButtonUserSetting {
 }
 
 export const buttonGroupStyleInit = {
-  top: 0,
-  left: 0,
+  top: 11.6,
+  left: 11.6,
   width: 80,
   height: 30,
   borderColor: "#ff0000",

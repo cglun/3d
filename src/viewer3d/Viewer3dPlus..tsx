@@ -1,5 +1,4 @@
-import { useReducer, useEffect, useRef, useState } from "react";
-
+import { useReducer, useEffect, useRef, useState, Suspense, memo } from "react";
 import { MessageError, RecordItem } from "@/app/type";
 
 import {
@@ -10,7 +9,6 @@ import {
 } from "@/app/MyContext";
 import ModalTour from "@/component/common/ModalTour";
 import { reducerCamera, reducerScene, reducerTour } from "@/app/reducer";
-
 import { viewerInstance } from "@/three/instance/ViewerInstance";
 import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 import { getProjectData } from "@/three/utils/util4Scene";
@@ -18,13 +16,20 @@ import Container from "react-bootstrap/esm/Container";
 import ProgressBar from "react-bootstrap/esm/ProgressBar";
 import { errorMessage } from "@/app/utils";
 import {
-  CustomButtonItem,
-  CustomButtonItem2,
-  PanelControllerButtonGroup,
-  RoamButtonGroup,
+  CustomButtonGroup,
+  customButtonGroupListInit,
+  GenerateButtonGroup,
   SceneUserData,
-  ToggleButtonGroup,
 } from "@/three/config/Three3dConfig";
+import {
+  generateButtonGroupItem,
+  getButtonGroupStyle,
+} from "@/component/routes/effects/utils";
+import {
+  getEditorInstance,
+  getListGroupByIndex,
+  getShowButtonStyle,
+} from "@/three/utils/utils";
 
 /**
  * 其他应用可以调用此组件，
@@ -53,12 +58,11 @@ export default function Viewer3dPlus({
     initTourWindow
   );
   const [camera, dispatchCamera] = useReducer(reducerCamera, initEditorCamera);
-  const [generateButtonList, setGenerateButtonList] =
-    useState<
-      [ToggleButtonGroup, RoamButtonGroup, PanelControllerButtonGroup]
-    >();
-  const [customButtonList, setCustomButtonList] = useState<CustomButtonItem2[]>(
-    []
+  const configGroup = { ...customButtonGroupListInit };
+  const [generateButtonGroup, setGenerateButtonGroup] =
+    useState<GenerateButtonGroup>(configGroup.generateButtonGroup);
+  const [customButtonGroup, setCustomButtonGroup] = useState<CustomButtonGroup>(
+    configGroup.customButtonGroup
   );
 
   useEffect(() => {
@@ -76,9 +80,6 @@ export default function Viewer3dPlus({
 
     if (item.des === "Scene") {
       loadScene();
-    }
-    if (item.des === "Mesh") {
-      loadMesh();
     }
 
     return () => {
@@ -101,12 +102,6 @@ export default function Viewer3dPlus({
       setLoadProgress(viewer);
     });
   }
-  // 加载模型
-  function loadMesh() {
-    const viewer = viewerInstance.getViewer();
-    viewer.addOneModel(item);
-    setLoadProgress(viewer);
-  }
 
   function setLoadProgress(viewer: Three3dViewer) {
     // 在模型加载完成后更新场景
@@ -119,15 +114,9 @@ export default function Viewer3dPlus({
           .userData as SceneUserData;
         const { generateButtonGroup, customButtonGroup } =
           customButtonGroupList;
-        const [toggleButtonGroup, roamButtonGroup, panelControllerButtonGroup] =
-          generateButtonGroup.group;
+        setGenerateButtonGroup(generateButtonGroup);
+        setCustomButtonGroup(customButtonGroup);
 
-        setGenerateButtonList([
-          toggleButtonGroup,
-          roamButtonGroup,
-          panelControllerButtonGroup,
-        ]);
-        setCustomButtonList(customButtonGroup.group);
         callBack(viewer);
       }
 
@@ -167,10 +156,162 @@ export default function Viewer3dPlus({
         )}
         <div style={canvasStyle} ref={canvas3d}></div>
         <ModalTour />
-        {generateButtonList?.map((item, index) => {
-          return <>{item.customButtonItem.name}</>;
-        })}
+        <Suspense fallback={<div>Loading...</div>}>
+          <GenerateButtonGroupShow
+            groupIndex={0}
+            generateButtonGroup={generateButtonGroup}
+            setGenerateButtonGroup={setGenerateButtonGroup}
+          />
+          <GenerateButtonGroupShow
+            groupIndex={1}
+            generateButtonGroup={generateButtonGroup}
+            setGenerateButtonGroup={setGenerateButtonGroup}
+          />
+          <GenerateButtonGroupShow
+            groupIndex={2}
+            generateButtonGroup={generateButtonGroup}
+            setGenerateButtonGroup={setGenerateButtonGroup}
+          />
+
+          <CustomButtonGroupShow />
+        </Suspense>
       </Container>
     </MyContext.Provider>
   );
 }
+
+function GenerateButtonGroupShow({
+  groupIndex,
+  generateButtonGroup,
+  setGenerateButtonGroup,
+}: {
+  groupIndex: number;
+  generateButtonGroup: GenerateButtonGroup;
+  setGenerateButtonGroup: (generateButtonGroup: GenerateButtonGroup) => void;
+}) {
+  const { customButtonItem } = generateButtonGroup.group[groupIndex];
+
+  const positionStyle = getButtonGroupStyle(customButtonItem);
+  const { showGroup, buttonGroupStyle } = customButtonItem;
+  const { editor } = getEditorInstance();
+
+  if (editor === undefined) {
+    return;
+  }
+
+  const listGroup = getListGroupByIndex(groupIndex);
+  useEffect(() => {
+    return () => {
+      // viewerInstance.getViewer() = null;
+    };
+  }, []);
+
+  return (
+    <div
+      style={{
+        ...positionStyle,
+        visibility: showGroup ? "visible" : "hidden",
+        flexDirection: buttonGroupStyle.direction === "row" ? "row" : "column",
+        position: "absolute",
+      }}
+    >
+      {listGroup.map((item, index) => {
+        const buttonStyle = generateButtonGroupItem(item, buttonGroupStyle);
+        const showButtonStyle = getShowButtonStyle(item);
+
+        return (
+          <button
+            key={index}
+            style={{
+              ...buttonStyle,
+              ...showButtonStyle,
+            }}
+            onClick={() => {
+              const newGroup = generateButtonGroup.group.map((x, xIndex) => {
+                // 深拷贝每个 customButtonItem 及其 listGroup
+                const customButtonItem = {
+                  ...x.customButtonItem,
+                  listGroup: x.customButtonItem.listGroup.map((y, yIndex) => {
+                    const newItem = { ...y, isClick: true };
+                    if (xIndex === groupIndex && yIndex === index) {
+                      newItem.isClick = true;
+                    }
+                    return newItem;
+                  }),
+                };
+                return { ...x, customButtonItem };
+              });
+              // 正确更新 generateButtonGroup 状态
+              setGenerateButtonGroup({
+                ...generateButtonGroup,
+                ...newGroup,
+              });
+              item.handler(item.NAME_ID);
+            }}
+          >
+            {item.showName}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+memo(GenerateButtonGroupShow);
+
+function CustomButtonGroupShow() {
+  return <>CustomButtonGroupShow</>;
+  const { scene, updateScene } = useUpdateScene();
+  const { customButtonGroupList } = scene.userData as SceneUserData;
+  const { group } = customButtonGroupList.customButtonGroup;
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+  const [showCodeWindow, setShowCodeWindow] = useState(false);
+  const codeString = group[x]?.listGroup[y]?.codeString || "";
+
+  return group.map((item, index) => {
+    const { listGroup, showGroup, buttonGroupStyle } = item;
+    const { group } = customButtonGroupList.customButtonGroup;
+    const positionStyle = getButtonGroupStyle(group[index]);
+    return (
+      <>
+        <div
+          key={index}
+          style={{
+            ...positionStyle,
+            visibility: showGroup ? "visible" : "hidden",
+            flexDirection:
+              buttonGroupStyle.direction === "row" ? "row" : "column",
+            position: "absolute",
+          }}
+        >
+          {listGroup.map((_item, _index) => {
+            const buttonStyle = generateButtonGroupItem(
+              _item,
+              buttonGroupStyle
+            );
+            const showButtonStyle = getShowButtonStyle(_item);
+
+            return (
+              <button
+                key={_index}
+                style={{ ...buttonStyle, ...showButtonStyle }}
+                onClick={() => {
+                  console.log(`名称：${_item.showName},ID：${_item.NAME_ID} `);
+                  const viewerIns = viewerInstance?.getViewer();
+                  if (viewerIns) {
+                    new Function("viewerIns", _item.codeString)(viewerIns);
+                    //如果是预览模式，不执行下面的了。
+                  }
+                }}
+              >
+                {_item.showName}
+              </button>
+            );
+          })}
+        </div>
+      </>
+    );
+  });
+}
+
+function resetClick() {}

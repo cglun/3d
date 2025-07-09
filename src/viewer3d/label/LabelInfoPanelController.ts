@@ -4,7 +4,7 @@ import { TourWindow } from "@/app/MyContext";
 import { LabelInfo } from "@/viewer3d/label/LabelInfo";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
 import { SceneUserData } from "@/three/config/Three3dConfig";
-import { _getViewer } from "@/viewer3d/buttonList/animateByButton";
+import { getViewerInstance } from "@/viewer3d/buttonList/animateByButton";
 
 // 标签信息面板控制器
 export class LabelInfoPanelController {
@@ -80,7 +80,8 @@ export class LabelInfoPanelController {
         const headerTitle = labelHeader.children[1] as HTMLElement;
 
         const labelBody = labelDiv.children[1] as HTMLElement;
-        const { userCssStyle } = _getViewer().scene.userData as SceneUserData;
+        const { userCssStyle } = getViewerInstance().scene
+          .userData as SceneUserData;
         const { cardWidth, cardHeight, headerMarginTop, headerMarginLeft } =
           userCssStyle.topCard;
         if (this.panelStatus < 3) {
@@ -124,7 +125,7 @@ export class LabelInfoPanelController {
    * @param modelGroupName 模型组名称
    */
   createLabelInfoPanelByModelGroupName(modelGroupName: string) {
-    const { scene } = _getViewer();
+    const { scene } = getViewerInstance();
 
     const group = scene.getObjectByName(modelGroupName);
 
@@ -139,7 +140,7 @@ export class LabelInfoPanelController {
             this.dispatchTourWindow
           );
           label.css3DSprite.visible = false;
-          _getViewer().scene.add(label.css3DSprite);
+          getViewerInstance().scene.add(label.css3DSprite);
           this.allLabelInfo.push(label);
         }
       }

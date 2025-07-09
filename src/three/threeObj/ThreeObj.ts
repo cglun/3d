@@ -38,6 +38,7 @@ export default abstract class ThreeObj {
   // abstract animate(): void;
   abstract addOneModel(item: RecordItem): void;
   abstract setTextureBackground_test(): void;
+
   //通过给定的空物体创建曲线
   abstract getCurveByEmptyMesh(
     curveEmptyGroupName: string,

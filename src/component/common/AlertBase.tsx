@@ -17,7 +17,7 @@ export default function AlertBase({
     iconClassName = setClassName("check-circle") + " me-1";
   }
   return (
-    <Alert variant={type} className={className}>
+    <Alert variant={type} className={className} style={{ marginBottom: 0 }}>
       <Icon iconName={iconClassName} />
       {text}
     </Alert>

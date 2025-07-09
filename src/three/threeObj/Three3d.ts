@@ -66,10 +66,6 @@ import { runScriptPro } from "@/three/script/scriptPro";
 import { GROUP } from "@/three/config/CONSTANT";
 import ThreeObj from "@/three/threeObj/ThreeObj";
 import { testLabel } from "@/component/routes/effects/utils";
-import {
-  SceneLoadIsEnd,
-  SceneLoadIsEndEvent,
-} from "@/app/customEvents/sceneEvent";
 
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;

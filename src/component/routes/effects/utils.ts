@@ -10,9 +10,11 @@ import {
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
 import { cameraEnterAnimation } from "@/three/utils/util4Camera";
-import { _getViewer } from "@/viewer3d/buttonList/animateByButton";
+import { getViewerInstance } from "@/viewer3d/buttonList/animateByButton";
+
 import { LabelInfo } from "@/viewer3d/label/LabelInfo";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
+
 import { Dispatch } from "react";
 import { NumberController } from "three/examples/jsm/libs/lil-gui.module.min.js";
 
@@ -218,7 +220,7 @@ export function useBackgroundImage(
 }
 
 export function getButtonGroupStyle(customButtonItem: CustomButtonItemBase) {
-  const { offsetWidth, offsetHeight } = _getViewer()?.divElement || {
+  const { offsetWidth, offsetHeight } = getViewerInstance()?.divElement || {
     offsetWidth: window.innerWidth,
     offsetHeight: window.innerHeight,
   };

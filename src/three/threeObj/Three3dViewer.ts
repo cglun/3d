@@ -1,14 +1,7 @@
 import { Object3D, Object3DEventMap, Raycaster, Vector2, Vector3 } from "three";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { TourWindow } from "@/app/MyContext";
-import {
-  getPanelControllerButtonGroup,
-  getRoamListByRoamButtonMap,
-  getToggleButtonGroup,
-} from "@/viewer3d/buttonList/buttonGroup";
-
 import { Three3d } from "./Three3d";
-import { _getViewer } from "@/viewer3d/buttonList/animateByButton";
 
 /**
  * Three3dViewer 类，继承自 Three3d 类，用于创建一个 3D 视图器。
@@ -52,19 +45,6 @@ export class Three3dViewer extends Three3d {
   }
   getSelectedObjects(): Object3D[] {
     return this.outlinePass.selectedObjects;
-  }
-
-  getToggleButtonGroup() {
-    const { scene } = _getViewer();
-    const { customButtonGroupList } = scene.userData as SceneUserData;
-    const [toggleButtonGroup] = customButtonGroupList.generateButtonGroup.group;
-    return getToggleButtonGroup(toggleButtonGroup);
-  }
-  getRoamListByRoamButtonMap() {
-    return getRoamListByRoamButtonMap();
-  }
-  getPanelControllerButtonGroup() {
-    return getPanelControllerButtonGroup();
   }
 
   onPointerClick(event: MouseEvent) {

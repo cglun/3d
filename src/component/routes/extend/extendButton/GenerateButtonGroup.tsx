@@ -5,7 +5,6 @@ import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import { useUpdateScene } from "@/app/hooks";
 import { APP_COLOR, CustomButtonType } from "@/app/type";
-import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import Toast3d from "@/component/common/Toast3d";
 import {
   generatePanelControllerButtonGroup,
@@ -21,16 +20,11 @@ import {
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { ListGroupItem } from "react-bootstrap";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
-import generateButtonGroupGUI from "@/component/routes/extend/generateButtonGroupGUI";
 
 export default function GenerateButtonGroup() {
-  const { scene, updateScene } = useUpdateScene(); // const [javaScriptCode, setJavaScriptCode] = useState<string>(javascript);
+  const { updateScene } = useUpdateScene(); // const [javaScriptCode, setJavaScriptCode] = useState<string>(javascript);
   const [isSet, setIsSet] = useState(false);
   const [buttonType, setButtonType] = useState<CustomButtonType>("TOGGLE");
-  // 获取主题颜色
-  const { themeColor } = getThemeByScene(scene);
-  const buttonColor = getButtonColor(themeColor);
-  //复制一份数据，然后去掉对象的selected3d属性，不然要序列化会报错，要报废
 
   // 生成按钮组
   function generateButton() {
@@ -56,10 +50,6 @@ export default function GenerateButtonGroup() {
   function getScene() {
     const { scene } = editorInstance.getEditor();
     return scene;
-  }
-
-  function setButtonGui(index: number) {
-    generateButtonGroupGUI(index, updateScene);
   }
 
   return (
@@ -135,19 +125,6 @@ export default function GenerateButtonGroup() {
             </Button>
           )}
         </ButtonGroup>
-        {!isSet && (
-          <ButtonGroup className="ms-2" size="sm">
-            <Button variant={buttonColor} onClick={() => setButtonGui(0)}>
-              切换
-            </Button>
-            <Button variant={buttonColor} onClick={() => setButtonGui(1)}>
-              漫游
-            </Button>
-            <Button variant={buttonColor} onClick={() => setButtonGui(2)}>
-              标签控制
-            </Button>
-          </ButtonGroup>
-        )}
       </ListGroupItem>
     </ListGroup>
   );

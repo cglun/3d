@@ -1,6 +1,7 @@
 import { useUpdateScene } from "@/app/hooks";
 import {
   customButtonGroupListInit,
+  GenerateButtonGroup,
   SceneUserData,
 } from "@/three/config/Three3dConfig";
 import {
@@ -8,94 +9,59 @@ import {
   getButtonGroupStyle,
 } from "@/component/routes/effects/utils";
 
-import {
-  getPanelControllerButtonGroup,
-  getRoamListByRoamButtonMap,
-  getToggleButtonGroup,
-} from "@/viewer3d/buttonList/buttonGroup";
-import { GenerateButtonItemMap } from "@/app/type";
-
-import { memo, Suspense, useEffect, useState } from "react";
+import { memo, Suspense, useState } from "react";
 import generateButtonGUI from "../generateButtonGUI";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
 import customButtonGUI from "../customButtonGUI";
 import CodeEditor from "../../script/CodeEditor";
+import { getListGroupByIndex, getShowButtonStyle } from "@/three/utils/utils";
 
 //生成按钮组
-export default function PreButtonGroup2({
-  dev = "editor3d",
-  num = 0,
-}: {
-  dev: "editor3d" | "viewer3d";
-  num: number;
-}) {
-  //当update为true时，才渲染Suspense里的内容
+export default function PreButtonGroup_copy() {
   const { scene } = useUpdateScene();
-  const { projectId } = scene.userData as SceneUserData;
-  const [godTime, setGodTime] = useState(116); //用于刷新
-  useEffect(() => {
-    document.addEventListener(
-      "sceneLoadIsEnd",
-      sceneReloadIsEnd as EventListener
-    );
-    return () => {
-      document.removeEventListener(
-        "sceneLoadIsEnd",
-        sceneReloadIsEnd as EventListener
-      );
-    };
-  }, [projectId, godTime]);
-  function sceneReloadIsEnd(e: CustomEvent<SceneLoadIsEnd>) {
-    console.log("sceneReloadIsEnd");
-
-    setGodTime(e.detail.sceneId);
-  }
+  const { customButtonGroupList, projectId } = scene.userData as SceneUserData;
+  const { generateButtonGroup } = customButtonGroupList || {
+    ...customButtonGroupListInit,
+  };
   if (projectId === undefined) {
-    return <div>Loading...</div>;
+    return;
   }
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <GenerateButtonGroupShow dev={dev} groupIndex={0} />
-      <GenerateButtonGroupShow dev={dev} groupIndex={1} />
-      <GenerateButtonGroupShow dev={dev} groupIndex={2} />
-      <CustomButtonGroupShow dev={dev} num={num} />
+      <GenerateButtonGroupShow
+        groupIndex={0}
+        generateButtonGroup={generateButtonGroup}
+      />
+      <GenerateButtonGroupShow
+        groupIndex={1}
+        generateButtonGroup={generateButtonGroup}
+      />
+      <GenerateButtonGroupShow
+        groupIndex={2}
+        generateButtonGroup={generateButtonGroup}
+      />
+
+      <CustomButtonGroupShow />
     </Suspense>
   );
 }
 
 function GenerateButtonGroupShow({
   groupIndex,
-  dev,
+  generateButtonGroup,
 }: {
   groupIndex: number;
-  dev: "editor3d" | "viewer3d";
+  generateButtonGroup: GenerateButtonGroup;
 }) {
-  const { scene, updateScene } = useUpdateScene();
-
-  const { customButtonGroupList } = scene.userData as SceneUserData;
-  const { generateButtonGroup } = customButtonGroupList || {
-    ...customButtonGroupListInit,
-  };
-  const [toggleButtonGroup] = generateButtonGroup.group;
-
-  const { customButtonItem } = toggleButtonGroup;
+  const { updateScene } = useUpdateScene();
+  const { customButtonItem } = generateButtonGroup.group[groupIndex];
 
   const positionStyle = getButtonGroupStyle(customButtonItem);
-
   const { showGroup, buttonGroupStyle } = customButtonItem;
+  const listGroup = getListGroupByIndex(groupIndex);
 
-  let listGroup = [] as GenerateButtonItemMap[];
-  if (groupIndex === 0) {
-    listGroup = getToggleButtonGroup(toggleButtonGroup);
-  }
-  if (groupIndex === 1) {
-    listGroup = getRoamListByRoamButtonMap();
-  }
-  if (groupIndex === 2) {
-    listGroup = getPanelControllerButtonGroup();
-  }
   return (
     <div
       style={{
@@ -107,16 +73,8 @@ function GenerateButtonGroupShow({
     >
       {listGroup.map((item, index) => {
         const buttonStyle = generateButtonGroupItem(item, buttonGroupStyle);
-        const showButtonStyle = {
-          opacity: item.showButton ? "initial" : 0.4,
-          // 拆分 border 属性
-          borderWidth: item.showButton ? "initial" : "1px",
-          borderStyle: item.showButton ? "initial" : "dashed",
-          borderColor: item.showButton ? "initial" : "#ff0000",
-        };
-        if (dev === "viewer3d") {
-          return;
-        }
+
+        const showButtonStyle = getShowButtonStyle(item);
 
         return (
           <button
@@ -139,7 +97,6 @@ function GenerateButtonGroupShow({
               item.handler(item.NAME_ID);
               item.isClick = true;
               generateButtonGUI(updateScene, listGroup, groupIndex, index);
-
               updateScene(editor.scene);
             }}
           >
@@ -152,22 +109,10 @@ function GenerateButtonGroupShow({
 }
 memo(GenerateButtonGroupShow);
 
-function CustomButtonGroupShow({
-  dev,
-  num,
-}: {
-  dev: "editor3d" | "viewer3d";
-  num: number;
-}) {
+function CustomButtonGroupShow() {
   const { scene, updateScene } = useUpdateScene();
   const { customButtonGroupList } = scene.userData as SceneUserData;
-
-  const { customButtonGroup } = customButtonGroupList || {
-    ...customButtonGroupListInit,
-  };
-
-  const { group } = customButtonGroup;
-
+  const { group } = customButtonGroupList.customButtonGroup;
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [showCodeWindow, setShowCodeWindow] = useState(false);
@@ -175,13 +120,12 @@ function CustomButtonGroupShow({
 
   return group.map((item, index) => {
     const { listGroup, showGroup, buttonGroupStyle } = item;
-
-    const positionStyle = getButtonGroupStyle(
-      customButtonGroupList.customButtonGroup.group[index]
-    );
+    const { group } = customButtonGroupList.customButtonGroup;
+    const positionStyle = getButtonGroupStyle(group[index]);
     return (
       <>
         <div
+          key={index}
           style={{
             ...positionStyle,
             visibility: showGroup ? "visible" : "hidden",
@@ -190,24 +134,16 @@ function CustomButtonGroupShow({
             position: "absolute",
           }}
         >
-          <div>{num}</div>
           {listGroup.map((_item, _index) => {
             const buttonStyle = generateButtonGroupItem(
               _item,
               buttonGroupStyle
             );
-            const showButtonStyle = {
-              opacity: _item.showButton ? "initial" : 0.4,
-              // 拆分 border 属性
-              borderWidth: _item.showButton ? "initial" : "1px",
-              borderStyle: _item.showButton ? "initial" : "dashed",
-              borderColor: _item.showButton ? "initial" : "#ff0000",
-            };
-            if (dev === "viewer3d") {
-              return;
-            }
+            const showButtonStyle = getShowButtonStyle(_item);
+
             return (
               <button
+                key={_index}
                 style={{ ...buttonStyle, ...showButtonStyle }}
                 onClick={() => {
                   console.log(`名称：${_item.showName},ID：${_item.NAME_ID} `);
@@ -265,4 +201,3 @@ function CustomButtonGroupShow({
     );
   });
 }
-memo(CustomButtonGroupShow);
