@@ -26,6 +26,17 @@ function RouteComponent() {
           logoName: "x-diamond",
           position: "底部栏",
           buttonName: "扩展",
+          des: "生成按钮移动到扩展栏，原来的UI编辑弃用，按钮组支持拖拽设置位置，可以删除和更改按钮样式等。",
+        },
+      ],
+      updateTime: "2025年7月3日-2025年7月10",
+    },
+    {
+      list: [
+        {
+          logoName: "x-diamond",
+          position: "底部栏",
+          buttonName: "扩展",
           des: "扩展功能，增加自定义按钮，样式自定义等。",
         },
       ],
