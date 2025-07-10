@@ -22,7 +22,6 @@ export default function buttonGroupBaseGUI(
     .add(customButtonItem, "showGroup")
     .name("显示")
     .onFinishChange(() => {
-      //生成div
       updateScene(editorInstance.getEditor().scene);
     });
   const direction = {
@@ -30,14 +29,15 @@ export default function buttonGroupBaseGUI(
     纵向: "column",
   };
   const { buttonGroupStyle } = customButtonItem;
-  //生成div
 
   stopRoam();
   const styleFolder = folder.addFolder("样式").onChange(() => {
-    //生成div
     updateScene(editorInstance.getEditor().scene);
   });
 
+  const { left, top } = buttonGroupStyle;
+  buttonGroupStyle.left = parseFloat(left.toFixed(2));
+  buttonGroupStyle.top = parseFloat(top.toFixed(2));
   styleFolder.add(buttonGroupStyle, "left", 0, 100, 0.01).name("位置X");
   styleFolder.add(buttonGroupStyle, "top", 0, 100, 0.01).name("位置Y");
   styleFolder.add(buttonGroupStyle, "width", 30, 1000, 0.1).name("宽度");

@@ -20,6 +20,7 @@ import {
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { ListGroupItem } from "react-bootstrap";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
+import { getEditorInstance } from "@/three/utils/utils";
 
 export default function GenerateButtonGroup() {
   const { updateScene } = useUpdateScene(); // const [javaScriptCode, setJavaScriptCode] = useState<string>(javascript);
@@ -30,7 +31,7 @@ export default function GenerateButtonGroup() {
   function generateButton() {
     setIsSet(false);
     const editor = editorInstance.getEditor();
-    const { customButtonGroupList } = editor.scene.userData as SceneUserData;
+    const { customButtonGroupList } = getEditorInstance();
     const [toggleButtonGroup, roamButtonGroup, panelControllerButtonGroup] =
       customButtonGroupList.generateButtonGroup.group;
     toggleButtonGroup.customButtonItem.type = buttonType;

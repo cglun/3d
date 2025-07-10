@@ -21,13 +21,6 @@ export default function generateButtonGUI(
 
   const button = listGroup[index] as GenerateButtonItemMap;
 
-  folder
-    .add(button, "showButton")
-    .name("是否显示按钮")
-    .onFinishChange(() => {
-      updateScene(editor.scene);
-    });
-
   if (type === "TOGGLE" || type === "STRETCH" || type === "DRAWER") {
     folder.add(button, "groupCanBeRaycast").name("是否被射线选中");
   }

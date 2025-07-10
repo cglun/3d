@@ -9,8 +9,8 @@ import {
 } from "@/three/config/Three3dConfig";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
+
 import { cameraEnterAnimation } from "@/three/utils/util4Camera";
-import { getViewerInstance } from "@/viewer3d/buttonList/animateByButton";
 
 import { LabelInfo } from "@/viewer3d/label/LabelInfo";
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
@@ -219,26 +219,33 @@ export function useBackgroundImage(
   };
 }
 
-export function getButtonGroupStyle(customButtonItem: CustomButtonItemBase) {
-  const { offsetWidth, offsetHeight } = getViewerInstance()?.divElement || {
-    offsetWidth: window.innerWidth,
-    offsetHeight: window.innerHeight,
-  };
-  const { buttonGroupStyle } = customButtonItem;
-  const { gap } = buttonGroupStyle;
+export function getButtonGroupStyle(
+  customButtonItem: CustomButtonItemBase,
+  showGroup: boolean,
+  divElement: HTMLElement
+) {
+  // const { offsetWidth, offsetHeight } = divElement || {
+  //   offsetWidth: window.innerWidth,
+  //   offsetHeight: window.innerHeight,
+  // };
+  const { offsetWidth, offsetHeight } = divElement;
 
+  const { gap, left, top, direction } = customButtonItem.buttonGroupStyle;
   const allStyle = {
-    left: `${(buttonGroupStyle.left * offsetWidth) / 100}px`,
-    top: `${(buttonGroupStyle.top * offsetHeight) / 100}px`,
+    left: `${(left * offsetWidth) / 100}px`,
+    top: `${(top * offsetHeight) / 100}px`,
     display: "flex",
     rowGap: `${gap}px`,
     columnGap: `${gap}px`,
     backgroundColor: "transparent",
-  };
+    position: "absolute",
+    visibility: showGroup ? "visible" : "hidden",
+    flexDirection: direction === "row" ? "row" : "column",
+  } as React.CSSProperties;
   return allStyle;
 }
 
-export function generateButtonGroupItem<T extends ButtonItemBase>(
+export function getButtonGroupItemStyle<T extends ButtonItemBase>(
   buttonBase: T,
   groupStyle: ButtonGroupStyle
 ) {
@@ -280,10 +287,10 @@ export function generateButtonGroupItem<T extends ButtonItemBase>(
     btnStyle.backgroundImage = `url(${bgUrl})`;
   }
   btnStyle.borderColor = isClick ? borderColorIsClick : borderColor;
+
   return {
     width: width + offsetWidth + "px",
     height: height + offsetHeight + "px",
-    borderWidth: borderWidth + "px",
     opacity: opacity.toString(),
     borderRadius: borderRadius + "px",
     fontSize: fontSize + "px",
@@ -292,7 +299,9 @@ export function generateButtonGroupItem<T extends ButtonItemBase>(
     marginLeft: marginLeft + "px",
     backgroundRepeat: "no-repeat",
     backgroundImage: btnStyle.backgroundImage,
-    borderColor: btnStyle.borderColor + "px",
+    borderWidth: borderWidth + "px",
+    borderStyle: "solid",
+    borderColor: btnStyle.borderColor,
     backgroundColor: btnStyle.backgroundColor,
     backgroundSize: `${width + offsetWidth}px ${height + offsetHeight}px`,
   };

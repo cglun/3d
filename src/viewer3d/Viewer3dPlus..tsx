@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useRef, useState, Suspense, memo } from "react";
-import { MessageError, RecordItem } from "@/app/type";
+import { APP_COLOR, MessageError, RecordItem } from "@/app/type";
 
 import {
   initEditorCamera,
@@ -22,14 +22,11 @@ import {
   SceneUserData,
 } from "@/three/config/Three3dConfig";
 import {
-  generateButtonGroupItem,
+  getButtonGroupItemStyle,
   getButtonGroupStyle,
 } from "@/component/routes/effects/utils";
-import {
-  getEditorInstance,
-  getListGroupByIndex,
-  getShowButtonStyle,
-} from "@/three/utils/utils";
+import { getListGroupByIndex, getViewerInstance } from "@/three/utils/utils";
+import Toast3d from "@/component/common/Toast3d";
 
 /**
  * 其他应用可以调用此组件，
@@ -93,9 +90,9 @@ export default function Viewer3dPlus({
   }, [item]);
 
   function loadScene() {
-    const viewer = viewerInstance.getViewer();
     getProjectData(item.id).then((data: string) => {
       // console.log("loadScene,要清空原来的哦");
+      const viewer = viewerInstance.getViewer();
       viewer.resetScene();
       viewer.deserialize(data, item);
 
@@ -173,7 +170,10 @@ export default function Viewer3dPlus({
             setGenerateButtonGroup={setGenerateButtonGroup}
           />
 
-          <CustomButtonGroupShow />
+          <CustomButtonGroupShow
+            customButtonGroup={customButtonGroup}
+            setCustomButtonGroup={setCustomButtonGroup}
+          />
         </Suspense>
       </Container>
     </MyContext.Provider>
@@ -190,62 +190,44 @@ function GenerateButtonGroupShow({
   setGenerateButtonGroup: (generateButtonGroup: GenerateButtonGroup) => void;
 }) {
   const { customButtonItem } = generateButtonGroup.group[groupIndex];
-
-  const positionStyle = getButtonGroupStyle(customButtonItem);
   const { showGroup, buttonGroupStyle } = customButtonItem;
-  const { editor } = getEditorInstance();
+  const viewer = viewerInstance.getViewer();
 
-  if (editor === undefined) {
+  if (!viewer) {
     return;
   }
 
+  const positionStyle = getButtonGroupStyle(
+    customButtonItem,
+    showGroup,
+    viewer.divElement
+  );
   const listGroup = getListGroupByIndex(groupIndex);
-  useEffect(() => {
-    return () => {
-      // viewerInstance.getViewer() = null;
-    };
-  }, []);
-
+  if (!showGroup) {
+    return;
+  }
   return (
-    <div
-      style={{
-        ...positionStyle,
-        visibility: showGroup ? "visible" : "hidden",
-        flexDirection: buttonGroupStyle.direction === "row" ? "row" : "column",
-        position: "absolute",
-      }}
-    >
+    <div style={positionStyle}>
       {listGroup.map((item, index) => {
-        const buttonStyle = generateButtonGroupItem(item, buttonGroupStyle);
-        const showButtonStyle = getShowButtonStyle(item);
+        const buttonStyle = getButtonGroupItemStyle(item, buttonGroupStyle);
+        if (!item.showButton) {
+          return;
+        }
 
         return (
           <button
             key={index}
             style={{
               ...buttonStyle,
-              ...showButtonStyle,
             }}
             onClick={() => {
-              const newGroup = generateButtonGroup.group.map((x, xIndex) => {
-                // 深拷贝每个 customButtonItem 及其 listGroup
-                const customButtonItem = {
-                  ...x.customButtonItem,
-                  listGroup: x.customButtonItem.listGroup.map((y, yIndex) => {
-                    const newItem = { ...y, isClick: true };
-                    if (xIndex === groupIndex && yIndex === index) {
-                      newItem.isClick = true;
-                    }
-                    return newItem;
-                  }),
-                };
-                return { ...x, customButtonItem };
-              });
+              const newGroup = resetGenerateButtonGroupClick(
+                generateButtonGroup,
+                groupIndex,
+                index
+              );
               // 正确更新 generateButtonGroup 状态
-              setGenerateButtonGroup({
-                ...generateButtonGroup,
-                ...newGroup,
-              });
+              setGenerateButtonGroup({ ...generateButtonGroup, ...newGroup });
               item.handler(item.NAME_ID);
             }}
           >
@@ -258,50 +240,66 @@ function GenerateButtonGroupShow({
 }
 memo(GenerateButtonGroupShow);
 
-function CustomButtonGroupShow() {
-  return <>CustomButtonGroupShow</>;
-  const { scene, updateScene } = useUpdateScene();
-  const { customButtonGroupList } = scene.userData as SceneUserData;
-  const { group } = customButtonGroupList.customButtonGroup;
-  const [x, setX] = useState(0);
-  const [y, setY] = useState(0);
-  const [showCodeWindow, setShowCodeWindow] = useState(false);
-  const codeString = group[x]?.listGroup[y]?.codeString || "";
+function CustomButtonGroupShow({
+  customButtonGroup,
+  setCustomButtonGroup,
+}: {
+  customButtonGroup: CustomButtonGroup;
+  setCustomButtonGroup: (customButtonGroup: CustomButtonGroup) => void;
+}) {
+  const { group } = customButtonGroup;
 
   return group.map((item, index) => {
     const { listGroup, showGroup, buttonGroupStyle } = item;
-    const { group } = customButtonGroupList.customButtonGroup;
-    const positionStyle = getButtonGroupStyle(group[index]);
+    const { group } = customButtonGroup;
+    const { viewer } = getViewerInstance();
+    const positionStyle = getButtonGroupStyle(
+      group[index],
+      showGroup,
+      viewer.divElement
+    );
+    if (!showGroup) {
+      return;
+    }
     return (
       <>
         <div
           key={index}
           style={{
             ...positionStyle,
-            visibility: showGroup ? "visible" : "hidden",
-            flexDirection:
-              buttonGroupStyle.direction === "row" ? "row" : "column",
-            position: "absolute",
           }}
         >
           {listGroup.map((_item, _index) => {
-            const buttonStyle = generateButtonGroupItem(
+            const buttonStyle = getButtonGroupItemStyle(
               _item,
               buttonGroupStyle
             );
-            const showButtonStyle = getShowButtonStyle(_item);
+            if (!_item.showButton) {
+              return;
+            }
 
             return (
               <button
                 key={_index}
-                style={{ ...buttonStyle, ...showButtonStyle }}
+                style={{ ...buttonStyle }}
                 onClick={() => {
-                  console.log(`名称：${_item.showName},ID：${_item.NAME_ID} `);
-                  const viewerIns = viewerInstance?.getViewer();
+                  const viewerIns = viewerInstance.getViewer();
+                  const newGroup = resetCustomButtonGroupClick(
+                    customButtonGroup,
+                    index,
+                    _index
+                  );
                   if (viewerIns) {
-                    new Function("viewerIns", _item.codeString)(viewerIns);
-                    //如果是预览模式，不执行下面的了。
+                    new Function("viewerIns", "iToast", _item.codeString)(
+                      viewerIns,
+                      { APP_COLOR, Toast3d }
+                    );
                   }
+
+                  setCustomButtonGroup({
+                    ...customButtonGroup,
+                    ...newGroup,
+                  });
                 }}
               >
                 {_item.showName}
@@ -314,4 +312,37 @@ function CustomButtonGroupShow() {
   });
 }
 
-function resetClick() {}
+function resetGenerateButtonGroupClick(
+  generateButtonGroup: GenerateButtonGroup,
+  parentIndex: number,
+  childrenIndex: number
+) {
+  const newGroup = generateButtonGroup.group[
+    parentIndex
+  ].customButtonItem.listGroup.map((item, index) => {
+    // 深拷贝每个 customButtonItem 及其 listGroup
+    item.isClick = false;
+    if (childrenIndex === index) {
+      item.isClick = true;
+    }
+  });
+
+  return newGroup;
+}
+function resetCustomButtonGroupClick(
+  customButtonGroup: CustomButtonGroup,
+  parentIndex: number,
+  childrenIndex: number
+) {
+  const newGroup = customButtonGroup.group[parentIndex].listGroup.map(
+    (item, index) => {
+      item.isClick = false;
+      if (childrenIndex === index) {
+        item.isClick = true;
+        item.codeString;
+      }
+    }
+  );
+
+  return newGroup;
+}

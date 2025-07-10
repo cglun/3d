@@ -113,7 +113,7 @@ function RouteComponent() {
             </Button>
           )}
         </ButtonGroup>
-        <Modal size="xl" show={show} onHide={handleClose}>
+        <Modal fullscreen show={show} onHide={handleClose}>
           {/* <Modal fullscreen show={show} onHide={handleClose}> */}
           {/* <Modal.Header closeButton>
             <Modal.Title>场景预览</Modal.Title>

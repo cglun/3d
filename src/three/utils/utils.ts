@@ -60,14 +60,13 @@ export function getListGroupByIndex(groupIndex: number) {
   }
   return listGroup;
 }
-export function getShowButtonStyle(
+export function getShowButtonStyle_xx(
   _item: CustomButtonItemMap | GenerateButtonItemMap
 ) {
   return {
-    opacity: _item.showButton ? "initial" : 0.4,
-    borderWidth: _item.showButton ? "initial" : "1px",
-    borderStyle: _item.showButton ? "initial" : "dashed",
-    borderColor: _item.showButton ? "initial" : "#ff0000",
+    opacity: _item.showButton ? "initial" : (0.6).toString(),
+    fontStyle: _item.showButton ? "normal" : "italic",
+    textDecoration: _item.showButton ? "none" : "line-through",
   };
 }
 /**
@@ -78,7 +77,8 @@ export function getEditorInstance() {
   const editor = editorInstance.getEditor();
   const userData = editor.scene.userData as SceneUserData;
   const customButtonGroupList = userData.customButtonGroupList;
-  return { editor, userData, customButtonGroupList };
+  const scene = editor.scene;
+  return { editor, userData, customButtonGroupList, scene };
 }
 /**
  * 获取查看器场景的用户数据和自定义按钮组列表
@@ -88,5 +88,6 @@ export function getViewerInstance() {
   const viewer = viewerInstance.getViewer();
   const userData = viewer.scene.userData as SceneUserData;
   const customButtonGroupList = userData.customButtonGroupList;
-  return { viewer, userData, customButtonGroupList };
+  const scene = viewer.scene;
+  return { viewer, userData, customButtonGroupList, scene };
 }

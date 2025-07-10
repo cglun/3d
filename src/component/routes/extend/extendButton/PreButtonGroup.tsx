@@ -5,7 +5,7 @@ import {
   SceneUserData,
 } from "@/three/config/Three3dConfig";
 import {
-  generateButtonGroupItem,
+  getButtonGroupItemStyle,
   getButtonGroupStyle,
 } from "@/component/routes/effects/utils";
 
@@ -15,47 +15,52 @@ import { editorInstance } from "@/three/instance/EditorInstance";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
 import customButtonGUI from "../customButtonGUI";
 import CodeEditor from "../../script/CodeEditor";
-import { getEditorInstance, getShowButtonStyle } from "@/three/utils/utils";
+import { getEditorInstance } from "@/three/utils/utils";
 import customButtonGroupGUI from "../customButtonGroupGUI";
 import Icon from "@/component/common/Icon";
 import Button from "react-bootstrap/esm/Button";
 import generateButtonGroupGUI from "../generateButtonGroupGUI";
 import { getThemeByScene } from "@/three/utils/util4UI";
 import AlertBase from "@/component/common/AlertBase";
-import { ListGroup, ListGroupItem } from "react-bootstrap";
+import { Badge, ButtonGroup, ListGroup, ListGroupItem } from "react-bootstrap";
 import { MathUtils } from "three";
-import { CustomButtonItemMap } from "@/app/type";
+import { APP_COLOR, CustomButtonItemMap } from "@/app/type";
 
+const selectBackColor = {
+  backgroundColor: "rgba(67, 43, 26, 0.88)",
+  padding: "2px",
+};
 //生成按钮组
 export default function PreButtonGroup() {
   const { userData } = useUpdateScene();
   const { customButtonGroupList, projectId } = userData;
   const [_groupIndex, _setGroupIndex] = useState(0);
-  const { generateButtonGroup } = customButtonGroupList || {
-    ...customButtonGroupListInit,
-  };
+
   if (projectId === undefined) {
     return;
   }
-
+  const { generateButtonGroup } = customButtonGroupList || {
+    ...customButtonGroupListInit,
+  };
+  const { group } = generateButtonGroup;
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <ListGroup horizontal>
         <GenerateButtonGroupShow
           groupIndex={0}
-          generateButtonGroup={generateButtonGroup}
+          group={group}
           _groupIndex={_groupIndex}
           _setGroupIndex={_setGroupIndex}
         />
         <GenerateButtonGroupShow
           groupIndex={1}
-          generateButtonGroup={generateButtonGroup}
+          group={group}
           _groupIndex={_groupIndex}
           _setGroupIndex={_setGroupIndex}
         />
         <GenerateButtonGroupShow
           groupIndex={2}
-          generateButtonGroup={generateButtonGroup}
+          group={group}
           _groupIndex={_groupIndex}
           _setGroupIndex={_setGroupIndex}
         />
@@ -68,18 +73,18 @@ export default function PreButtonGroup() {
 
 function GenerateButtonGroupShow({
   groupIndex,
-  generateButtonGroup,
+  group,
   _groupIndex,
   _setGroupIndex,
 }: {
   groupIndex: number;
-  generateButtonGroup: GenerateButtonGroup;
+  group: GenerateButtonGroup["group"];
   _groupIndex: number;
   _setGroupIndex: (value: number) => void;
 }) {
   const { scene, updateScene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
-  const { customButtonItem } = generateButtonGroup.group[groupIndex];
+  const { customButtonItem } = group[groupIndex];
   const { showGroup, buttonGroupStyle, listGroup } = customButtonItem;
 
   if (listGroup.length === 0) {
@@ -89,24 +94,19 @@ function GenerateButtonGroupShow({
       </ListGroupItem>
     );
   }
+  const { editor } = getEditorInstance();
+  const positionStyle = getButtonGroupStyle(
+    customButtonItem,
+    showGroup,
+    editor.divElement
+  );
 
-  const positionStyle = getButtonGroupStyle(customButtonItem);
-  let selectBackColor = {};
-  if (_groupIndex === groupIndex) {
-    selectBackColor = {
-      borderColor: "red",
-      borderWidth: "2px",
-      backgroundColor: "rgba(36, 110, 11, 0.74)",
-    };
-  }
   return (
     <div
       style={{
         ...positionStyle,
-        visibility: showGroup ? "visible" : "hidden",
-        flexDirection: buttonGroupStyle.direction === "row" ? "row" : "column",
-        position: "absolute",
-        ...selectBackColor,
+        ...(_groupIndex === groupIndex && selectBackColor),
+        visibility: "visible",
       }}
     >
       <Button
@@ -116,35 +116,35 @@ function GenerateButtonGroupShow({
           _setGroupIndex(groupIndex);
           generateButtonGroupGUI(groupIndex, updateScene);
         }}
+        onDragStart={() => {
+          _setGroupIndex(groupIndex);
+          generateButtonGroupGUI(groupIndex, updateScene);
+        }}
         draggable={true}
         onDragEnd={(e) => {
-          const { clientX, clientY } = e;
-          const top = clientY / window.innerHeight;
-          const left = clientX / window.innerWidth;
-
           const { customButtonGroupList, editor } = getEditorInstance();
+          const { top, left } = getButtonPosition(e, editor.divElement);
+
           const { group } = customButtonGroupList.generateButtonGroup;
           const { buttonGroupStyle } = group[groupIndex].customButtonItem;
           buttonGroupStyle.top = top * 100;
           buttonGroupStyle.left = left * 100;
+
           generateButtonGroupGUI(groupIndex, updateScene);
           updateScene(editor.scene);
         }}
       >
-        <Icon iconName="bi bi-arrows-move" gap={1} />
-        {generateButtonGroup.group[groupIndex].customButtonItem.name}
+        <Icon iconName="bi bi-arrows-move" gap={1} title="拖动" />
+        {group[groupIndex].customButtonItem.name}
+        {!showGroup && isHide()}
       </Button>
       {listGroup.map((item, index) => {
-        const buttonStyle = generateButtonGroupItem(item, buttonGroupStyle);
-        const showButtonStyle = getShowButtonStyle(item);
-
+        const buttonStyle = getButtonGroupItemStyle(item, buttonGroupStyle);
+        const { showName, showButton } = item;
         return (
           <button
             key={index}
-            style={{
-              ...buttonStyle,
-              ...showButtonStyle,
-            }}
+            style={buttonStyle}
             onClick={() => {
               const { customButtonGroupList, editor } = getEditorInstance();
               const { group } = customButtonGroupList.generateButtonGroup;
@@ -158,7 +158,7 @@ function GenerateButtonGroupShow({
               updateScene(editor.scene);
             }}
           >
-            {item.showName}
+            {showButton ? showName : isHide()}
           </button>
         );
       })}
@@ -177,148 +177,132 @@ function CustomButtonGroupShow() {
   const [showCodeWindow, setShowCodeWindow] = useState(false);
   const codeString = group[x]?.listGroup[y]?.codeString || "";
 
+  function selectParent(parentIndex: number) {
+    setX(parentIndex);
+    customButtonGroupGUI(
+      customButtonGroupList.customButtonGroup.group[parentIndex],
+      updateScene,
+      parentIndex
+    );
+  }
+
   return group.map((item, index) => {
     const { listGroup, showGroup, buttonGroupStyle } = item;
     // const { group } = customButtonGroupList.customButtonGroup;
-    const positionStyle = getButtonGroupStyle(group[index]);
-    let selectBackColor = {};
-    if (index === x) {
-      selectBackColor = {
-        borderColor: "red",
-        borderWidth: "2px",
-        backgroundColor: "rgba(36, 110, 11, 0.74)",
-      };
-    }
+    const { editor } = getEditorInstance();
+    const positionStyle = getButtonGroupStyle(
+      group[index],
+      showGroup,
+      editor.divElement
+    );
+
     return (
       <>
         <div
           key={index}
           style={{
             ...positionStyle,
-            visibility: showGroup ? "visible" : "hidden",
-            flexDirection:
-              buttonGroupStyle.direction === "row" ? "row" : "column",
-            position: "absolute",
-            ...selectBackColor,
+            ...(index === x && selectBackColor),
+            visibility: "visible",
           }}
         >
-          <Button
-            variant={themeColor}
-            size="sm"
-            onMouseEnter={() => {
-              setX(index);
-              customButtonGroupGUI(
-                customButtonGroupList.customButtonGroup.group[index],
-                updateScene,
-                index
-              );
-            }}
-            draggable={true}
-            onDragStart={() => {
-              setX(index);
-            }}
-            onDragEnd={(e) => {
-              //输出button的位置
+          <ButtonGroup>
+            <Button
+              variant={themeColor}
+              size="sm"
+              onClick={() => {
+                selectParent(index);
+              }}
+              draggable={true}
+              onDragStart={() => {
+                setX(index);
+              }}
+              onDragEnd={(e) => {
+                const { customButtonGroupList, editor } = getEditorInstance();
+                const { top, left } = getButtonPosition(e, editor.divElement);
 
-              const { clientX, clientY } = e;
-              const top = clientY / window.innerHeight;
-              const left = clientX / window.innerWidth;
-              const { customButtonGroupList, editor } = getEditorInstance();
-              const { group } = customButtonGroupList.customButtonGroup;
-              const { buttonGroupStyle } = group[x];
-              buttonGroupStyle.top = top * 100;
-              buttonGroupStyle.left = left * 100;
-              customButtonGroupGUI(group[x], updateScene, x);
-              updateScene(editor.scene);
-            }}
-          >
-            <Icon iconName="bi bi-arrows-move" gap={1} /> {group[index].name}
-          </Button>
+                const { group } = customButtonGroupList.customButtonGroup;
+                const { buttonGroupStyle } = group[x];
+                buttonGroupStyle.top = top * 100;
+                buttonGroupStyle.left = left * 100;
+                customButtonGroupGUI(group[x], updateScene, x);
+                updateScene(editor.scene);
+              }}
+            >
+              <Icon
+                iconName="bi bi-arrows-move"
+                gap={1}
+                title={group[index].name}
+              />
+              {!showGroup && isHide()}
+            </Button>
+            <Button
+              variant={themeColor}
+              size="sm"
+              onMouseEnter={() => {
+                selectParent(index);
+              }}
+              onClick={() => {
+                const { customButtonGroupList, editor } = getEditorInstance();
+                const { group } = customButtonGroupList.customButtonGroup;
+                const { listGroup, name } = group[x];
+                // const item = listGroup[y];
+                const buttonNum = listGroup.length + 1;
+                const uuid = MathUtils.generateUUID();
+                const item: CustomButtonItemMap = {
+                  NAME_ID: uuid,
+                  showName: `按钮${buttonNum}`,
+                  showButton: true,
+                  isClick: false,
+                  style: {
+                    offsetWidth: 0,
+                    offsetHeight: 0,
+                  },
+
+                  codeString: `//${name}_按钮${buttonNum}, NAME_ID: ${uuid}
+console.log("${name}_按钮${buttonNum}");
+              `,
+                };
+                listGroup.push(item);
+                updateScene(editor.scene);
+              }}
+            >
+              <Icon iconName="plus-square" title="添加按钮" />
+            </Button>
+          </ButtonGroup>
           {listGroup.map((_item, _index) => {
-            const buttonStyle = generateButtonGroupItem(
+            const buttonStyle = getButtonGroupItemStyle(
               _item,
               buttonGroupStyle
             );
-            const showButtonStyle = getShowButtonStyle(_item);
-
+            const { showButton, showName } = _item;
             return (
               <button
                 key={_index}
-                style={{ ...buttonStyle, ...showButtonStyle }}
+                style={buttonStyle}
                 onClick={() => {
-                  const viewerIns = viewerInstance?.getViewer();
+                  setX(index);
+                  setY(_index);
+                  const { customButtonGroupList, editor } = getEditorInstance();
+                  const { group } = customButtonGroupList.customButtonGroup;
+                  group[index].listGroup.forEach((_item, _index) => {
+                    _item.isClick = false;
+                  });
+                  _item.isClick = !_item.isClick;
+                  customButtonGUI(
+                    updateScene,
+                    index,
+                    _index,
+                    setShowCodeWindow
+                  );
 
-                  if (viewerIns) {
-                    new Function("viewerIns", _item.codeString)(viewerIns);
-                    //如果是预览模式，不执行下面的了。
-                    return;
-                  }
-                  const editorIns = editorInstance?.getEditor();
-                  if (editorIns) {
-                    const { customButtonGroupList } = editorIns.scene
-                      .userData as SceneUserData;
-                    customButtonGroupList.customButtonGroup.group[
-                      index
-                    ].listGroup.forEach((_item, _index) => {
-                      _item.isClick = false;
-                    });
-                    _item.isClick = !_item.isClick;
-                    customButtonGUI(
-                      updateScene,
-                      index,
-                      _index,
-                      setShowCodeWindow
-                    );
-                    setX(index);
-                    setY(_index);
-                    updateScene(editorIns.scene);
-                    new Function("editorIns", _item.codeString)(editorIns);
-                  }
+                  updateScene(editor.scene);
                 }}
               >
-                {_item.showName}
+                {showButton ? showName : isHide()}
               </button>
             );
           })}
-          <Button
-            variant={themeColor}
-            size="sm"
-            onMouseEnter={() => {
-              setX(index);
-              customButtonGroupGUI(
-                customButtonGroupList.customButtonGroup.group[index],
-                updateScene,
-                index
-              );
-            }}
-            onClick={() => {
-              const { customButtonGroupList, editor } = getEditorInstance();
-              const { group } = customButtonGroupList.customButtonGroup;
-              const { listGroup, name } = group[x];
-              // const item = listGroup[y];
-              const buttonNum = listGroup.length + 1;
-              const uuid = MathUtils.generateUUID();
-              const item: CustomButtonItemMap = {
-                NAME_ID: uuid,
-                showName: `按钮${buttonNum}`,
-                showButton: true,
-                isClick: false,
-                style: {
-                  offsetWidth: 0,
-                  offsetHeight: 0,
-                },
-
-                codeString: `//${name}_按钮${buttonNum}, NAME_ID: ${uuid}
-console.log("${name}_按钮${buttonNum}");
-              `,
-              };
-              listGroup.push(item);
-              updateScene(editor.scene);
-            }}
-          >
-            <Icon iconName="plus-square" gap={1} />
-            按钮
-          </Button>
         </div>
         <CodeEditor
           tipsTitle="实现按钮事件"
@@ -337,4 +321,26 @@ console.log("${name}_按钮${buttonNum}");
       </>
     );
   });
+}
+
+function getButtonPosition(
+  e: React.DragEvent<HTMLButtonElement>,
+  divElement: HTMLDivElement
+) {
+  const { clientX, clientY } = e;
+  //输出按钮的宽度和高度
+  const buttonElement = e.target as HTMLElement;
+  const { offsetWidth, offsetHeight } = buttonElement;
+
+  const top = (clientY - offsetHeight / 2) / divElement.offsetHeight;
+  const left = (clientX - offsetWidth / 2) / divElement.offsetWidth;
+  return {
+    top,
+    left,
+  };
+}
+function isHide() {
+  return (
+    <span className={"text-" + APP_COLOR.Warning + " ms-1"}>[已隐藏]</span>
+  );
 }

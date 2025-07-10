@@ -1,10 +1,10 @@
 import React from "react";
-import { Scene } from "three";
+import { Scene, Vector3 } from "three";
 import { TourWindow } from "@/app/MyContext";
 import { LabelInfo } from "@/viewer3d/label/LabelInfo";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
 import { SceneUserData } from "@/three/config/Three3dConfig";
-import { getViewerInstance } from "@/viewer3d/buttonList/animateByButton";
+import { getViewerInstance } from "@/three/utils/utils";
 
 // 标签信息面板控制器
 export class LabelInfoPanelController {
@@ -80,7 +80,7 @@ export class LabelInfoPanelController {
         const headerTitle = labelHeader.children[1] as HTMLElement;
 
         const labelBody = labelDiv.children[1] as HTMLElement;
-        const { userCssStyle } = getViewerInstance().scene
+        const { userCssStyle } = getViewerInstance().viewer.scene
           .userData as SceneUserData;
         const { cardWidth, cardHeight, headerMarginTop, headerMarginLeft } =
           userCssStyle.topCard;
@@ -125,12 +125,20 @@ export class LabelInfoPanelController {
    * @param modelGroupName 模型组名称
    */
   createLabelInfoPanelByModelGroupName(modelGroupName: string) {
-    const { scene } = getViewerInstance();
+    const { scene, userData } = getViewerInstance();
+    const [toggleButtonGroup] =
+      userData.customButtonGroupList.generateButtonGroup.group;
+    const { type } = toggleButtonGroup.customButtonItem;
+    const labelOffset = new Vector3(0, 0, 0);
+    if (type === "DRAWER" || type === "STRETCH") {
+      const { modelOffset } = toggleButtonGroup.userSetting;
+      labelOffset.copy(modelOffset);
+    }
 
-    const group = scene.getObjectByName(modelGroupName);
+    const modelGroup = scene.getObjectByName(modelGroupName);
 
-    if (group) {
-      const { children } = group;
+    if (modelGroup) {
+      const { children } = modelGroup;
       if (children) {
         for (let i = 0; i < children.length; i++) {
           const child = children[i];
@@ -140,7 +148,14 @@ export class LabelInfoPanelController {
             this.dispatchTourWindow
           );
           label.css3DSprite.visible = false;
-          getViewerInstance().scene.add(label.css3DSprite);
+          const { x, y, z } = label.css3DSprite.position;
+          label.css3DSprite.position.set(
+            x + labelOffset.x,
+            y + labelOffset.y,
+            z + labelOffset.z
+          );
+          debugger;
+          scene.add(label.css3DSprite);
           this.allLabelInfo.push(label);
         }
       }
@@ -163,9 +178,10 @@ export class LabelInfoPanelController {
     this.canBeShowLabelInfo = [];
     viewer.getSelectedObjects().length = 0;
     this.allLabelInfo.filter((_item) => {
+      debugger;
       return modelNameList.some((item) => {
         // const css3DSprite = _item.css3DSprite.name.replace("SPRITE-", "");
-        const isOk = this.boxName + "-" + _item.css3DSprite.name === item;
+        const isOk = this.boxName + _item.css3DSprite.name === item;
         if (isOk) {
           this.canBeShowLabelInfo.push(_item);
         }

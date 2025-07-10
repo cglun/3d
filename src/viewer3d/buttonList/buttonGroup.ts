@@ -1,6 +1,5 @@
 import { Scene, Vector3 } from "three";
 import {
-  APP_COLOR,
   CustomButtonType,
   generateButtonItemMap,
   GenerateButtonItemMap,
@@ -15,14 +14,16 @@ import {
   animateTOGGLE,
   cameraBackHome,
   drawerBackHome,
-  getViewerInstance,
   showModelBackHome,
   stretchModelBackHome,
 } from "@/viewer3d/buttonList/animateByButton";
 
 import { SceneUserData } from "@/three/config/Three3dConfig";
-import { hasValueString } from "@/three/utils/utils";
-import Toast3d from "@/component/common/Toast3d";
+import {
+  getEditorInstance,
+  getViewerInstance,
+  hasValueString,
+} from "@/three/utils/utils";
 
 export const cameraViewerPosition = new Vector3(0, 0, 0);
 
@@ -128,8 +129,10 @@ export function resetListGroupIsClick(listGroup: GenerateButtonItemMap[]) {
 export function getToggleButtonGroup(): GenerateButtonItemMap[] {
   // const { customButtonItem } = generateButtonGroup.group[index];
 
-  const { scene } = getViewerInstance();
-  const { customButtonGroupList } = scene.userData as SceneUserData;
+  const { customButtonGroupList } = getViewerInstance();
+  if (!customButtonGroupList) {
+    return [];
+  }
   const { generateButtonGroup } = customButtonGroupList;
   const group = generateButtonGroup.group[0];
   const { listGroup, type } = group.customButtonItem;
@@ -152,9 +155,8 @@ export function getToggleButtonGroup(): GenerateButtonItemMap[] {
 //生成漫游动画按钮组
 export function generateRoamButtonGroup() {
   const roamButtonGroup: GenerateButtonItemMap[] = [];
-  const { scene } = getViewerInstance();
-
-  const roam = scene.getObjectByName("_ROAM_");
+  const { scene } = getEditorInstance();
+  const roam = scene.getObjectByName(GROUP.ROAM);
   if (roam) {
     roam.children.forEach((item) => {
       const { name } = item;
@@ -175,9 +177,10 @@ export function generateRoamButtonGroup() {
 }
 //获取漫游动画按钮组
 export function getRoamListByRoamButtonMap(): GenerateButtonItemMap[] {
-  const { scene } = getViewerInstance();
-  const { customButtonGroupList } = scene.userData as SceneUserData;
-
+  const { customButtonGroupList } = getViewerInstance();
+  if (!customButtonGroupList) {
+    return [];
+  }
   const [toggleButtonGroup, roamButtonGroup] =
     customButtonGroupList.generateButtonGroup.group;
   const { listGroup } = roamButtonGroup.customButtonItem;
@@ -190,7 +193,7 @@ export function getRoamListByRoamButtonMap(): GenerateButtonItemMap[] {
         }
         if (state.includes("_STOP")) {
           roamAnimation(false);
-          const { camera, controls } = getViewerInstance();
+          const { camera, controls } = getViewerInstance().viewer;
           const { userSetting } = toggleButtonGroup;
           cameraBackHome(camera, controls, userSetting.animationTime);
         }
@@ -204,7 +207,7 @@ export function getRoamListByRoamButtonMap(): GenerateButtonItemMap[] {
 }
 
 export function roamAnimation(isRunning: boolean) {
-  const { scene, controls } = getViewerInstance();
+  const { scene, controls } = getViewerInstance().viewer;
   const { customButtonGroupList } = scene.userData as SceneUserData;
 
   const listGroup = getRoamListByRoamButtonMap();
@@ -240,12 +243,15 @@ export function generatePanelControllerButtonGroup() {
 }
 
 export function getPanelControllerButtonGroup(): GenerateButtonItemMap[] {
-  const { customButtonGroupList } = getViewerInstance().scene
-    .userData as SceneUserData;
-  const panelController =
-    getViewerInstance().scene.userData.labelInfoPanelController;
+  const { customButtonGroupList, viewer } = getViewerInstance();
+  if (!customButtonGroupList) {
+    return [];
+  }
+
+  const { labelInfoPanelController } = viewer;
   const { customButtonItem } =
     customButtonGroupList.generateButtonGroup.group[2];
+
   const { listGroup } = customButtonItem;
   return listGroup.map((item: GenerateButtonItemMap) => {
     const { NAME_ID } = item;
@@ -253,13 +259,13 @@ export function getPanelControllerButtonGroup(): GenerateButtonItemMap[] {
       ...item, // 保留原有的属性
       handler: () => {
         item.isClick = !item.isClick;
+
         if (NAME_ID === "expandLabelInfo") {
-          panelController?.expandLabelInfo(); // 调用 expandLabelInfo 方法
+          labelInfoPanelController.expandLabelInfo(); // 调用 expandLabelInfo 方法
         }
         if (NAME_ID === "foldLabelInfo") {
-          panelController?.foldLabelInfo(); // 调用 foldLabelInfo 方法
+          labelInfoPanelController.foldLabelInfo(); // 调用 foldLabelInfo 方法
         }
-        Toast3d("预览模式生效", "提示", APP_COLOR.Warning);
       },
     } as GenerateButtonItemMap; // 显式类型断言
   });

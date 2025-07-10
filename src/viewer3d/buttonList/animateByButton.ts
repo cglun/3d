@@ -18,28 +18,27 @@ import {
 } from "@/viewer3d/buttonList/buttonGroup";
 
 import { SceneUserData, ToggleButtonGroup } from "@/three/config/Three3dConfig";
-
 import { viewerInstance } from "@/three/instance/ViewerInstance";
 
-export function getViewerInstance() {
+function _viewerInstance() {
   return viewerInstance.getViewer();
 }
 
 function getCamera() {
-  return getViewerInstance().camera;
+  return _viewerInstance().camera;
 }
 function getControls() {
-  return getViewerInstance().controls;
+  return _viewerInstance().controls;
 }
 // 显示模型-显示和隐藏
 export function showModelByNameId(NAME_ID: string) {
-  const MODEL_GROUP = getViewerInstance().MODEL_GROUP;
+  const MODEL_GROUP = _viewerInstance().MODEL_GROUP;
 
   MODEL_GROUP.traverse((item) => {
     item.layers.set(1);
   });
 
-  const groups = getViewerInstance().scene.getObjectByName(NAME_ID);
+  const groups = _viewerInstance().scene.getObjectByName(NAME_ID);
   if (groups) {
     groups.traverse((item) => {
       item.layers.set(0);
@@ -70,7 +69,7 @@ export function drawerOutByNameId(
 ) {
   // 使用可选链操作符和默认值确保解构安全
 
-  const MODEL_GROUP = getViewerInstance().scene.getObjectByName(item.NAME_ID);
+  const MODEL_GROUP = _viewerInstance().scene.getObjectByName(item.NAME_ID);
   item.data = {
     isSelected: true,
     isRunning: true,
@@ -105,7 +104,7 @@ export function drawerBackHome(toggleButtonGroup: ToggleButtonGroup) {
       const { isRunning, isSelected } = _item.data;
 
       if (isSelected && !isRunning) {
-        const model = getViewerInstance().scene.getObjectByName(_item.NAME_ID);
+        const model = _viewerInstance().scene.getObjectByName(_item.NAME_ID);
 
         _item.data = {
           isRunning: true,
@@ -142,7 +141,7 @@ export function stretchModelByNameId(
   NAME_ID: string,
   toggleButtonGroup: ToggleButtonGroup
 ) {
-  const MODEL_GROUP = getViewerInstance().scene.getObjectByName(NAME_ID);
+  const MODEL_GROUP = _viewerInstance().scene.getObjectByName(NAME_ID);
 
   if (MODEL_GROUP) {
     const isStretch = MODEL_GROUP.userData.childrenIsStretch;
@@ -164,7 +163,7 @@ export function stretchModelBackHome(toggleButtonGroup: ToggleButtonGroup) {
   const { type } = toggleButtonGroup.customButtonItem;
 
   if (type === "STRETCH") {
-    const MODEL_GROUP = getViewerInstance()
+    const MODEL_GROUP = _viewerInstance()
       .MODEL_GROUP as Object3D<Object3DEventMap>;
     MODEL_GROUP.children.forEach((_item) => {
       const { children } = _item;
@@ -253,7 +252,7 @@ export function moveCameraSTRETCH(
 ) {
   const { NAME_ID } = item;
 
-  const MODEL_GROUP = getViewerInstance().scene.getObjectByName(NAME_ID);
+  const MODEL_GROUP = _viewerInstance().scene.getObjectByName(NAME_ID);
 
   if (MODEL_GROUP) {
     // 移动相机到指定位置
@@ -285,7 +284,7 @@ export function moveCameraDRAWER(
   toggleButtonGroup: ToggleButtonGroup
 ) {
   const { NAME_ID } = item;
-  const MODEL_GROUP = getViewerInstance().scene.getObjectByName(NAME_ID);
+  const MODEL_GROUP = _viewerInstance().scene.getObjectByName(NAME_ID);
   if (MODEL_GROUP) {
     // 移动相机到指定位置
     const camera = getCamera();
@@ -330,8 +329,7 @@ export function cameraBackHome(
   controls: OrbitControls,
   animationTime: number
 ) {
-  const { cameraPosition } = getViewerInstance().scene
-    .userData as SceneUserData;
+  const { cameraPosition } = _viewerInstance().scene.userData as SceneUserData;
 
   cameraTween(camera, cameraPosition.end, animationTime)
     .start()
@@ -376,7 +374,7 @@ export function animateTOGGLE(
         return;
       }
       showModelByNameId(NAME_ID);
-      const model = getViewerInstance().scene.getObjectByName(NAME_ID);
+      const model = _viewerInstance().scene.getObjectByName(NAME_ID);
       if (model) {
         const { x, y, z } = getObjectWorldPosition(model);
         const camera = getCamera();
@@ -430,7 +428,7 @@ export function animateSTRETCH(
       commonHandler(item);
       //如果是全景按钮，
       if (NAME_ID === GROUP.MODEL) {
-        //const CustomButtonGroupList =   getViewerInstance()('viewer3d').userData
+        //const CustomButtonGroupList =   _viewerInstance()('viewer3d').userData
         stretchModelBackHome(toggleButton);
         return;
       }
@@ -461,7 +459,7 @@ export function animateROAM(
   });
 
   const curve = new CatmullRomCurve3(vector, true);
-  const { roamLine } = getViewerInstance().extraParams;
+  const { roamLine } = _viewerInstance().extraParams;
   if (roamLine) {
     roamLine.roamIsRunning = isRunning;
     roamLine.tubeGeometry = new TubeGeometry(curve, 100, 2, 3, true);

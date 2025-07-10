@@ -39,6 +39,13 @@ export default function buttonBaseGui(
     .onChange(() => {
       updateScene(editor.scene);
     });
+  folder
+    .add(button, "showButton")
+    .name("是否显示按钮")
+    .onFinishChange(() => {
+      updateScene(editor.scene);
+    });
+
   const styleFolder = folder.addFolder("样式");
   styleFolder
     .add(button.style, "offsetHeight", -100, 100, 1)
