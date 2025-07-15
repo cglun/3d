@@ -10,10 +10,12 @@ import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import Icon from "@/component/common/Icon";
 import { MyContext } from "@/app/MyContext";
 import modelHighlightGUI from "@/component/routes/effects/gui/modelHighlightGUI";
-import roamGUI from "@/component/routes/effects/gui/roamGUI";
+
 import { stopRoam } from "@/component/routes/effects/utils";
-import { editorInstance } from "@/three/instance/EditorInstance";
+
 import { GROUP } from "@/three/config/CONSTANT";
+
+import { getEditorInstance } from "@/three/utils/utils";
 
 // 定义一个变量来保存 GUI 实例
 
@@ -27,8 +29,8 @@ function RouteComponent() {
   const buttonColor = getButtonColor(themeColor);
   const { dispatchTourWindow } = useContext(MyContext);
   useEffect(() => {
-    const editor = editorInstance.getEditor();
-    const testGroup = editor.scene.getObjectByName(GROUP.TEST);
+    const { editor, scene } = getEditorInstance();
+    const testGroup = scene.getObjectByName(GROUP.TEST);
     if (testGroup) testGroup.visible = true;
 
     editor.TEST_GROUP.children.forEach((item) => {
@@ -88,12 +90,15 @@ function RouteComponent() {
             高亮
           </Button>
         </ButtonGroup>
-        <ButtonGroup className="ms-2" size="sm">
-          <Button variant={buttonColor} onClick={roamGUI}>
+        {/* <ButtonGroup className="ms-2" size="sm">
+          <Button
+            variant={buttonColor}
+            onClick={() => generateButtonGroupGUI(1, updateScene)}
+          >
             <Icon iconName=" bi bi-person-walking" gap={1} />
             漫游
           </Button>
-        </ButtonGroup>
+        </ButtonGroup> */}
       </ListGroupItem>
     </ListGroup>
   );

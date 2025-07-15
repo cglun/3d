@@ -5,22 +5,18 @@ import {
   TubeGeometry,
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import {
-  RoamButtonUserSetting,
-  SceneUserData,
-} from "@/three/config/Three3dConfig";
+import { RoamButtonUserSetting } from "@/three/config/Three3dConfig";
 import { cameraEnterAnimation } from "@/three/utils/util4Camera";
 import { editorInstance } from "@/three/instance/EditorInstance";
+import { getEditorInstance } from "@/three/utils/utils";
 export default function roamGUI(folder: GUI) {
-  const editor = editorInstance.getEditor();
+  const { customButtonGroupList, editor } = getEditorInstance();
   editor.outlinePass.selectedObjects = [];
 
-  const { customButtonGroupList } = editorInstance.getEditor().scene
-    .userData as SceneUserData;
   const { userSetting } = customButtonGroupList.generateButtonGroup.group[1];
   //const roamFolder = editor.createGUI("漫游");
   const roamFolder = folder.addFolder("设置");
-  const { roamLine } = editorInstance.getEditor().extraParams;
+  const { roamLine } = getEditorInstance().editor.extraParams;
   if (roamLine) {
     roamLine.roamIsRunning = true;
     addTube(userSetting);

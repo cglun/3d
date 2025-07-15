@@ -8,13 +8,15 @@ import { useUpdateScene } from "@/app/hooks";
 import Toast3d from "@/component/common/Toast3d";
 
 import { APP_COLOR, DELAY } from "@/app/type";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import Icon from "@/component/common/Icon";
 
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
-import { editorInstance } from "@/three/instance/EditorInstance";
+
 import { config3dInit, SceneUserData } from "@/three/config/Three3dConfig";
+
+import { getEditorInstance } from "@/three/utils/utils";
 
 export const Route = createLazyFileRoute("/editor3d/config")({
   component: RouteComponent,
@@ -26,30 +28,9 @@ function RouteComponent() {
   const [token, setToken] = useState(t || "TOKEN");
   const { themeColor } = getThemeByScene(scene);
   const btnColor = getButtonColor(themeColor);
+  const config3d = scene.userData.config3d || { ...config3dInit };
 
-  useEffect(() => {
-    // 确保在组件加载时，scene.userData.config3d 已经存在
-    if (scene.userData.config3d === undefined) {
-      const _scene = scene.clone();
-      _scene.userData.config3d = { ...config3dInit };
-      updateScene(_scene);
-    }
-  }, []);
-
-  if (scene.userData.config3d === undefined) {
-    return;
-  }
-  const { FPS } = scene.userData.config3d || 0;
-
-  // // 关键帧动画设置
-  // function setKeyframe() {
-  //   const { useKeyframe } = getScene().userData.config3d || 0;
-  //   if (useKeyframe) {
-  //     Toast3d("保存后，重新加载生效!", "提示", APP_COLOR.Warning, DELAY.LONG);
-  //   }
-  // }
-
-  function configToken() {
+  function ConfigToken() {
     if (import.meta.env.DEV) {
       return (
         <ListGroup.Item>
@@ -102,6 +83,27 @@ function RouteComponent() {
     <ListGroup horizontal className="mt-2">
       <ListGroup.Item>
         <ConfigCheck
+          iconName="globe-americas"
+          label="启用地图"
+          configKey="useCesium"
+          toolTip={"启用cesium地图"}
+          callBack={() => {
+            const { editor, userData } = getEditorInstance();
+            const { config3d } = userData;
+            if (config3d.useCesium) {
+              editor.controls.enabled = false;
+              editor.deserializeIsEnd();
+            } else {
+              editor.controls.enabled = true;
+              editor.cesiumTiles?.globeControls.dispose();
+              editor.cesiumTiles?.tiles.dispose();
+            }
+            updateScene(scene);
+          }}
+        />
+      </ListGroup.Item>
+      <ListGroup.Item>
+        <ConfigCheck
           toolTip="相机视角动画"
           iconName="bi bi-play-circle-fill"
           label="启用Tween"
@@ -115,7 +117,7 @@ function RouteComponent() {
           toolTip="模型阴影"
           configKey="useShadow"
           callBack={() => {
-            const editor = editorInstance.getEditor();
+            const { editor, scene } = getEditorInstance();
 
             const { shadowMap } = editor.renderer;
             const { config3d } = editor.scene.userData as SceneUserData;
@@ -123,7 +125,7 @@ function RouteComponent() {
 
             editor.enableShadow(editor.MODEL_GROUP);
             editor.enableShadow(editor.LIGHT_GROUP);
-            updateScene(editor.scene);
+            updateScene(scene);
           }}
         />
       </ListGroup.Item>
@@ -152,11 +154,10 @@ function RouteComponent() {
           </InputGroup.Text>
           <Form.Select
             aria-label="FPS"
-            value={FPS}
+            value={config3d.FPS}
             onChange={(e) => {
-              const { scene } = editorInstance.getEditor();
-              const { config3d } = scene.userData as SceneUserData;
-
+              const { userData } = getEditorInstance();
+              const { config3d } = userData;
               config3d.FPS = Number(e.target.value);
               Toast3d("当前帧率：" + e.target.value);
               updateScene(scene);
@@ -170,7 +171,7 @@ function RouteComponent() {
           </Form.Select>
         </InputGroup>
       </ListGroup.Item>
-      {configToken()}
+      <ConfigToken />
     </ListGroup>
   );
 }

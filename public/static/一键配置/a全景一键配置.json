@@ -1,18 +1,18 @@
 {
-  "projectId": 219,
+  "projectId": 81,
   "GOD_NUMBER": {
-    "clearHistory": 1751193482974
+    "clearHistory": 1752216934423
   },
   "cameraPosition": {
     "start": {
-      "x": -19,
-      "y": 13,
-      "z": -0.68
+      "x": -6.57,
+      "y": 0.42,
+      "z": 7.72
     },
     "end": {
-      "x": -10,
-      "y": 7,
-      "z": -0.36
+      "x": -7.15,
+      "y": 0.42,
+      "z": 8.38
     }
   },
   "config3d": {
@@ -21,7 +21,7 @@
     "useTween": true,
     "useShadow": true,
     "useKeyframe": true,
-    "FPS": 60,
+    "FPS": 30,
     "useComposer": true
   },
   "backgroundHDR": {
@@ -31,7 +31,7 @@
     "HDRName": "venice_sunset_1k.hdr"
   },
   "javascript": "console.log(116)",
-  "CustomButtonGroupList": {
+  "customButtonList": {
     "toggleButtonGroup": {
       "customButtonItem": {
         "name": "切换",
@@ -81,9 +81,9 @@
         "radiusSegments": 6,
         "closed": true,
         "lookAhead": false,
-        "speed": 0.4,
-        "offset": -0.1,
-        "radius": 0.01,
+        "speed": 0.6,
+        "offset": -0.2,
+        "radius": 0.02,
         "tension": 0.2
       }
     },
@@ -135,39 +135,39 @@
   },
   "userCssStyle": {
     "topCard": {
-      "cardWidth": 130,
-      "cardHeight": 150,
-      "cardRadius": 0.8,
-      "cardBackgroundColor": "#002e2e",
+      "cardWidth": 296,
+      "cardHeight": 378,
+      "cardRadius": 0,
+      "cardBackgroundColor": "#502626",
       "cardBackgroundUrl": "/editor3d/static/images/topCard.png",
       "enableCardBackgroundUrl": true,
-      "headerFontSize": 16,
-      "headerColor": "#e18989",
-      "bodyFontSize": 12,
+      "headerFontSize": 24,
+      "headerColor": "#67ebeb",
+      "bodyFontSize": 20,
       "bodyColor": "#48db4a",
       "offsetX": 0,
       "offsetY": 0,
-      "cardSize": 0.03,
-      "headerMarginTop": 15,
-      "headerMarginLeft": 18,
+      "cardSize": 0.0116,
+      "headerMarginTop": 20,
+      "headerMarginLeft": 20,
       "opacity": 1
     },
     "markLabel": {
-      "cardWidth": 140,
-      "cardHeight": 18,
-      "cardRadius": 0.8,
+      "cardWidth": 123,
+      "cardHeight": 25,
+      "cardRadius": 0,
       "cardBackgroundColor": "#502626",
       "cardBackgroundUrl": "/editor3d/static/images/topMark.png",
       "enableCardBackgroundUrl": true,
       "headerFontSize": 16,
-      "headerColor": "#e18989",
-      "bodyFontSize": 16,
+      "headerColor": "#a30000",
+      "bodyFontSize": 12,
       "bodyColor": "#48db4a",
       "offsetX": 0,
       "offsetY": 0,
-      "cardSize": 0.03,
-      "headerMarginTop": 15,
-      "headerMarginLeft": 18,
+      "cardSize": 0.0116,
+      "headerMarginTop": 0,
+      "headerMarginLeft": 40,
       "opacity": 1
     },
     "modelEdgeHighlight": {
@@ -181,5 +181,174 @@
   },
   "sceneName": "新场景",
   "des": "Scene",
-  "projectName": "名字"
+  "projectName": "名字",
+  "customButtonGroupList": {
+    "generateButtonGroup": {
+      "des": "生成按钮组",
+      "group": [
+        {
+          "customButtonItem": {
+            "name": "切换",
+            "type": "DRAWER",
+            "listGroup": [],
+            "showGroup": true,
+            "buttonGroupStyle": {
+              "top": 31.27,
+              "left": 16.42,
+              "width": 80,
+              "height": 30,
+              "borderColor": "#ff0000",
+              "borderColorIsClick": "#ff00ff",
+              "borderWidth": 0,
+              "direction": "row",
+              "opacity": 1,
+              "borderRadius": 0,
+              "fontSize": 20,
+              "gap": 2,
+              "color": "#7a2a2a",
+              "colorIsClick": "#ff00ff",
+              "marginTop": 0,
+              "marginLeft": 0,
+              "backgroundColor": "#67ebeb",
+              "backgroundColorIsClick": "#5b2806",
+              "useBackgroundUrl": true,
+              "backgroundUrl": "/editor3d/static/images/topMark.png",
+              "backgroundUrlIsClick": "/editor3d/static/images/topMark.png"
+            }
+          },
+          "userSetting": {
+            "modelOffset": {
+              "x": 0,
+              "y": 0,
+              "z": 5
+            },
+            "cameraOffset": {
+              "x": 0,
+              "y": 4,
+              "z": 1
+            },
+            "animationTime": 1160
+          }
+        },
+        {
+          "customButtonItem": {
+            "name": "漫游",
+            "type": "ROAM",
+            "listGroup": [
+              {
+                "showName": "开始",
+                "NAME_ID": "漫游动画1_AN_START",
+                "showButton": true,
+                "isClick": false,
+                "groupCanBeRaycast": false,
+                "data": {
+                  "isSelected": false,
+                  "isRunning": false,
+                  "cameraViewerPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                "style": {
+                  "offsetWidth": 0,
+                  "offsetHeight": 0
+                }
+              },
+              {
+                "showName": "停止",
+                "NAME_ID": "漫游动画1_AN_STOP",
+                "showButton": true,
+                "isClick": true,
+                "groupCanBeRaycast": false,
+                "data": {
+                  "isSelected": false,
+                  "isRunning": false,
+                  "cameraViewerPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                "style": {
+                  "offsetWidth": 0,
+                  "offsetHeight": 0
+                }
+              }
+            ],
+            "showGroup": true,
+            "buttonGroupStyle": {
+              "top": 80.36,
+              "left": 43.94,
+              "width": 80,
+              "height": 30,
+              "borderColor": "#ff0000",
+              "borderColorIsClick": "#ff00ff",
+              "borderWidth": 0,
+              "direction": "row",
+              "opacity": 1,
+              "borderRadius": 0,
+              "fontSize": 20,
+              "gap": 2,
+              "color": "#7a2a2a",
+              "colorIsClick": "#ff00ff",
+              "marginTop": 0,
+              "marginLeft": 0,
+              "backgroundColor": "#67ebeb",
+              "backgroundColorIsClick": "#5b2806",
+              "useBackgroundUrl": true,
+              "backgroundUrl": "/editor3d/static/images/topMark.png",
+              "backgroundUrlIsClick": "/editor3d/static/images/topMark.png"
+            }
+          },
+          "userSetting": {
+            "scale": 1,
+            "extrusionSegments": 1050,
+            "radiusSegments": 6,
+            "closed": true,
+            "lookAhead": false,
+            "speed": 0.6,
+            "offset": -0.2,
+            "radius": 0.02,
+            "tension": 0.2
+          }
+        },
+        {
+          "customButtonItem": {
+            "name": "标签控制",
+            "type": "PANEL_CONTROLLER",
+            "listGroup": [],
+            "showGroup": false,
+            "buttonGroupStyle": {
+              "top": 85.65,
+              "left": 55.14,
+              "width": 80,
+              "height": 30,
+              "borderColor": "#ff0000",
+              "borderColorIsClick": "#ff00ff",
+              "borderWidth": 0,
+              "direction": "row",
+              "opacity": 1,
+              "borderRadius": 0,
+              "fontSize": 20,
+              "gap": 2,
+              "color": "#7a2a2a",
+              "colorIsClick": "#ff00ff",
+              "marginTop": 0,
+              "marginLeft": 0,
+              "backgroundColor": "#67ebeb",
+              "backgroundColorIsClick": "#5b2806",
+              "useBackgroundUrl": true,
+              "backgroundUrl": "/editor3d/static/images/topMark.png",
+              "backgroundUrlIsClick": "/editor3d/static/images/topMark.png"
+            }
+          }
+        }
+      ]
+    },
+    "customButtonGroup": {
+      "des": "用户自定义",
+      "group": []
+    }
+  }
 }

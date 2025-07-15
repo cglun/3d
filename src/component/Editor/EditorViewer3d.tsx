@@ -18,6 +18,7 @@ import { errorMessage } from "@/app/utils";
 import TransformControl from "./TransformControl/TransformControl";
 import { SceneReload } from "@/app/customEvents/sceneEvent";
 import { SceneUserData } from "@/three/config/Three3dConfig";
+import { getEditorInstance } from "@/three/utils/utils";
 
 function EditorViewer3d() {
   const editorCanvas: React.RefObject<HTMLDivElement> =
@@ -62,7 +63,7 @@ function EditorViewer3d() {
       };
 
       if (item.id !== -1) {
-        const editor = editorInstance.getEditor();
+        const { editor } = getEditorInstance();
 
         editorInstance.resetUndo();
         editor.resetScene();
@@ -75,7 +76,6 @@ function EditorViewer3d() {
               // 在模型加载完成后更新场景
               // //  editor.addGridHelper();=[]
               editor.runJavascript();
-
               editor.destroyGUI();
               editor.scene.add(editor.HELPER_GROUP);
 

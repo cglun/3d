@@ -154,7 +154,7 @@ export class LabelInfoPanelController {
             y + labelOffset.y,
             z + labelOffset.z
           );
-          debugger;
+
           scene.add(label.css3DSprite);
           this.allLabelInfo.push(label);
         }
@@ -178,7 +178,6 @@ export class LabelInfoPanelController {
     this.canBeShowLabelInfo = [];
     viewer.getSelectedObjects().length = 0;
     this.allLabelInfo.filter((_item) => {
-      debugger;
       return modelNameList.some((item) => {
         // const css3DSprite = _item.css3DSprite.name.replace("SPRITE-", "");
         const isOk = this.boxName + _item.css3DSprite.name === item;

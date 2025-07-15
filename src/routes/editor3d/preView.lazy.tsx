@@ -16,8 +16,7 @@ import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import Icon from "@/component/common/Icon";
 import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 import { errorMessage } from "@/app/utils";
-
-import Viewer3dPlus from "@/viewer3d/Viewer3dPlus.";
+import Viewer3dPlus from "@/viewer3d/Viewer3dPlus";
 
 // 定义响应数据的类型
 interface PageListResponse {
@@ -86,7 +85,7 @@ function RouteComponent() {
       });
   }, []);
 
-  // 忽略类型检查，暂时不清楚 Context116 完整类型定义
+  //@ts-ignore 忽略类型检查,后面有可能用到，不要问为什么
   function callBack(viewer: Three3dViewer) {
     console.log("o");
   }
@@ -149,7 +148,7 @@ function RouteComponent() {
                 </Button>
               </ButtonGroup>
             </Container>
-            <Viewer3dPlus dev="viewer3d" item={_item} callBack={callBack} />
+            <Viewer3dPlus item={_item} callBack={callBack} />
           </Modal.Body>
         </Modal>
       </ListGroupItem>

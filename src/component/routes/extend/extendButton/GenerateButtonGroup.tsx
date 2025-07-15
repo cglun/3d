@@ -13,10 +13,7 @@ import {
   setUserSettingByType,
 } from "@/viewer3d/buttonList/buttonGroup";
 import Icon from "@/component/common/Icon";
-import {
-  customButtonGroupListInit,
-  SceneUserData,
-} from "@/three/config/Three3dConfig";
+import { customButtonGroupListInit } from "@/three/config/Three3dConfig";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { ListGroupItem } from "react-bootstrap";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";

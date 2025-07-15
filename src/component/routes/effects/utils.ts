@@ -241,6 +241,7 @@ export function getButtonGroupStyle(
     position: "absolute",
     visibility: showGroup ? "visible" : "hidden",
     flexDirection: direction === "row" ? "row" : "column",
+    zIndex: 1,
   } as React.CSSProperties;
   return allStyle;
 }

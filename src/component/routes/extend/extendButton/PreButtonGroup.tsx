@@ -12,7 +12,7 @@ import {
 import { memo, Suspense, useState } from "react";
 import generateButtonGUI from "../generateButtonGUI";
 import { editorInstance } from "@/three/instance/EditorInstance";
-import { viewerInstance } from "@/three/instance/ViewerInstance";
+
 import customButtonGUI from "../customButtonGUI";
 import CodeEditor from "../../script/CodeEditor";
 import { getEditorInstance } from "@/three/utils/utils";
@@ -22,7 +22,7 @@ import Button from "react-bootstrap/esm/Button";
 import generateButtonGroupGUI from "../generateButtonGroupGUI";
 import { getThemeByScene } from "@/three/utils/util4UI";
 import AlertBase from "@/component/common/AlertBase";
-import { Badge, ButtonGroup, ListGroup, ListGroupItem } from "react-bootstrap";
+import { ButtonGroup, ListGroup, ListGroupItem } from "react-bootstrap";
 import { MathUtils } from "three";
 import { APP_COLOR, CustomButtonItemMap } from "@/app/type";
 
@@ -149,7 +149,7 @@ function GenerateButtonGroupShow({
               const { customButtonGroupList, editor } = getEditorInstance();
               const { group } = customButtonGroupList.generateButtonGroup;
               const { listGroup } = group[groupIndex].customButtonItem;
-              listGroup.forEach((_item, _index) => {
+              listGroup.forEach((_item) => {
                 _item.isClick = false;
               });
 
@@ -285,7 +285,7 @@ console.log("${name}_按钮${buttonNum}");
                   setY(_index);
                   const { customButtonGroupList, editor } = getEditorInstance();
                   const { group } = customButtonGroupList.customButtonGroup;
-                  group[index].listGroup.forEach((_item, _index) => {
+                  group[index].listGroup.forEach((_item) => {
                     _item.isClick = false;
                   });
                   _item.isClick = !_item.isClick;

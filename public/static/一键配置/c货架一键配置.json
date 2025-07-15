@@ -1,18 +1,18 @@
 {
-  "projectId": 220,
+  "projectId": 76,
   "GOD_NUMBER": {
-    "clearHistory": 116
+    "clearHistory": 1752216969789
   },
   "cameraPosition": {
     "start": {
-      "x": 84,
-      "y": -94,
-      "z": -4
+      "x": 61.41,
+      "y": 70.26,
+      "z": 0.86
     },
     "end": {
-      "x": 39,
-      "y": 75,
-      "z": 2
+      "x": 65.08,
+      "y": 74.49,
+      "z": 0.65
     }
   },
   "config3d": {
@@ -30,135 +30,7 @@
     "isColor": false,
     "HDRName": "venice_sunset_1k.hdr"
   },
-  "javascript": "if (viewerIns) {\r\n\r\n  const button = document.querySelector(\"#threeDimensionalComponent [type=button]\");\r\n  const position = {\r\n    x: 500,//距离顶部\r\n    y: 200,//距离左侧\r\n  };\r\n \r\n  if (button) {\r\n    button.style.backgroundColor = \"red\";//背景色\r\n    button.style.top = position.x + \"px\"; \r\n    button.style.left = position.y + \"px\";\r\n  }\r\n\r\n    const { labelInfoPanelController } = viewerIns;\r\n    if (labelInfoPanelController) {\r\n      labelInfoPanelController.isShow = true; // 设置面板显示状态\r\n      labelInfoPanelController.createLabelInfoPanelByModelGroupName(\"huojia\");\r\n      document.getCurrentGenerateButtonItemMap = function (item) {\r\n        if (labelInfoPanelController) {\r\n          if (item.NAME_ID === \"全景\") {\r\n            labelInfoPanelController.resetHighLightModel();\r\n            labelInfoPanelController.hideLabel();\r\n          }\r\n          const boxName = Array.isArray(item.showName)\r\n            ? item.showName[0].slice(2)\r\n            : item.showName.slice(2);\r\n          labelInfoPanelController.resetHighLightModel();\r\n          labelInfoPanelController.setBoxName(boxName);\r\n          labelInfoPanelController.hideLabel();\r\n          labelInfoPanelController.updateLabelInfoPanel();\r\n        }\r\n      };\r\n    }\r\n  }",
-  "CustomButtonGroupList": {
-    "toggleButtonGroup": {
-      "customButtonItem": {
-        "name": "切换",
-        "type": "TOGGLE",
-        "listGroup": [
-          {
-            "showName": "全景",
-            "NAME_ID": "MODEL_GROUP",
-            "showButton": true,
-            "isClick": false,
-            "groupCanBeRaycast": false,
-            "data": {
-              "isSelected": false,
-              "isRunning": false,
-              "cameraOffsetStretch": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              }
-            }
-          },
-          {
-            "showName": "货架1",
-            "NAME_ID": "huojia",
-            "showButton": true,
-            "isClick": false,
-            "groupCanBeRaycast": true,
-            "data": {
-              "isSelected": false,
-              "isRunning": false,
-              "cameraOffsetStretch": {
-                "x": 20,
-                "y": 0,
-                "z": 0
-              }
-            }
-          },
-          {
-            "showName": "货架2",
-            "NAME_ID": "huojia",
-            "showButton": true,
-            "isClick": false,
-            "groupCanBeRaycast": true,
-            "data": {
-              "isSelected": false,
-              "isRunning": false,
-              "cameraOffsetStretch": {
-                "x": 20,
-                "y": 0,
-                "z": 0
-              }
-            }
-          }
-        ]
-      },
-      "userSetting": {
-        "modelOffset": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        },
-        "cameraOffset": {
-          "x": 26,
-          "y": 0,
-          "z": 0
-        },
-        "animationTime": 1160
-      }
-    },
-    "roamButtonGroup": {
-      "customButtonItem": {
-        "name": "漫游",
-        "type": "ROAM",
-        "listGroup": []
-      },
-      "userSetting": {
-        "scale": 4,
-        "extrusionSegments": 100,
-        "radiusSegments": 3,
-        "closed": true,
-        "lookAhead": true,
-        "speed": 2,
-        "offset": 15,
-        "radius": 1
-      }
-    },
-    "panelControllerButtonGroup": {
-      "customButtonItem": {
-        "name": "面板",
-        "type": "PANEL_CONTROLLER",
-        "listGroup": [
-          {
-            "showName": "展开",
-            "NAME_ID": "expandLabelInfo",
-            "showButton": true,
-            "isClick": false,
-            "groupCanBeRaycast": false,
-            "data": {
-              "isSelected": false,
-              "isRunning": false,
-              "cameraPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              }
-            }
-          },
-          {
-            "showName": "收起",
-            "NAME_ID": "foldLabelInfo",
-            "showButton": true,
-            "isClick": false,
-            "groupCanBeRaycast": false,
-            "data": {
-              "isSelected": false,
-              "isRunning": false,
-              "cameraPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              }
-            }
-          }
-        ]
-      }
-    }
-  },
+  "javascript": "if (viewerIns) {\r\n  const { labelInfoPanelController, scene } = viewerIns;\r\n  if (labelInfoPanelController) {\r\n    labelInfoPanelController.isShow = true; // 设置面板显示状态\r\n    labelInfoPanelController.createLabelInfoPanelByModelGroupName(\"huojia\");\r\n    document.getCurrentGenerateButtonItemMap = function (item) {\r\n      if (labelInfoPanelController) {        const { customButtonGroupList } =scene.userData;\r\n        customButtonGroupList.generateButtonGroup.group[2].customButtonItem.showGroup=false;//隐藏展开按钮\r\n\r\n        if (item.NAME_ID === \"全景\") {\r\n          labelInfoPanelController.resetHighLightModel();\r\n          labelInfoPanelController.hideLabel();\r\n        }\r\n\r\n        const boxName = Array.isArray(item.showName)\r\n          ? item.showName[0].slice(2)\r\n          : item.showName.slice(2);\r\n        labelInfoPanelController.resetHighLightModel();\r\n        labelInfoPanelController.setBoxName(boxName+\"-\");\r\n        labelInfoPanelController.hideLabel();\r\n        labelInfoPanelController.updateLabelInfoPanel();\r\n      }\r\n    };\r\n  }\r\n}",
   "APP_THEME": {
     "themeColor": "dark",
     "iconFill": "",
@@ -169,36 +41,36 @@
       "cardWidth": 296,
       "cardHeight": 378,
       "cardRadius": 0,
-      "cardBackgroundColor": "#2c231c",
+      "cardBackgroundColor": "#502626",
       "cardBackgroundUrl": "/editor3d/static/images/topCard.png",
       "enableCardBackgroundUrl": true,
-      "headerFontSize": 36,
-      "headerColor": "#e18989",
-      "bodyFontSize": 32,
+      "headerFontSize": 24,
+      "headerColor": "#67ebeb",
+      "bodyFontSize": 20,
       "bodyColor": "#48db4a",
       "offsetX": 0,
       "offsetY": 0,
-      "cardSize": 0.01,
-      "headerMarginTop": 15,
-      "headerMarginLeft": 18,
-      "opacity": 0.63
+      "cardSize": 0.0116,
+      "headerMarginTop": 20,
+      "headerMarginLeft": 20,
+      "opacity": 1
     },
     "markLabel": {
-      "cardWidth": 140,
-      "cardHeight": 18,
-      "cardRadius": 0.8,
+      "cardWidth": 123,
+      "cardHeight": 25,
+      "cardRadius": 0,
       "cardBackgroundColor": "#502626",
       "cardBackgroundUrl": "/editor3d/static/images/topMark.png",
       "enableCardBackgroundUrl": true,
       "headerFontSize": 16,
-      "headerColor": "#e18989",
-      "bodyFontSize": 16,
+      "headerColor": "#a30000",
+      "bodyFontSize": 12,
       "bodyColor": "#48db4a",
       "offsetX": 0,
       "offsetY": 0,
-      "cardSize": 0.03,
-      "headerMarginTop": 15,
-      "headerMarginLeft": 18,
+      "cardSize": 0.0116,
+      "headerMarginTop": 0,
+      "headerMarginLeft": 40,
       "opacity": 1
     },
     "modelEdgeHighlight": {
@@ -212,5 +84,277 @@
   },
   "sceneName": "新场景",
   "des": "Scene",
-  "projectName": "名字"
+  "projectName": "名字",
+  "customButtonGroupList": {
+    "generateButtonGroup": {
+      "des": "生成按钮组",
+      "group": [
+        {
+          "customButtonItem": {
+            "name": "切换",
+            "type": "TOGGLE",
+            "listGroup": [
+              {
+                "showName": "全景",
+                "NAME_ID": "MODEL_GROUP",
+                "showButton": true,
+                "isClick": false,
+                "groupCanBeRaycast": false,
+                "data": {
+                  "isSelected": false,
+                  "isRunning": false,
+                  "cameraViewerPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                "style": {
+                  "offsetWidth": 0,
+                  "offsetHeight": 0
+                }
+              },
+              {
+                "showName": "货架1",
+                "NAME_ID": "huojia",
+                "showButton": true,
+                "isClick": false,
+                "groupCanBeRaycast": false,
+                "data": {
+                  "isSelected": false,
+                  "isRunning": false,
+                  "cameraViewerPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                "style": {
+                  "offsetWidth": 0,
+                  "offsetHeight": 0
+                }
+              },
+              {
+                "showName": "货架2",
+                "NAME_ID": "huojia",
+                "showButton": true,
+                "isClick": false,
+                "groupCanBeRaycast": false,
+                "data": {
+                  "isSelected": false,
+                  "isRunning": false,
+                  "cameraViewerPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                "style": {
+                  "offsetWidth": 0,
+                  "offsetHeight": 0
+                }
+              }
+            ],
+            "showGroup": true,
+            "buttonGroupStyle": {
+              "top": 59.21,
+              "left": 13.3,
+              "width": 80,
+              "height": 30,
+              "borderColor": "#ff0000",
+              "borderColorIsClick": "#ff00ff",
+              "borderWidth": 0,
+              "direction": "row",
+              "opacity": 1,
+              "borderRadius": 0,
+              "fontSize": 20,
+              "gap": 2,
+              "color": "#7a2a2a",
+              "colorIsClick": "#ff00ff",
+              "marginTop": 0,
+              "marginLeft": 0,
+              "backgroundColor": "#67ebeb",
+              "backgroundColorIsClick": "#5b2806",
+              "useBackgroundUrl": true,
+              "backgroundUrl": "/editor3d/static/images/topMark.png",
+              "backgroundUrlIsClick": "/editor3d/static/images/topMark.png"
+            }
+          },
+          "userSetting": {
+            "modelOffset": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "cameraOffset": {
+              "x": 35,
+              "y": 0,
+              "z": 0
+            },
+            "animationTime": 1160
+          }
+        },
+        {
+          "customButtonItem": {
+            "name": "漫游",
+            "type": "ROAM",
+            "listGroup": [],
+            "showGroup": true,
+            "buttonGroupStyle": {
+              "top": 11.6,
+              "left": 11.6,
+              "width": 80,
+              "height": 30,
+              "borderColor": "#ff0000",
+              "borderColorIsClick": "#ff00ff",
+              "borderWidth": 0,
+              "direction": "row",
+              "opacity": 1,
+              "borderRadius": 0,
+              "fontSize": 20,
+              "gap": 2,
+              "color": "#7a2a2a",
+              "colorIsClick": "#ff00ff",
+              "marginTop": 0,
+              "marginLeft": 0,
+              "backgroundColor": "#67ebeb",
+              "backgroundColorIsClick": "#5b2806",
+              "useBackgroundUrl": true,
+              "backgroundUrl": "/editor3d/static/images/topMark.png",
+              "backgroundUrlIsClick": "/editor3d/static/images/topMark.png"
+            }
+          },
+          "userSetting": {
+            "scale": 1,
+            "extrusionSegments": 100,
+            "radiusSegments": 3,
+            "closed": true,
+            "lookAhead": true,
+            "speed": 2,
+            "offset": 1,
+            "radius": 1,
+            "tension": 0.25
+          }
+        },
+        {
+          "customButtonItem": {
+            "name": "标签控制",
+            "type": "PANEL_CONTROLLER",
+            "listGroup": [
+              {
+                "showName": "展开",
+                "NAME_ID": "expandLabelInfo",
+                "showButton": true,
+                "isClick": false,
+                "groupCanBeRaycast": false,
+                "data": {
+                  "isSelected": false,
+                  "isRunning": false,
+                  "cameraViewerPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                "style": {
+                  "offsetWidth": 0,
+                  "offsetHeight": 0
+                }
+              },
+              {
+                "showName": "收起",
+                "NAME_ID": "foldLabelInfo",
+                "showButton": true,
+                "isClick": false,
+                "groupCanBeRaycast": false,
+                "data": {
+                  "isSelected": false,
+                  "isRunning": false,
+                  "cameraViewerPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                "style": {
+                  "offsetWidth": 0,
+                  "offsetHeight": 0
+                }
+              }
+            ],
+            "showGroup": false,
+            "buttonGroupStyle": {
+              "top": 91.24,
+              "left": 22.89,
+              "width": 80,
+              "height": 30,
+              "borderColor": "#ff0000",
+              "borderColorIsClick": "#ff00ff",
+              "borderWidth": 0,
+              "direction": "row",
+              "opacity": 1,
+              "borderRadius": 0,
+              "fontSize": 20,
+              "gap": 2,
+              "color": "#7a2a2a",
+              "colorIsClick": "#ff00ff",
+              "marginTop": 0,
+              "marginLeft": 0,
+              "backgroundColor": "#67ebeb",
+              "backgroundColorIsClick": "#5b2806",
+              "useBackgroundUrl": true,
+              "backgroundUrl": "/editor3d/static/images/topMark.png",
+              "backgroundUrlIsClick": "/editor3d/static/images/topMark.png"
+            }
+          }
+        }
+      ]
+    },
+    "customButtonGroup": {
+      "des": "用户自定义",
+      "group": [
+        {
+          "name": "按钮组1",
+          "type": "USER_BUTTON",
+          "listGroup": [
+            {
+              "NAME_ID": "d226c371-9aca-4133-9f2a-072d2ffbf289",
+              "showName": "查找资料",
+              "showButton": true,
+              "isClick": false,
+              "style": {
+                "offsetWidth": 0,
+                "offsetHeight": 0
+              },
+              "codeString": "const { customButtonGroupList } = viewerIns.scene.userData;\n\nconst modelNameList = [\n  \"2-004-015\",\n  \"2-010-017\",\n  \"2-008-015\",\n  \"2-006-020\",\n  \"2-007-024\",\n];\nconst controller = viewerIns.labelInfoPanelController;\ncontroller.findLabelInfoByModelBoxName(modelNameList); \nconst isShow = controller.canBeShowLabelInfo.length > 0;\n\nif (isShow) {\n  customButtonGroupList.generateButtonGroup.group[2].customButtonItem.showGroup = true;\n  controller.showSmallCircle();\n  controller.highlightLabelInfoPanel();\n} else {\n  const {APP_COLOR, Toast3d}=iToast\nToast3d(\"搜索不存在\",\"提示\",APP_COLOR.Danger)\n}\n"
+            }
+          ],
+          "showGroup": true,
+          "buttonGroupStyle": {
+            "top": 84.89,
+            "left": 32.85,
+            "width": 117.8,
+            "height": 30,
+            "borderColor": "#ff0000",
+            "borderColorIsClick": "#ff00ff",
+            "borderWidth": 0,
+            "direction": "row",
+            "opacity": 1,
+            "borderRadius": 0,
+            "fontSize": 20,
+            "gap": 2,
+            "color": "#7a2a2a",
+            "colorIsClick": "#ff00ff",
+            "marginTop": 0,
+            "marginLeft": 0,
+            "backgroundColor": "#67ebeb",
+            "backgroundColorIsClick": "#5b2806",
+            "useBackgroundUrl": true,
+            "backgroundUrl": "/editor3d/static/images/topMark.png",
+            "backgroundUrlIsClick": "/editor3d/static/images/topMark.png"
+          }
+        }
+      ]
+    }
+  }
 }

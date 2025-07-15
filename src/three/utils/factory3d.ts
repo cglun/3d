@@ -23,6 +23,16 @@ import sceneUserData from "@/three/config/Three3dConfig";
 import { getTourSrc } from "@/three/utils/util4Scene";
 import { setClassName } from "@/three/utils/util4UI";
 
+import { TilesRenderer, GlobeControls, Ellipsoid } from "3d-tiles-renderer";
+import {
+  CesiumIonAuthPlugin,
+  GLTFExtensionsPlugin,
+  TilesFadePlugin,
+  UpdateOnChangePlugin,
+} from "3d-tiles-renderer/plugins";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
+import { getEditorInstance } from "./utils";
+
 export function createPerspectiveCamera(
   node: HTMLElement,
   cameraName = "透视相机"
@@ -125,6 +135,69 @@ export function createLabelRenderer(
   renderDom.classList.add("label-renderer");
   node.appendChild(labelRenderer.domElement);
   return labelRenderer;
+}
+export function createTilesRenderer(
+  scene: Scene,
+  camera: PerspectiveCamera,
+  renderer: WebGLRenderer
+) {
+  const { userData } = getEditorInstance();
+  const { useCesium } = userData.config3d;
+  if (!useCesium) {
+    // 如果不使用Cesium，则不创建TilesRenderer
+    return { cesiumTiles: undefined };
+  }
+  const { cesiumConfig } = userData.APP_THEME;
+
+  const baseurl = import.meta.env.BASE_URL;
+  let path = `${baseurl}static/js/draco/`;
+  if (import.meta.env.DEV) {
+    path = `${baseurl}public/static/js/draco/gltf/`;
+  }
+  const dracoLoader = new DRACOLoader();
+  dracoLoader.setDecoderPath(path);
+  dracoLoader.setDecoderConfig({ type: "js" });
+
+  const tiles = new TilesRenderer();
+
+  tiles.registerPlugin(new CesiumIonAuthPlugin(cesiumConfig));
+  tiles.registerPlugin(new GLTFExtensionsPlugin({ dracoLoader }));
+  tiles.registerPlugin(new TilesFadePlugin());
+  tiles.registerPlugin(new UpdateOnChangePlugin());
+  tiles.setCamera(camera);
+  tiles.setResolutionFromRenderer(camera, renderer);
+  scene.add(tiles.group);
+
+  // rotate the globe so the north pole is up
+  tiles.group.rotation.x = -Math.PI / 2;
+
+  // controls
+  // const globeControls = new GlobeControls();
+  // globeControls.setScene(scene);
+  // globeControls.setCamera(camera);
+
+  // const ellipsoid = new Ellipsoid(0, 0, 0);
+  // globeControls.setEllipsoid(ellipsoid, null);
+  const globeControls = new GlobeControls(
+    scene,
+    camera,
+    renderer.domElement,
+    tiles
+  );
+  //globeControls.attach(renderer.domElement);
+  // globeControls.setScene(scene); // 使用 setScene 替代 setTilesRenderer
+  // const ellipsoid = new Ellipsoid(0, 0, 0);
+  // globeControls.setEllipsoid(ellipsoid, null); // 使用 setEllipsoid 替代 setTilesRenderer
+  // globeControls.setCamera(camera);
+
+  //阻尼（惯性）效果
+  globeControls.enableDamping = true;
+
+  const cesiumTiles = {
+    tiles,
+    globeControls,
+  };
+  return { cesiumTiles };
 }
 
 function createDiv(

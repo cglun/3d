@@ -5,10 +5,11 @@ import InputGroup from "react-bootstrap/esm/InputGroup";
 
 import OverlayTrigger from "react-bootstrap/esm/OverlayTrigger";
 import Tooltip from "react-bootstrap/esm/Tooltip";
-import { editorInstance } from "@/three/instance/EditorInstance";
-import { Config3d } from "@/three/config/Three3dConfig";
+import { config3dInit } from "@/three/config/Three3dConfig";
 import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
+import { getEditorInstance } from "@/three/utils/utils";
+
 export function ConfigCheck({
   label = "label",
   configKey = "css2d",
@@ -18,20 +19,23 @@ export function ConfigCheck({
   callBack,
 }: {
   label: string;
-  configKey: keyof Config3d;
+  configKey: keyof typeof config3dInit;
   iconName: string;
   toolTip?: string;
   disabled?: boolean;
   callBack?: () => void;
 }) {
-  const { scene, updateScene } = useUpdateScene();
-  const checked = scene.userData.config3d[configKey];
+  const { scene, updateScene, userData } = useUpdateScene();
+  const config3d = userData.config3d || { ...config3dInit };
+  if (typeof config3d[configKey] === "number") {
+    return;
+  }
+  const checked = config3d[configKey];
 
   return (
     <InputGroup size="sm">
       <InputGroup.Text style={{ color: styleBody.color }}>
         <Icon iconName={iconName} gap={1} />
-        {label}
       </InputGroup.Text>
       <InputGroup.Text>
         <OverlayTrigger
@@ -40,13 +44,16 @@ export function ConfigCheck({
         >
           <Form>
             <Form.Check
+              style={{ minHeight: "initial", marginBottom: "initial" }}
+              id={`check-api-${iconName}`}
               type="switch"
+              label={label}
               checked={checked}
               disabled={disabled}
               onChange={() => {
-                const { scene } = editorInstance.getEditor();
-                const _config3d = scene.userData.config3d;
-                _config3d[configKey] = !_config3d[configKey];
+                const { userData } = getEditorInstance();
+                const { config3d } = userData;
+                (config3d[configKey] as boolean) = !config3d[configKey];
                 if (callBack) {
                   callBack();
                 }

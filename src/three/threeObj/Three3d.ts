@@ -46,6 +46,7 @@ import { MarkLabel } from "@/viewer3d/label/MarkLabel";
 import {
   createLabelRenderer,
   createPerspectiveCamera,
+  createTilesRenderer,
   createUnrealBloomPass,
 } from "@/three/utils/factory3d";
 import {
@@ -66,6 +67,7 @@ import { runScriptPro } from "@/three/script/scriptPro";
 import { GROUP } from "@/three/config/CONSTANT";
 import ThreeObj from "@/three/threeObj/ThreeObj";
 import { testLabel } from "@/component/routes/effects/utils";
+import { TilesRenderer, GlobeControls } from "3d-tiles-renderer";
 
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;
@@ -74,6 +76,10 @@ export class Three3d extends ThreeObj {
   private _camera: PerspectiveCamera;
   private _renderer: WebGLRenderer;
   private _controls: OrbitControls;
+  private _cesiumTiles?: {
+    tiles: TilesRenderer;
+    globeControls: GlobeControls;
+  };
   private _clock = new Clock();
   private _timeS = 0;
 
@@ -223,6 +229,12 @@ export class Three3d extends ThreeObj {
   }
   get clock() {
     return this._clock;
+  }
+  get cesiumTiles() {
+    return this._cesiumTiles;
+  }
+  set cesiumTiles(value) {
+    this._cesiumTiles = value;
   }
 
   constructor(
@@ -375,6 +387,7 @@ export class Three3d extends ThreeObj {
           projectId: item.id,
         };
         this.scene.userData.APP_THEME.sceneCanSave = true;
+        this.deserializeIsEnd();
 
         // 处理选中
         this.scene.children = [];
@@ -414,6 +427,15 @@ export class Three3d extends ThreeObj {
       this.extraParams.modelSize += model.userData.modelTotal;
       this.loadModelByUrl(model);
     });
+  }
+  //反序列化结束
+  deserializeIsEnd() {
+    const { cesiumTiles } = createTilesRenderer(
+      this.scene,
+      this.camera,
+      this.renderer
+    );
+    this._cesiumTiles = cesiumTiles;
   }
   setTextureBackground_test(object?: Scene) {
     const { backgroundHDR } = this.scene.userData as SceneUserData;
@@ -548,12 +570,14 @@ export class Three3d extends ThreeObj {
   animate(): void {
     const { config3d, customButtonGroupList } = this.scene
       .userData as SceneUserData;
-    const { css2d, css3d, useTween, FPS, useKeyframe, useComposer } = config3d;
+    const { css2d, css3d, useTween, FPS, useKeyframe, useComposer, useCesium } =
+      config3d;
 
     const { mixer, roamLine } = this.extraParams;
     const delta = this.clock.getDelta();
     this.timeS = this.timeS + delta;
     const renderT = 1 / FPS;
+    const cesiumTiles = this.cesiumTiles;
 
     if (this.timeS >= renderT) {
       if (css2d) {
@@ -565,12 +589,17 @@ export class Three3d extends ThreeObj {
       if (useTween) {
         TWEEN.update();
       }
+
       if (useKeyframe) {
         mixer.forEach((_mixer) => {
           _mixer.update(delta);
         });
       }
-      this.controls.update();
+
+      if (useCesium && cesiumTiles) {
+        cesiumTiles.tiles.update();
+        cesiumTiles.globeControls.update();
+      }
       if (roamLine) {
         const { userSetting } = (
           customButtonGroupList || {
@@ -585,6 +614,7 @@ export class Three3d extends ThreeObj {
       } else {
         this.renderer.render(this.scene, this.camera);
       }
+      this.controls.update();
 
       this.timeS = 0;
     }
@@ -626,9 +656,7 @@ export class Three3d extends ThreeObj {
     }
   }
 
-  loadedModelsEnd(): void {
-    console.log("loadedModelsEnd");
-  }
+  loadedModelsEnd(): void {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onLoadProgress(_process: number) {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

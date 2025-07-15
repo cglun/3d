@@ -35,15 +35,16 @@ import Toast3d from "@/component/common/Toast3d";
 
 export default function Viewer3dPlus({
   item,
-  canvasStyle = { height: "100vh", width: "100vw" },
-  showProgress = true,
   callBack,
+  showButtonGroup = true,
+  showProgress = true,
+  canvasStyle = { height: "100vh", width: "100vw" },
 }: {
   item: RecordItem;
-  showProgress?: boolean;
-  dev?: "editor3d" | "viewer3d";
-  canvasStyle?: { height: string; width: string } & React.CSSProperties;
   callBack: (viewer: Three3dViewer) => void;
+  showProgress?: boolean;
+  canvasStyle?: { height: string; width: string } & React.CSSProperties;
+  showButtonGroup?: boolean;
 }) {
   // 修改为明确指定 HTMLDivElement 类型
   const canvas3d = useRef(null);
@@ -109,10 +110,12 @@ export default function Viewer3dPlus({
         viewer.setOutLinePassColor();
         const { customButtonGroupList } = viewer.scene
           .userData as SceneUserData;
-        const { generateButtonGroup, customButtonGroup } =
-          customButtonGroupList;
-        setGenerateButtonGroup(generateButtonGroup);
-        setCustomButtonGroup(customButtonGroup);
+        if (showButtonGroup) {
+          const { generateButtonGroup, customButtonGroup } =
+            customButtonGroupList;
+          setGenerateButtonGroup(generateButtonGroup);
+          setCustomButtonGroup(customButtonGroup);
+        }
 
         callBack(viewer);
       }
@@ -153,28 +156,30 @@ export default function Viewer3dPlus({
         )}
         <div style={canvasStyle} ref={canvas3d}></div>
         <ModalTour />
-        <Suspense fallback={<div>Loading...</div>}>
-          <GenerateButtonGroupShow
-            groupIndex={0}
-            generateButtonGroup={generateButtonGroup}
-            setGenerateButtonGroup={setGenerateButtonGroup}
-          />
-          <GenerateButtonGroupShow
-            groupIndex={1}
-            generateButtonGroup={generateButtonGroup}
-            setGenerateButtonGroup={setGenerateButtonGroup}
-          />
-          <GenerateButtonGroupShow
-            groupIndex={2}
-            generateButtonGroup={generateButtonGroup}
-            setGenerateButtonGroup={setGenerateButtonGroup}
-          />
+        {showButtonGroup && (
+          <Suspense fallback={<div>Loading...</div>}>
+            <GenerateButtonGroupShow
+              groupIndex={0}
+              generateButtonGroup={generateButtonGroup}
+              setGenerateButtonGroup={setGenerateButtonGroup}
+            />
+            <GenerateButtonGroupShow
+              groupIndex={1}
+              generateButtonGroup={generateButtonGroup}
+              setGenerateButtonGroup={setGenerateButtonGroup}
+            />
+            <GenerateButtonGroupShow
+              groupIndex={2}
+              generateButtonGroup={generateButtonGroup}
+              setGenerateButtonGroup={setGenerateButtonGroup}
+            />
 
-          <CustomButtonGroupShow
-            customButtonGroup={customButtonGroup}
-            setCustomButtonGroup={setCustomButtonGroup}
-          />
-        </Suspense>
+            <CustomButtonGroupShow
+              customButtonGroup={customButtonGroup}
+              setCustomButtonGroup={setCustomButtonGroup}
+            />
+          </Suspense>
+        )}
       </Container>
     </MyContext.Provider>
   );

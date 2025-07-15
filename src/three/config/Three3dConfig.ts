@@ -124,7 +124,6 @@ export interface UserButton {
   group: CustomButtonItem2[];
 }
 
-export type Config3dKey = keyof Config3d;
 export type Config3d = typeof config3dInit;
 export const config3dInit = {
   css2d: true, //是否开启2d标签
@@ -134,6 +133,7 @@ export const config3dInit = {
   useKeyframe: true, //是否开启关键帧动画
   FPS: 30, //帧率
   useComposer: true,
+  useCesium: false,
 };
 
 export interface SceneUserData {
@@ -153,6 +153,11 @@ export interface SceneUserData {
     themeColor: APP_COLOR;
     iconFill: string;
     sceneCanSave: boolean;
+    cesiumConfig: {
+      apiToken: string;
+      assetId: string;
+      autoRefreshToken: boolean;
+    };
   };
   userCssStyle: {
     topCard: UserCssStyle;
@@ -279,6 +284,12 @@ const sceneUserData: SceneUserData = {
     themeColor: APP_COLOR.Dark, // 若 APP_COLOR 有具体结构，需按需填充
     iconFill: "",
     sceneCanSave: false,
+    cesiumConfig: {
+      apiToken:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MTZiODJjNC1lNzUzLTQxNTAtOGQ1MC1jYjNkZTg4YzRhY2EiLCJpZCI6MzIwODY3LCJpYXQiOjE3NTIzMjg2Njh9.k2hWmKgoF2WN2BqpfJIUNVM6SFgYH0ZQXcTQxDpOeUo",
+      assetId: "2275207",
+      autoRefreshToken: false,
+    },
   },
   userCssStyle: {
     topCard: {

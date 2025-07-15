@@ -26,7 +26,7 @@ const excludeFile = [
   // "@react-monaco-editor",
   // "@monaco-editor/react",
   "bootstrap",
-  // "three",
+  //"three",
   // "axios",
   // "@static/file3d/hdr/spruit_sunrise_1k.hdr?url",
 ];
@@ -39,12 +39,13 @@ export default defineConfig({
       filename: "remoteEntry.js",
       exposes: {
         "./Viewer3d": "./src/Viewer3d/Viewer3d.tsx",
+        "./Viewer3dPlus": "./src/Viewer3d/Viewer3dPlus.tsx",
         "./sendTo3d": "./src/Viewer3d/sendTo3d.ts",
       },
       shared: {
         react: { singleton: true, requiredVersion: "^18.3.1" },
         "react-dom": { singleton: true, requiredVersion: "^18.3.1" },
-        //  bootstrap: { singleton: true, requiredVersion: "^5.3.7" },
+        bootstrap: { singleton: true, requiredVersion: "^5.3.7" },
         // three: { singleton: true, requiredVersion: "^0.177.0" },
         // axios: { singleton: true, requiredVersion: "^1.10.0" },
         // "@monaco-editor/react": { singleton: true },
@@ -64,8 +65,8 @@ export default defineConfig({
     modulePreload: true,
     copyPublicDir: true,
     target: "esnext",
-    minify: true,
-    //minify: false,
+    //minify: true,
+    minify: false,
     cssCodeSplit: false,
     outDir: "../ArgDataV.Designer.V2.Vite/editor3d",
     // outDir: "dist/editor3d",
@@ -77,13 +78,8 @@ export default defineConfig({
     },
 
     rollupOptions: {
-      external: [
-        ...excludeFile,
-        // "@static/file3d/hdr/spruit_sunrise_1k.hdr?url",
-        // "@static/file3d/hdr/venice_sunset_1k.hdr?url",
-        //new RegExp(".hdr"),
-      ],
-      //  external: [new RegExp(".hdr")],
+      external: [...excludeFile],
+
       output: {
         assetFileNames: "assets/static/css/[name].[ext]",
         // chunkFileNames: "assets/[name]-[hash].js",
