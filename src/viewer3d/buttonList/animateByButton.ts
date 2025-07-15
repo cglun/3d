@@ -11,13 +11,13 @@ import { GenerateButtonItemMap } from "@/app/type";
 import { GROUP } from "@/three/config/CONSTANT";
 import { cameraTween, meshTween } from "@/three/animate";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { getObjectWorldPosition } from "@/three/utils/utils";
+import { getObjectWorldPosition, getViewerInstance } from "@/three/utils/utils";
 import {
   cameraViewerPosition,
   roamAnimation,
 } from "@/viewer3d/buttonList/buttonGroup";
 
-import { SceneUserData, ToggleButtonGroup } from "@/three/config/Three3dConfig";
+import { ToggleButtonGroup } from "@/three/config/Three3dConfig";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
 
 function _viewerInstance() {
@@ -329,8 +329,8 @@ export function cameraBackHome(
   controls: OrbitControls,
   animationTime: number
 ) {
-  const { cameraPosition } = _viewerInstance().scene.userData as SceneUserData;
-
+  const { userData } = getViewerInstance();
+  const { cameraPosition } = userData;
   cameraTween(camera, cameraPosition.end, animationTime)
     .start()
     .onComplete(() => {

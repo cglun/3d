@@ -17,7 +17,7 @@ import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
 import { errorMessage } from "@/app/utils";
 import TransformControl from "./TransformControl/TransformControl";
 import { SceneReload } from "@/app/customEvents/sceneEvent";
-import { SceneUserData } from "@/three/config/Three3dConfig";
+
 import { getEditorInstance } from "@/three/utils/utils";
 
 function EditorViewer3d() {
@@ -102,8 +102,8 @@ function EditorViewer3d() {
                   },
                 });
               }, 1998);
-              const { GOD_NUMBER } = editor.scene.userData as SceneUserData;
-              GOD_NUMBER.clearHistory = new Date().getTime(); //清除历史记录
+              const { userData } = getEditorInstance();
+              userData.GOD_NUMBER.clearHistory = new Date().getTime(); //清除历史记录
               updateScene(editor.scene);
               updateCamera(editor.camera);
               document.title = `【id:${item.id}】`;

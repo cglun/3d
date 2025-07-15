@@ -387,10 +387,11 @@ export class Three3d extends ThreeObj {
           projectId: item.id,
         };
         this.scene.userData.APP_THEME.sceneCanSave = true;
-        this.deserializeIsEnd();
 
         // 处理选中
         this.scene.children = [];
+        this.deserializeIsEnd();
+
         //在编辑器里增加灯光
         const light = object.getObjectByName(GROUP.LIGHT);
         if (light) this.LIGHT_GROUP.children = light.children;
@@ -597,7 +598,7 @@ export class Three3d extends ThreeObj {
       }
 
       if (useCesium && cesiumTiles) {
-        cesiumTiles.tiles.update();
+        cesiumTiles?.tiles.update();
         cesiumTiles.globeControls.update();
       }
       if (roamLine) {
@@ -614,8 +615,7 @@ export class Three3d extends ThreeObj {
       } else {
         this.renderer.render(this.scene, this.camera);
       }
-      this.controls.update();
-
+      this.controls.update(delta); // 更新控制器的状态，传递 delta 参数
       this.timeS = 0;
     }
   }

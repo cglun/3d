@@ -11,12 +11,13 @@ import { APP_COLOR, DELAY } from "@/app/type";
 import { useState } from "react";
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import Icon from "@/component/common/Icon";
-
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
-
 import { config3dInit, SceneUserData } from "@/three/config/Three3dConfig";
-
 import { getEditorInstance } from "@/three/utils/utils";
+import { cameraTween } from "@/three/animate";
+import ModalConfirm3d from "@/component/common/ModalConfirm3d";
+import AlertBase from "@/component/common/AlertBase";
+import { Vector3 } from "three";
 
 export const Route = createLazyFileRoute("/editor3d/config")({
   component: RouteComponent,
@@ -89,16 +90,66 @@ function RouteComponent() {
           toolTip={"启用cesium地图"}
           callBack={() => {
             const { editor, userData } = getEditorInstance();
-            const { config3d } = userData;
+            const { camera, controls } = editor;
+            const { config3d, cameraPosition } = userData;
             if (config3d.useCesium) {
-              editor.controls.enabled = false;
-              editor.deserializeIsEnd();
+              ModalConfirm3d(
+                {
+                  body: (
+                    <AlertBase
+                      text={
+                        "注意：遥遥领先的国家需解决网络问题，否则难以加载地图，甚至无法加载。"
+                      }
+                      type={APP_COLOR.Warning}
+                    />
+                  ),
+                  title: "重大提醒",
+                  confirmButton: {
+                    show: true,
+                    closeButton: true,
+                    hasButton: true,
+                  },
+                },
+                () => {
+                  controls.enabled = false;
+                  editor.deserializeIsEnd();
+                  const { x, y, z } = new Vector3(
+                    -2306236.16,
+                    6965679.87,
+                    -8196202.81
+                  );
+
+                  camera.position.set(x, y, z);
+                  camera.updateProjectionMatrix();
+                }
+              );
             } else {
-              editor.controls.enabled = true;
-              editor.cesiumTiles?.globeControls.dispose();
-              editor.cesiumTiles?.tiles.dispose();
+              controls.enabled = true;
+              if (editor.cesiumTiles) {
+                // 移除场景中的 group
+                if (editor.cesiumTiles.tiles.group.parent) {
+                  editor.cesiumTiles.tiles.group.parent.remove(
+                    editor.cesiumTiles.tiles.group
+                  );
+                }
+                // 销毁 GlobeControls 和 TilesRenderer
+                editor.cesiumTiles.globeControls.dispose();
+                editor.cesiumTiles.tiles.dispose();
+                // 清理 DOM 关联（如果有）
+                if (editor.cesiumTiles.globeControls.domElement) {
+                  // 这里根据实际情况处理 DOM 元素，例如移除事件监听
+                }
+              }
+
+              //end的位置怎么没有变化？
+              const { end } = cameraPosition;
+              camera.far = 1000;
+              camera.near = 0.1;
+              // camera.lookAt(new Vector3(0, 0, 0));
+              camera.updateProjectionMatrix();
+              cameraTween(camera, end, 1000).start();
             }
-            updateScene(scene);
+            updateScene(editor.scene);
           }}
         />
       </ListGroup.Item>

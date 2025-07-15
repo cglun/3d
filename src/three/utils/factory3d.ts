@@ -4,7 +4,9 @@ import {
   GridHelper,
   PerspectiveCamera,
   Scene,
+  Sphere,
   Vector2,
+  Vector3,
   WebGLRenderer,
 } from "three";
 
@@ -143,6 +145,7 @@ export function createTilesRenderer(
 ) {
   const { userData } = getEditorInstance();
   const { useCesium } = userData.config3d;
+
   if (!useCesium) {
     // 如果不使用Cesium，则不创建TilesRenderer
     return { cesiumTiles: undefined };
@@ -184,11 +187,6 @@ export function createTilesRenderer(
     renderer.domElement,
     tiles
   );
-  //globeControls.attach(renderer.domElement);
-  // globeControls.setScene(scene); // 使用 setScene 替代 setTilesRenderer
-  // const ellipsoid = new Ellipsoid(0, 0, 0);
-  // globeControls.setEllipsoid(ellipsoid, null); // 使用 setEllipsoid 替代 setTilesRenderer
-  // globeControls.setCamera(camera);
 
   //阻尼（惯性）效果
   globeControls.enableDamping = true;
