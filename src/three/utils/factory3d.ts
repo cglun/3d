@@ -4,9 +4,7 @@ import {
   GridHelper,
   PerspectiveCamera,
   Scene,
-  Sphere,
   Vector2,
-  Vector3,
   WebGLRenderer,
 } from "three";
 
@@ -21,11 +19,11 @@ import {
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { UserDataType } from "@/app/type";
 import { TourWindow } from "@/app/MyContext";
-import sceneUserData from "@/three/config/Three3dConfig";
+import sceneUserData, { SceneUserData } from "@/three/config/Three3dConfig";
 import { getTourSrc } from "@/three/utils/util4Scene";
 import { setClassName } from "@/three/utils/util4UI";
 
-import { TilesRenderer, GlobeControls, Ellipsoid } from "3d-tiles-renderer";
+import { TilesRenderer, GlobeControls } from "3d-tiles-renderer";
 import {
   CesiumIonAuthPlugin,
   GLTFExtensionsPlugin,
@@ -33,7 +31,6 @@ import {
   UpdateOnChangePlugin,
 } from "3d-tiles-renderer/plugins";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
-import { getEditorInstance } from "./utils";
 
 export function createPerspectiveCamera(
   node: HTMLElement,
@@ -143,8 +140,9 @@ export function createTilesRenderer(
   camera: PerspectiveCamera,
   renderer: WebGLRenderer
 ) {
-  const { userData } = getEditorInstance();
-  const { useCesium } = userData.config3d;
+  // const { userData } = getEditorInstance();
+  const userData = scene.userData as SceneUserData;
+  const { useCesium } = scene.userData.config3d;
 
   if (!useCesium) {
     // 如果不使用Cesium，则不创建TilesRenderer

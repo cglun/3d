@@ -116,6 +116,10 @@ export default function EditorBottom() {
             );
           }
 
+          if (item.title === "测试" && import.meta.env.PROD) {
+            return;
+          }
+
           return (
             <Nav.Item key={index}>
               <Nav.Link eventKey={BASE_URL + path}>

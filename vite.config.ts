@@ -16,19 +16,18 @@ const manualChunksConfig = {
   // 将第三方库打包到一个单独的 chunk 中
   // vendor: ["axios", "bootstrap", "three"],
   three: ["three"],
-  bootstrap: ["bootstrap"],
+  // bootstrap: ["bootstrap"],
   axios: ["axios"],
   // 将 monaco-editor 相关依赖打包到一个单独的 chunk 中
   monaco: ["react-monaco-editor", "@monaco-editor/react"],
-  // 可以根据需要添加更多的 chunk
 };
 const excludeFile = [
   // "@react-monaco-editor",
   // "@monaco-editor/react",
-  "bootstrap",
+  // "bootstrap",
   //"three",
   // "axios",
-  // "@static/file3d/hdr/spruit_sunrise_1k.hdr?url",
+  "@static/file3d/hdr/spruit_sunrise_1k.hdr?url",
 ];
 export default defineConfig({
   plugins: [
@@ -45,7 +44,11 @@ export default defineConfig({
       shared: {
         react: { singleton: true, requiredVersion: "^18.3.1" },
         "react-dom": { singleton: true, requiredVersion: "^18.3.1" },
-        bootstrap: { singleton: true, requiredVersion: "^5.3.7" },
+        "react-bootstrap": {
+          singleton: true,
+          requiredVersion: "^2.10.10",
+        },
+        //bootstrap: { singleton: true, requiredVersion: "^5.3.7" },
         // three: { singleton: true, requiredVersion: "^0.177.0" },
         // axios: { singleton: true, requiredVersion: "^1.10.0" },
         // "@monaco-editor/react": { singleton: true },

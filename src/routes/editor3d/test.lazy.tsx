@@ -95,6 +95,7 @@ function RouteComponent() {
         >
           当前相机位置
         </Button>
+        <Button onClick={() => {}}>TEST</Button>
       </ButtonGroup>
     </>
   );

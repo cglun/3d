@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useRef, useState, Suspense, memo } from "react";
-import { APP_COLOR, MessageError, RecordItem } from "@/app/type";
+import { APP_COLOR, DELAY, MessageError, RecordItem } from "@/app/type";
 
 import {
   initEditorCamera,
@@ -26,7 +26,7 @@ import {
   getButtonGroupStyle,
 } from "@/component/routes/effects/utils";
 import { getListGroupByIndex, getViewerInstance } from "@/three/utils/utils";
-import Toast3d from "@/component/common/Toast3d";
+import Toast3dPlus, { Toast3dPlusProps } from "@/component/common/Toast3dPlus";
 
 /**
  * 其他应用可以调用此组件，
@@ -50,6 +50,7 @@ export default function Viewer3dPlus({
   const canvas3d = useRef(null);
   const isInitialized = useRef(false);
   const [progress, setProgress] = useState(0);
+
   const [scene, dispatchScene] = useReducer(reducerScene, initEditorScene);
   const [tourWindow, dispatchTourWindow] = useReducer(
     reducerTour,
@@ -62,6 +63,9 @@ export default function Viewer3dPlus({
   const [customButtonGroup, setCustomButtonGroup] = useState<CustomButtonGroup>(
     configGroup.customButtonGroup
   );
+  if (import.meta.env.PROD) {
+    document.body.setAttribute("data-bs-theme", "dark");
+  }
 
   useEffect(() => {
     if (canvas3d.current && !isInitialized.current) {
@@ -123,7 +127,6 @@ export default function Viewer3dPlus({
       //关了进度条
       if (showProgress) {
         setProgress(100);
-        // 添加场景加载完成事件
       }
     };
     viewer.onLoadError = (error: MessageError) => {
@@ -258,6 +261,13 @@ function CustomButtonGroupShow({
     const { listGroup, showGroup, buttonGroupStyle } = item;
     const { group } = customButtonGroup;
     const { viewer } = getViewerInstance();
+    const [toast3dPlusProps, setToast3dPlusProps] = useState<Toast3dPlusProps>({
+      show: false,
+      content: "content",
+      title: "提示",
+      type: APP_COLOR.Success,
+      delay: DELAY.MIDDLE,
+    });
     const positionStyle = getButtonGroupStyle(
       group[index],
       showGroup,
@@ -265,6 +275,19 @@ function CustomButtonGroupShow({
     );
     if (!showGroup) {
       return;
+    }
+    function showToast3dPlus(
+      content: string,
+      type?: APP_COLOR,
+      title?: string
+    ) {
+      setToast3dPlusProps({
+        ...toast3dPlusProps,
+        show: true,
+        content,
+        title: title ?? "提示",
+        type: type ?? APP_COLOR.Success,
+      });
     }
     return (
       <>
@@ -297,7 +320,10 @@ function CustomButtonGroupShow({
                   if (viewerIns) {
                     new Function("viewerIns", "iToast", _item.codeString)(
                       viewerIns,
-                      { APP_COLOR, Toast3d }
+                      {
+                        APP_COLOR,
+                        showToast3dPlus,
+                      }
                     );
                   }
 
@@ -312,6 +338,10 @@ function CustomButtonGroupShow({
             );
           })}
         </div>
+        <Toast3dPlus
+          toast3dPlusProps={toast3dPlusProps}
+          setToast3dPlusProps={setToast3dPlusProps}
+        />
       </>
     );
   });
