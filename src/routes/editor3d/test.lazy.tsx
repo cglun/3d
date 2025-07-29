@@ -2,7 +2,7 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import Button from "react-bootstrap/esm/Button";
 import { Scene, Vector3 } from "three";
-import Toast3d from "@/component/common/Toast3d";
+import Toast3d from "@/component/common/Toast3d/Toast3d";
 import { useUpdateScene } from "@/app/hooks";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 import { editorInstance } from "@/three/instance/EditorInstance";

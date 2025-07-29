@@ -23,6 +23,17 @@ function RouteComponent() {
     {
       list: [
         {
+          logoName: "gear",
+          position: "底部栏",
+          buttonName: "配置",
+          des: "增加cesium地图，默认为关闭状态，需要手动开启。",
+        },
+      ],
+      updateTime: "2025年7月15",
+    },
+    {
+      list: [
+        {
           logoName: "x-diamond",
           position: "底部栏",
           buttonName: "扩展",

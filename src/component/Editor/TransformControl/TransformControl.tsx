@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { TransformControlsMode } from "three/examples/jsm/controls/TransformControls.js";
 import { useUpdateScene } from "@/app/hooks";
 import Icon from "@/component/common/Icon";
-import Toast3d from "@/component/common/Toast3d";
+import Toast3d from "@/component/common/Toast3d/Toast3d";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { getThemeByScene } from "@/three/utils/util4UI";
 import Button from "react-bootstrap/esm/Button";

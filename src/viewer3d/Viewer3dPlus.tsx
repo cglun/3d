@@ -26,7 +26,9 @@ import {
   getButtonGroupStyle,
 } from "@/component/routes/effects/utils";
 import { getListGroupByIndex, getViewerInstance } from "@/three/utils/utils";
-import Toast3dPlus, { Toast3dPlusProps } from "@/component/common/Toast3dPlus";
+import Toast3dPlus, {
+  Toast3dPlusProps,
+} from "@/component/common/Toast3d/Toast3dPlus";
 
 /**
  * 其他应用可以调用此组件，

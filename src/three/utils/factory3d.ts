@@ -31,6 +31,7 @@ import {
   UpdateOnChangePlugin,
 } from "3d-tiles-renderer/plugins";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
+import { GROUP } from "../config/CONSTANT";
 
 export function createPerspectiveCamera(
   node: HTMLElement,
@@ -167,8 +168,8 @@ export function createTilesRenderer(
   tiles.registerPlugin(new UpdateOnChangePlugin());
   tiles.setCamera(camera);
   tiles.setResolutionFromRenderer(camera, renderer);
+  tiles.group.name = GROUP.TILES;
   scene.add(tiles.group);
-
   // rotate the globe so the north pole is up
   tiles.group.rotation.x = -Math.PI / 2;
 

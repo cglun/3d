@@ -9,7 +9,7 @@ import AlertBase from "@/component/common/AlertBase";
 
 import { APP_COLOR, MessageError, RecordItem } from "@/app/type";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
-import Toast3d from "@/component/common/Toast3d";
+import Toast3d from "@/component/common/Toast3d/Toast3d";
 import EditorForm from "@/component/common/EditorForm";
 import axios, { loadAssets } from "@/app/http";
 import { useUpdateScene } from "@/app/hooks";

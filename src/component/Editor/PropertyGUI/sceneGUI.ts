@@ -1,4 +1,4 @@
-import Toast3d from "@/component/common/Toast3d";
+import Toast3d from "@/component/common/Toast3d/Toast3d";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { Color, FogExp2, Scene } from "three";

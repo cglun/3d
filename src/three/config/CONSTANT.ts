@@ -9,4 +9,5 @@ export enum GROUP {
   ROAM = "_ROAM_",
   TEST = "TEST_GROUP",
   NONE = "NONE",
+  TILES = "TILES_GROUP",
 }

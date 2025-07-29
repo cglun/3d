@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import InputGroup from "react-bootstrap/esm/InputGroup";
 import Form from "react-bootstrap/esm/Form";
 import Viewer3d from "@/viewer3d/Viewer3d";
-import Toast3d from "@/component/common/Toast3d";
+import Toast3d from "@/component/common/Toast3d/Toast3d";
 
 import axios, { loadAssets } from "@/app/http";
 import { APP_COLOR, MessageError, RecordItem } from "@/app/type";

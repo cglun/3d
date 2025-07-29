@@ -1,7 +1,7 @@
 import ListGroup from "react-bootstrap/esm/ListGroup";
 import Button from "react-bootstrap/esm/Button";
 import { APP_COLOR } from "@/app/type";
-import Toast3d from "@/component/common/Toast3d";
+import Toast3d from "@/component/common/Toast3d/Toast3d";
 import { useUpdateCamera } from "@/app/hooks";
 import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";

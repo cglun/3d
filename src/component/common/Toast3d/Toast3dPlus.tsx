@@ -3,6 +3,7 @@ import { APP_COLOR, DELAY } from "@/app/type";
 
 import Icon from "@/component/common/Icon";
 import ToastContainer from "react-bootstrap/esm/ToastContainer";
+import Toast3dBase from "./Toast3dBase";
 
 /**
  * 消息提示
@@ -25,6 +26,23 @@ export default function Toast3dPlus({
   setToast3dPlusProps: (props: Toast3dPlusProps) => void;
 }) {
   const { content, title, type, delay, show } = toast3dPlusProps;
+
+  return (
+    <Toast3dBase
+      content={content}
+      title={title}
+      type={type}
+      delay={delay}
+      show={show}
+      callBackOnclose={function (): void {
+        setToast3dPlusProps({
+          ...toast3dPlusProps,
+          show: false,
+        });
+      }}
+    />
+  );
+
   return (
     <ToastContainer className="position-static">
       <Toast

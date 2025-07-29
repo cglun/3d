@@ -156,6 +156,10 @@ export class Three3dEditor extends Three3d {
     if (modelGroup) {
       sceneCopy.remove(modelGroup);
     }
+    const tilesGroup = sceneCopy.getObjectByName(GROUP.TILES);
+    if (tilesGroup) {
+      sceneCopy.remove(tilesGroup);
+    }
 
     //sceneCopy.children = [];
     const modelList: GlbModel[] = [];

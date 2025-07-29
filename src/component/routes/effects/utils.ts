@@ -1,6 +1,6 @@
 import { TourWindow } from "@/app/MyContext";
 import { ButtonItemBase, APP_COLOR } from "@/app/type";
-import Toast3d from "@/component/common/Toast3d";
+import Toast3d from "@/component/common/Toast3d/Toast3d";
 import { GROUP } from "@/three/config/CONSTANT";
 import {
   ButtonGroupStyle,

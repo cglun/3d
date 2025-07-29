@@ -26,6 +26,7 @@ export class Command {
     [GROUP.ENV]: "环境",
     [GROUP.ROAM]: "漫游",
     [GROUP.TEST]: "测试",
+    [GROUP.TILES]: "地图",
   };
 
   // 存储执行操作的函数

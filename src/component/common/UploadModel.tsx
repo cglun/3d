@@ -6,7 +6,7 @@ import Form from "react-bootstrap/esm/Form";
 import { Euler, Vector3 } from "three";
 
 import { useRef, useState } from "react";
-import Toast3d from "@/component/common/Toast3d";
+import Toast3d from "@/component/common/Toast3d/Toast3d";
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import axios from "@/app/http";
 import { APP_COLOR, GlbModel, MessageError } from "@/app/type";

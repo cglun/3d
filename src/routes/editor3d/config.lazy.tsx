@@ -5,7 +5,7 @@ import Button from "react-bootstrap/esm/Button";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { ConfigCheck } from "@/component/common/ConfigCheck";
 import { useUpdateScene } from "@/app/hooks";
-import Toast3d from "@/component/common/Toast3d";
+import Toast3d from "@/component/common/Toast3d/Toast3d";
 
 import { APP_COLOR, DELAY } from "@/app/type";
 import { useState } from "react";

@@ -5,7 +5,7 @@ import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import { useUpdateScene } from "@/app/hooks";
 import { APP_COLOR, CustomButtonType } from "@/app/type";
-import Toast3d from "@/component/common/Toast3d";
+import Toast3d from "@/component/common/Toast3d/Toast3d";
 import {
   generatePanelControllerButtonGroup,
   generateRoamButtonGroup,

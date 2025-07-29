@@ -11,7 +11,7 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 
 import { useContext, useEffect, useState } from "react";
 import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
-import Toast3d from "@/component/common/Toast3d";
+import Toast3d from "@/component/common/Toast3d/Toast3d";
 import markLabelGUI from "@/component/routes/effects/gui/markLabelGUI";
 import topCardGUI from "@/component/routes/effects/gui/topCardGUI";
 import { APP_COLOR, MessageError, TourItem } from "@/app/type";

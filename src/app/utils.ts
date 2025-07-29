@@ -1,4 +1,4 @@
-import Toast3d from "@/component/common/Toast3d";
+import Toast3d from "@/component/common/Toast3d/Toast3d";
 import { APP_COLOR, DELAY, MessageError } from "@/app/type";
 
 export function errorMessage(error: MessageError) {
