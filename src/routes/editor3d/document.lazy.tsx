@@ -23,6 +23,17 @@ function RouteComponent() {
     {
       list: [
         {
+          logoName: "x-diamond",
+          position: "底部栏",
+          buttonName: "扩展",
+          des: "漫游时标签和顶牌隐藏，不知道什么原因会和相机一起移动，始终出现在视野内。",
+        },
+      ],
+      updateTime: "2025年8月14",
+    },
+    {
+      list: [
+        {
           logoName: "gear",
           position: "底部栏",
           buttonName: "配置",
