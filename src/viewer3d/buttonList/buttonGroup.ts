@@ -189,18 +189,10 @@ export function getRoamListByRoamButtonMap(): GenerateButtonItemMap[] {
     return {
       ...item,
       handler: (state: string) => {
-        const viewer = viewerInstance.getViewer();
-        const { MARK_LABEL_GROUP } = viewer;
         if (state.includes("_START")) {
-          if (MARK_LABEL_GROUP) {
-            MARK_LABEL_GROUP.visible = false;
-          }
           roamAnimation(true);
         }
         if (state.includes("_STOP")) {
-          if (MARK_LABEL_GROUP) {
-            MARK_LABEL_GROUP.visible = true;
-          }
           roamAnimation(false);
           const { camera, controls } = getViewerInstance().viewer;
           const { userSetting } = toggleButtonGroup;

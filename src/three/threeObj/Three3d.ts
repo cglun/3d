@@ -581,12 +581,6 @@ export class Three3d extends ThreeObj {
     const cesiumTiles = this.cesiumTiles;
 
     if (this.timeS >= renderT) {
-      if (css2d) {
-        this.labelRenderer2d.render(this.scene, this.camera);
-      }
-      if (css3d) {
-        this.labelRenderer3d.render(this.scene, this.camera);
-      }
       if (useTween) {
         TWEEN.update();
       }
@@ -608,6 +602,13 @@ export class Three3d extends ThreeObj {
           }
         ).generateButtonGroup.group[1];
         manyou(roamLine, this.camera, userSetting);
+      }
+      //渲染标签要放到manyou之后，不然会始终出现在相机视野里。
+      if (css2d) {
+        this.labelRenderer2d.render(this.scene, this.camera);
+      }
+      if (css3d) {
+        this.labelRenderer3d.render(this.scene, this.camera);
       }
 
       if (useComposer) {
