@@ -79,9 +79,13 @@ function TreeNode({
       }
       return;
     }
-    if (parentGroup === GROUP.GEOMETRY) {
-      transformCMD(editorObject, () => meshGroupGUI(editorObject as Mesh));
-      editor.transformControl.attach(editorObject as Mesh);
+
+    if (parentGroup === GROUP.EMERGENCY_PLAN) {
+      const isGroup = editorObject?.parent?.name.includes(GROUP.EMERGENCY_PLAN);
+      if (isGroup) {
+        transformCMD(editorObject, () => meshGroupGUI(editorObject as Group));
+        editor.transformControl.attach(editorObject as Group);
+      }
       return;
     }
 

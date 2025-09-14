@@ -25,8 +25,10 @@ export default function customButtonGroupGUI(
           body: `删除【${group[index].name}】吗？`,
         },
         () => {
-          const div = document.querySelector("#buttonGroupDiv") as HTMLElement;
-          div.style.visibility = "hidden";
+          // const div = document.querySelector("#buttonGroupDiv") as HTMLElement;
+          // if (div) {
+          //   //  div.style.visibility = "hidden";
+          // }
           group.splice(index, 1);
           editor.destroyGUI();
           updateScene(editor.scene);

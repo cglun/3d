@@ -164,9 +164,9 @@ export class Three3dEditor extends Three3d {
     //sceneCopy.children = [];
     const modelList: GlbModel[] = [];
 
-    sceneCopy.add(this.MARK_LABEL_GROUP);
-    sceneCopy.add(this.LIGHT_GROUP);
-    sceneCopy.add(this.GEOMETRY);
+    // sceneCopy.add(this.MARK_LABEL_GROUP);
+    // sceneCopy.add(this.LIGHT_GROUP);
+    // sceneCopy.add(this.GEOMETRY);
 
     this.MODEL_GROUP.children.forEach((child) => {
       const { id, name, position, rotation, scale } = child;
@@ -213,10 +213,10 @@ export class Three3dEditor extends Three3d {
       modelsJsonString: JSON.stringify(modelList),
       type: "scene",
     };
-    this.scene.add(this.HELPER_GROUP);
-    this.scene.add(this.MARK_LABEL_GROUP);
-    this.scene.add(this.LIGHT_GROUP);
-    this.scene.add(this.GEOMETRY);
+    // this.scene.add(this.HELPER_GROUP);
+    // this.scene.add(this.MARK_LABEL_GROUP);
+    // this.scene.add(this.LIGHT_GROUP);
+    // this.scene.add(this.GEOMETRY);
     return JSON.stringify(result);
   }
 

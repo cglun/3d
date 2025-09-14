@@ -24,7 +24,6 @@ import {
   getViewerInstance,
   hasValueString,
 } from "@/three/utils/utils";
-import { viewerInstance } from "@/three/instance/ViewerInstance";
 
 export const cameraViewerPosition = new Vector3(0, 0, 0);
 

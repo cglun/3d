@@ -30,6 +30,7 @@ export default function Index() {
   let MODEL_GROUP: Object3D[] = [];
   let MARK_LABEL_GROUP: Object3D[] = [];
   let GEOMETRY: Object3D[] = [];
+  let EMERGENCY_PLAN_GROUP: Object3D[] = [];
 
   const array = scene.children;
 
@@ -47,6 +48,9 @@ export default function Index() {
         break;
       case GROUP.GEOMETRY:
         GEOMETRY = getGroupByName(children);
+        break;
+      case GROUP.EMERGENCY_PLAN:
+        EMERGENCY_PLAN_GROUP = getGroupByName(children);
         break;
       default:
         break;
@@ -95,6 +99,10 @@ export default function Index() {
           <CardItem
             icon={<Icon iconName="pin-map" gap={gap} title="标签" />}
             groupBody={TreeListShow(MARK_LABEL_GROUP)}
+          />
+          <CardItem
+            icon={<Icon iconName="menu-button" gap={gap} title="预案" />}
+            groupBody={TreeListShow(EMERGENCY_PLAN_GROUP)}
           />
           <CardItem
             icon={<Icon iconName="box" gap={gap} title="几何体" />}

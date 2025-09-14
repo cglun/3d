@@ -92,6 +92,14 @@ export class Three3d extends ThreeObj {
   private _LIGHT_GROUP: Group = new Group();
   private _GEOMETRY: Group = new Group();
   private _TEST_GROUP: Group = new Group();
+  private _EMERGENCY_PLAN_GROUP: Group = new Group();
+
+  get EMERGENCY_PLAN_GROUP() {
+    return this._EMERGENCY_PLAN_GROUP;
+  }
+  set EMERGENCY_PLAN_GROUP(value) {
+    this._EMERGENCY_PLAN_GROUP = value;
+  }
 
   get TEST_GROUP() {
     return this._TEST_GROUP;
@@ -250,12 +258,14 @@ export class Three3d extends ThreeObj {
     this.LIGHT_GROUP.name = GROUP.LIGHT;
     this.GEOMETRY.name = GROUP.GEOMETRY;
     this.TEST_GROUP.name = GROUP.TEST;
+    this.EMERGENCY_PLAN_GROUP.name = GROUP.EMERGENCY_PLAN;
 
     this.scene.add(this.MARK_LABEL_GROUP);
     this.scene.add(this.MODEL_GROUP);
     this.scene.add(this.LIGHT_GROUP);
     this.scene.add(this.GEOMETRY);
     this.scene.add(this.TEST_GROUP);
+    this.scene.add(this.EMERGENCY_PLAN_GROUP);
 
     this._camera = this.initCamera();
     this._renderer = this.initRenderer();
