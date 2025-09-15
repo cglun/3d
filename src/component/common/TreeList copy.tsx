@@ -12,10 +12,7 @@ import {
 import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
 import Container from "react-bootstrap/esm/Container";
 import Button from "react-bootstrap/esm/Button";
-import {
-  CSS3DObject,
-  CSS3DSprite,
-} from "three/addons/renderers/CSS3DRenderer.js";
+import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import AlertBase from "@/component/common/AlertBase";
 import Toast3d from "@/component/common/Toast3d/Toast3d";
@@ -25,15 +22,15 @@ import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { getObjectNameByName } from "@/three/utils/util4UI";
+
 import directionalLightGUI from "@/component/Editor/PropertyGUI/lightGUI/directionalLightGUI";
 import ambientLightGUI from "@/component/Editor/PropertyGUI/lightGUI/ambientLightGUI";
 import meshGroupGUI from "@/component/Editor/PropertyGUI/meshGroupGUI";
+
+import css3CSS3DSpriteGUI from "@/component/Editor/PropertyGUI/css3DSpriteGUI";
 import { GROUP } from "@/three/config/CONSTANT";
 import { transformCMD } from "@/three/command/cmd";
 import emergencyPlanGui from "@/component/routes/extend/emergencyPlanGui/emergencyPlanGui";
-import emergencyPlanStepGui from "@/component/routes/extend/emergencyPlanGui/emergencyPlanStepGui";
-import css3DSpriteGUI from "@/component/Editor/PropertyGUI/css3DSpriteGUI";
-import css3DObjectGUI from "@/component/Editor/PropertyGUI/css3DObjectGUI";
 
 function TreeNode({
   node,
@@ -62,8 +59,8 @@ function TreeNode({
 
     editor.currentSelected3d = editorObject;
     editor.destroyGUI();
-    const parentGroup = editorObject?.parent;
-    if (parentGroup?.name === GROUP.LIGHT) {
+    const parentGroup = editorObject?.parent?.name;
+    if (parentGroup === GROUP.LIGHT) {
       if (editorObject instanceof DirectionalLight) {
         editor.transformControl.attach(editorObject);
         transformCMD(editorObject, () => directionalLightGUI(editorObject));
@@ -75,36 +72,29 @@ function TreeNode({
       return;
     }
 
-    if (parentGroup?.name === GROUP.MODEL) {
-      transformCMD(editorObject, () => meshGroupGUI(editorObject as Group));
-      editor.transformControl.attach(editorObject as Group);
+    if (parentGroup === GROUP.MODEL) {
+      const isGroup = editorObject?.parent?.name.includes(GROUP.MODEL);
+      if (isGroup) {
+        transformCMD(editorObject, () => meshGroupGUI(editorObject as Group));
+        editor.transformControl.attach(editorObject as Group);
+      }
       return;
     }
 
-    if (parentGroup?.name === GROUP.EMERGENCY_PLAN) {
+    if (parentGroup === GROUP.EMERGENCY_PLAN) {
       transformCMD(editorObject, () =>
         emergencyPlanGui(editorObject as Group, updateScene)
       );
-      editor.transformControl.detach();
+      editor.transformControl.attach(editorObject as Group);
+
       return;
     }
 
-    if (parentGroup?.parent?.name === GROUP.EMERGENCY_PLAN) {
-      transformCMD(editorObject, () =>
-        emergencyPlanStepGui(editorObject as Group, updateScene)
-      );
-      editor.transformControl.attach(editorObject);
-      return;
+    if (parentGroup === GROUP.EMERGENCY_PLAN) {
     }
-    if (parentGroup?.parent?.parent?.name === GROUP.EMERGENCY_PLAN) {
-      transformCMD(editorObject, () =>
-        css3DObjectGUI(editorObject as CSS3DObject, updateScene)
-      );
-      editor.transformControl.attach(editorObject);
-      return;
-    }
+
     if (editorObject instanceof CSS3DSprite) {
-      transformCMD(editorObject, () => css3DSpriteGUI(editorObject));
+      transformCMD(editorObject, () => css3CSS3DSpriteGUI(editorObject));
       editor.transformControl.attach(editorObject);
       return;
     }

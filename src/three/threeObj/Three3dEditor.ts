@@ -33,7 +33,7 @@ import directionalLightGUI from "@/component/Editor/PropertyGUI/lightGUI/directi
 import { GROUP } from "@/three/config/CONSTANT";
 import cameraGUI from "@/component/Editor/PropertyGUI/cameraGUI";
 import meshGroupGUI from "@/component/Editor/PropertyGUI/meshGroupGUI";
-import css3CSS3DSpriteGUI from "@/component/Editor/PropertyGUI/css3CSS3DSpriteGUI";
+import css3CSS3DSpriteGUI from "@/component/Editor/PropertyGUI/css3DSpriteGUI";
 import { Three3d } from "@/three/threeObj/Three3d";
 import { transformCMD } from "@/three/command/cmd";
 

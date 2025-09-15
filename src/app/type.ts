@@ -141,3 +141,16 @@ export interface MessageError {
     };
   };
 }
+// 定义响应数据的类型
+export interface ResponseData {
+  code: number;
+  message: string;
+  data: {
+    records: {
+      id: number;
+      name: string;
+      des: string;
+      cover: string;
+    }[];
+  };
+}

@@ -69,15 +69,19 @@ export function showLabel(
     label.visible = true;
     return label;
   } else {
-    const label = new MarkLabel(editor.scene, dispatchTourWindow, {
-      markName: "标签",
-      logo: "geo-alt",
-      showEye: false,
-      tourObject: {
-        id: "id",
-        title: "title",
+    const label = new MarkLabel(
+      editor.scene,
+      {
+        markName: "标签",
+        logo: "geo-alt",
+        showEye: false,
+        tourObject: {
+          id: "id",
+          title: "title",
+        },
       },
-    });
+      dispatchTourWindow
+    );
     label.css3DSprite.name = labelName;
     label.css3DSprite.userData.isHelper = true;
     editor.scene.add(label.css3DSprite);
@@ -107,15 +111,19 @@ export function getMarkLabelTest(
   if (testLabel.markLabel) {
     return testLabel.markLabel;
   }
-  const markLabel = new MarkLabel(editor.scene, dispatchTourWindow, {
-    markName: "预览标签",
-    logo: "geo-alt",
-    showEye: false,
-    tourObject: {
-      id: "id",
-      title: "title",
+  const markLabel = new MarkLabel(
+    editor.scene,
+    {
+      markName: "预览标签",
+      logo: "geo-alt",
+      showEye: false,
+      tourObject: {
+        id: "id",
+        title: "title",
+      },
     },
-  });
+    dispatchTourWindow
+  );
 
   editor.TEST_GROUP.add(markLabel.css3DSprite);
   testLabel.markLabel = markLabel;

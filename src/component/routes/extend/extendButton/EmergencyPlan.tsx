@@ -2,10 +2,6 @@ import Button from "react-bootstrap/esm/Button";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import ListGroup from "react-bootstrap/esm/ListGroup";
 import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
-import {
-  buttonGroupStyleInit,
-  CustomButtonItem2,
-} from "@/three/config/Three3dConfig";
 import Icon from "@/component/common/Icon";
 
 import { getEditorInstance } from "@/three/utils/utils";
@@ -13,6 +9,7 @@ import { useUpdateScene } from "@/app/hooks";
 import { APP_COLOR } from "@/app/type";
 import { Group } from "three";
 import { GROUP } from "@/three/config/CONSTANT";
+import ImagesList from "@/component/routes/extend/extendButton/imagesList/ImagesList";
 export default function EmergencyPlan() {
   const { updateScene } = useUpdateScene();
   return (
@@ -30,8 +27,7 @@ export default function EmergencyPlan() {
               }
 
               const group1 = new Group();
-              group1.name = "预案" + emergencyPlan.children.length;
-
+              group1.name = "预案" + (emergencyPlan.children.length + 1);
               emergencyPlan.add(group1);
               scene.add(emergencyPlan);
               updateScene(scene);
@@ -40,7 +36,11 @@ export default function EmergencyPlan() {
             <Icon iconName="plus-circle" gap={1} fontSize={1} />
             预案
           </Button>
+          <Button variant={APP_COLOR.Success}>样式</Button>
         </ButtonGroup>
+      </ListGroupItem>
+      <ListGroupItem>
+        <ImagesList />
       </ListGroupItem>
     </ListGroup>
   );

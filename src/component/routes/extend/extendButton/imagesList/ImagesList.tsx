@@ -1,20 +1,14 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 import React, { useEffect } from "react";
 import ListGroup from "react-bootstrap/esm/ListGroup";
 import Container from "react-bootstrap/esm/Container";
 import { Search3d } from "@/component/common/Search3d";
-import { UploadModel } from "@/component/common/UploadModel";
-import ListCard from "@/component/common/ListCard";
 import _axios from "@/app/http";
 import { MessageError, RecordItem, ResponseData } from "@/app/type";
 import { errorMessage } from "@/app/utils";
+import { UploadImage } from "@/component/routes/extend/extendButton/imagesList/UploadImage";
+import ListImageCard from "@/component/routes/extend/extendButton/imagesList/ListImageCard";
 
-// 更新路由定义，添加 sceneID参数
-export const Route = createLazyFileRoute("/editor3d/model")({
-  component: ModelList,
-});
-
-function ModelList() {
+export default function ImagesList() {
   const [list, setList] = React.useState<RecordItem[]>([]);
   const [filterList, setFilterList] = React.useState<RecordItem[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -34,7 +28,7 @@ function ModelList() {
           }
           const list = res.data.data.records;
           const sceneList = list.filter((item) => {
-            if (item.des === "Mesh") {
+            if (item.des === "Image") {
               return item;
             }
           });
@@ -65,21 +59,20 @@ function ModelList() {
     const currentTime = Date.now();
     updateList(currentTime);
   };
-
   return (
     <Container fluid className="d-flex mt-2">
       <ListGroup>
         {/* 修改部分：使用 handleFilterList 替代 setFilterList */}
-        <Search3d list={list} setFilterList={handleFilterList} type="模型" />
+        <Search3d list={list} setFilterList={handleFilterList} type="图片" />
         {/* 修改部分：使用 noArgUpdateList 替代 updateList */}
-        <UploadModel updateList={noArgUpdateList} />
+        <UploadImage updateList={noArgUpdateList} />
       </ListGroup>
-      <ListCard
+      <ListImageCard
         list={filterList}
         setList={setFilterList}
         isLoading={isLoading}
         error={error}
-      ></ListCard>
+      ></ListImageCard>
     </Container>
   );
 }

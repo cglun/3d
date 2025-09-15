@@ -6,6 +6,7 @@ import {
 import { Scene } from "three";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import buttonGroupBaseGUI from "@/component/routes/extend/extendButtonGui/buttonGroupBaseGUI";
+import deleteButtonGUI from "@/component/Editor/PropertyGUI/deleteButtonGUI/deleteButtonGUI";
 
 export default function customButtonGroupGUI(
   customButtonItem: CustomButtonItemBase,
@@ -18,17 +19,13 @@ export default function customButtonGroupGUI(
 
   const folder = editor.createGUI("按钮组");
   const funcDel = {
-    deleteButtonGroup: () => {
+    delButton: () => {
       ModalConfirm3d(
         {
           title: "删除按钮组",
           body: `删除【${group[index].name}】吗？`,
         },
         () => {
-          // const div = document.querySelector("#buttonGroupDiv") as HTMLElement;
-          // if (div) {
-          //   //  div.style.visibility = "hidden";
-          // }
           group.splice(index, 1);
           editor.destroyGUI();
           updateScene(editor.scene);
@@ -36,8 +33,7 @@ export default function customButtonGroupGUI(
       );
     },
   };
-  const delFolder = folder.add(funcDel, "deleteButtonGroup").name("删除按钮组")
-    .domElement.children[0].children[0].children[0] as HTMLElement;
-  delFolder.style.color = "rgb(220, 53, 69)";
+
+  deleteButtonGUI(funcDel, folder, "按钮组");
   buttonGroupBaseGUI(folder, customButtonItem, updateScene);
 }

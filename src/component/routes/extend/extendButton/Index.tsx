@@ -48,10 +48,10 @@ export default function Index() {
         <PreButtonGroup />
       </Tab>
       <Tab eventKey="profile" title="自定义">
-        <CustomButtonGroup />
+        <CustomButtonGroup /> <PreButtonGroup />
       </Tab>
       <Tab eventKey="emergencyPlan" title="应急预案">
-        <EmergencyPlan />
+        <EmergencyPlan /> <PreButtonGroup />
       </Tab>
       <Tab eventKey="contact" title="代码编辑">
         {showCodeWindow ? (

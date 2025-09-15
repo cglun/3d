@@ -4,6 +4,7 @@ import { editorInstance } from "@/three/instance/EditorInstance";
 import { ButtonItemBase } from "@/app/type";
 
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
+import deleteButtonGUI from "@/component/Editor/PropertyGUI/deleteButtonGUI/deleteButtonGUI";
 export default function buttonBaseGui(
   folder: GUI,
   updateScene: (scene: Scene) => void,
@@ -14,7 +15,7 @@ export default function buttonBaseGui(
   const button = listGroup[index];
 
   const funcDel = {
-    deleteButton: () => {
+    delButton: () => {
       ModalConfirm3d(
         {
           title: "删除按钮",
@@ -29,9 +30,7 @@ export default function buttonBaseGui(
     },
   };
 
-  const delFolder = folder.add(funcDel, "deleteButton").name("删除按钮")
-    .domElement.children[0].children[0].children[0] as HTMLElement;
-  delFolder.style.color = "rgb(220, 53, 69)";
+  deleteButtonGUI(funcDel, folder, "按钮");
 
   folder
     .add(button, "showName")

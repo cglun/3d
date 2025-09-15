@@ -1,24 +1,22 @@
 import Button from "react-bootstrap/esm/Button";
 import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
-import ProgressBar from "react-bootstrap/esm/ProgressBar";
+
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import Form from "react-bootstrap/esm/Form";
-import { Euler, Vector3 } from "three";
 
 import { useRef, useState } from "react";
 import Toast3d from "@/component/common/Toast3d/Toast3d";
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import axios from "@/app/http";
-import { APP_COLOR, GlbModel, MessageError } from "@/app/type";
+import { APP_COLOR, MessageError } from "@/app/type";
 import { useUpdateScene } from "@/app/hooks";
 import Icon from "@/component/common/Icon";
 import { errorMessage } from "@/app/utils";
 
-export function UploadModel({ updateList = () => {} }) {
+export function UploadImage({ updateList = () => {} }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [curFile, setCurFile] = useState<File | null>(null);
   const [btn, setBtn] = useState<boolean>(true);
-  const [progress, setProgress] = useState<number>(100);
   const { scene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
   const buttonColor = getButtonColor(themeColor);
@@ -34,13 +32,13 @@ export function UploadModel({ updateList = () => {} }) {
         axios
           .post("/project/create/", {
             name: model.name,
-            des: "Mesh",
+            des: "Image",
             dataJson: JSON.stringify(model),
+            cover: model.cover,
           })
           .then((res) => {
             if (res.data.code === 200) {
               Toast3d("保存成功");
-              // 修正：移除多余参数
               updateList();
             } else {
               Toast3d(res.data.message, "提示", APP_COLOR.Warning);
@@ -57,24 +55,16 @@ export function UploadModel({ updateList = () => {} }) {
     }
   }
 
-  function uploadModels(formData: FormData): Promise<GlbModel> {
+  function uploadModels(formData: FormData): Promise<{
+    id: string;
+    name: string;
+    cover: string;
+  }> {
     return new Promise((resolve, reject) => {
-      let modelTotal = 0;
       axios
         .post("/material/upload/116", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-          },
-          onUploadProgress: function (progressEvent) {
-            if (progressEvent.total !== undefined) {
-              modelTotal = progressEvent.total;
-              setProgress(progressEvent.loaded / progressEvent.total);
-              // 计算上传的百分比
-              const percentCompleted = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              );
-              setProgress(percentCompleted);
-            }
           },
         })
         .then((res) => {
@@ -82,25 +72,19 @@ export function UploadModel({ updateList = () => {} }) {
             Toast3d(res.data.message, "提示", APP_COLOR.Warning);
             return;
           }
-
-          const model: GlbModel = {
-            id: res.data.result.id,
-            name: curFile?.name || "模型名称",
-            position: new Vector3(0, 0, 0),
-            rotation: new Euler(0, 0, 0, "XYZ"),
-            scale: new Vector3(1, 1, 1),
-            userData: {
-              modelUrl: res.data.result.url,
-              modelTotal: modelTotal,
-              modelLoaded: 0,
-            },
+          const { id, url } = res.data.result;
+          const model = {
+            id,
+            name: curFile?.name || "图片名称",
+            //cover: `/file/view/${fileId}?thumb=1`,
+            cover: url,
           };
 
           resolve(model);
         })
         .catch((error: MessageError) => {
           reject(error);
-          setProgress(100);
+
           errorMessage(error);
         });
     });
@@ -123,7 +107,7 @@ export function UploadModel({ updateList = () => {} }) {
                 style={{ fontSize: "1rem" }}
               ></i>{" "} */}
               <Icon iconName="cloud-plus" fontSize={1.6} />
-              <em style={{ fontSize: "1.4rem" }}>选择模型</em>
+              <em style={{ fontSize: "1.4rem" }}>选择图片</em>
             </Form.Label>
           </Button>
           <Form.Control
@@ -131,7 +115,7 @@ export function UploadModel({ updateList = () => {} }) {
             style={{ display: "none", marginBottom: 0 }}
             type="file"
             ref={fileRef}
-            accept=".glb,.gltf"
+            accept=".png,.jpg"
             onChange={() => {
               // 检查 fileRef.current 是否存在
               if (
@@ -151,7 +135,6 @@ export function UploadModel({ updateList = () => {} }) {
       ) : (
         <div className="ellipsis-3d" style={{ width: "12rem" }}>
           <Form.Text>{curFile?.name}</Form.Text>
-          {progress < 100 && <ProgressBar now={progress} label={progress} />}
         </div>
       )}
       <ButtonGroup size="sm" className="mt-2">

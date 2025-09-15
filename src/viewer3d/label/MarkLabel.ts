@@ -32,12 +32,12 @@ export class MarkLabel {
   } as UserCssStyle;
 
   css3DSprite = new CSS3DSprite(this.div);
-  dispatchTourWindow: React.Dispatch<TourWindow>;
+  dispatchTourWindow?: React.Dispatch<TourWindow>;
 
   constructor(
     scene: Scene,
-    dispatchTourWindow: React.Dispatch<TourWindow>,
-    markLabelProps: MarkLabelProps
+    markLabelProps: MarkLabelProps,
+    dispatchTourWindow?: React.Dispatch<TourWindow>
   ) {
     this.dispatchTourWindow = dispatchTourWindow;
     this.markLabelProps = markLabelProps;

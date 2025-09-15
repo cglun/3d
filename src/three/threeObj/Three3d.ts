@@ -410,13 +410,26 @@ export class Three3d extends ThreeObj {
         if (geometry) this.GEOMETRY.children = geometry.children;
         //加入标签
         const markLabelGroup = object.getObjectByName(GROUP.MARK_LABEL);
-        if (markLabelGroup) this.setLabelGroup(markLabelGroup);
+        if (markLabelGroup)
+          this.setLabelGroup(markLabelGroup, this.MARK_LABEL_GROUP);
+
+        //加入标签
+        const emergencyPlan = object.getObjectByName(GROUP.EMERGENCY_PLAN);
+        if (emergencyPlan) {
+          this.EMERGENCY_PLAN_GROUP.children = emergencyPlan.children;
+          // const { children } = emergencyPlan;
+          // const group = new Group();
+          // children.forEach((item) => {
+          //   this.setLabelGroup(item, this.MARK_LABEL_GROUP);
+          // });
+        }
 
         this.scene.add(this.LIGHT_GROUP); //更新
         this.scene.add(this.GEOMETRY);
         this.scene.add(this.MARK_LABEL_GROUP);
         this.scene.add(this.MODEL_GROUP);
         this.scene.add(this.TEST_GROUP);
+        this.scene.add(this.EMERGENCY_PLAN_GROUP);
         this.outlinePass.selectedObjects = [];
 
         this.setTextureBackground_test(object);
@@ -482,19 +495,29 @@ export class Three3d extends ThreeObj {
   }
 
   //加载模型后，要设置标签
-  private setLabelGroup(labelGroup: Object3D) {
+  private setLabelGroup(labelGroup: Object3D, parentGroup: Group) {
     labelGroup.children.forEach((item: Object3D) => {
-      const mark = new MarkLabel(this.scene, this.dispatchTourWindow, {
+      parentGroup.add(this.getLabelByItem(item));
+    });
+    return parentGroup;
+  }
+
+  private getLabelByItem(item: Object3D) {
+    const mark = new MarkLabel(
+      this.scene,
+      {
         markName: item.name,
         logo: item.userData.logo,
         showEye: item.userData.showEye,
         tourObject: item.userData.tourObject,
-      });
-      const label = mark.css3DSprite;
-      const { x, y, z } = item.position;
-      label.position.set(x, y, z);
-      this.MARK_LABEL_GROUP.add(label);
-    });
+      },
+      this.dispatchTourWindow
+    );
+    debugger;
+    const label = mark.css3DSprite;
+    const { x, y, z } = item.position;
+    label.position.set(x, y, z);
+    return label;
   }
 
   // 添加 private 修饰符

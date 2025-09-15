@@ -195,16 +195,19 @@ function RouteComponent() {
                 disabled={!config3d.css3d}
                 onClick={() => {
                   const { scene } = editorInstance.getEditor(); //addMark(createCss3dLabel(markName, logo));
-                  const label = new MarkLabel(scene, dispatchTourWindow, {
-                    markName,
-                    logo,
-
-                    showEye: false,
-                    tourObject: {
-                      id: "id",
-                      title: "title",
+                  const label = new MarkLabel(
+                    scene,
+                    {
+                      markName,
+                      logo,
+                      showEye: false,
+                      tourObject: {
+                        id: "id",
+                        title: "title",
+                      },
                     },
-                  });
+                    dispatchTourWindow
+                  );
 
                   addMark(label.css3DSprite);
 
@@ -244,15 +247,19 @@ function RouteComponent() {
                     style={{ cursor: "crosshair" }}
                     onClick={() => {
                       const { scene } = editorInstance.getEditor();
-                      const label = new MarkLabel(scene, dispatchTourWindow, {
-                        markName: item.title,
-                        logo,
-                        showEye: true,
-                        tourObject: {
-                          id: item.id.toString(),
-                          title: item.title,
+                      const label = new MarkLabel(
+                        scene,
+                        {
+                          markName: item.title,
+                          logo,
+                          showEye: true,
+                          tourObject: {
+                            id: item.id.toString(),
+                            title: item.title,
+                          },
                         },
-                      });
+                        dispatchTourWindow
+                      );
                       addMark(label.css3DSprite);
 
                       updateScene(scene);

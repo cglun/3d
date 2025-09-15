@@ -81,6 +81,7 @@ function GenerateButtonGroupShow({
   group: GenerateButtonGroup["group"];
   _groupIndex: number;
   _setGroupIndex: (value: number) => void;
+  showGenateButtonGroup?: boolean;
 }) {
   const { scene, updateScene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
@@ -88,6 +89,7 @@ function GenerateButtonGroupShow({
   const { showGroup, buttonGroupStyle, listGroup } = customButtonItem;
 
   if (listGroup.length === 0) {
+    return;
     return (
       <ListGroupItem>
         <AlertBase text={`${customButtonItem.name} 为空`} />

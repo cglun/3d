@@ -3,6 +3,8 @@ import { editorInstance } from "@/three/instance/EditorInstance";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import buttonGroupBaseGUI from "@/component/routes/extend/extendButtonGui/buttonGroupBaseGUI";
 import roamGUI from "@/component/routes/effects/gui/roamGUI";
+import deleteButtonGUI from "@/component/Editor/PropertyGUI/deleteButtonGUI/deleteButtonGUI";
+import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 
 export default function generateButtonGroupGUI(
   key: number,
@@ -15,6 +17,24 @@ export default function generateButtonGroupGUI(
 
   const editor = editorInstance.getEditor();
   const folder = editor.createGUI(customButtonItem.name);
+
+  const funcDel = {
+    delButton: () => {
+      ModalConfirm3d(
+        {
+          title: "删除按钮组",
+          body: `删除【${customButtonItem.name}】吗？`,
+        },
+        () => {
+          customButtonItem.listGroup = [];
+          editor.destroyGUI();
+          updateScene(editor.scene);
+        }
+      );
+    },
+  };
+
+  deleteButtonGUI(funcDel, folder, `${customButtonItem.name}组`);
   buttonGroupBaseGUI(folder, customButtonItem, updateScene);
   if (key === 0) {
     const { userSetting } = generateButtonGroup.group[key];
