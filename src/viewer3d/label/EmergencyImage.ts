@@ -32,7 +32,6 @@ export class EmergencyImage {
 
   private createCss3dLabel(position = { x: 0, y: 0, z: 0 } as Vector3) {
     const css3DSprite = new CSS3DObject(this.div);
-
     css3DSprite.name = this.markLabelProps.markName;
     const { cardSize } = this.userDataStyles;
     css3DSprite.scale.set(cardSize, cardSize, cardSize);
@@ -41,6 +40,10 @@ export class EmergencyImage {
     css3DSprite.position.set(x, y, z);
     css3DSprite.rotation.set(-Math.PI / 2, 0, 0);
     this.css3DSprite = css3DSprite;
+    this.css3DSprite.userData = {
+      ...this.css3DSprite.userData,
+      styles: this.userDataStyles,
+    };
   }
 
   private createDiv() {

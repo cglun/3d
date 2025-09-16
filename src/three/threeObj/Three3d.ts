@@ -68,6 +68,8 @@ import { GROUP } from "@/three/config/CONSTANT";
 import ThreeObj from "@/three/threeObj/ThreeObj";
 import { testLabel } from "@/component/routes/effects/utils";
 import { TilesRenderer, GlobeControls } from "3d-tiles-renderer";
+import { EmergencyImage } from "@/viewer3d/label/EmergencyImage";
+import { loadAssets } from "@/app/http";
 
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;
@@ -415,8 +417,34 @@ export class Three3d extends ThreeObj {
 
         //加入标签
         const emergencyPlan = object.getObjectByName(GROUP.EMERGENCY_PLAN);
+
         if (emergencyPlan) {
           this.EMERGENCY_PLAN_GROUP.children = emergencyPlan.children;
+          if (emergencyPlan.children) {
+            emergencyPlan.children.forEach((_item) => {
+              const array = _item.children;
+              array.forEach((element) => {
+                const children = [...element.children];
+                children.forEach((el, index) => {
+                  const { markName, styles } = el.userData;
+
+                  const bb = new EmergencyImage(
+                    { ...markName },
+                    {
+                      ...styles,
+                    }
+                  );
+                  bb.css3DSprite.position.copy(el.position);
+                  bb.css3DSprite.scale.copy(el.scale);
+                  bb.css3DSprite.rotation.copy(el.rotation);
+                  bb.css3DSprite.name = el.name;
+                  el.removeFromParent();
+                  element.add(bb.css3DSprite);
+                });
+              });
+            });
+          }
+
           // const { children } = emergencyPlan;
           // const group = new Group();
           // children.forEach((item) => {
@@ -513,7 +541,6 @@ export class Three3d extends ThreeObj {
       },
       this.dispatchTourWindow
     );
-    debugger;
     const label = mark.css3DSprite;
     const { x, y, z } = item.position;
     label.position.set(x, y, z);

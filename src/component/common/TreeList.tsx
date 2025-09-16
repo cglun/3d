@@ -35,6 +35,11 @@ import emergencyPlanStepGui from "@/component/routes/extend/emergencyPlanGui/eme
 import css3DSpriteGUI from "@/component/Editor/PropertyGUI/css3DSpriteGUI";
 import css3DObjectGUI from "@/component/Editor/PropertyGUI/css3DObjectGUI";
 
+import {
+  removeRecursively,
+  setEmergencyPlanAddButton,
+} from "@/three/utils/util4Scene";
+
 function TreeNode({
   node,
   onToggle,
@@ -45,7 +50,7 @@ function TreeNode({
   // 确保所有的 useState 调用和 useUpdateScene 调用都在条件返回之前
   const [isExpanded, setIsExpanded] = useState(false);
   const [delBtn, setDelBtn] = useState(false);
-  const { updateScene } = useUpdateScene();
+  const { scene, updateScene } = useUpdateScene();
   const hasChildren = node.children.length > 0;
 
   if (node.userData.isHelper) {
@@ -59,8 +64,9 @@ function TreeNode({
     if (editorObject === undefined) {
       return;
     }
-
+    setEmergencyPlanAddButton(false);
     editor.currentSelected3d = editorObject;
+    updateScene(scene);
     editor.destroyGUI();
     const parentGroup = editorObject?.parent;
     if (parentGroup?.name === GROUP.LIGHT) {
@@ -88,14 +94,19 @@ function TreeNode({
       editor.transformControl.detach();
       return;
     }
-
+    //预案Item
     if (parentGroup?.parent?.name === GROUP.EMERGENCY_PLAN) {
       transformCMD(editorObject, () =>
         emergencyPlanStepGui(editorObject as Group, updateScene)
       );
       editor.transformControl.attach(editorObject);
+
+      setEmergencyPlanAddButton(true);
+      updateScene(scene);
       return;
     }
+
+    //预案步骤
     if (parentGroup?.parent?.parent?.name === GROUP.EMERGENCY_PLAN) {
       transformCMD(editorObject, () =>
         css3DObjectGUI(editorObject as CSS3DObject, updateScene)
@@ -112,6 +123,7 @@ function TreeNode({
     if (editorObject) {
       onToggle(editorObject.uuid, !isExpanded);
     }
+
     editor.transformControl.detach();
     updateScene(editor.scene);
   };
@@ -134,17 +146,19 @@ function TreeNode({
         if (targetItem === undefined) {
           return;
         }
-        if (targetItem instanceof CSS3DSprite) {
-          editor.MARK_LABEL_GROUP.remove(targetItem);
-          editor.destroyGUI();
-          updateScene(scene);
-          return;
-        }
+        // if (targetItem instanceof CSS3DSprite) {
+        //   editor.MARK_LABEL_GROUP.remove(targetItem);
+        //   editor.destroyGUI();
+        //   updateScene(scene);
+        //   return;
+        // }
         if (targetItem.parent === null) {
           return;
         }
 
-        targetItem.parent.remove(targetItem);
+        // targetItem.parent.remove(targetItem);
+        removeRecursively(targetItem);
+        setEmergencyPlanAddButton(false);
 
         if (transformControl) {
           transformControl.detach();

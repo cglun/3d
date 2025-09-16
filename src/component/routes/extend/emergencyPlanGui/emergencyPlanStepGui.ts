@@ -6,6 +6,10 @@ import { EmergencyImage } from "@/viewer3d/label/EmergencyImage";
 import { userCssStyle } from "@/three/config/Three3dConfig";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import deleteButtonGUI from "@/component/Editor/PropertyGUI/deleteButtonGUI/deleteButtonGUI";
+import {
+  removeRecursively,
+  setEmergencyPlanAddButton,
+} from "@/three/utils/util4Scene";
 
 export default function emergencyPlanStepGui(
   group: Group | Mesh,
@@ -38,7 +42,10 @@ export default function emergencyPlanStepGui(
         },
         () => {
           editor.transformControl.detach(); // 取消选中,不然会报错
-          group.removeFromParent();
+          editor.scene.userData.tempDate.showEmergencyPlanAddButton = false; // 隐藏添加按钮
+          setEmergencyPlanAddButton(false);
+
+          removeRecursively(group);
           folder.destroy();
           updateScene(scene);
         }
@@ -46,6 +53,6 @@ export default function emergencyPlanStepGui(
     },
   };
 
-  deleteButtonGUI(fun, folder, group.name);
-  folder.add(fun, "addButton").name("添加图片");
+  deleteButtonGUI(fun, folder, "步骤");
+  // folder.add(fun, "addButton").name("添加图片");
 }

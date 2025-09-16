@@ -164,6 +164,9 @@ export interface SceneUserData {
     markLabel: UserCssStyle;
     modelEdgeHighlight: ModelEdgeHighlight;
   };
+  tempDate: {
+    showEmergencyPlanAddButton: boolean;
+  };
 }
 
 export interface GenerateButtonGroup {
@@ -310,6 +313,9 @@ const sceneUserData: SceneUserData = {
     modelEdgeHighlight: {
       ...modelEdgeHighlight,
     },
+  },
+  tempDate: {
+    showEmergencyPlanAddButton: false,
   },
 };
 export default sceneUserData;

@@ -39,7 +39,7 @@ export default function css3DObjectGUI(
     },
   };
 
-  deleteButtonGUI(fun, folder, object.name);
+  deleteButtonGUI(fun, folder, "图片");
 
   folder.add(object, "name").name("标签名");
   positionGUI(folder, object, -50, 50, 0.01);

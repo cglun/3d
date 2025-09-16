@@ -25,6 +25,7 @@ import {
 import { GROUP } from "@/three/config/CONSTANT";
 import { GlbModel, UserDataType } from "@/app/type";
 import { editorInstance } from "@/three/instance/EditorInstance";
+import { getEditorInstance } from "./utils";
 
 //设置物体的变换
 export function setGLTFTransform(model: GlbModel, gltf: GLTF) {
@@ -279,4 +280,25 @@ export function addMonkey() {
     group.add(...gltf.scene.children);
     scene.add(group);
   });
+}
+
+// 假设 group 是你要删除的组
+export function removeRecursively(group: Object3D<Object3DEventMap>) {
+  while (group.children.length > 0) {
+    const child = group.children[0]; // 获取第一个子项
+    if (child.children) {
+      // 如果子项是组，则递归调用自身
+      removeRecursively(child); // 递归删除子组及其内容
+    }
+    group.remove(child); // 删除子项
+  }
+  // 最后删除父组本身
+  if (group.parent) {
+    group.parent.remove(group);
+  }
+}
+
+export function setEmergencyPlanAddButton(show: boolean) {
+  const { tempDate } = getEditorInstance().scene.userData;
+  tempDate.showEmergencyPlanAddButton = show;
 }

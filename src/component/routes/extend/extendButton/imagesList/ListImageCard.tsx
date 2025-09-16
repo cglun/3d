@@ -18,6 +18,10 @@ import { getThemeByScene } from "@/three/utils/util4UI";
 import { errorMessage } from "@/app/utils";
 import EditorFormImage from "@/component/routes/extend/extendButton/imagesList/EditorFormImage";
 
+import { SceneUserData, userCssStyle } from "@/three/config/Three3dConfig";
+import { EmergencyImage } from "@/viewer3d/label/EmergencyImage";
+import { getEditorInstance } from "@/three/utils/utils";
+
 interface Props {
   list: RecordItem[];
   setList: (list: RecordItem[]) => void;
@@ -27,6 +31,8 @@ interface Props {
 function ListImageCard(props: Props) {
   const { list, setList, isLoading, error } = props;
   const { scene, updateScene } = useUpdateScene();
+
+  const { tempDate } = scene.userData as SceneUserData;
   const { themeColor } = getThemeByScene(scene);
   const navigate = useNavigate();
   const location = useLocation();
@@ -117,22 +123,9 @@ function ListImageCard(props: Props) {
     import.meta.url
   ).href;
 
-  //获取url的参数 值
-  const urlParams = new URLSearchParams(window.location.search);
-  const sceneId = urlParams.get("sceneId");
-
   return (
     <Container fluid className="d-flex flex-wrap">
       {list.map((item: RecordItem, index: number) => {
-        let selectStyle =
-          item.des === "Scene" && scene.userData.projectId === item.id
-            ? "bg-success"
-            : "";
-
-        if (sceneId && sceneId === item.id.toString()) {
-          selectStyle = "bg-success";
-        }
-
         const cardBodyImg = (
           <Card.Img
             src={loadAssets(item.cover)}
@@ -154,7 +147,7 @@ function ListImageCard(props: Props) {
 
         return (
           <Card className="ms-2 mt-2" key={index}>
-            <Card.Header style={{ width: "auto" }} className={selectStyle}>
+            <Card.Header style={{ width: "auto" }}>
               {item.name.trim() === "" ? (
                 <span className="text-warning"> 未命名</span>
               ) : (
@@ -198,6 +191,27 @@ function ListImageCard(props: Props) {
                 >
                   <Icon iconName="trash" title="删除" />
                 </Button>
+
+                {tempDate.showEmergencyPlanAddButton && (
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      const { currentSelected3d } = getEditorInstance().editor;
+                      const label = new EmergencyImage(
+                        { markName: item.name || "名称" },
+                        {
+                          ...userCssStyle,
+                          cardBackgroundUrl: loadAssets(item.cover),
+                        }
+                      );
+
+                      currentSelected3d.add(label.css3DSprite);
+                      updateScene(scene);
+                    }}
+                  >
+                    加上
+                  </Button>
+                )}
               </ButtonGroup>
             </Card.Body>
           </Card>

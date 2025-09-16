@@ -4,7 +4,6 @@ import ListGroup from "react-bootstrap/esm/ListGroup";
 import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
 import Tab from "react-bootstrap/esm/Tab";
 import Tabs from "react-bootstrap/esm/Tabs";
-import PreButtonGroup from "@/component/routes/extend/extendButton/PreButtonGroup";
 import { useUpdateScene } from "@/app/hooks";
 import {
   customButtonGroupListInit,
@@ -45,13 +44,12 @@ export default function Index() {
     >
       <Tab eventKey="home" title="生成">
         <GenerateButtonGroup />
-        <PreButtonGroup />
       </Tab>
       <Tab eventKey="profile" title="自定义">
-        <CustomButtonGroup /> <PreButtonGroup />
+        <CustomButtonGroup />
       </Tab>
       <Tab eventKey="emergencyPlan" title="应急预案">
-        <EmergencyPlan /> <PreButtonGroup />
+        <EmergencyPlan />
       </Tab>
       <Tab eventKey="contact" title="代码编辑">
         {showCodeWindow ? (
