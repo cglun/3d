@@ -19,7 +19,7 @@ export default function emergencyPlanStepGui(
   const folder = editor.createGUI("组").onFinishChange(() => {
     transformCMD(group, () => emergencyPlanStepGui(group, updateScene));
   });
-
+  folder.add(group, "name").name("步骤名称"); // 步骤名称不可编辑
   const fun = {
     addButton: () => {
       const label = new EmergencyImage(
@@ -44,7 +44,6 @@ export default function emergencyPlanStepGui(
           editor.transformControl.detach(); // 取消选中,不然会报错
           editor.scene.userData.tempDate.showEmergencyPlanAddButton = false; // 隐藏添加按钮
           setEmergencyPlanAddButton(false);
-
           removeRecursively(group);
           folder.destroy();
           updateScene(scene);

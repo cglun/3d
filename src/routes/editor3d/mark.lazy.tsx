@@ -34,6 +34,7 @@ import { stopRoam } from "@/component/routes/effects/utils";
 import Icon from "@/component/common/Icon";
 import { GROUP } from "@/three/config/CONSTANT";
 import { errorMessage } from "@/app/utils";
+import { getEditorInstance } from "@/three/utils/utils";
 
 export const Route = createLazyFileRoute("/editor3d/mark")({
   component: RouteComponent,
@@ -107,7 +108,10 @@ function RouteComponent() {
                 label="3D标签"
                 configKey="css3d"
                 toolTip="显示和隐藏标签"
-                callBack={clearOldLabel}
+                callBack={() => {
+                  const { scene } = getEditorInstance();
+                  clearOldLabel(scene);
+                }}
               />
             </ListGroup.Item>
             <ListGroup.Item>

@@ -11,6 +11,8 @@ import { cameraEnterAnimation } from "@/three/utils/util4Camera";
 import { useEffect } from "react";
 import { config3dInit } from "@/three/config/Three3dConfig";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
+import { clearOldLabel } from "@/three/utils/util4Scene";
+import { getEditorInstance } from "@/three/utils/utils";
 
 export const Route = createLazyFileRoute("/editor3d/test")({
   component: RouteComponent,
@@ -95,7 +97,14 @@ function RouteComponent() {
         >
           当前相机位置
         </Button>
-        <Button onClick={() => {}}>TEST</Button>
+        <Button
+          onClick={() => {
+            const { scene } = getEditorInstance();
+            clearOldLabel(scene);
+          }}
+        >
+          TEST清空所有的标签
+        </Button>
       </ButtonGroup>
     </>
   );

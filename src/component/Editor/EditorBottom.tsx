@@ -9,6 +9,7 @@ export default function EditorBottom() {
   const location = useLocation();
   const [showIcons, setShowIcons] = useState(false);
   const BASE_URL = import.meta.env.BASE_URL;
+
   function handleSelect(eventKey: string | null) {
     if (eventKey !== null) {
       navigate({
@@ -20,6 +21,9 @@ export default function EditorBottom() {
 
   if (location.href.includes("sceneId=")) {
     defaultActiveKey = location.pathname;
+    //defaultActiveKey去掉"/editor3d/"
+    // const _defaultActiveKey = location.pathname.replace(BASE_URL, "");
+    // setDefaultActiveKey(_defaultActiveKey);
     // navigate({ to: location.href });
   }
   const tabsList = [
@@ -93,6 +97,7 @@ export default function EditorBottom() {
         variant="tabs"
         // activeKey={import.meta.env.BASE_URL}
         defaultActiveKey={defaultActiveKey}
+        activeKey={defaultActiveKey}
         onSelect={(eventKey) => handleSelect(eventKey)}
       >
         {tabsList.map((item, index) => {
@@ -105,7 +110,7 @@ export default function EditorBottom() {
                   setShowIcons(!showIcons);
                 }}
               >
-                <Nav.Link>
+                <Nav.Link eventKey={BASE_URL + path}>
                   {showIcons ? (
                     <Icon iconName="bi bi-chevron-right" title="收起logo" />
                   ) : (

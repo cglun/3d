@@ -69,7 +69,6 @@ import ThreeObj from "@/three/threeObj/ThreeObj";
 import { testLabel } from "@/component/routes/effects/utils";
 import { TilesRenderer, GlobeControls } from "3d-tiles-renderer";
 import { EmergencyImage } from "@/viewer3d/label/EmergencyImage";
-import { loadAssets } from "@/app/http";
 
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;
@@ -313,7 +312,7 @@ export class Three3d extends ThreeObj {
       cameraEnterAnimation(this);
     }
 
-    clearOldLabel();
+    clearOldLabel(this.scene);
     this.setTextureBackground_test();
   }
 
@@ -425,7 +424,7 @@ export class Three3d extends ThreeObj {
               const array = _item.children;
               array.forEach((element) => {
                 const children = [...element.children];
-                children.forEach((el, index) => {
+                children.forEach((el) => {
                   const { markName, styles } = el.userData;
 
                   const bb = new EmergencyImage(

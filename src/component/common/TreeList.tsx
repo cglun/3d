@@ -39,6 +39,7 @@ import {
   removeRecursively,
   setEmergencyPlanAddButton,
 } from "@/three/utils/util4Scene";
+import { useNavigate } from "@tanstack/react-router";
 
 function TreeNode({
   node,
@@ -52,7 +53,7 @@ function TreeNode({
   const [delBtn, setDelBtn] = useState(false);
   const { scene, updateScene } = useUpdateScene();
   const hasChildren = node.children.length > 0;
-
+  const navigate = useNavigate();
   if (node.userData.isHelper) {
     return null;
   }
@@ -94,24 +95,28 @@ function TreeNode({
       editor.transformControl.detach();
       return;
     }
-    //预案Item
+    //预案
     if (parentGroup?.parent?.name === GROUP.EMERGENCY_PLAN) {
       transformCMD(editorObject, () =>
         emergencyPlanStepGui(editorObject as Group, updateScene)
       );
       editor.transformControl.attach(editorObject);
-
       setEmergencyPlanAddButton(true);
+      navigate({
+        to: `/editor3d/extend?sceneId=${editor.scene.userData.projectId}`,
+      });
+
       updateScene(scene);
       return;
     }
 
-    //预案步骤
+    //预案图片
     if (parentGroup?.parent?.parent?.name === GROUP.EMERGENCY_PLAN) {
       transformCMD(editorObject, () =>
         css3DObjectGUI(editorObject as CSS3DObject, updateScene)
       );
       editor.transformControl.attach(editorObject);
+
       return;
     }
     if (editorObject instanceof CSS3DSprite) {

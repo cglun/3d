@@ -114,12 +114,22 @@ export function onWindowResize(
 }
 
 //删除之前的标签
-export function clearOldLabel(labelGroupName?: string) {
-  const labelDiv = document.querySelectorAll(labelGroupName || ".mark-label");
+export function clearOldLabel(scene: Scene) {
+  const labelDiv = document.querySelectorAll(".mark-label");
+
   if (labelDiv.length > 0) {
     labelDiv.forEach((element) => {
       element.parentNode?.removeChild(element);
     });
+  }
+
+  const labelGroup = scene.getObjectByName(GROUP.EMERGENCY_PLAN);
+  const labelGroup2 = scene.getObjectByName(GROUP.MARK_LABEL);
+  if (labelGroup) {
+    removeRecursively(labelGroup);
+  }
+  if (labelGroup2) {
+    removeRecursively(labelGroup2);
   }
 }
 export function getTourSrc(tourObject: string) {

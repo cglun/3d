@@ -195,6 +195,7 @@ function ListImageCard(props: Props) {
                 {tempDate.showEmergencyPlanAddButton && (
                   <Button
                     size="sm"
+                    variant={APP_COLOR.Success}
                     onClick={() => {
                       const { currentSelected3d } = getEditorInstance().editor;
                       const label = new EmergencyImage(
@@ -209,7 +210,7 @@ function ListImageCard(props: Props) {
                       updateScene(scene);
                     }}
                   >
-                    加上
+                    <Icon iconName="plus-circle" title="添加" />
                   </Button>
                 )}
               </ButtonGroup>
