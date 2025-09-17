@@ -1,4 +1,4 @@
-import { Object3D } from "three";
+import { Group, Object3D } from "three";
 import Accordion from "react-bootstrap/esm/Accordion";
 import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
 import Card from "react-bootstrap/esm/Card";
@@ -14,17 +14,15 @@ import { styleHeader } from "@/component/Editor/OutlineView/fontColor";
 
 import { GROUP } from "@/three/config/CONSTANT";
 import { APP_COLOR } from "@/app/type";
+import { Button, ButtonGroup } from "react-bootstrap";
+import { getEditorInstance } from "@/three/utils/utils";
 
 // import { editor } from "monaco-editor";
 // import { editorInstance } from "@/three/EditorInstance";
 
 export default function Index() {
   const gap = 1;
-  const { scene } = useUpdateScene();
-
-  if (!scene.children) {
-    return null;
-  }
+  const { scene, updateScene } = useUpdateScene();
 
   let LIGHT_GROUP: Object3D[] = [];
   let MODEL_GROUP: Object3D[] = [];
@@ -102,7 +100,47 @@ export default function Index() {
           />
           <CardItem
             icon={<Icon iconName="menu-button" gap={gap} title="预案" />}
-            groupBody={TreeListShow(EMERGENCY_PLAN_GROUP)}
+            groupBody={
+              <>
+                <ButtonGroup size="sm">
+                  <Button
+                    variant={APP_COLOR.Success}
+                    onClick={() => {
+                      const { editor, scene } = getEditorInstance();
+                      const emergencyPlan = editor.EMERGENCY_PLAN_GROUP;
+                      const group = scene.getObjectByName(GROUP.EMERGENCY_PLAN);
+                      if (!group) {
+                        scene.add(emergencyPlan);
+                      }
+
+                      const group1 = new Group();
+                      group1.name =
+                        "预案" + (emergencyPlan.children.length + 1);
+                      group1.userData.showChildren = false;
+                      emergencyPlan.add(group1);
+                      scene.add(emergencyPlan);
+                      updateScene(scene);
+                    }}
+                  >
+                    <Icon
+                      iconName="plus-circle"
+                      gap={1}
+                      fontSize={0.8}
+                      title="添加预案"
+                    />
+                  </Button>
+                  <Button variant={APP_COLOR.Success}>
+                    <Icon
+                      iconName="bi bi-css"
+                      gap={1}
+                      fontSize={0.8}
+                      title="按钮样式"
+                    />
+                  </Button>
+                </ButtonGroup>
+                {TreeListShow(EMERGENCY_PLAN_GROUP)}
+              </>
+            }
           />
           <CardItem
             icon={<Icon iconName="box" gap={gap} title="几何体" />}

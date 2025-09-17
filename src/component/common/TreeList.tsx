@@ -103,9 +103,8 @@ function TreeNode({
       editor.transformControl.attach(editorObject);
       setEmergencyPlanAddButton(true);
       navigate({
-        to: `/editor3d/extend?sceneId=${editor.scene.userData.projectId}`,
+        to: `/editor3d/image?sceneId=${editor.scene.userData.projectId}`,
       });
-
       updateScene(scene);
       return;
     }
@@ -219,9 +218,9 @@ function TreeNode({
           )}
           {hasChildren &&
             (isExpanded ? (
-              <Icon iconName="dash-square" title="收缩" />
+              <Icon iconName="caret-down" title="收缩" />
             ) : (
-              <Icon iconName="plus-square" title="展开" />
+              <Icon iconName="caret-left" title="展开" />
             ))}
         </div>
       </Container>

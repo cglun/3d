@@ -38,6 +38,11 @@ export default function EditorBottom() {
       icon: "bi bi-boxes",
     },
     {
+      title: "图片",
+      path: "image",
+      icon: "image",
+    },
+    {
       title: "几何体",
       path: "mesh",
       icon: "box",

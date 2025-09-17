@@ -16,7 +16,6 @@ import CodeEditor from "@/component/routes/script/CodeEditor";
 import CustomButtonGroup from "@/component/routes/extend/extendButton/CustomButtonGroup";
 import GenerateButtonGroup from "@/component/routes/extend/extendButton/GenerateButtonGroup";
 import { editorInstance } from "@/three/instance/EditorInstance";
-import EmergencyPlan from "@/component/routes/extend/extendButton/EmergencyPlan";
 
 export default function Index() {
   const { scene } = useUpdateScene();
@@ -52,9 +51,6 @@ export default function Index() {
       </Tab>
       <Tab eventKey="profile" title="自定义">
         <CustomButtonGroup />
-      </Tab>
-      <Tab eventKey="emergencyPlan" title="应急预案">
-        <EmergencyPlan />
       </Tab>
       <Tab eventKey="contact" title="代码编辑">
         {showCodeWindow ? (
