@@ -3,10 +3,12 @@ import ListGroup from "react-bootstrap/esm/ListGroup";
 import Container from "react-bootstrap/esm/Container";
 import { Search3d } from "@/component/common/Search3d";
 import _axios from "@/app/http";
-import { MessageError, RecordItem, ResponseData } from "@/app/type";
+import { MessageError, RecordItem } from "@/app/type";
 import { errorMessage } from "@/app/utils";
-import { UploadImage } from "@/component/routes/extend/extendButton/imagesList/UploadImage";
-import ListImageCard from "@/component/routes/extend/extendButton/imagesList/ListImageCard";
+
+import getPageList from "@/app/httpRequest";
+import { UploadImage } from "@/component/routes/image/UploadImage";
+import ListImageCard from "@/component/routes/image/ListImageCard";
 
 export default function ImagesList() {
   const [list, setList] = React.useState<RecordItem[]>([]);
@@ -17,28 +19,19 @@ export default function ImagesList() {
 
   useEffect(() => {
     setIsLoading(true);
-    _axios
-      .post<ResponseData>("/project/pageList/", { size: 1000 })
+    getPageList({ name: "3D_PROJECT", type: "Image", description: "图片" })
       .then((res) => {
-        if (res.data.code === 200) {
-          const message = res.data.message;
-          if (message) {
-            setError(message);
-            return;
-          }
-          const list = res.data.data.records;
-          const sceneList = list.filter((item) => {
-            if (item.des === "Image") {
-              return item;
-            }
-          });
-          setList(sceneList);
-          setFilterList(sceneList);
+        if (Array.isArray(res)) {
+          setList(res);
+          setFilterList(res);
           setIsLoading(false);
         }
       })
       .catch((error: MessageError) => {
         errorMessage(error);
+        if (typeof error === "string") {
+          setError(error);
+        }
       });
   }, [updateTime]);
 

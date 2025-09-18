@@ -25,6 +25,7 @@ import { stopRoam } from "@/component/routes/effects/utils";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { errorMessage } from "@/app/utils";
 import { SceneReload, SceneReloadEvent } from "@/app/customEvents/sceneEvent";
+import getPageList from "@/app/httpRequest";
 
 // 若 getThemeByScene 确实在该文件且正确导出，使用此导入语句
 
@@ -137,28 +138,19 @@ export default function EditorTop() {
   useEffect(() => {
     setIsLoading(true);
 
-    axios
-      .post("/project/pageList/", { size: 1000 })
+    getPageList({ name: "3D_PROJECT", type: "Scene", description: "3d模型" })
       .then((res) => {
-        if (res.data.code === 200) {
-          const message = res.data.message;
-          if (message) {
-            setError(message);
-            return;
-          }
-          const list = res.data.data.records;
-          const sceneList = list.filter((item: RecordItem) => {
-            if (item.des === "Scene") {
-              return item;
-            }
-          });
-          setList(sceneList);
+        if (Array.isArray(res)) {
+          setList(res);
+          setFilterList(res);
           setIsLoading(false);
-          setFilterList(sceneList);
         }
       })
       .catch((error: MessageError) => {
         errorMessage(error);
+        if (typeof error === "string") {
+          setError(error);
+        }
       });
   }, [showScene]);
 

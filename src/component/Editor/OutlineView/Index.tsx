@@ -16,6 +16,8 @@ import { GROUP } from "@/three/config/CONSTANT";
 import { APP_COLOR } from "@/app/type";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { getEditorInstance } from "@/three/utils/utils";
+import { getThemeByScene } from "@/three/utils/util4UI";
+import { useNavigate } from "@tanstack/react-router";
 
 // import { editor } from "monaco-editor";
 // import { editorInstance } from "@/three/EditorInstance";
@@ -23,7 +25,8 @@ import { getEditorInstance } from "@/three/utils/utils";
 export default function Index() {
   const gap = 1;
   const { scene, updateScene } = useUpdateScene();
-
+  const { themeColor } = getThemeByScene(scene);
+  const navigate = useNavigate();
   let LIGHT_GROUP: Object3D[] = [];
   let MODEL_GROUP: Object3D[] = [];
   let MARK_LABEL_GROUP: Object3D[] = [];
@@ -104,7 +107,7 @@ export default function Index() {
               <>
                 <ButtonGroup size="sm">
                   <Button
-                    variant={APP_COLOR.Success}
+                    variant={themeColor}
                     onClick={() => {
                       const { editor, scene } = getEditorInstance();
                       const emergencyPlan = editor.EMERGENCY_PLAN_GROUP;
@@ -129,7 +132,15 @@ export default function Index() {
                       title="添加预案"
                     />
                   </Button>
-                  <Button variant={APP_COLOR.Success}>
+                  <Button
+                    variant={themeColor}
+                    onClick={() => {
+                      const { userData } = getEditorInstance();
+                      navigate({
+                        to: `/editor3d/extend?sceneId=${userData.projectId}`,
+                      });
+                    }}
+                  >
                     <Icon
                       iconName="bi bi-css"
                       gap={1}

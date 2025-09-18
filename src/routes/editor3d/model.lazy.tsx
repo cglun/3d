@@ -6,8 +6,9 @@ import { Search3d } from "@/component/common/Search3d";
 import { UploadModel } from "@/component/common/UploadModel";
 import ListCard from "@/component/common/ListCard";
 import _axios from "@/app/http";
-import { MessageError, RecordItem, ResponseData } from "@/app/type";
+import { MessageError, RecordItem } from "@/app/type";
 import { errorMessage } from "@/app/utils";
+import getPageList from "@/app/httpRequest";
 
 // 更新路由定义，添加 sceneID参数
 export const Route = createLazyFileRoute("/editor3d/model")({
@@ -23,28 +24,19 @@ function ModelList() {
 
   useEffect(() => {
     setIsLoading(true);
-    _axios
-      .post<ResponseData>("/project/pageList/", { size: 1000 })
+    getPageList({ name: "3D_PROJECT", type: "Mesh", description: "3d模型" })
       .then((res) => {
-        if (res.data.code === 200) {
-          const message = res.data.message;
-          if (message) {
-            setError(message);
-            return;
-          }
-          const list = res.data.data.records;
-          const sceneList = list.filter((item) => {
-            if (item.des === "Mesh") {
-              return item;
-            }
-          });
-          setList(sceneList);
-          setFilterList(sceneList);
+        if (Array.isArray(res)) {
+          setList(res);
+          setFilterList(res);
           setIsLoading(false);
         }
       })
       .catch((error: MessageError) => {
         errorMessage(error);
+        if (typeof error === "string") {
+          setError(error);
+        }
       });
   }, [updateTime]);
 

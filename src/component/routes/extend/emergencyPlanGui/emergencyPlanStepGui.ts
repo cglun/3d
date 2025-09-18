@@ -6,10 +6,11 @@ import { EmergencyImage } from "@/viewer3d/label/EmergencyImage";
 import { userCssStyle } from "@/three/config/Three3dConfig";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import deleteButtonGUI from "@/component/Editor/PropertyGUI/deleteButtonGUI/deleteButtonGUI";
-import {
-  removeRecursively,
-  setEmergencyPlanAddButton,
-} from "@/three/utils/util4Scene";
+import { removeRecursively } from "@/three/utils/util4Scene";
+import getPageList from "@/app/httpRequest";
+import { errorMessage } from "@/app/utils";
+import { MessageError } from "@/app/type";
+import { loadAssets } from "@/app/http";
 
 export default function emergencyPlanStepGui(
   group: Group | Mesh,
@@ -42,8 +43,7 @@ export default function emergencyPlanStepGui(
         },
         () => {
           editor.transformControl.detach(); // 取消选中,不然会报错
-          editor.scene.userData.tempDate.showEmergencyPlanAddButton = false; // 隐藏添加按钮
-          setEmergencyPlanAddButton(false);
+
           removeRecursively(group);
           folder.destroy();
           updateScene(scene);
@@ -52,6 +52,45 @@ export default function emergencyPlanStepGui(
     },
   };
 
-  deleteButtonGUI(fun, folder, "步骤");
-  // folder.add(fun, "addButton").name("添加图片");
+  deleteButtonGUI(fun, folder, "步骤"); // folder.add(fun, "addButton").name("添加图片");
+  const div = document.createElement("div");
+
+  folder.domElement.appendChild(div);
+  //默认图片
+  const defaultImage3dUrl = new URL(
+    "@static/images/defaultImage3d.png",
+    import.meta.url
+  ).href;
+  //const cardBody = item.cover?.trim().length > 0 ? cardBodyImg : defaultImage3d;
+
+  getPageList({ name: "3D_PROJECT", type: "Image", description: "图片" })
+    .then((res) => {
+      if (Array.isArray(res)) {
+        res.forEach((item) => {
+          const img = document.createElement("img");
+          img.src = loadAssets(item.cover?.trim() || defaultImage3dUrl);
+          img.style.width = "33.33%";
+          img.addEventListener("click", () => {
+            const { currentSelected3d } = getEditorInstance().editor;
+            const label = new EmergencyImage(
+              { markName: item.name || "名称" },
+              {
+                ...userCssStyle,
+                cardBackgroundUrl: loadAssets(item.cover),
+              }
+            );
+
+            currentSelected3d.add(label.css3DSprite);
+            updateScene(scene);
+          });
+          div.appendChild(img);
+        });
+      }
+    })
+    .catch((error: MessageError) => {
+      errorMessage(error);
+      if (typeof error === "string") {
+        alert(error);
+      }
+    });
 }

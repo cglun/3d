@@ -11,16 +11,10 @@ import Toast3d from "@/component/common/Toast3d/Toast3d";
 import axios, { loadAssets } from "@/app/http";
 import { useUpdateScene } from "@/app/hooks";
 import Trigger3d from "@/component/common/Trigger3d";
-import { useLocation, useNavigate } from "@tanstack/react-router";
 import Icon from "@/component/common/Icon";
-import { editorInstance } from "@/three/instance/EditorInstance";
 import { getThemeByScene } from "@/three/utils/util4UI";
 import { errorMessage } from "@/app/utils";
-import EditorFormImage from "@/component/routes/extend/extendButton/imagesList/EditorFormImage";
-
-import { SceneUserData, userCssStyle } from "@/three/config/Three3dConfig";
-import { EmergencyImage } from "@/viewer3d/label/EmergencyImage";
-import { getEditorInstance } from "@/three/utils/utils";
+import EditorFormImage from "@/component/routes/image/EditorFormImage";
 
 interface Props {
   list: RecordItem[];
@@ -30,12 +24,9 @@ interface Props {
 }
 function ListImageCard(props: Props) {
   const { list, setList, isLoading, error } = props;
-  const { scene, updateScene } = useUpdateScene();
+  const { scene } = useUpdateScene();
 
-  const { tempDate } = scene.userData as SceneUserData;
   const { themeColor } = getThemeByScene(scene);
-  const navigate = useNavigate();
-  const location = useLocation();
 
   //错误提示
   if (error.trim().length > 0) {
@@ -158,22 +149,7 @@ function ListImageCard(props: Props) {
               className="d-flex flex-column text-center"
               style={{ padding: "0" }}
             >
-              <div
-                onClick={() => {
-                  const pathname = location.pathname;
-                  const editor = editorInstance.getEditor();
-                  if (item.des === "Scene") {
-                    const url = `${pathname}?sceneId=${item.id}`;
-
-                    navigate({
-                      to: url,
-                    });
-                    return;
-                  }
-                }}
-              >
-                {cardBody}
-              </div>
+              <div>{cardBody}</div>
 
               <ButtonGroup aria-label="Basic example" className="mt-2">
                 <Button
@@ -191,28 +167,6 @@ function ListImageCard(props: Props) {
                 >
                   <Icon iconName="trash" title="删除" />
                 </Button>
-
-                {tempDate.showEmergencyPlanAddButton && (
-                  <Button
-                    size="sm"
-                    variant={APP_COLOR.Success}
-                    onClick={() => {
-                      const { currentSelected3d } = getEditorInstance().editor;
-                      const label = new EmergencyImage(
-                        { markName: item.name || "名称" },
-                        {
-                          ...userCssStyle,
-                          cardBackgroundUrl: loadAssets(item.cover),
-                        }
-                      );
-
-                      currentSelected3d.add(label.css3DSprite);
-                      updateScene(scene);
-                    }}
-                  >
-                    <Icon iconName="plus-circle" title="添加" />
-                  </Button>
-                )}
               </ButtonGroup>
             </Card.Body>
           </Card>

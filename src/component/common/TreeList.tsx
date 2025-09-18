@@ -35,11 +35,8 @@ import emergencyPlanStepGui from "@/component/routes/extend/emergencyPlanGui/eme
 import css3DSpriteGUI from "@/component/Editor/PropertyGUI/css3DSpriteGUI";
 import css3DObjectGUI from "@/component/Editor/PropertyGUI/css3DObjectGUI";
 
-import {
-  removeRecursively,
-  setEmergencyPlanAddButton,
-} from "@/three/utils/util4Scene";
-import { useNavigate } from "@tanstack/react-router";
+import { removeRecursively } from "@/three/utils/util4Scene";
+import { loadAssets } from "@/app/http";
 
 function TreeNode({
   node,
@@ -53,7 +50,7 @@ function TreeNode({
   const [delBtn, setDelBtn] = useState(false);
   const { scene, updateScene } = useUpdateScene();
   const hasChildren = node.children.length > 0;
-  const navigate = useNavigate();
+
   if (node.userData.isHelper) {
     return null;
   }
@@ -65,7 +62,7 @@ function TreeNode({
     if (editorObject === undefined) {
       return;
     }
-    setEmergencyPlanAddButton(false);
+
     editor.currentSelected3d = editorObject;
     updateScene(scene);
     editor.destroyGUI();
@@ -95,17 +92,13 @@ function TreeNode({
       editor.transformControl.detach();
       return;
     }
-    //预案
+    //步骤
     if (parentGroup?.parent?.name === GROUP.EMERGENCY_PLAN) {
       transformCMD(editorObject, () =>
         emergencyPlanStepGui(editorObject as Group, updateScene)
       );
       editor.transformControl.attach(editorObject);
-      setEmergencyPlanAddButton(true);
-      navigate({
-        to: `/editor3d/image?sceneId=${editor.scene.userData.projectId}`,
-      });
-      updateScene(scene);
+
       return;
     }
 
@@ -162,7 +155,6 @@ function TreeNode({
 
         // targetItem.parent.remove(targetItem);
         removeRecursively(targetItem);
-        setEmergencyPlanAddButton(false);
 
         if (transformControl) {
           transformControl.detach();
@@ -191,6 +183,14 @@ function TreeNode({
   if (node instanceof CSS3DSprite) {
     showDelBtn = delBtn && true;
   }
+  const isImage = node.parent?.parent?.parent?.name === GROUP.EMERGENCY_PLAN;
+  function getImageByNode(node: any) {
+    const imgUrl = loadAssets(node.userData.styles.cardBackgroundUrl?.trim());
+    const img = <img src={imgUrl} style={{ width: "33.33%" }}></img>;
+
+    return img;
+  }
+
   return (
     <ListGroupItem>
       <Container
@@ -203,7 +203,7 @@ function TreeNode({
       >
         <div>
           {getLogo(node)}
-          {getObjectNameByName(node)}
+          {isImage ? getImageByNode(node) : getObjectNameByName(node)}
         </div>
         <div>
           {showDelBtn && (

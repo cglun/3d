@@ -39,9 +39,8 @@ export default function EmerGencyPlanButtonGroup() {
         {emergencyPlan?.children &&
           emergencyPlan?.children.map((item) => {
             return (
-              <div>
+              <div key={item.uuid}>
                 <button
-                  key={item.uuid}
                   onClick={() => {
                     emergencyPlan?.traverse((child) => {
                       if (child instanceof CSS3DObject) {

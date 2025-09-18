@@ -307,8 +307,3 @@ export function removeRecursively(group: Object3D<Object3DEventMap>) {
     group.parent.remove(group);
   }
 }
-
-export function setEmergencyPlanAddButton(show: boolean) {
-  const { tempDate } = getEditorInstance().scene.userData;
-  tempDate.showEmergencyPlanAddButton = show;
-}

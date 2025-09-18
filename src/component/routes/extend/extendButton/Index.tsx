@@ -5,7 +5,7 @@ import ListGroupItem from "react-bootstrap/esm/ListGroupItem";
 import Tab from "react-bootstrap/esm/Tab";
 import Tabs from "react-bootstrap/esm/Tabs";
 import { useUpdateScene } from "@/app/hooks";
-import sceneUserData, {
+import {
   customButtonGroupListInit,
   SceneUserData,
 } from "@/three/config/Three3dConfig";
@@ -23,11 +23,6 @@ export default function Index() {
   const { themeColor } = getThemeByScene(scene);
   const buttonColor = getButtonColor(themeColor);
 
-  if (scene.userData.tempDate === undefined) {
-    scene.userData.tempDate = { ...sceneUserData.tempDate };
-  }
-  const { showEmergencyPlanAddButton } = scene.userData.tempDate;
-
   const customButtonGroupListString = JSON.stringify(
     customButtonGroupList || { ...customButtonGroupListInit },
     null,
@@ -38,7 +33,7 @@ export default function Index() {
 
   return (
     <Tabs
-      defaultActiveKey={showEmergencyPlanAddButton ? "emergencyPlan" : "home"}
+      defaultActiveKey={"home"}
       id="uncontrolled-tab-example"
       onSelect={(e) => {
         if (e === "contact") {
