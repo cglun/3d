@@ -25,7 +25,6 @@ import {
 import { GROUP } from "@/three/config/CONSTANT";
 import { GlbModel, UserDataType } from "@/app/type";
 import { editorInstance } from "@/three/instance/EditorInstance";
-import { getEditorInstance } from "./utils";
 
 //设置物体的变换
 export function setGLTFTransform(model: GlbModel, gltf: GLTF) {

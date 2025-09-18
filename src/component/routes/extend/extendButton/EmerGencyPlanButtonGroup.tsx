@@ -1,11 +1,13 @@
-import { useUpdateScene } from "@/app/hooks";
 import { GROUP } from "@/three/config/CONSTANT";
-import { getEditorInstance } from "@/three/utils/utils";
+import { useState } from "react";
+import { Scene } from "three";
 
 import { CSS3DObject } from "three/examples/jsm/Addons.js";
 
-export default function EmerGencyPlanButtonGroup() {
-  const { scene, updateScene } = useUpdateScene();
+export default function EmergencyPlanButtonGroup({ scene }: { scene: Scene }) {
+  // const { scene, updateScene } = useUpdateScene();
+  const [, setTime] = useState(0);
+
   // if (scene.children.length === 0) {
   //   return;
   // }
@@ -13,7 +15,7 @@ export default function EmerGencyPlanButtonGroup() {
   //   return;
   // }
   // const emergencyPlan = scene?.getObjectByName(GROUP.EMERGENCY_PLAN);
-  const emergencyPlan = scene.children.find((item) => {
+  const emergencyPlan = scene?.children?.find((item) => {
     if (item.name === GROUP.EMERGENCY_PLAN) {
       return item;
     }
@@ -48,7 +50,7 @@ export default function EmerGencyPlanButtonGroup() {
                       }
                     });
                     item.userData.showChildren = !item.userData.showChildren;
-                    const { editor } = getEditorInstance();
+
                     emergencyPlan.traverse((child) => {
                       if (child.uuid === item.uuid) {
                         child.userData.showChildren = true;
@@ -56,8 +58,8 @@ export default function EmerGencyPlanButtonGroup() {
                         child.userData.showChildren = false;
                       }
                     });
-
-                    updateScene(editor.scene);
+                    setTime(Date.now());
+                    // updateScene(editor.scene);
                   }}
                 >
                   {item.name}

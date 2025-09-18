@@ -299,6 +299,7 @@ export class Three3d extends ThreeObj {
     this.extraParams.mixer = [];
 
     this.MARK_LABEL_GROUP.children = [];
+    this.EMERGENCY_PLAN_GROUP.children = [];
     this.MODEL_GROUP.children = [];
     this.LIGHT_GROUP.children = [];
     this.TEST_GROUP.children = [];
@@ -426,7 +427,6 @@ export class Three3d extends ThreeObj {
                 const children = [...element.children];
                 children.forEach((el) => {
                   const { markName, styles } = el.userData;
-
                   const bb = new EmergencyImage(
                     { ...markName },
                     {

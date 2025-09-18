@@ -23,6 +23,23 @@ function RouteComponent() {
     {
       list: [
         {
+          logoName: "image",
+          position: "底部栏",
+          buttonName: "图片",
+          des: "增加图片上传。",
+        },
+        {
+          logoName: "menu-button",
+          position: "右侧栏",
+          buttonName: "预案",
+          des: "预案功能，预案切换功能，步骤切换。",
+        },
+      ],
+      updateTime: "2025年9月18",
+    },
+    {
+      list: [
+        {
           logoName: "x-diamond",
           position: "底部栏",
           buttonName: "扩展",

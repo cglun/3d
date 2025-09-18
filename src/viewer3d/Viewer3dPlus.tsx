@@ -29,6 +29,7 @@ import { getListGroupByIndex, getViewerInstance } from "@/three/utils/utils";
 import Toast3dPlus, {
   Toast3dPlusProps,
 } from "@/component/common/Toast3d/Toast3dPlus";
+import EmergencyPlanButtonGroup from "@/component/routes/extend/extendButton/EmerGencyPlanButtonGroup";
 
 /**
  * 其他应用可以调用此组件，
@@ -160,6 +161,7 @@ export default function Viewer3dPlus({
           </div>
         )}
         <div style={canvasStyle} ref={canvas3d}></div>
+        <EmergencyPlanButtonGroup scene={viewerInstance.getViewer()?.scene} />
         <ModalTour />
         {showButtonGroup && (
           <Suspense fallback={<div>Loading...</div>}>

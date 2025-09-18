@@ -52,8 +52,13 @@ export class Command {
   }
   buttonName() {
     const groupKeys = Object.values(GROUP);
-    const parentLabel = groupKeys.includes(this.objectParent as GROUP)
-      ? this.objectParentString[this.objectParent as GROUP]
+    // 正确检查this.objectParent是否为有效的GROUP枚举值
+    const isValidGroup = groupKeys.includes(this.objectParent as GROUP);
+    // 直接使用this.objectParent作为键，因为我们已经确认它是有效的
+    const parentLabel = isValidGroup
+      ? this.objectParentString[
+          this.objectParent as keyof typeof this.objectParentString
+        ]
       : GROUP.NONE;
 
     if (parentLabel === GROUP.NONE) {
