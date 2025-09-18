@@ -24,7 +24,7 @@ function ModelList() {
 
   useEffect(() => {
     setIsLoading(true);
-    getPageList({ name: "3D_PROJECT", type: "Mesh", description: "3d模型" })
+    getPageList({ from: "EDITOR_3D", type: "Mesh", description: "3d模型" })
       .then((res) => {
         if (Array.isArray(res)) {
           setList(res);
@@ -45,9 +45,20 @@ function ModelList() {
   }
   // 创建一个适配函数，解决 setFilterList 类型不匹配问题
   const handleFilterList = (newList: RecordItem[]) => {
-    const mappedList = newList.map((item) => {
+    const mappedList = newList.map((item: RecordItem) => {
       const foundItem = list.find((listItem) => listItem.name === item.name);
-      return foundItem || { id: 0, name: item.name, des: "", cover: "" };
+      return (
+        foundItem || {
+          id: 0,
+          name: item.name,
+          des: JSON.stringify({
+            type: item.des,
+            description: "-",
+            from: "EDITOR_3D",
+          }),
+          cover: "",
+        }
+      );
     });
     setFilterList(mappedList);
   };

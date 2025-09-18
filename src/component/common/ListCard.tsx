@@ -232,13 +232,14 @@ function RecordItemCard(props: Props) {
                 onClick={() => {
                   const pathname = location.pathname;
                   const editor = editorInstance.getEditor();
-                  if (item.des === "Scene") {
-                    const url = `${pathname}?sceneId=${item.id}`;
-
-                    navigate({
-                      to: url,
-                    });
-                    return;
+                  if (item.des.includes("EDITOR_3D")) {
+                    if (item.des.includes("Scene")) {
+                      const url = `${pathname}?sceneId=${item.id}`;
+                      navigate({
+                        to: url,
+                      });
+                      return;
+                    }
                   }
                   editor.addOneModel(item);
                   editor.onLoadProgress = (progress: number) => {
@@ -289,15 +290,16 @@ function RecordItemCard(props: Props) {
                 >
                   <Icon iconName="pencil" title="编辑" />
                 </Button>
-                {item.des == "Scene" && (
-                  <Button
-                    variant={themeColor}
-                    size="sm"
-                    onClick={() => fixProject(item)}
-                  >
-                    <Icon iconName="bi bi-wrench-adjustable" title="修复" />
-                  </Button>
-                )}
+                {item.des.includes("EDITOR_3D") &&
+                  item.des.includes("Scene") && (
+                    <Button
+                      variant={themeColor}
+                      size="sm"
+                      onClick={() => fixProject(item)}
+                    >
+                      <Icon iconName="bi bi-wrench-adjustable" title="修复" />
+                    </Button>
+                  )}
                 <Button
                   variant={themeColor}
                   size="sm"

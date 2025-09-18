@@ -25,7 +25,7 @@ import { stopRoam } from "@/component/routes/effects/utils";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { errorMessage } from "@/app/utils";
 import { SceneReload, SceneReloadEvent } from "@/app/customEvents/sceneEvent";
-import getPageList from "@/app/httpRequest";
+import getPageList, { ProjectType } from "@/app/httpRequest";
 
 // 若 getThemeByScene 确实在该文件且正确导出，使用此导入语句
 
@@ -90,9 +90,16 @@ export default function EditorTop() {
   function saveAsNewScene() {
     const { scene } = editorInstance.getEditor();
     // scene.userData.APP_THEME.sceneCanSave = true;
-    function getValue(sceneName: string, des: string) {
+
+    const _description: ProjectType = {
+      type: "Scene",
+      description: "一个新场景。",
+      from: "EDITOR_3D",
+    };
+    function getValue(sceneName: string, des: string, description: string) {
       scene.userData.sceneName = sceneName;
       scene.userData.des = des;
+      _description.description = description;
     }
 
     ModalConfirm3d(
@@ -112,7 +119,7 @@ export default function EditorTop() {
         axios
           .post("/project/create/", {
             name: scene.userData.sceneName,
-            des: "Scene",
+            des: JSON.stringify(_description),
             dataJson: dataJson,
           })
           .then((res) => {
@@ -138,7 +145,7 @@ export default function EditorTop() {
   useEffect(() => {
     setIsLoading(true);
 
-    getPageList({ name: "3D_PROJECT", type: "Scene", description: "3d模型" })
+    getPageList({ from: "EDITOR_3D", type: "Scene", description: "3d场景" })
       .then((res) => {
         if (Array.isArray(res)) {
           setList(res);

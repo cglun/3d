@@ -26,6 +26,17 @@ function RouteComponent() {
           logoName: "image",
           position: "底部栏",
           buttonName: "图片",
+          des: "更新字段，加入描述！",
+        },
+      ],
+      updateTime: "2025年9月19",
+    },
+    {
+      list: [
+        {
+          logoName: "image",
+          position: "底部栏",
+          buttonName: "图片",
           des: "增加图片上传。",
         },
         {

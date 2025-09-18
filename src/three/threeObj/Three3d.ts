@@ -550,6 +550,7 @@ export class Three3d extends ThreeObj {
   // 添加 private 修饰符
   private loadModelByUrl(model: GlbModel) {
     const loader = glbLoader();
+
     loader.load(
       model.userData.modelUrl + "?url",
       (gltf: GLTF) => {
@@ -597,7 +598,7 @@ export class Three3d extends ThreeObj {
     getProjectData(item.id).then((res: string) => {
       const model = JSON.parse(res) as GlbModel;
       const loader = glbLoader();
-
+      debugger;
       loader.load(
         model.userData.modelUrl + "?url",
         (gltf: GLTF) => {

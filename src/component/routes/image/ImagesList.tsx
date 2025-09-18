@@ -19,7 +19,7 @@ export default function ImagesList() {
 
   useEffect(() => {
     setIsLoading(true);
-    getPageList({ name: "3D_PROJECT", type: "Image", description: "图片" })
+    getPageList({ from: "EDITOR_3D", type: "Image", description: "图片" })
       .then((res) => {
         if (Array.isArray(res)) {
           setList(res);

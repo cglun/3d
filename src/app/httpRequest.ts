@@ -2,15 +2,15 @@ import _axios from "@/app/http";
 import { MessageError, RecordItem, ResponseData } from "@/app/type";
 
 export type ProjectType = {
-  name: "3D_PROJECT";
-  type: "Mesh" | "Scene" | "Image";
+  from: "EDITOR_3D";
+  type: "Mesh" | "Scene" | "Image" | string;
   description: string;
 };
 
 // 获取项目列表
 export default async function getPageList(
   project: ProjectType = {
-    name: "3D_PROJECT",
+    from: "EDITOR_3D",
     type: "Image",
     description: "3d项目",
   }
@@ -27,8 +27,11 @@ export default async function getPageList(
           }
           const list = res.data.data.records;
           const sceneList = list.filter((item: RecordItem) => {
-            if (item.des === project.type) {
-              return item;
+            if (item.des.includes("EDITOR_3D")) {
+              //const res = JSON.parse(item.des);
+              if (item.des.includes(project.type)) {
+                return item;
+              }
             }
           });
           resolve(sceneList);

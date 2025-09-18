@@ -32,7 +32,11 @@ export function UploadImage({ updateList = () => {} }) {
         axios
           .post("/project/create/", {
             name: model.name,
-            des: "Image",
+            des: {
+              type: "Image",
+              description: "一张图",
+              from: "EDITOR_3D",
+            },
             dataJson: JSON.stringify(model),
             cover: model.cover,
           })

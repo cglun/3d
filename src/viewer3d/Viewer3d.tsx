@@ -57,12 +57,13 @@ export default function Viewer3d({
       );
       window.addEventListener("resize", () => viewer.onWindowResize());
     }
-
-    if (item.des === "Scene") {
-      loadScene();
-    }
-    if (item.des === "Mesh") {
-      loadMesh();
+    if (item.des.includes("EDITOR_3D")) {
+      if (item.des.includes("Scene")) {
+        loadScene();
+      }
+      if (item.des.includes("Mesh")) {
+        loadMesh();
+      }
     }
 
     return () => {

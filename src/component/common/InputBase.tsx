@@ -12,18 +12,33 @@ export default function InputBase({
   name?: string;
   des?: string;
   placeholder?: string;
-  getValue: (sceneName: string, des: string) => void;
+  getValue: (sceneName: string, des: string, description: string) => void;
 }) {
   const [sceneName, setSceneName] = useState(name);
   const [sceneDes, setSceneDes] = useState(des);
+  const [description, setDescription] = useState("这是一个新场景");
 
   useEffect(() => {
-    getValue(sceneName, sceneDes);
-  }, [getValue, sceneDes, sceneName]); // 添加 getValue 到依赖项数组
+    getValue(sceneName, sceneDes, description);
+  }, [getValue, description, sceneName, sceneDes]); // 添加 getValue 到依赖项数组
 
   return (
     <Container fluid>
       <InputGroup size="sm">
+        <InputGroup.Text id="inputGroup-sizing-sm">类型</InputGroup.Text>
+        <Form.Control
+          aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm"
+          placeholder={placeholder}
+          type="text"
+          disabled={true}
+          value={sceneDes}
+          onChange={(e) => {
+            setSceneDes(() => e.target.value);
+          }}
+        />
+      </InputGroup>
+      <InputGroup size="sm" className="mt-2">
         <InputGroup.Text id="inputGroup-sizing-sm">名称</InputGroup.Text>
         <Form.Control
           aria-label="Small"
@@ -37,16 +52,15 @@ export default function InputBase({
         />
       </InputGroup>
       <InputGroup size="sm" className="mt-2">
-        <InputGroup.Text id="inputGroup-sizing-sm">类型</InputGroup.Text>
+        <InputGroup.Text id="inputGroup-sizing-sm">描述</InputGroup.Text>
         <Form.Control
           aria-label="Small"
           aria-describedby="inputGroup-sizing-sm"
           placeholder={placeholder}
           type="text"
-          disabled={true}
-          value={sceneDes}
+          value={description}
           onChange={(e) => {
-            setSceneDes(() => e.target.value);
+            setDescription(() => e.target.value);
           }}
         />
       </InputGroup>

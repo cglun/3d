@@ -22,6 +22,7 @@ import Button from "react-bootstrap/esm/Button";
 import { errorMessage } from "@/app/utils";
 
 import { viewerInstance } from "@/three/instance/ViewerInstance";
+import { ProjectType } from "@/app/httpRequest";
 
 export default function EditorForm({
   item,
@@ -78,10 +79,22 @@ export default function EditorForm({
       style={{ cursor: "crosshair", width: "300px" }}
     />
   );
+  const itemDes = JSON.parse(_item.des) as ProjectType;
 
   return (
     <Container fluid>
       <InputGroup size="sm">
+        <InputGroup.Text id="inputGroup-sizing-sm">类型</InputGroup.Text>
+        <Form.Control
+          aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm"
+          placeholder={itemDes.type}
+          type="text"
+          disabled={true}
+          value={itemDes.type}
+        />
+      </InputGroup>
+      <InputGroup size="sm" className="mt-2">
         <InputGroup.Text id="inputGroup-sizing-sm">名称</InputGroup.Text>
         <Form.Control
           aria-label="Small"
@@ -96,21 +109,22 @@ export default function EditorForm({
         />
       </InputGroup>
       <InputGroup size="sm" className="mt-2">
-        <InputGroup.Text id="inputGroup-sizing-sm">类型</InputGroup.Text>
+        <InputGroup.Text id="inputGroup-sizing-sm">描述</InputGroup.Text>
         <Form.Control
           aria-label="Small"
           aria-describedby="inputGroup-sizing-sm"
-          placeholder={_item.des}
+          placeholder={itemDes.description}
           type="text"
-          disabled={true}
-          value={_item.des}
+          value={itemDes.description}
           onChange={(e) => {
-            const item = { ..._item, des: e.target.value };
+            const item = {
+              ..._item,
+              des: JSON.stringify({ ...itemDes, description: e.target.value }),
+            };
             _setItem(item);
           }}
         />
       </InputGroup>
-
       <div className="mt-2 d-flex flex-column align-items-center ">
         {loadScene ? (
           <Viewer3d

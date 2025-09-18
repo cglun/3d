@@ -34,7 +34,7 @@ export default function emergencyPlanStepGui(
   ).href;
   //const cardBody = item.cover?.trim().length > 0 ? cardBodyImg : defaultImage3d;
 
-  getPageList({ name: "3D_PROJECT", type: "Image", description: "图片" })
+  getPageList({ from: "EDITOR_3D", type: "Image", description: "图片" })
     .then((res) => {
       if (Array.isArray(res)) {
         res.forEach((item) => {

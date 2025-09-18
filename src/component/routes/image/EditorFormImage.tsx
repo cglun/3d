@@ -7,6 +7,7 @@ import { RecordItem } from "@/app/type";
 
 import Card from "react-bootstrap/esm/Card";
 import Container from "react-bootstrap/esm/Container";
+import { ProjectType } from "@/app/httpRequest";
 
 export default function EditorFormImage({
   item,
@@ -32,10 +33,22 @@ export default function EditorFormImage({
       style={{ cursor: "crosshair", width: "300px" }}
     />
   );
+  const itemDes = JSON.parse(_item.des) as ProjectType;
 
   return (
     <Container fluid>
       <InputGroup size="sm">
+        <InputGroup.Text id="inputGroup-sizing-sm">类型</InputGroup.Text>
+        <Form.Control
+          aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm"
+          placeholder={itemDes.type}
+          type="text"
+          disabled={true}
+          value={itemDes.type}
+        />
+      </InputGroup>
+      <InputGroup size="sm" className="mt-2">
         <InputGroup.Text id="inputGroup-sizing-sm">名称</InputGroup.Text>
         <Form.Control
           aria-label="Small"
@@ -50,21 +63,22 @@ export default function EditorFormImage({
         />
       </InputGroup>
       <InputGroup size="sm" className="mt-2">
-        <InputGroup.Text id="inputGroup-sizing-sm">类型</InputGroup.Text>
+        <InputGroup.Text id="inputGroup-sizing-sm">描述</InputGroup.Text>
         <Form.Control
           aria-label="Small"
           aria-describedby="inputGroup-sizing-sm"
-          placeholder={_item.des}
+          placeholder={itemDes.description}
           type="text"
-          disabled={true}
-          value={_item.des}
+          value={itemDes.description}
           onChange={(e) => {
-            const item = { ..._item, des: e.target.value };
+            const item = {
+              ..._item,
+              des: JSON.stringify({ ...itemDes, description: e.target.value }),
+            };
             _setItem(item);
           }}
         />
       </InputGroup>
-
       <div className="mt-2 d-flex flex-column align-items-center ">
         {_item.cover?.trim().length > 0 ? (
           <Card.Img
