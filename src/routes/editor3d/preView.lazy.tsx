@@ -17,15 +17,7 @@ import Icon from "@/component/common/Icon";
 import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 import { errorMessage } from "@/app/utils";
 import Viewer3dPlus from "@/viewer3d/Viewer3dPlus";
-
-// 定义响应数据的类型
-interface PageListResponse {
-  code: number;
-  message: string;
-  data: {
-    records: RecordItem[];
-  };
-}
+import getPageList from "@/app/httpRequest";
 
 export const Route = createLazyFileRoute("/editor3d/preView")({
   component: RouteComponent,
@@ -46,38 +38,66 @@ function RouteComponent() {
     cover: "",
   });
 
-  useEffect(() => {
-    // 指定响应数据的类型
-    _axios
-      .post<PageListResponse>("/project/pageList/", { size: 1000 })
-      .then((res) => {
-        if (res.data.code === 200) {
-          const message = res.data.message;
-          if (message) {
-            return;
-          }
-          const records: RecordItem[] = res.data.data.records;
-          const sceneList = records.filter((item) => {
-            if (item.des === "Scene") {
-              item.id = parseInt(item.id.toString());
-              return item;
-            }
-          });
+  // useEffect(() => {
+  //   // 指定响应数据的类型
+  //   _axios
+  //     .post<PageListResponse>("/project/pageList/", { size: 1000 })
+  //     .then((res) => {
+  //       if (res.data.code === 200) {
+  //         const message = res.data.message;
+  //         if (message) {
+  //           return;
+  //         }
+  //         const records: RecordItem[] = res.data.data.records;
+  //         const sceneList = records.filter((item) => {
+  //           if (item.des === "Scene") {
+  //             item.id = parseInt(item.id.toString());
+  //             return item;
+  //           }
+  //         });
 
-          setListScene(sceneList);
-          //获取url的参数 值
+  //         setListScene(sceneList);
+  //         //获取url的参数 值
+  //         const urlParams = new URLSearchParams(window.location.search);
+  //         const sceneId = urlParams.get("sceneId");
+  //         if (sceneId) {
+  //           _setItem({
+  //             id: parseInt(sceneId),
+  //             name: "场景预览",
+  //             des: "Scene",
+  //             cover: "",
+  //           });
+  //           return;
+  //         }
+  //         _setItem(sceneList[0]);
+  //       }
+  //     })
+  //     .catch((error: MessageError) => {
+  //       errorMessage(error);
+  //     });
+  // }, []);
+
+  useEffect(() => {
+    getPageList({ from: "EDITOR_3D", type: "Scene", description: "3d场景" })
+      .then((res) => {
+        if (Array.isArray(res)) {
+          setListScene(res);
           const urlParams = new URLSearchParams(window.location.search);
           const sceneId = urlParams.get("sceneId");
           if (sceneId) {
             _setItem({
               id: parseInt(sceneId),
               name: "场景预览",
-              des: "Scene",
+              des: JSON.stringify({
+                type: "Scene",
+                description: "说明",
+                from: "EDITOR_3D",
+              }),
               cover: "",
             });
             return;
           }
-          _setItem(sceneList[0]);
+          _setItem(res[0]);
         }
       })
       .catch((error: MessageError) => {

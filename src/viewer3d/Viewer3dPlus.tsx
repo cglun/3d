@@ -83,8 +83,10 @@ export default function Viewer3dPlus({
       window.addEventListener("resize", () => viewer.onWindowResize());
     }
 
-    if (item.des === "Scene") {
-      loadScene();
+    if (item.des.includes("EDITOR_3D")) {
+      if (item.des.includes("Scene")) {
+        loadScene();
+      }
     }
 
     return () => {
