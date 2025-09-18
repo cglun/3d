@@ -1,61 +1,32 @@
 import { Group, Mesh, Scene } from "three";
-
 import { transformCMD } from "@/three/command/cmd";
 import { getEditorInstance } from "@/three/utils/utils";
 import { EmergencyImage } from "@/viewer3d/label/EmergencyImage";
 import { userCssStyle } from "@/three/config/Three3dConfig";
-import ModalConfirm3d from "@/component/common/ModalConfirm3d";
-import deleteButtonGUI from "@/component/Editor/PropertyGUI/deleteButtonGUI/deleteButtonGUI";
-import { removeRecursively } from "@/three/utils/util4Scene";
 import getPageList from "@/app/httpRequest";
 import { errorMessage } from "@/app/utils";
 import { MessageError } from "@/app/type";
 import { loadAssets } from "@/app/http";
-
+import positionGUI from "@/component/Editor/PropertyGUI/commonGUI/positionGUI";
+import rotationGUI from "@/component/Editor/PropertyGUI/commonGUI/rotationGUI";
+import scaleGUI from "@/component/Editor/PropertyGUI/commonGUI/scaleGUI";
 export default function emergencyPlanStepGui(
   group: Group | Mesh,
-  updateScene: (scene: Scene) => void
+  updateScene?: (scene: Scene) => void
 ) {
   const { editor, scene } = getEditorInstance();
   const folder = editor.createGUI("组").onFinishChange(() => {
     transformCMD(group, () => emergencyPlanStepGui(group, updateScene));
   });
   folder.add(group, "name").name("步骤名称"); // 步骤名称不可编辑
-  const fun = {
-    addButton: () => {
-      const label = new EmergencyImage(
-        { markName: "name" },
-        { ...userCssStyle }
-      );
-      group.add(label.css3DSprite);
-      updateScene(scene);
-    },
-    delButton: () => {
-      ModalConfirm3d(
-        {
-          title: "删除步骤",
-          body: `确认删除${group.name}吗？`,
-          confirmButton: {
-            show: true,
-            hasButton: true,
-            closeButton: true,
-          },
-        },
-        () => {
-          editor.transformControl.detach(); // 取消选中,不然会报错
+  const folderStep = folder.addFolder("变换").close();
+  positionGUI(folderStep, group, -50, 50, 0.01);
+  rotationGUI(folderStep, group);
+  scaleGUI(folderStep, group, -50, 50, 0.001);
 
-          removeRecursively(group);
-          folder.destroy();
-          updateScene(scene);
-        }
-      );
-    },
-  };
-
-  deleteButtonGUI(fun, folder, "步骤"); // folder.add(fun, "addButton").name("添加图片");
   const div = document.createElement("div");
 
-  folder.domElement.appendChild(div);
+  folderStep.domElement.appendChild(div);
   //默认图片
   const defaultImage3dUrl = new URL(
     "@static/images/defaultImage3d.png",
@@ -81,7 +52,7 @@ export default function emergencyPlanStepGui(
             );
 
             currentSelected3d.add(label.css3DSprite);
-            updateScene(scene);
+            updateScene?.(scene);
           });
           div.appendChild(img);
         });

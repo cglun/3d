@@ -27,6 +27,7 @@ export class Command {
     [GROUP.ROAM]: "漫游",
     [GROUP.TEST]: "测试",
     [GROUP.TILES]: "地图",
+    [GROUP.EMERGENCY_PLAN]: "应急预案",
   };
 
   // 存储执行操作的函数
@@ -51,6 +52,10 @@ export class Command {
     console.log(name);
   }
   buttonName() {
+    if (this.objectName === "透视相机") {
+      return `相机->${this.objectName}->${this.cmd}`;
+    }
+
     const groupKeys = Object.values(GROUP);
     // 正确检查this.objectParent是否为有效的GROUP枚举值
     const isValidGroup = groupKeys.includes(this.objectParent as GROUP);
@@ -62,8 +67,9 @@ export class Command {
       : GROUP.NONE;
 
     if (parentLabel === GROUP.NONE) {
-      return `相机->${this.objectName}->${this.cmd}`;
+      return `${this.objectName}->${this.cmd}`;
     }
+
     return `${parentLabel}->${this.objectName}->${this.cmd}`;
   }
 }

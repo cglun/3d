@@ -37,6 +37,8 @@ import css3DObjectGUI from "@/component/Editor/PropertyGUI/css3DObjectGUI";
 
 import { removeRecursively } from "@/three/utils/util4Scene";
 import { loadAssets } from "@/app/http";
+import { navigateToUrl } from "@/app/utils";
+import { useNavigate } from "@tanstack/react-router";
 
 function TreeNode({
   node,
@@ -50,6 +52,7 @@ function TreeNode({
   const [delBtn, setDelBtn] = useState(false);
   const { scene, updateScene } = useUpdateScene();
   const hasChildren = node.children.length > 0;
+  const navigate = useNavigate();
 
   if (node.userData.isHelper) {
     return null;
@@ -86,14 +89,22 @@ function TreeNode({
     }
 
     if (parentGroup?.name === GROUP.EMERGENCY_PLAN) {
+      navigate({
+        to: navigateToUrl("extend"),
+      });
       transformCMD(editorObject, () =>
         emergencyPlanGui(editorObject as Group, updateScene)
       );
-      editor.transformControl.detach();
+      // editor.transformControl.detach();
+      editor.transformControl.attach(editorObject);
+
       return;
     }
     //步骤
     if (parentGroup?.parent?.name === GROUP.EMERGENCY_PLAN) {
+      navigate({
+        to: navigateToUrl("extend"),
+      });
       transformCMD(editorObject, () =>
         emergencyPlanStepGui(editorObject as Group, updateScene)
       );
@@ -104,6 +115,9 @@ function TreeNode({
 
     //预案图片
     if (parentGroup?.parent?.parent?.name === GROUP.EMERGENCY_PLAN) {
+      navigate({
+        to: navigateToUrl("extend"),
+      });
       transformCMD(editorObject, () =>
         css3DObjectGUI(editorObject as CSS3DObject, updateScene)
       );
@@ -174,20 +188,28 @@ function TreeNode({
     // if (item instanceof Group) logo = "collection";
     if (item instanceof Light) logo = "lightbulb";
     if (item instanceof CSS3DSprite) logo = "pin-map";
+
+    if (item.parent?.parent?.parent?.name === GROUP.EMERGENCY_PLAN) {
+      return;
+    }
     return <Icon iconName={logo} gap={1} />;
   }
 
   const light = `d-flex justify-content-between`;
   // const light = `d-flex justify-content-between ${node.userData.isSelected && "text-warning"}`;
+
   let showDelBtn = delBtn && node?.parent?.name.includes("_GROUP");
   if (node instanceof CSS3DSprite) {
     showDelBtn = delBtn && true;
   }
-  const isImage = node.parent?.parent?.parent?.name === GROUP.EMERGENCY_PLAN;
+  const EMERGENCY_PLAN_CHILD = node.parent?.parent;
+  const isImage = EMERGENCY_PLAN_CHILD?.parent?.name === GROUP.EMERGENCY_PLAN;
+  if (isImage || EMERGENCY_PLAN_CHILD?.name === GROUP.EMERGENCY_PLAN) {
+    showDelBtn = delBtn && true;
+  }
   function getImageByNode(node: any) {
     const imgUrl = loadAssets(node.userData.styles.cardBackgroundUrl?.trim());
-    const img = <img src={imgUrl} style={{ width: "33.33%" }}></img>;
-
+    const img = <img src={imgUrl} style={{ height: "2rem" }}></img>;
     return img;
   }
 

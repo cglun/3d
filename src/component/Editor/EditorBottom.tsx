@@ -21,10 +21,6 @@ export default function EditorBottom() {
 
   if (location.href.includes("sceneId=")) {
     defaultActiveKey = location.pathname;
-    //defaultActiveKey去掉"/editor3d/"
-    // const _defaultActiveKey = location.pathname.replace(BASE_URL, "");
-    // setDefaultActiveKey(_defaultActiveKey);
-    // navigate({ to: location.href });
   }
   const tabsList = [
     {

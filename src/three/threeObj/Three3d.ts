@@ -260,6 +260,7 @@ export class Three3d extends ThreeObj {
     this.GEOMETRY.name = GROUP.GEOMETRY;
     this.TEST_GROUP.name = GROUP.TEST;
     this.EMERGENCY_PLAN_GROUP.name = GROUP.EMERGENCY_PLAN;
+    this.EMERGENCY_PLAN_GROUP.userData.enableEMERGENCY_PLAN_GROUP = true;
 
     this.scene.add(this.MARK_LABEL_GROUP);
     this.scene.add(this.MODEL_GROUP);

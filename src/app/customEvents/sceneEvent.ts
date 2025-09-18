@@ -14,6 +14,14 @@ export const SceneReloadEvent = (detail: SceneReload) => {
   });
 };
 
+export const EmergencyResponsePlanButtonGroupUpdate = ({
+  time = new Date().getTime(),
+}) => {
+  return new CustomEvent<{ time: number }>(
+    "EmergencyResponsePlanButtonGroupUpdate",
+    { detail: { time } }
+  );
+};
 // // 触发自定义事件示例
 // const detail: SceneReload = {
 //   sceneId: 116,

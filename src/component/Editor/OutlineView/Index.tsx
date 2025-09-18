@@ -18,6 +18,8 @@ import { Button, ButtonGroup } from "react-bootstrap";
 import { getEditorInstance } from "@/three/utils/utils";
 import { getThemeByScene } from "@/three/utils/util4UI";
 import { useNavigate } from "@tanstack/react-router";
+import { navigateToUrl, updateEmergencyPlan } from "@/app/utils";
+import { useState } from "react";
 
 // import { editor } from "monaco-editor";
 // import { editorInstance } from "@/three/EditorInstance";
@@ -25,6 +27,7 @@ import { useNavigate } from "@tanstack/react-router";
 export default function Index() {
   const gap = 1;
   const { scene, updateScene } = useUpdateScene();
+  const [isEmergencyPlanVisible, setIsEmergencyPlanVisible] = useState(false);
   const { themeColor } = getThemeByScene(scene);
   const navigate = useNavigate();
   let LIGHT_GROUP: Object3D[] = [];
@@ -32,7 +35,7 @@ export default function Index() {
   let MARK_LABEL_GROUP: Object3D[] = [];
   let GEOMETRY: Object3D[] = [];
   let EMERGENCY_PLAN_GROUP: Object3D[] = [];
-
+  let enableEmergency = false;
   const array = scene.children;
 
   for (let index = 0; index < array.length; index++) {
@@ -52,6 +55,7 @@ export default function Index() {
         break;
       case GROUP.EMERGENCY_PLAN:
         EMERGENCY_PLAN_GROUP = getGroupByName(children);
+        enableEmergency = array[index].userData.enableEMERGENCY_PLAN_GROUP;
         break;
       default:
         break;
@@ -110,6 +114,9 @@ export default function Index() {
                     variant={themeColor}
                     onClick={() => {
                       const { editor, scene } = getEditorInstance();
+                      navigate({
+                        to: navigateToUrl("extend"),
+                      });
                       const emergencyPlan = editor.EMERGENCY_PLAN_GROUP;
                       const group = scene.getObjectByName(GROUP.EMERGENCY_PLAN);
                       if (!group) {
@@ -122,6 +129,7 @@ export default function Index() {
                       group1.userData.showChildren = false;
                       emergencyPlan.add(group1);
                       scene.add(emergencyPlan);
+                      updateEmergencyPlan();
                       updateScene(scene);
                     }}
                   >
@@ -135,9 +143,8 @@ export default function Index() {
                   <Button
                     variant={themeColor}
                     onClick={() => {
-                      const { userData } = getEditorInstance();
                       navigate({
-                        to: `/editor3d/extend?sceneId=${userData.projectId}`,
+                        to: navigateToUrl("extend"),
                       });
                     }}
                   >
@@ -146,6 +153,53 @@ export default function Index() {
                       gap={1}
                       fontSize={0.8}
                       title="按钮样式"
+                    />
+                  </Button>
+                  <Button
+                    variant={themeColor}
+                    onClick={() => {
+                      navigate({
+                        to: navigateToUrl("extend"),
+                      });
+                      const { editor } = getEditorInstance();
+                      const emergencyPlan = editor.EMERGENCY_PLAN_GROUP;
+                      emergencyPlan?.traverse((child) => {
+                        child.userData.showChildren = !isEmergencyPlanVisible;
+                        child.visible = !isEmergencyPlanVisible;
+                      });
+                      setIsEmergencyPlanVisible(!isEmergencyPlanVisible);
+                      updateEmergencyPlan();
+                    }}
+                  >
+                    <Icon
+                      iconName={isEmergencyPlanVisible ? "eye" : "eye-slash"}
+                      gap={1}
+                      fontSize={0.8}
+                      title="全部显示"
+                    />
+                  </Button>
+
+                  <Button
+                    variant={themeColor}
+                    onClick={() => {
+                      const { editor } = getEditorInstance();
+                      navigate({
+                        to: navigateToUrl("extend"),
+                      });
+                      const emergencyPlan = editor.EMERGENCY_PLAN_GROUP;
+                      emergencyPlan.userData.enableEMERGENCY_PLAN_GROUP =
+                        !emergencyPlan.userData.enableEMERGENCY_PLAN_GROUP;
+                      updateEmergencyPlan();
+                      updateScene(editor.scene);
+                    }}
+                  >
+                    <Icon
+                      iconName={
+                        enableEmergency ? "bi bi-toggle-on" : "bi bi-toggle-off"
+                      }
+                      gap={1}
+                      fontSize={0.8}
+                      title="启用/禁用"
                     />
                   </Button>
                 </ButtonGroup>

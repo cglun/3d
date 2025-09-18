@@ -2,10 +2,14 @@ import { Group, Mesh, Scene } from "three";
 
 import { transformCMD } from "@/three/command/cmd";
 import { getEditorInstance } from "@/three/utils/utils";
+import { updateEmergencyPlan } from "@/app/utils";
+import positionGUI from "@/component/Editor/PropertyGUI/commonGUI/positionGUI";
+import rotationGUI from "@/component/Editor/PropertyGUI/commonGUI/rotationGUI";
+import scaleGUI from "@/component/Editor/PropertyGUI/commonGUI/scaleGUI";
 
 export default function emergencyPlanGui(
   group: Group | Mesh,
-  updateScene: (scene: Scene) => void
+  updateScene?: (scene: Scene) => void
 ) {
   const { editor, scene } = getEditorInstance();
   const folder = editor.createGUI("组").onFinishChange(() => {
@@ -17,9 +21,13 @@ export default function emergencyPlanGui(
       const step = new Group();
       step.name = "步骤" + (group.children.length + 1);
       group.add(step);
-      updateScene(scene);
+      updateEmergencyPlan();
+      updateScene?.(scene);
     },
   };
 
   folder.add(fun, "addButton").name("增加步骤");
+  positionGUI(folder, group, -50, 50, 0.01);
+  rotationGUI(folder, group);
+  scaleGUI(folder, group, -50, 50, 0.001);
 }

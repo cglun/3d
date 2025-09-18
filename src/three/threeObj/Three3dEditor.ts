@@ -16,7 +16,10 @@ import {
 } from "three";
 import { Dispatch } from "react";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
+import {
+  CSS3DObject,
+  CSS3DSprite,
+} from "three/addons/renderers/CSS3DRenderer.js";
 
 import { TransformControls } from "three/addons/controls/TransformControls.js";
 import { BackgroundHDR, SceneUserData } from "@/three/config/Three3dConfig";
@@ -36,6 +39,9 @@ import meshGroupGUI from "@/component/Editor/PropertyGUI/meshGroupGUI";
 import css3CSS3DSpriteGUI from "@/component/Editor/PropertyGUI/css3DSpriteGUI";
 import { Three3d } from "@/three/threeObj/Three3d";
 import { transformCMD } from "@/three/command/cmd";
+import emergencyPlanGui from "@/component/routes/extend/emergencyPlanGui/emergencyPlanGui";
+import emergencyPlanStepGui from "@/component/routes/extend/emergencyPlanGui/emergencyPlanStepGui";
+import css3DObjectGUI from "@/component/Editor/PropertyGUI/css3DObjectGUI";
 
 export class Three3dEditor extends Three3d {
   static divElement: HTMLDivElement;
@@ -110,12 +116,33 @@ export class Three3dEditor extends Three3d {
         if (curSelected instanceof Mesh) {
           // meshGroupGUI(curSelected);
           transformCMD(curSelected, () => meshGroupGUI(curSelected));
+          return;
         }
+        const parentGroup = curSelected.parent;
         if (curSelected instanceof Group) {
+          if (parentGroup?.name === GROUP.EMERGENCY_PLAN) {
+            transformCMD(curSelected, () => emergencyPlanGui(curSelected));
+            return;
+          }
+          // 应急预案步骤
+          if (parentGroup?.parent?.name === GROUP.EMERGENCY_PLAN) {
+            transformCMD(curSelected, () => emergencyPlanStepGui(curSelected));
+            return;
+          }
           transformCMD(curSelected, () => meshGroupGUI(curSelected));
+          return;
         }
+
+        if (curSelected instanceof CSS3DObject) {
+          if (parentGroup?.parent?.parent?.name === GROUP.EMERGENCY_PLAN) {
+            transformCMD(curSelected, () => css3DObjectGUI(curSelected));
+            return;
+          }
+        }
+
         if (curSelected instanceof DirectionalLight) {
           transformCMD(curSelected, () => directionalLightGUI(curSelected));
+          return;
         }
 
         if (curSelected instanceof CSS3DSprite) {
