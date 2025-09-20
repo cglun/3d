@@ -81,7 +81,7 @@ export const buttonGroupStyleInit = {
   backgroundColorIsClick: "#5b2806",
   useBackgroundUrl: true,
   backgroundUrl: "/editor3d/static/images/topMark.png",
-  backgroundUrlIsClick: "/editor3d/static/images/topMark.png",
+  backgroundUrlIsClick: "/editor3d/static/images/topMarkIsClick.png",
 };
 export type ButtonGroupStyle = typeof buttonGroupStyleInit;
 

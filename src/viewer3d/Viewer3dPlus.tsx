@@ -163,7 +163,7 @@ export default function Viewer3dPlus({
           </div>
         )}
         <div style={canvasStyle} ref={canvas3d}></div>
-        <EmergencyPlanButtonGroup scene={viewerInstance.getViewer()?.scene} />
+        <EmergencyPlanButtonGroup instance={viewerInstance.getViewer()} />
         <ModalTour />
         {showButtonGroup && (
           <Suspense fallback={<div>Loading...</div>}>

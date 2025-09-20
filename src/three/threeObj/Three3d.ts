@@ -24,6 +24,7 @@ import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { runScriptDev } from "@/three/script/scriptDev";
 
 import {
+  buttonGroupStyleInit,
   customButtonGroupListInit,
   ExtraParams,
   hdr,
@@ -69,6 +70,7 @@ import ThreeObj from "@/three/threeObj/ThreeObj";
 import { testLabel } from "@/component/routes/effects/utils";
 import { TilesRenderer, GlobeControls } from "3d-tiles-renderer";
 import { EmergencyImage } from "@/viewer3d/label/EmergencyImage";
+import { emergencyButtonGroup } from "@/component/routes/extend/extendButton/EmergencyButtonType";
 
 export class Three3d extends ThreeObj {
   private _composer: EffectComposer;
@@ -260,7 +262,12 @@ export class Three3d extends ThreeObj {
     this.GEOMETRY.name = GROUP.GEOMETRY;
     this.TEST_GROUP.name = GROUP.TEST;
     this.EMERGENCY_PLAN_GROUP.name = GROUP.EMERGENCY_PLAN;
-    this.EMERGENCY_PLAN_GROUP.userData.enableEMERGENCY_PLAN_GROUP = true;
+    // this.EMERGENCY_PLAN_GROUP.userData.enableEMERGENCY_PLAN_GROUP = true;
+    this.EMERGENCY_PLAN_GROUP.userData = {
+      buttonGroupStyle: {
+        ...emergencyButtonGroup,
+      },
+    };
 
     this.scene.add(this.MARK_LABEL_GROUP);
     this.scene.add(this.MODEL_GROUP);
@@ -421,9 +428,11 @@ export class Three3d extends ThreeObj {
 
         if (emergencyPlan) {
           this.EMERGENCY_PLAN_GROUP.children = emergencyPlan.children;
+          this.EMERGENCY_PLAN_GROUP.userData = emergencyPlan.userData;
           if (emergencyPlan.children) {
             emergencyPlan.children.forEach((_item) => {
               const array = _item.children;
+
               array.forEach((element) => {
                 const children = [...element.children];
                 children.forEach((el) => {
@@ -438,6 +447,7 @@ export class Three3d extends ThreeObj {
                   bb.css3DSprite.scale.copy(el.scale);
                   bb.css3DSprite.rotation.copy(el.rotation);
                   bb.css3DSprite.name = el.name;
+                  bb.css3DSprite.userData = el.userData;
                   el.removeFromParent();
                   element.add(bb.css3DSprite);
                 });

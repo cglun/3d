@@ -34,11 +34,11 @@ export function UploadModel({ updateList = () => {} }) {
         axios
           .post("/project/create/", {
             name: model.name,
-            des: {
+            des: JSON.stringify({
               type: "Mesh",
               description: "一个模型。",
               from: "EDITOR_3D",
-            },
+            }),
             dataJson: JSON.stringify(model),
           })
           .then((res) => {

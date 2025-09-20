@@ -23,7 +23,7 @@ function RouteComponent() {
     <>
       <CustomButton />
       <PreButtonGroup />
-      <EmergencyPlanButtonGroup scene={editorInstance.getEditor()?.scene} />
+      <EmergencyPlanButtonGroup instance={editorInstance.getEditor()} />
     </>
   );
 }
