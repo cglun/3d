@@ -34,7 +34,7 @@ function RootComponent() {
     initTourWindow
   );
   const [camera, dispatchCamera] = useReducer(reducerCamera, initEditorCamera);
-  const [pageList, setPageList] = useState<any[]>([]);
+  const [pageList, setPageList] = useState<RecordItem[]>([]);
 
   let upZiDuan = true;
 

@@ -1,6 +1,4 @@
 import { Euler, Vector3 } from "three";
-import { ProjectType } from "@/app/httpRequest";
-
 export enum APP_COLOR {
   Primary = "primary",
   Secondary = "secondary",

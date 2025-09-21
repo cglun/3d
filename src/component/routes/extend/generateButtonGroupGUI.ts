@@ -39,10 +39,13 @@ export default function generateButtonGroupGUI(
   if (key === 0) {
     const { userSetting } = generateButtonGroup.group[key];
     const dataFolder = folder.addFolder("数据");
-    dataFolder.add(userSetting, "animationTime").name("动画时间");
-    const min = 100,
+    const min = -100,
       max = 100,
       step = 0.01;
+    dataFolder
+      .add(userSetting, "animationTime", min * 100, max * 100, step * 100)
+      .name("动画时间");
+
     const cameraFolder = folder.addFolder("相机偏移");
     cameraFolder.add(userSetting.cameraOffset, "x", min, max, step).name("X");
     cameraFolder.add(userSetting.cameraOffset, "y", min, max, step).name("Y");

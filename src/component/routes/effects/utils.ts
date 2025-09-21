@@ -315,3 +315,20 @@ export function getButtonGroupItemStyle<T extends ButtonItemBase>(
     backgroundSize: `${width + offsetWidth}px ${height + offsetHeight}px`,
   };
 }
+
+export function getButtonPosition(
+  e: React.DragEvent<HTMLButtonElement>,
+  divElement: HTMLDivElement
+) {
+  const { clientX, clientY } = e;
+  //输出按钮的宽度和高度
+  const buttonElement = e.target as HTMLElement;
+  const { offsetWidth, offsetHeight } = buttonElement;
+
+  const top = (clientY - offsetHeight / 2) / divElement.offsetHeight;
+  const left = (clientX - offsetWidth / 2) / divElement.offsetWidth;
+  return {
+    top,
+    left,
+  };
+}

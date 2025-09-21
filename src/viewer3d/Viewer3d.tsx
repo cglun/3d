@@ -96,7 +96,8 @@ export default function Viewer3d({
   function setLoadProgress(viewer: Three3dViewer) {
     // 在模型加载完成后更新场景
     viewer.loadedModelsEnd = () => {
-      if (item.des === "Scene") {
+      const desJSON = JSON.parse(item.des);
+      if (desJSON.type === "Scene") {
         viewer.runJavascript();
         viewer.setCanBeRaycast();
         viewer.setOutLinePassColor();

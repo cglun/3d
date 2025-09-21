@@ -7,6 +7,7 @@ import {
 import {
   getButtonGroupItemStyle,
   getButtonGroupStyle,
+  getButtonPosition,
 } from "@/component/routes/effects/utils";
 
 import { memo, Suspense, useState } from "react";
@@ -111,59 +112,75 @@ function GenerateButtonGroupShow({
         visibility: "visible",
       }}
     >
-      <Button
-        size="sm"
-        variant={themeColor}
-        onClick={() => {
-          _setGroupIndex(groupIndex);
-          generateButtonGroupGUI(groupIndex, updateScene);
-        }}
-        onDragStart={() => {
-          _setGroupIndex(groupIndex);
-          generateButtonGroupGUI(groupIndex, updateScene);
-        }}
-        draggable={true}
-        onDragEnd={(e) => {
-          const { customButtonGroupList, editor } = getEditorInstance();
-          const { top, left } = getButtonPosition(e, editor.divElement);
+      <ButtonGroup>
+        <Button
+          size="sm"
+          style={{
+            cursor: "move",
+          }}
+          variant={themeColor}
+          onClick={() => {
+            _setGroupIndex(groupIndex);
+            generateButtonGroupGUI(groupIndex, updateScene);
+          }}
+          onDragStart={() => {
+            _setGroupIndex(groupIndex);
+            generateButtonGroupGUI(groupIndex, updateScene);
+          }}
+          draggable={true}
+          onDragEnd={(e) => {
+            const { customButtonGroupList, editor } = getEditorInstance();
+            const { top, left } = getButtonPosition(e, editor.divElement);
 
-          const { group } = customButtonGroupList.generateButtonGroup;
-          const { buttonGroupStyle } = group[groupIndex].customButtonItem;
-          buttonGroupStyle.top = top * 100;
-          buttonGroupStyle.left = left * 100;
+            const { group } = customButtonGroupList.generateButtonGroup;
+            const { buttonGroupStyle } = group[groupIndex].customButtonItem;
+            buttonGroupStyle.top = top * 100;
+            buttonGroupStyle.left = left * 100;
 
-          generateButtonGroupGUI(groupIndex, updateScene);
-          updateScene(editor.scene);
-        }}
-      >
-        <Icon iconName="bi bi-arrows-move" gap={1} title="拖动" />
-        {group[groupIndex].customButtonItem.name}
-        {!showGroup && isHide()}
-      </Button>
-      {listGroup.map((item, index) => {
-        const buttonStyle = getButtonGroupItemStyle(item, buttonGroupStyle);
-        const { showName, showButton } = item;
-        return (
-          <button
-            key={index}
-            style={buttonStyle}
-            onClick={() => {
-              const { customButtonGroupList, editor } = getEditorInstance();
-              const { group } = customButtonGroupList.generateButtonGroup;
-              const { listGroup } = group[groupIndex].customButtonItem;
-              listGroup.forEach((_item) => {
-                _item.isClick = false;
-              });
+            generateButtonGroupGUI(groupIndex, updateScene);
+            updateScene(editor.scene);
+          }}
+        >
+          {group[groupIndex].customButtonItem.name}
+        </Button>
+        <Button
+          variant={themeColor}
+          onClick={() => {
+            customButtonItem.showGroup = !customButtonItem.showGroup;
+            updateScene(editor.scene);
+          }}
+        >
+          <Icon
+            iconName={showGroup ? "eye" : "eye-slash"}
+            title={"显示与隐藏"}
+          />
+        </Button>
+      </ButtonGroup>
+      {showGroup &&
+        listGroup.map((item, index) => {
+          const buttonStyle = getButtonGroupItemStyle(item, buttonGroupStyle);
+          const { showName, showButton } = item;
+          return (
+            <button
+              key={index}
+              style={buttonStyle}
+              onClick={() => {
+                const { customButtonGroupList, editor } = getEditorInstance();
+                const { group } = customButtonGroupList.generateButtonGroup;
+                const { listGroup } = group[groupIndex].customButtonItem;
+                listGroup.forEach((_item) => {
+                  _item.isClick = false;
+                });
 
-              item.isClick = true;
-              generateButtonGUI(updateScene, listGroup, groupIndex, index);
-              updateScene(editor.scene);
-            }}
-          >
-            {showButton ? showName : isHide()}
-          </button>
-        );
-      })}
+                item.isClick = true;
+                generateButtonGUI(updateScene, listGroup, groupIndex, index);
+                updateScene(editor.scene);
+              }}
+            >
+              {showButton ? showName : isHide()}
+            </button>
+          );
+        })}
     </div>
   );
 }
@@ -211,6 +228,9 @@ function CustomButtonGroupShow() {
           <ButtonGroup>
             <Button
               variant={themeColor}
+              style={{
+                cursor: "move",
+              }}
               size="sm"
               onClick={() => {
                 selectParent(index);
@@ -231,12 +251,19 @@ function CustomButtonGroupShow() {
                 updateScene(editor.scene);
               }}
             >
+              自定义
+            </Button>
+            <Button
+              variant={themeColor}
+              onClick={() => {
+                item.showGroup = !item.showGroup;
+                updateScene(editor.scene);
+              }}
+            >
               <Icon
-                iconName="bi bi-arrows-move"
-                gap={1}
-                title={group[index].name}
+                iconName={showGroup ? "eye" : "eye-slash"}
+                title={"显示与隐藏"}
               />
-              {!showGroup && isHide()}
             </Button>
             <Button
               variant={themeColor}
@@ -272,39 +299,41 @@ console.log("${name}_按钮${buttonNum}");
               <Icon iconName="plus-square" title="添加按钮" />
             </Button>
           </ButtonGroup>
-          {listGroup.map((_item, _index) => {
-            const buttonStyle = getButtonGroupItemStyle(
-              _item,
-              buttonGroupStyle
-            );
-            const { showButton, showName } = _item;
-            return (
-              <button
-                key={_index}
-                style={buttonStyle}
-                onClick={() => {
-                  setX(index);
-                  setY(_index);
-                  const { customButtonGroupList, editor } = getEditorInstance();
-                  const { group } = customButtonGroupList.customButtonGroup;
-                  group[index].listGroup.forEach((_item) => {
-                    _item.isClick = false;
-                  });
-                  _item.isClick = !_item.isClick;
-                  customButtonGUI(
-                    updateScene,
-                    index,
-                    _index,
-                    setShowCodeWindow
-                  );
+          {showGroup &&
+            listGroup.map((_item, _index) => {
+              const buttonStyle = getButtonGroupItemStyle(
+                _item,
+                buttonGroupStyle
+              );
+              const { showButton, showName } = _item;
+              return (
+                <button
+                  key={_index}
+                  style={buttonStyle}
+                  onClick={() => {
+                    setX(index);
+                    setY(_index);
+                    const { customButtonGroupList, editor } =
+                      getEditorInstance();
+                    const { group } = customButtonGroupList.customButtonGroup;
+                    group[index].listGroup.forEach((_item) => {
+                      _item.isClick = false;
+                    });
+                    _item.isClick = !_item.isClick;
+                    customButtonGUI(
+                      updateScene,
+                      index,
+                      _index,
+                      setShowCodeWindow
+                    );
 
-                  updateScene(editor.scene);
-                }}
-              >
-                {showButton ? showName : isHide()}
-              </button>
-            );
-          })}
+                    updateScene(editor.scene);
+                  }}
+                >
+                  {showButton ? showName : isHide()}
+                </button>
+              );
+            })}
         </div>
         <CodeEditor
           tipsTitle="实现按钮事件"
@@ -325,24 +354,13 @@ console.log("${name}_按钮${buttonNum}");
   });
 }
 
-function getButtonPosition(
-  e: React.DragEvent<HTMLButtonElement>,
-  divElement: HTMLDivElement
-) {
-  const { clientX, clientY } = e;
-  //输出按钮的宽度和高度
-  const buttonElement = e.target as HTMLElement;
-  const { offsetWidth, offsetHeight } = buttonElement;
-
-  const top = (clientY - offsetHeight / 2) / divElement.offsetHeight;
-  const left = (clientX - offsetWidth / 2) / divElement.offsetWidth;
-  return {
-    top,
-    left,
-  };
-}
 function isHide() {
   return (
-    <span className={"text-" + APP_COLOR.Warning + " ms-1"}>[已隐藏]</span>
+    <div
+      className={"text-" + APP_COLOR.Warning + " ms-1"}
+      style={{ fontSize: "14px", backgroundColor: "#330c0cff" }}
+    >
+      [-已隐藏-]
+    </div>
   );
 }

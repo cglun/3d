@@ -24,7 +24,6 @@ import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { runScriptDev } from "@/three/script/scriptDev";
 
 import {
-  buttonGroupStyleInit,
   customButtonGroupListInit,
   ExtraParams,
   hdr,
@@ -608,7 +607,6 @@ export class Three3d extends ThreeObj {
     getProjectData(item.id).then((res: string) => {
       const model = JSON.parse(res) as GlbModel;
       const loader = glbLoader();
-      debugger;
       loader.load(
         model.userData.modelUrl + "?url",
         (gltf: GLTF) => {

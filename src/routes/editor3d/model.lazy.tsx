@@ -5,7 +5,7 @@ import Container from "react-bootstrap/esm/Container";
 import { Search3d } from "@/component/common/Search3d";
 import { UploadModel } from "@/component/common/UploadModel";
 import ListCard from "@/component/common/ListCard";
-import _axios from "@/app/http";
+
 import { MessageError, RecordItem } from "@/app/type";
 import { errorMessage } from "@/app/utils";
 import getPageList from "@/app/httpRequest";

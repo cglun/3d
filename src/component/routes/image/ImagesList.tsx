@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import ListGroup from "react-bootstrap/esm/ListGroup";
 import Container from "react-bootstrap/esm/Container";
 import { Search3d } from "@/component/common/Search3d";
-import _axios from "@/app/http";
+
 import { MessageError, RecordItem } from "@/app/type";
 import { errorMessage } from "@/app/utils";
 

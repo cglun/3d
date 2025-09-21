@@ -155,6 +155,24 @@ function ListImageCard(props: Props) {
                 <Button
                   variant={themeColor}
                   size="sm"
+                  onClick={async () => {
+                    try {
+                      const imageSrc = loadAssets(item.cover);
+                      await navigator.clipboard.writeText(imageSrc);
+
+                      Toast3d("图片地址已复制");
+                    } catch (err) {
+                      console.error("Failed to copy: ", err);
+                      Toast3d("复制失败", "提示", APP_COLOR.Danger);
+                    }
+                  }}
+                >
+                  <Icon iconName="bi bi-copy" title="复制图片地址" />
+                </Button>
+
+                <Button
+                  variant={themeColor}
+                  size="sm"
                   onClick={() => editorBtn(item, index)}
                 >
                   <Icon iconName="pencil" title="编辑" />

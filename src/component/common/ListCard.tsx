@@ -184,7 +184,8 @@ function RecordItemCard(props: Props) {
     <Container fluid className="d-flex flex-wrap">
       {list.map((item: RecordItem, index: number) => {
         let selectStyle =
-          item.des === "Scene" && scene.userData.projectId === item.id
+          JSON.parse(item.des).type === "Scene" &&
+          scene.userData.projectId === item.id
             ? "bg-success"
             : "";
 
@@ -219,7 +220,9 @@ function RecordItemCard(props: Props) {
               ) : (
                 <Trigger3d
                   title={
-                    (item.des === "Scene" ? item.id + "_" : "") + item.name
+                    (JSON.parse(item.des).type === "Scene"
+                      ? item.id + "_"
+                      : "") + item.name
                   }
                 />
               )}

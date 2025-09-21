@@ -16,17 +16,15 @@ export default function buttonGroupBaseGUI(
     .name("名称")
     .disable(customButtonItem.type !== "USER_BUTTON")
     .onChange(() => {
-      updateScene(editorInstance.getEditor().scene);
-    });
-  folderBase
-    .add(customButtonItem, "showGroup")
-    .name("显示")
-    .onFinishChange(() => {
+      console.log("名称");
+
       updateScene(editorInstance.getEditor().scene);
     });
 
   const { buttonGroupStyle } = customButtonItem;
   stopRoam();
 
-  groupBaseGUI(folder, buttonGroupStyle);
+  groupBaseGUI(folderBase, buttonGroupStyle).onChange(() => {
+    updateScene(editorInstance.getEditor().scene);
+  });
 }

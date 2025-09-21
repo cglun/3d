@@ -11,7 +11,7 @@ export default function UpdateDateBase({
     <Container>
       <Button
         onClick={() => {
-          pageList.map((item: any) => {
+          pageList.map((item: RecordItem) => {
             const description: ProjectType = {
               type: item.des,
               description: "说明：" + item.des,
@@ -22,11 +22,18 @@ export default function UpdateDateBase({
                 id: item.id,
                 des: JSON.stringify(description),
               })
-              .then((res: any) => {
-                if (res.data.data) {
-                  console.log(res.data.data);
+
+              .then(
+                (res: {
+                  data: {
+                    data: string;
+                  };
+                }) => {
+                  if (res.data.data) {
+                    console.log(res.data.data);
+                  }
                 }
-              });
+              );
           });
 
           localStorage.setItem("upZiDuan", "true");

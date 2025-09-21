@@ -106,10 +106,6 @@ export function UploadImage({ updateList = () => {} }) {
                 marginBottom: 0,
               }}
             >
-              {/* <i
-                className={setClassName()}
-                style={{ fontSize: "1rem" }}
-              ></i>{" "} */}
               <Icon iconName="cloud-plus" fontSize={1.6} />
               <em style={{ fontSize: "1.4rem" }}>选择图片</em>
             </Form.Label>

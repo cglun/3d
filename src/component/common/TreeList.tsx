@@ -207,7 +207,7 @@ function TreeNode({
   if (isImage || EMERGENCY_PLAN_CHILD?.name === GROUP.EMERGENCY_PLAN) {
     showDelBtn = delBtn && true;
   }
-  function getImageByNode(node: any) {
+  function getImageByNode(node: Group) {
     const imgUrl = loadAssets(node.userData.styles.cardBackgroundUrl?.trim());
     const img = <img src={imgUrl} style={{ height: "2rem" }}></img>;
     return img;
@@ -225,7 +225,7 @@ function TreeNode({
       >
         <div>
           {getLogo(node)}
-          {isImage ? getImageByNode(node) : getObjectNameByName(node)}
+          {isImage ? getImageByNode(node as Group) : getObjectNameByName(node)}
         </div>
         <div>
           {showDelBtn && (

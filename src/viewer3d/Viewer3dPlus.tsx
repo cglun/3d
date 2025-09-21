@@ -73,7 +73,7 @@ export default function Viewer3dPlus({
   useEffect(() => {
     if (canvas3d.current && !isInitialized.current) {
       isInitialized.current = true; // 标记为已初始化
-      console.log("Viewer3d", item.id);
+
       const viewer = new Three3dViewer(canvas3d.current, dispatchTourWindow);
       viewerInstance.setViewer(viewer);
       viewer.controls.enabled = true;
@@ -113,7 +113,9 @@ export default function Viewer3dPlus({
   function setLoadProgress(viewer: Three3dViewer) {
     // 在模型加载完成后更新场景
     viewer.loadedModelsEnd = () => {
-      if (item.des === "Scene") {
+      const desJSON = JSON.parse(item.des);
+
+      if (desJSON.type === "Scene") {
         viewer.runJavascript();
         viewer.setCanBeRaycast();
         viewer.setOutLinePassColor();
@@ -216,6 +218,7 @@ function GenerateButtonGroupShow({
     showGroup,
     viewer.divElement
   );
+
   const listGroup = getListGroupByIndex(groupIndex);
   if (!showGroup) {
     return;
@@ -262,18 +265,18 @@ function CustomButtonGroupShow({
   setCustomButtonGroup: (customButtonGroup: CustomButtonGroup) => void;
 }) {
   const { group } = customButtonGroup;
-
+  const [toast3dPlusProps, setToast3dPlusProps] = useState<Toast3dPlusProps>({
+    show: false,
+    content: "content",
+    title: "提示",
+    type: APP_COLOR.Success,
+    delay: DELAY.MIDDLE,
+  });
   return group.map((item, index) => {
     const { listGroup, showGroup, buttonGroupStyle } = item;
     const { group } = customButtonGroup;
     const { viewer } = getViewerInstance();
-    const [toast3dPlusProps, setToast3dPlusProps] = useState<Toast3dPlusProps>({
-      show: false,
-      content: "content",
-      title: "提示",
-      type: APP_COLOR.Success,
-      delay: DELAY.MIDDLE,
-    });
+
     const positionStyle = getButtonGroupStyle(
       group[index],
       showGroup,
@@ -380,8 +383,8 @@ function resetCustomButtonGroupClick(
       item.isClick = false;
       if (childrenIndex === index) {
         item.isClick = true;
-        item.codeString;
       }
+      return item;
     }
   );
 

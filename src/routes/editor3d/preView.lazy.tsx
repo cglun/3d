@@ -7,7 +7,7 @@ import Modal from "react-bootstrap/esm/Modal";
 import { createLazyFileRoute } from "@tanstack/react-router";
 
 import { useEffect, useRef, useState } from "react";
-import _axios from "@/app/http";
+
 import { useUpdateScene } from "@/app/hooks";
 
 import { APP_COLOR, MessageError, RecordItem } from "@/app/type";
@@ -105,9 +105,9 @@ function RouteComponent() {
       });
   }, []);
 
-  //@ts-ignore 忽略类型检查,后面有可能用到，不要问为什么
+  // 忽略类型检查,后面有可能用到，不要问为什么
   function callBack(viewer: Three3dViewer) {
-    console.log("o");
+    console.log("Three3dViewer", viewer);
   }
 
   function handleClose() {

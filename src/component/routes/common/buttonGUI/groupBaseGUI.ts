@@ -61,5 +61,5 @@ export default function groupBaseGUI(
     .add(buttonGroupStyle, "backgroundUrlIsClick")
     .name("点击背景图片")
     .disable(!buttonGroupStyle.useBackgroundUrl);
-  return folder;
+  return folderBase;
 }
