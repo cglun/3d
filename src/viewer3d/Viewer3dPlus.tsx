@@ -285,11 +285,7 @@ function CustomButtonGroupShow({
     if (!showGroup) {
       return;
     }
-    function showToast3dPlus(
-      content: string,
-      type?: APP_COLOR,
-      title?: string
-    ) {
+    function Toast3d(content: string, type?: APP_COLOR, title?: string) {
       setToast3dPlusProps({
         ...toast3dPlusProps,
         show: true,
@@ -331,7 +327,7 @@ function CustomButtonGroupShow({
                       viewerIns,
                       {
                         APP_COLOR,
-                        showToast3dPlus,
+                        Toast3d,
                       }
                     );
                   }

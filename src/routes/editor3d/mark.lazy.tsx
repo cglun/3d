@@ -22,7 +22,7 @@ import _axios from "@/app/http";
 import { MyContext } from "@/app/MyContext";
 
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
-import { SceneUserData } from "@/three/config/Three3dConfig";
+import { SceneUserData, userCssStyle } from "@/three/config/Three3dConfig";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import {
   getButtonColor,
@@ -35,6 +35,7 @@ import Icon from "@/component/common/Icon";
 import { GROUP } from "@/three/config/CONSTANT";
 import { errorMessage } from "@/app/utils";
 import { getEditorInstance } from "@/three/utils/utils";
+import CodeEditor from "@/component/routes/script/CodeEditor";
 
 export const Route = createLazyFileRoute("/editor3d/mark")({
   component: RouteComponent,
@@ -48,9 +49,11 @@ function RouteComponent() {
   const { scene, updateScene } = useUpdateScene();
   const { themeColor } = getThemeByScene(scene);
   const buttonColor = getButtonColor(themeColor);
+  const [showCodeWindow, setShowCodeWindow] = useState(false);
 
   const userData = scene.userData as SceneUserData;
   const { config3d } = userData as SceneUserData;
+
   useEffect(() => {
     const editor = editorInstance.getEditor();
     const testGroup = editor.scene.getObjectByName(GROUP.TEST);
@@ -83,6 +86,8 @@ function RouteComponent() {
   }, []);
 
   if (!config3d) return;
+  const { topCard } = userData.userCssStyle;
+  const codeString = topCard?.codeString || userCssStyle.codeString;
 
   function addMark(label: CSS3DSprite) {
     const editor = editorInstance.getEditor();
@@ -132,7 +137,7 @@ function RouteComponent() {
                   disabled={!config3d.css3d}
                   onClick={() => {
                     stopRoam();
-                    topCardGUI(dispatchTourWindow);
+                    topCardGUI(dispatchTourWindow, setShowCodeWindow);
                   }}
                 >
                   <Icon iconName="credit-card-2-front" gap={1} />
@@ -274,6 +279,17 @@ function RouteComponent() {
             })}
         </Col>
       </Row>
+      <CodeEditor
+        tipsTitle="代码编辑"
+        code={codeString}
+        isValidate={true}
+        show={showCodeWindow}
+        setShow={setShowCodeWindow}
+        callback={(code) => {
+          const { userCssStyle } = getEditorInstance().userData;
+          userCssStyle.topCard.codeString = code;
+        }}
+      />
     </Container>
   );
 }

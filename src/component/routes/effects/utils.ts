@@ -5,6 +5,7 @@ import { GROUP } from "@/three/config/CONSTANT";
 import {
   ButtonGroupStyle,
   CustomButtonItemBase,
+  SceneUserData,
   UserCssStyle,
 } from "@/three/config/Three3dConfig";
 import { editorInstance } from "@/three/instance/EditorInstance";
@@ -139,11 +140,22 @@ export function getLabelInfo(
   if (testLabel.labelInfo) {
     return testLabel.labelInfo;
   }
-
+  const { userCssStyle } = editor.scene.userData as SceneUserData;
   const cube = editor.addCube();
-  testLabel.labelInfo = new LabelInfo(cube, editor.scene, dispatchTourWindow);
+  testLabel.labelInfo = new LabelInfo(
+    cube,
+    userCssStyle.topCard,
+    dispatchTourWindow,
+    {
+      author: "author_test",
+      district: "district_test",
+      id: "id_test",
+    }
+  );
+
   testLabel.labelInfo.name = GROUP.TEST + "_labelInfo";
   editor.TEST_GROUP.add(testLabel.labelInfo.css3DSprite);
+
   return testLabel.labelInfo;
 }
 

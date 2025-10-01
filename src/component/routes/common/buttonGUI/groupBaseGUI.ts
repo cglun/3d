@@ -13,14 +13,14 @@ export default function groupBaseGUI(
   const { left, top } = buttonGroupStyle;
   buttonGroupStyle.left = parseFloat(left.toFixed(2));
   buttonGroupStyle.top = parseFloat(top.toFixed(2));
+  const directionDom = folderBase
+    .add(buttonGroupStyle, "direction", direction)
+    .name("排列方向").domElement.children[1].children[1] as HTMLElement;
   folderBase.add(buttonGroupStyle, "left", 0, 100, 0.01).name("位置X");
   folderBase.add(buttonGroupStyle, "top", 0, 100, 0.01).name("位置Y");
   folderBase.add(buttonGroupStyle, "width", 30, 1000, 0.1).name("宽度");
   folderBase.add(buttonGroupStyle, "height", 20, 100, 0.1).name("高度");
 
-  const directionDom = folderBase
-    .add(buttonGroupStyle, "direction", direction)
-    .name("排列方向").domElement.children[1].children[1] as HTMLElement;
   directionDom.style.width = "100%";
   directionDom.style.textAlign = "center";
   folderBase.add(buttonGroupStyle, "gap", 0, 100, 0.01).name("间距");

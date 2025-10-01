@@ -13,6 +13,8 @@ import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { editorInstance } from "@/three/instance/EditorInstance";
+import UpdateDateBase from "@/component/common/UpdateDateBase";
+import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 
 export const Route = createLazyFileRoute("/editor3d/script")({
   component: RouteComponent,
@@ -72,6 +74,25 @@ function RouteComponent() {
             >
               <Icon iconName="building-gear" gap={1} />
               一键配置
+            </Button>
+            <Button
+              variant={buttonColor}
+              style={{ borderColor: styleBody.color }}
+              onClick={() => {
+                ModalConfirm3d({
+                  title: "更新字段",
+                  body: <UpdateDateBase />,
+                  size: "lg",
+                  confirmButton: {
+                    show: true,
+                    hasButton: true,
+                    closeButton: true,
+                  },
+                });
+              }}
+            >
+              <Icon iconName="bi bi-arrow-clockwise" gap={1} />
+              更新字段
             </Button>
           </ButtonGroup>
           <CodeEditor

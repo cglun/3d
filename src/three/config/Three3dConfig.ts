@@ -36,7 +36,13 @@ export const userCssStyle = {
   headerMarginTop: 0,
   headerMarginLeft: 0,
   opacity: 1,
+  codeString: `title.textContent = "title";//设置标题
+  const p1 = document.createElement("p");
+  p1.textContent = "id：" + "formData.id";
+  container.appendChild(p1);
+  `,
 };
+
 export const modelEdgeHighlight = {
   //设置颜色
   edgeStrength: 5, // 边缘强度

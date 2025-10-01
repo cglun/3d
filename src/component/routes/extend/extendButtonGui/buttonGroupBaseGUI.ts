@@ -1,9 +1,9 @@
+import { Scene } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { CustomButtonItemBase } from "@/three/config/Three3dConfig";
 import { stopRoam } from "@/component/routes/effects/utils";
-import { Scene } from "three";
 import { editorInstance } from "@/three/instance/EditorInstance";
-import groupBaseGUI from "../../common/buttonGUI/groupBaseGUI";
+import groupBaseGUI from "@/component/routes/common/buttonGUI/groupBaseGUI";
 
 export default function buttonGroupBaseGUI(
   folder: GUI,
@@ -16,8 +16,6 @@ export default function buttonGroupBaseGUI(
     .name("名称")
     .disable(customButtonItem.type !== "USER_BUTTON")
     .onChange(() => {
-      console.log("名称");
-
       updateScene(editorInstance.getEditor().scene);
     });
 

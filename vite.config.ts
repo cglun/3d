@@ -13,7 +13,6 @@ declare module "@originjs/vite-plugin-federation" {
 const manualChunksConfig = {
   // 将 React 相关依赖打包到一个单独的 chunk 中
   react: ["react", "react-dom"],
-  // 将第三方库打包到一个单独的 chunk 中
   // vendor: ["axios", "bootstrap", "three"],
   three: ["three"],
   // bootstrap: ["bootstrap"],
@@ -69,7 +68,7 @@ export default defineConfig({
     copyPublicDir: true,
     target: "esnext",
     minify: true,
-    // minify: false,
+    //  minify: false,
     cssCodeSplit: false,
     outDir: "../ArgDataV.Designer.V2.Vite/editor3d",
     // outDir: "dist/editor3d",

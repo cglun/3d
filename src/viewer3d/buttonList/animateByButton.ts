@@ -245,7 +245,7 @@ function stretchListGroup(
   }
 }
 
-let isMoveCamera = false;
+export let isMoveCamera = false;
 export function moveCameraSTRETCH(
   item: GenerateButtonItemMap,
   toggleButtonGroup: ToggleButtonGroup

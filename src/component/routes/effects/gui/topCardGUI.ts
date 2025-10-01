@@ -1,6 +1,5 @@
 import { Dispatch } from "react";
 import { TourWindow } from "@/app/MyContext";
-import { editorInstance } from "@/three/instance/EditorInstance";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import {
   createTestLabel,
@@ -8,11 +7,21 @@ import {
   setLabelFontColor,
 } from "@/component/routes/effects/utils";
 import markCommonGUI from "@/component/routes/effects/gui/markCommonGUI";
+import { getEditorInstance } from "@/three/utils/utils";
 
-export default function topCardGUI(dispatchTourWindow: Dispatch<TourWindow>) {
-  const editor = editorInstance.getEditor();
+export default function topCardGUI(
+  dispatchTourWindow: Dispatch<TourWindow>,
+  setShowCodeWindow: (show: boolean) => void
+) {
+  const { editor } = getEditorInstance();
 
   const folderGeometry = editor.createGUI("顶牌");
+  const funcDel = {
+    openCodeWindow: () => {
+      setShowCodeWindow(true);
+    },
+  };
+  folderGeometry.add(funcDel, "openCodeWindow").name("自定义内容");
 
   const userData = editor.scene.userData as SceneUserData;
   const { topCard } = userData.userCssStyle;
@@ -42,6 +51,8 @@ export default function topCardGUI(dispatchTourWindow: Dispatch<TourWindow>) {
       const div = labelInfoDiv.children[1] as HTMLDivElement;
       setLabelFontColor(div, topCard.bodyColor);
     });
+
+  //加一个按钮，点击后创建一个新的顶牌
 
   // folderGeometry.addColor( topCard, "bodyColor").onChange( function ( val ) {
 

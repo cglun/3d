@@ -69,6 +69,26 @@ export default function EmergencyPlanButtonGroup({
     return;
   }
 
+  function createRippleEffect(e: React.MouseEvent<HTMLButtonElement>) {
+    // 创建涟漪效果
+    const ripple = document.createElement("span");
+    ripple.classList.add("press-ripple");
+
+    // 设置涟漪位置
+    const targetElement = e.target as HTMLElement;
+    const rect = targetElement.getBoundingClientRect();
+
+    ripple.style.left = e.clientX - rect.left + "px";
+    ripple.style.top = e.clientY - rect.top + "px";
+
+    targetElement.appendChild(ripple);
+
+    // 动画结束后移除
+    setTimeout(() => {
+      ripple.remove();
+    }, 600);
+  }
+
   const { left, top, gap, showGroup, direction, enable } =
     emergencyPlan.userData.buttonGroupStyle;
   const { offsetWidth, offsetHeight } = instance.divElement;
@@ -108,10 +128,13 @@ export default function EmergencyPlanButtonGroup({
           );
 
           return (
-            <div key={item.uuid}>
+            <div key={item.uuid} className="super-press-btn-container">
               <button
+                className="super-press-btn"
                 style={{ ...buttonStyle }}
-                onClick={() => {
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  createRippleEffect(e);
+
                   emergencyPlan.traverse((child) => {
                     if (child instanceof CSS3DObject) {
                       child.visible = false;
@@ -171,9 +194,12 @@ export default function EmergencyPlanButtonGroup({
                     );
                     return (
                       <button
+                        className="super-press-btn"
                         key={_item.uuid}
                         style={{ ...buttonStyle }}
-                        onClick={() => {
+                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                          createRippleEffect(e);
+
                           _item.children.forEach((child) => {
                             child.visible = true;
                           });

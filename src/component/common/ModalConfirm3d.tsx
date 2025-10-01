@@ -1,5 +1,5 @@
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+import Modal, { ModalProps } from "react-bootstrap/Modal";
 import { createRoot } from "react-dom/client";
 
 import { ConfirmButton } from "@/app/type";
@@ -25,11 +25,13 @@ function ModalConfirm({
   title,
   body,
   confirmButton,
+  size,
   callback,
 }: {
   title: string;
   body: JSX.Element | string;
   confirmButton: ConfirmButton;
+  size: ModalProps["size"];
   callback: () => void;
 }) {
   const { userData } = getEditorInstance();
@@ -40,6 +42,7 @@ function ModalConfirm({
   };
   return (
     <Modal
+      size={size}
       show={confirmButton.show}
       onHide={onClose}
       animation={true}
@@ -83,10 +86,12 @@ export default function ModalConfirm3d(
   {
     title = "ModalConfirm3d提示",
     body = "ModalConfirm3d内容",
+    size = undefined,
     confirmButton = _confirmButton,
   }: {
     title: string;
     body: JSX.Element | string;
+    size?: ModalProps["size"];
     confirmButton?: ConfirmButton;
   },
   callback = () => {}
@@ -94,6 +99,7 @@ export default function ModalConfirm3d(
   root.render(
     <ModalConfirm
       title={title}
+      size={size}
       body={body}
       confirmButton={confirmButton}
       callback={callback}

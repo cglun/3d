@@ -5,6 +5,7 @@ import { LabelInfo } from "@/viewer3d/label/LabelInfo";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { getViewerInstance } from "@/three/utils/utils";
+import { isMoveCamera } from "../buttonList/animateByButton";
 
 // 标签信息面板控制器
 export class LabelInfoPanelController {
@@ -29,7 +30,6 @@ export class LabelInfoPanelController {
   constructor(dispatchTourWindow: React.Dispatch<TourWindow>, scene: Scene) {
     this.dispatchTourWindow = dispatchTourWindow;
     this.scene = scene;
-    // this.createLabelInfoPanelByModelGroupName(modelName);
   }
 
   setModelName(modelName: string) {
@@ -130,9 +130,11 @@ export class LabelInfoPanelController {
       userData.customButtonGroupList.generateButtonGroup.group;
     const { type } = toggleButtonGroup.customButtonItem;
     const labelOffset = new Vector3(0, 0, 0);
-    if (type === "DRAWER" || type === "STRETCH") {
-      const { modelOffset } = toggleButtonGroup.userSetting;
-      labelOffset.copy(modelOffset);
+    if (isMoveCamera) {
+      if (type === "DRAWER" || type === "STRETCH") {
+        const { modelOffset } = toggleButtonGroup.userSetting;
+        labelOffset.copy(modelOffset);
+      }
     }
 
     const modelGroup = scene.getObjectByName(modelGroupName);
@@ -140,13 +142,28 @@ export class LabelInfoPanelController {
     if (modelGroup) {
       const { children } = modelGroup;
       if (children) {
+        //console.log(options, "options");
+        const { userCssStyle } = scene.userData as SceneUserData;
         for (let i = 0; i < children.length; i++) {
           const child = children[i];
-          const label = new LabelInfo(
+
+          let label = new LabelInfo(
             child,
-            this.scene,
+            userCssStyle.topCard,
             this.dispatchTourWindow
           );
+          const options = window?.ObjectEditor3d?.options;
+
+          if (options && options.trigger && options.database) {
+            const formItem = options.database.data.staticData[i];
+            label = new LabelInfo(
+              child,
+              userCssStyle.topCard,
+              this.dispatchTourWindow,
+              formItem,
+              options.trigger
+            );
+          }
           label.css3DSprite.visible = false;
           const { x, y, z } = label.css3DSprite.position;
           label.css3DSprite.position.set(

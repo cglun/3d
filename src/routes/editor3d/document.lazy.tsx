@@ -23,6 +23,39 @@ function RouteComponent() {
     {
       list: [
         {
+          logoName: "pin-map",
+          position: "底部栏",
+          buttonName: "标签",
+          des: "自定义顶牌内容，点击小眼睛查看详情。",
+        },
+      ],
+      updateTime: "2025年9月28",
+    },
+    {
+      list: [
+        {
+          logoName: "menu-button",
+          position: "右侧栏",
+          buttonName: "预案",
+          des: "预案按钮，加入按钮动效。",
+        },
+      ],
+      updateTime: "2025年9月27",
+    },
+    {
+      list: [
+        {
+          logoName: "x-diamond",
+          position: "底部栏",
+          buttonName: "扩展",
+          des: "修复小bug,拖动bar简化。",
+        },
+      ],
+      updateTime: "2025年9月21",
+    },
+    {
+      list: [
+        {
           logoName: "image",
           position: "底部栏",
           buttonName: "图片",
