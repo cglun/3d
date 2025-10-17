@@ -5,7 +5,7 @@ import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
 import { getButtonGroupItemStyle } from "../../effects/utils";
 import DragBarButton from "@/component/common/Button/DragBarButton";
-import { Button } from "react-bootstrap";
+import { Button, ButtonGroup } from "react-bootstrap";
 import { useUpdateScene } from "@/app/hooks";
 import { getThemeByScene } from "@/three/utils/util4UI";
 import Icon from "@/component/common/Icon";
@@ -17,6 +17,11 @@ import { emergencyButton } from "./EmergencyButtonType";
 import { getEditorInstance } from "@/three/utils/utils";
 import emergencyPlanStepGui from "../emergencyPlanGui/emergencyPlanStepGui";
 
+import { SceneUserData } from "@/three/config/Three3dConfig";
+import { cameraTween } from "@/three/animate";
+import Toast3d from "@/component/common/Toast3d/Toast3d";
+import { APP_COLOR } from "@/app/type";
+
 export default function EmergencyPlanButtonGroup({
   instance,
 }: {
@@ -25,6 +30,7 @@ export default function EmergencyPlanButtonGroup({
   // 将所有 hooks 移到组件顶部
   const { updateScene } = useUpdateScene();
   const [, setTime] = useState(0);
+  const [showChildrenButton, setShowChildrenButton] = useState(true);
 
   // 使用 useEffect 来正确处理事件监听器的添加和移除
   useEffect(() => {
@@ -119,8 +125,10 @@ export default function EmergencyPlanButtonGroup({
       {enable &&
         emergencyPlan.children &&
         emergencyPlan.children.map((item) => {
+          const { cameraPosition } = instance.scene.userData as SceneUserData;
           const buttonBase = item.userData.buttonBase || {
             ...emergencyButton,
+            cameraViewer: cameraPosition.end,
           };
           const buttonStyle = getButtonGroupItemStyle(
             buttonBase,
@@ -141,7 +149,19 @@ export default function EmergencyPlanButtonGroup({
                     }
                   });
 
-                  item.userData.showChildren = !item.userData.showChildren;
+                  // item.userData.showChildren = false;
+
+                  // if (!item.userData.showChildren) {
+                  //   item.userData.showChildren = true;
+                  // }
+                  //如果已经显示子节点，则不把子节点隐藏
+
+                  if (item.userData.showChildren) {
+                    setShowChildrenButton(!showChildrenButton);
+                  } else {
+                    setShowChildrenButton(true);
+                  }
+
                   emergencyPlan.children.forEach((_item) => {
                     _item.userData.buttonBase.isClick = false;
                     const { children } = _item;
@@ -152,6 +172,11 @@ export default function EmergencyPlanButtonGroup({
                     }
                   });
                   item.userData.buttonBase.isClick = true;
+                  const { cameraViewer } = item.userData.buttonBase;
+
+                  if (cameraViewer) {
+                    cameraTween(instance.camera, cameraViewer, 1000).start();
+                  }
 
                   if (isEditor) {
                     instance.currentSelected3d = item;
@@ -168,7 +193,7 @@ export default function EmergencyPlanButtonGroup({
                       child.userData.showChildren = false;
                     }
                   });
-                  setTime(Date.now());
+                  updateScene(instance.scene);
                 }}
               >
                 {item.name}
@@ -184,6 +209,7 @@ export default function EmergencyPlanButtonGroup({
                 }}
               >
                 {item.userData.showChildren &&
+                  showChildrenButton &&
                   item.children.map((_item) => {
                     const buttonBase = _item.userData.buttonBase || {
                       ...emergencyButton,
@@ -206,6 +232,7 @@ export default function EmergencyPlanButtonGroup({
                           buttonBase.isClick = true;
 
                           if (isEditor) {
+                            instance.currentSelected3d = _item;
                             transformCMD(_item, () =>
                               emergencyPlanStepGui(_item as Group, updateScene)
                             );
@@ -218,29 +245,51 @@ export default function EmergencyPlanButtonGroup({
                       </button>
                     );
                   })}
-                {isEditor && item.userData.showChildren && (
-                  <Button
-                    size="sm"
-                    variant={themeColor}
-                    onMouseEnter={() => {}}
-                    onClick={() => {
-                      const { editor } = getEditorInstance();
-                      const step = new Group();
-                      step.name = "步骤" + (item.children.length + 1);
-                      step.userData.buttonBase = {
-                        ...emergencyButton,
-                      };
-                      item.add(step);
-                      updateScene(editor.scene);
-                    }}
-                  >
-                    <Icon
-                      iconName="plus-square"
-                      fontSize={0.8}
-                      title="添加步骤"
-                    />
-                  </Button>
-                )}
+                {isEditor &&
+                  item.userData.showChildren &&
+                  showChildrenButton && (
+                    <ButtonGroup size="sm">
+                      <Button
+                        variant={themeColor}
+                        onMouseEnter={() => {}}
+                        onClick={() => {
+                          const { editor } = getEditorInstance();
+                          const step = new Group();
+                          step.name = "步骤" + (item.children.length + 1);
+                          step.userData.buttonBase = {
+                            ...emergencyButton,
+                          };
+                          item.add(step);
+                          updateScene(editor.scene);
+                        }}
+                      >
+                        <Icon
+                          iconName="plus-square"
+                          fontSize={0.8}
+                          title="添加步骤"
+                        />
+                      </Button>
+                      <Button
+                        variant={themeColor}
+                        onMouseEnter={() => {}}
+                        onClick={() => {
+                          const { editor } = getEditorInstance();
+                          const { buttonBase } =
+                            editor.currentSelected3d.userData;
+                          buttonBase.cameraViewer =
+                            editor.camera.position.clone();
+                          Toast3d("视角已设置", "提示", APP_COLOR.Success);
+                          updateScene(editor.scene);
+                        }}
+                      >
+                        <Icon
+                          iconName="camera"
+                          fontSize={0.8}
+                          title={`${item.name}视角`}
+                        />
+                      </Button>
+                    </ButtonGroup>
+                  )}
               </div>
             </div>
           );

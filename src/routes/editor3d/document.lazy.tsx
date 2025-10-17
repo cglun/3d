@@ -23,6 +23,17 @@ function RouteComponent() {
     {
       list: [
         {
+          logoName: "menu-button",
+          position: "右侧栏",
+          buttonName: "预案",
+          des: "预案按钮bug修复，增加视角展示，增加折叠。",
+        },
+      ],
+      updateTime: "2025年10月17",
+    },
+    {
+      list: [
+        {
           logoName: "pin-map",
           position: "底部栏",
           buttonName: "标签",

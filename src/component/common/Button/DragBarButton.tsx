@@ -82,7 +82,7 @@ export default function DragBarButton({
         variant={themeColor}
         onMouseEnter={() => {}}
         onClick={() => {
-          const { editor } = getEditorInstance();
+          const { editor, userData } = getEditorInstance();
           //   navigate({
           //     to: navigateToUrl("extend"),
           //   });
@@ -91,10 +91,13 @@ export default function DragBarButton({
           if (!group) {
             scene.add(emergencyPlan);
           }
-
+          const { end } = userData.cameraPosition;
           const group1 = new Group();
           group1.name = "预案" + (emergencyPlan.children.length + 1);
-          group1.userData.buttonBase = { ...emergencyButton };
+          group1.userData.buttonBase = {
+            ...emergencyButton,
+            cameraViewer: end,
+          };
           emergencyPlan.add(group1);
           editor.scene.add(emergencyPlan);
           //updateEmergencyPlan();

@@ -52,6 +52,7 @@ function RouteComponent() {
 
       <ListGroup>
         {/* {projectId && projectId !== -1 && ( */}
+
         <ListGroup.Item>
           <ButtonGroup size="sm">
             <Button
@@ -85,7 +86,7 @@ function RouteComponent() {
                   size: "lg",
                   confirmButton: {
                     show: true,
-                    hasButton: true,
+                    hasButton: false,
                     closeButton: true,
                   },
                 });
