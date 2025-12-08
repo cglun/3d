@@ -24,7 +24,9 @@ function RouteComponent() {
   const { scene, updateScene } = useUpdateScene(); // const [javaScriptCode, setJavaScriptCode] = useState<string>(javascript);
   const [showJavaScript, setShowJavaScript] = useState(false); // 是否为调试场景[调试场景不允许修改代码]
   const [showAllConfig, setShowAllConfig] = useState(false); // 使用可选属性和类型断言
-  const { javascript, projectId } = scene.userData as SceneUserData;
+  const [showCustomAction, setShowCustomAction] = useState(false); // 是否为调试场景[调试场景不允许修改代码]
+  const { javascript, projectId, customActionList } =
+    scene.userData as SceneUserData;
 
   // 获取主题颜色
   const { themeColor } = getThemeByScene(scene);
@@ -64,6 +66,16 @@ function RouteComponent() {
             >
               <Icon iconName="file-code" gap={1} />
               代码
+            </Button>
+            <Button
+              variant={buttonColor}
+              style={{ borderColor: styleBody.color }}
+              onClick={() => {
+                setShowCustomAction(true);
+              }}
+            >
+              <Icon iconName="file-code" gap={1} />
+              Action
             </Button>
 
             <Button
@@ -105,6 +117,18 @@ function RouteComponent() {
             callback={function (value): void {
               getScene().userData.javascript = value;
               updateScene(scene);
+            }}
+          />
+          <CodeEditor
+            tipsTitle="Action编辑"
+            language="javascript"
+            code={customActionList}
+            isValidate={true}
+            show={showCustomAction}
+            setShow={setShowCustomAction}
+            callback={function (value): void {
+              ((getScene().userData.customActionList = value),
+                updateScene(scene));
             }}
           />
 

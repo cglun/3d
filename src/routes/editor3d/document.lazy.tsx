@@ -23,6 +23,17 @@ function RouteComponent() {
     {
       list: [
         {
+          logoName: "info",
+          position: "二维",
+          buttonName: "提示",
+          des: "二维场景与三维场景之间的桥接，实现二维场景与三维场景的交互。",
+        },
+      ],
+      updateTime: "2025年12月18",
+    },
+    {
+      list: [
+        {
           logoName: "menu-button",
           position: "右侧栏",
           buttonName: "预案",

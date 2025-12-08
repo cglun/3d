@@ -56,6 +56,11 @@ export default function Viewer3d({
         viewer.onPointerClick(event)
       );
       window.addEventListener("resize", () => viewer.onWindowResize());
+
+      // 加载场景或模型，做测试，测试完后删除
+      const outlinePass = viewer.outlinePass;
+      viewer.scene.getObjectByName("name");
+      outlinePass.selectedObjects = [];
     }
     if (item.des.includes("EDITOR_3D")) {
       if (item.des.includes("Scene")) {

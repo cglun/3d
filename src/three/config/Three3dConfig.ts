@@ -141,7 +141,11 @@ export const config3dInit = {
   useComposer: true,
   useCesium: false,
 };
-
+export interface ActionInfo {
+  id: string;
+  name: string;
+  handler: string;
+}
 export interface SceneUserData {
   projectId: number;
   GOD_NUMBER: {
@@ -155,6 +159,7 @@ export interface SceneUserData {
   backgroundHDR: BackgroundHDR;
   javascript: string;
   customButtonGroupList: typeof customButtonGroupListInit;
+  customActionList: string;
   APP_THEME: {
     themeColor: APP_COLOR;
     iconFill: string;
@@ -286,6 +291,7 @@ const sceneUserData: SceneUserData = {
   backgroundHDR: { ...backgroundHDR },
   javascript: "console.log(116)",
   customButtonGroupList: { ...customButtonGroupListInit },
+  customActionList: "",
   APP_THEME: {
     themeColor: APP_COLOR.Dark, // 若 APP_COLOR 有具体结构，需按需填充
     iconFill: "",
