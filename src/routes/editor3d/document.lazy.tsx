@@ -23,13 +23,24 @@ function RouteComponent() {
     {
       list: [
         {
+          logoName: "bi bi-javascript",
+          position: "底部栏",
+          buttonName: "输入-输出",
+          des: "自定义输入-输出节点，二维可以调用 。",
+        },
+      ],
+      updateTime: "2025年12月08",
+    },
+    {
+      list: [
+        {
           logoName: "info",
           position: "二维",
           buttonName: "提示",
           des: "二维场景与三维场景之间的桥接，实现二维场景与三维场景的交互。",
         },
       ],
-      updateTime: "2025年12月18",
+      updateTime: "2025年12月08",
     },
     {
       list: [

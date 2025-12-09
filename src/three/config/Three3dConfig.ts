@@ -159,7 +159,8 @@ export interface SceneUserData {
   backgroundHDR: BackgroundHDR;
   javascript: string;
   customButtonGroupList: typeof customButtonGroupListInit;
-  customActionList: string;
+  customInputList: string;
+  customOutputList: string;
   APP_THEME: {
     themeColor: APP_COLOR;
     iconFill: string;
@@ -291,7 +292,10 @@ const sceneUserData: SceneUserData = {
   backgroundHDR: { ...backgroundHDR },
   javascript: "console.log(116)",
   customButtonGroupList: { ...customButtonGroupListInit },
-  customActionList: "",
+  customInputList:
+    '(function inputList() {\r\n  const input1 = {\r\n    id: "input1",\r\n    name: "输入demo",\r\n    handler: `alert("input1")`,\r\n  };\r\n  return [input1];\r\n})();',
+  customOutputList:
+    '(function outputList() {\r\n  const output1 = {\r\n    id: "output1",\r\n    name: "输出demo",\r\n    handler: `alert("output1")`,\r\n  };\r\n  return [output1];\r\n})();',
   APP_THEME: {
     themeColor: APP_COLOR.Dark, // 若 APP_COLOR 有具体结构，需按需填充
     iconFill: "",

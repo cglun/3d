@@ -24,8 +24,9 @@ function RouteComponent() {
   const { scene, updateScene } = useUpdateScene(); // const [javaScriptCode, setJavaScriptCode] = useState<string>(javascript);
   const [showJavaScript, setShowJavaScript] = useState(false); // 是否为调试场景[调试场景不允许修改代码]
   const [showAllConfig, setShowAllConfig] = useState(false); // 使用可选属性和类型断言
-  const [showCustomAction, setShowCustomAction] = useState(false); // 是否为调试场景[调试场景不允许修改代码]
-  const { javascript, projectId, customActionList } =
+  const [showCustomInput, setShowCustomInput] = useState(false); // 是否为调试场景[调试场景不允许修改代码]
+  const [showCustomOutput, setShowCustomOutput] = useState(false); // 是否为调试场景[调试场景不允许修改代码]
+  const { javascript, projectId, customInputList, customOutputList } =
     scene.userData as SceneUserData;
 
   // 获取主题颜色
@@ -71,11 +72,21 @@ function RouteComponent() {
               variant={buttonColor}
               style={{ borderColor: styleBody.color }}
               onClick={() => {
-                setShowCustomAction(true);
+                setShowCustomInput(true);
               }}
             >
-              <Icon iconName="file-code" gap={1} />
-              Action
+              <Icon iconName="node-plus-fill" gap={1} />
+              输入
+            </Button>
+            <Button
+              variant={buttonColor}
+              style={{ borderColor: styleBody.color }}
+              onClick={() => {
+                setShowCustomOutput(true);
+              }}
+            >
+              <Icon iconName="node-minus-fill" gap={1} />
+              输出
             </Button>
 
             <Button
@@ -120,14 +131,26 @@ function RouteComponent() {
             }}
           />
           <CodeEditor
-            tipsTitle="Action编辑"
+            tipsTitle="INPUT"
             language="javascript"
-            code={customActionList}
+            code={customInputList}
             isValidate={true}
-            show={showCustomAction}
-            setShow={setShowCustomAction}
+            show={showCustomInput}
+            setShow={setShowCustomInput}
             callback={function (value): void {
-              ((getScene().userData.customActionList = value),
+              ((getScene().userData.customInputList = value),
+                updateScene(scene));
+            }}
+          />
+          <CodeEditor
+            tipsTitle="OUTPUT"
+            language="javascript"
+            code={customOutputList}
+            isValidate={true}
+            show={showCustomOutput}
+            setShow={setShowCustomOutput}
+            callback={function (value): void {
+              ((getScene().userData.customOutputList = value),
                 updateScene(scene));
             }}
           />
