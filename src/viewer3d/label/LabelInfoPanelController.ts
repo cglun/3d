@@ -42,6 +42,9 @@ export class LabelInfoPanelController {
   setBoxName(boxName: string) {
     this.boxName = boxName;
   }
+  getModelName() {
+    return this.modelName;
+  }
 
   //隐藏标签信息面板
   hideLabel() {
@@ -126,6 +129,7 @@ export class LabelInfoPanelController {
    */
   createLabelInfoPanelByModelGroupName(modelGroupName: string) {
     const { scene, userData } = getViewerInstance();
+
     const [toggleButtonGroup] =
       userData.customButtonGroupList.generateButtonGroup.group;
     const { type } = toggleButtonGroup.customButtonItem;

@@ -3,16 +3,22 @@ import { SceneUserData } from "@/three/config/Three3dConfig";
 import { TourWindow } from "@/app/MyContext";
 import { Three3d } from "./Three3d";
 
+import mitt, { Emitter, EventType } from "mitt";
+import { GenerateButtonItemMap } from "@/app/type";
+
 /**
  * Three3dViewer 类，继承自 Three3d 类，用于创建一个 3D 视图器。
  * 该类提供了设置场景用户数据的功能。
  */
 export class Three3dViewer extends Three3d {
+  mitt: Emitter<Record<EventType, unknown>>;
+  getToggleButtonGroup: GenerateButtonItemMap[] = [];
   /**
    * 构造函数，初始化 Three3dViewer 实例。
    * @param divElement - 用于渲染 3D 场景的 HTML div 元素。
    */
   point = new Vector3();
+  divElement: HTMLDivElement;
   raycaster = new Raycaster();
   pointer = new Vector2(0, 0);
   canBeRaycast = [] as Object3D<Object3DEventMap>[];
@@ -21,6 +27,8 @@ export class Three3dViewer extends Three3d {
     dispatchTourWindow: React.Dispatch<TourWindow>
   ) {
     super(divElement, dispatchTourWindow);
+    this.divElement = divElement;
+    this.mitt = mitt();
   }
 
   /**
@@ -57,17 +65,25 @@ export class Three3dViewer extends Three3d {
 
     this.raycaster.setFromCamera(this.pointer, this.camera);
 
-    const intersects = this.raycaster.intersectObjects(
-      this.canBeRaycast,
-      false
-    );
+    const intersects = this.raycaster.intersectObjects(this.canBeRaycast, true);
 
     if (intersects.length > 0) {
       const object = intersects[0].object;
-      this.outlinePass.selectedObjects = [object];
-      console.log(object.name);
+
+      //const list = getToggleButtonGroup();
+      //高亮选中
+      // this.outlinePass.selectedObjects = [object];
+      // list[1].handler(object.name);
+
+      this.mitt.emit("selectObject", object);
+
+      // clickModel(object);
+      // //
+
+      // return object;
     }
   }
+
   setCanBeRaycast() {
     const { customButtonGroupList } = this.scene.userData as SceneUserData;
     const canBeRaycast = [] as Object3D<Object3DEventMap>[];
@@ -90,5 +106,16 @@ export class Three3dViewer extends Three3d {
     }
 
     this.canBeRaycast = canBeRaycast;
+    this.setCanBeRaycast1();
+  }
+
+  setCanBeRaycast1() {
+    const group = this.scene.getObjectByName("cangku_bg");
+
+    if (group) {
+      group.children.forEach((item) => {
+        this.canBeRaycast.push(item);
+      });
+    }
   }
 }

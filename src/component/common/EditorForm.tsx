@@ -156,6 +156,7 @@ export default function EditorForm({
             disabled={!loadScene}
             onClick={() => {
               const viewer = viewerInstance.getViewer();
+
               const imgBase64 = viewer.takeScreenshot(300, 300);
               setImgBase64(imgBase64);
               Toast3d("截图成功");
