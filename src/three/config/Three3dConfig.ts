@@ -25,6 +25,8 @@ export const userCssStyle = {
   cardRadius: 0,
   cardBackgroundColor: "#502626",
   cardBackgroundUrl: "/editor3d/static/images/topCard.png",
+  cardBackgroundWidth: 296,
+  cardBackgroundHeight: 378,
   enableCardBackgroundUrl: true,
   headerFontSize: 16,
   headerColor: "#67ebeb",

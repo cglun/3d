@@ -21,9 +21,14 @@ export class LabelInfo {
     title: "title",
   };
   formItem = {
-    author: "author",
-    district: "district",
-    id: "id",
+    pallet_code: "000071",
+    core_code: "HC100_2",
+    project_id: "9e87e09d-e788-11ef-966c-347379a081b8",
+    data_id: "3bff82d1-201b-11f0-b126-347379a081b8",
+    archives_id: "cc08c89d-264e-4698-aa95-3b960aede2f5",
+    core_box_code: 31,
+    storehouse: "北库房",
+    location_code: "20-002-002",
   };
 
   css3DSprite = new CSS3DSprite(this.div);
@@ -45,13 +50,7 @@ export class LabelInfo {
     // this.userDataStyles = _userData.userCssStyle.topCard;
     this.userDataStyles = userDataStyles;
     // this.size = _userData.userCssStyleTopCard.cardSize;
-    this.init(
-      formItem || {
-        author: "author",
-        district: "district",
-        id: "id",
-      }
-    );
+    this.init(formItem || this.formItem);
   }
   init(formItem: typeof this.formItem) {
     // this.tourObject.title = getObjectNameByName(this.mesh);
@@ -62,8 +61,12 @@ export class LabelInfo {
   }
   private createCss3dLabel() {
     const css3DSprite = new CSS3DSprite(this.div);
-    //   css3DSprite.name = this.mesh.name;
-    css3DSprite.name = this.formItem.district;
+    // 标签名称为 location_code
+    /**  
+      设置 CSS3DSprite 的名称为标签的 location_code，以便后续通过名称进行识别和操作。
+       */
+
+    css3DSprite.name = "SPRITE-" + this.mesh.name;
     const { x, y, z } = getObjectWorldPosition(this.mesh);
     css3DSprite.position.set(x, y, z);
     const { cardSize } = this.userDataStyles;
@@ -73,13 +76,16 @@ export class LabelInfo {
   }
 
   private createDiv() {
-    this.div.className = "mark-label mark-label-controller-panel";
+    this.div.className = `mark-label mark-label-controller-panel`;
+    this.div.id = `SPRITE-${this.mesh.name}`;
     const labelStyle = this.div.style;
     const {
       headerFontSize,
       cardRadius,
       cardBackgroundColor,
       cardBackgroundUrl,
+      cardBackgroundWidth,
+      cardBackgroundHeight,
       bodyFontSize,
       headerColor,
       cardHeight,
@@ -102,15 +108,19 @@ export class LabelInfo {
     //labelStyle.paddingLeft = headerMarginTop + "px " + headerMarginLeft + "px";
     labelStyle.borderRadius = cardRadius + "px";
     labelStyle.backgroundColor = `rgba(${hexToRgb(cardBackgroundColor)}, ${opacity})`;
-
-    if (enableCardBackgroundUrl) {
-      labelStyle.backgroundImage = getCardBackgroundUrl(cardBackgroundUrl);
-      labelStyle.backgroundColor = "transparent";
-    }
-
-    labelStyle.backgroundRepeat = "no-repeat";
     labelStyle.backgroundPosition = "center center";
     labelStyle.backgroundSize = "cover";
+    if (enableCardBackgroundUrl) {
+      labelStyle.backgroundImage = getCardBackgroundUrl(cardBackgroundUrl);
+      labelStyle.backgroundSize =
+        cardBackgroundWidth + "%" + " " + cardBackgroundHeight + "%";
+      labelStyle.backgroundColor = "transparent";
+
+      labelStyle.backgroundPosition = "0 0";
+      labelStyle.backgroundRepeat = "no-repeat";
+      labelStyle.backgroundOrigin = "padding-box";
+    }
+
     labelStyle.fontSize = bodyFontSize + "px";
     labelStyle.color = headerColor;
     //const { x, y, z } = getObjectWorldPosition(this.mesh);
@@ -135,23 +145,23 @@ export class LabelInfo {
 
     eye.setAttribute("data-tour-id", this.tourObject.id);
 
-    eye.addEventListener("click", () => {
-      // 使用箭头函数保证 this 指向实例
-      // if (this.dispatchTourWindow) {
-      //   this.dispatchTourWindow({
-      //     type: "tourWindow",
-      //     payload: {
-      //       show: true,
-      //       title: this.tourObject.title,
-      //       tourSrc: getTourSrc(this.tourObject.id),
-      //     },
-      //   });
-      // }
+    // eye.addEventListener("click", () => {
+    // 使用箭头函数保证 this 指向实例
+    // if (this.dispatchTourWindow) {
+    //   this.dispatchTourWindow({
+    //     type: "tourWindow",
+    //     payload: {
+    //       show: true,
+    //       title: this.tourObject.title,
+    //       tourSrc: getTourSrc(this.tourObject.id),
+    //     },
+    //   });
+    // }
 
-      if (this.trigger) {
-        this.trigger(this.formItem.district);
-      }
-    });
+    // if (this.trigger) {
+    //   this.trigger(this.formItem.core_code.toString());
+    // }
+    // });
     header.appendChild(eye);
 
     const title = document.createElement("span");
@@ -166,10 +176,11 @@ export class LabelInfo {
     //container.style.marginLeft = headerMarginLeft + "px";
     container.style.color = bodyColor;
 
-    new Function("title", "container", "formData", codeString)(
+    new Function("title", "container", "formItem", "fontColor", codeString)(
       title,
       container,
-      this.formItem
+      this.formItem,
+      this.userDataStyles.bodyColor
     );
     header.appendChild(title);
 

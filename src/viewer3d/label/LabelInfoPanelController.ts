@@ -100,7 +100,10 @@ export class LabelInfoPanelController {
           // labelBody.style.padding = `0px ${headerMarginLeft}px`;
         }
         headerEye.style.display = showAreYou[0] ? "block" : "none";
-        headerTitle.style.display = showAreYou[1] ? "block" : "none";
+        if (headerTitle) {
+          headerTitle.style.display = showAreYou[1] ? "block" : "none";
+        }
+
         labelBody.style.display = showAreYou[2] ? "block" : "none";
       }
     }
@@ -156,18 +159,19 @@ export class LabelInfoPanelController {
             userCssStyle.topCard,
             this.dispatchTourWindow
           );
-          const options = window?.ObjectEditor3d?.options;
+          // 过滤出需要创建标签信息面板的模型
+          // const options = window?.ObjectEditor3d?.options;
 
-          if (options && options.trigger && options.database) {
-            const formItem = options.database.data.staticData[i];
-            label = new LabelInfo(
-              child,
-              userCssStyle.topCard,
-              this.dispatchTourWindow,
-              formItem,
-              options.trigger
-            );
-          }
+          // if (options && options.trigger && options.database) {
+          //   const formItem = options.database.data.staticData[i];
+          //   label = new LabelInfo(
+          //     child,
+          //     userCssStyle.topCard,
+          //     this.dispatchTourWindow,
+          //     formItem,
+          //     options.trigger
+          //   );
+          // }
           label.css3DSprite.visible = false;
           const { x, y, z } = label.css3DSprite.position;
           label.css3DSprite.position.set(
@@ -200,8 +204,8 @@ export class LabelInfoPanelController {
     viewer.getSelectedObjects().length = 0;
     this.allLabelInfo.filter((_item) => {
       return modelNameList.some((item) => {
-        // const css3DSprite = _item.css3DSprite.name.replace("SPRITE-", "");
-        const isOk = this.boxName + _item.css3DSprite.name === item;
+        const isOk = _item.css3DSprite.name === "SPRITE-" + item;
+
         if (isOk) {
           this.canBeShowLabelInfo.push(_item);
         }
@@ -215,8 +219,8 @@ export class LabelInfoPanelController {
     const { scene } = viewer;
 
     this.canBeShowLabelInfo.forEach((item) => {
-      // const modelName = item.css3DSprite.name.replace("SPRITE-", "");
-      const model = scene.getObjectByName(item.css3DSprite.name);
+      const newName = item.name.split("-");
+      const model = scene.getObjectByName(`${newName[1]}-${newName[2]}`);
       if (model) {
         viewer.getSelectedObjects().push(model);
       }

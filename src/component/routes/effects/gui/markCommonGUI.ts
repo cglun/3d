@@ -23,12 +23,14 @@ export default function markCommonGUI(
   editor.outlinePass.selectedObjects = [];
 
   const { style } = labelInfoDiv;
-
+  const enableCardBg = object.enableCardBackgroundUrl;
   parentFolder
     .add(object, "enableCardBackgroundUrl")
     .name("使用背景图")
     .onChange((value) => {
       bgUrl.disable(!value);
+      bgWidth.disable(!value);
+      bgHeight.disable(!value);
       imgHeight.disable(value);
       imgWidth.disable(value);
       bgOpacity.disable(value);
@@ -44,7 +46,7 @@ export default function markCommonGUI(
   const imgWidth = parentFolder
     .add(object, "cardWidth", 30, 500, 0.01)
     .name("宽度")
-    .disable(object.enableCardBackgroundUrl)
+    .disable(enableCardBg)
     .onChange(() => {
       style.width = `${object.cardWidth}px`;
     });
@@ -52,7 +54,7 @@ export default function markCommonGUI(
   const imgHeight = parentFolder
     .add(object, "cardHeight", 30, 500, 0.01)
     .name("高度")
-    .disable(object.enableCardBackgroundUrl)
+    .disable(enableCardBg)
     .onChange(() => {
       style.height = `${object.cardHeight}px`;
     });
@@ -80,7 +82,7 @@ export default function markCommonGUI(
   const bgColor = parentFolder
     .addColor(object, "cardBackgroundColor")
     .name("背景颜色")
-    .disable(object.enableCardBackgroundUrl)
+    .disable(enableCardBg)
     .onChange(() => {
       // 将颜色值和透明度结合为 rgba 格式
       const rgbaColor = `rgba(${hexToRgb(object.cardBackgroundColor)}, ${object.opacity})`;
@@ -91,7 +93,7 @@ export default function markCommonGUI(
     .add(object, "opacity", 0, 1)
     .step(0.01)
     .name("背景色透明度")
-    .disable(object.enableCardBackgroundUrl)
+    .disable(enableCardBg)
     .onChange(() => {
       // const rgbaColor = `rgba(${hexToRgb(object.cardBackgroundColor)}, ${object.opacity})`;
       // style.backgroundColor = rgbaColor;
@@ -101,9 +103,23 @@ export default function markCommonGUI(
   const bgUrl = parentFolder
     .add(object, "cardBackgroundUrl")
     .name("背景URL")
-    .disable(!object.enableCardBackgroundUrl)
+    .disable(!enableCardBg)
     .onChange(() => {
       useBackgroundImage(object, style, imgHeight, imgWidth);
+    });
+  const bgWidth = parentFolder
+    .add(object, "cardBackgroundWidth", 0.1, 100, 0.01)
+    .name("背景图宽度")
+    .disable(!enableCardBg)
+    .onChange(() => {
+      style.backgroundSize = `${object.cardBackgroundWidth}% ${object.cardBackgroundHeight}%`;
+    });
+  const bgHeight = parentFolder
+    .add(object, "cardBackgroundHeight", 0.1, 100, 0.01)
+    .name("背景图高度")
+    .disable(!enableCardBg)
+    .onChange(() => {
+      style.backgroundSize = `${object.cardBackgroundWidth}% ${object.cardBackgroundHeight}%`;
     });
 
   parentFolder

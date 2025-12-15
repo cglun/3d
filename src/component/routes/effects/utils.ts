@@ -147,9 +147,14 @@ export function getLabelInfo(
     userCssStyle.topCard,
     dispatchTourWindow,
     {
-      author: "author_test",
-      district: "district_test",
-      id: "id_test",
+      pallet_code: "000071",
+      core_code: "HC100_2",
+      project_id: "9e87e09d-e788-11ef-966c-347379a081b8",
+      data_id: "3bff82d1-201b-11f0-b126-347379a081b8",
+      archives_id: "cc08c89d-264e-4698-aa95-3b960aede2f5",
+      core_box_code: 31,
+      storehouse: "北库房",
+      location_code: "20-002-002",
     }
   );
 

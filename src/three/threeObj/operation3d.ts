@@ -66,18 +66,3 @@ export function clickModel(model: Object3D) {
     console.log("监听到选中模型", obj);
   });
 }
-// ***/
-
-function abc(store: any) {
-  const testPosition = "02-004-004";
-  const newName = testPosition.split("-");
-
-  const box = newName[2] + "-" + newName[1];
-  //打开货架
-  const model = store.viewer.scene.getObjectByName(box);
-  if (model) {
-    store.viewer.getToggleButtonGroup[1].handler("huojia");
-    store.viewer.outlinePass.selectedObjects.push(box);
-    store.viewer.LabelInfoPanelController.showLabel();
-  }
-}
