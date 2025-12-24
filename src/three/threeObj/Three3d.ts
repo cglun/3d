@@ -14,13 +14,13 @@ import {
   Color,
   CatmullRomCurve3,
   Group,
+  Light,
 } from "three";
 
 import TWEEN from "three/addons/libs/tween.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 import { GlbModel, RecordItem } from "@/app/type";
-import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { runScriptDev } from "@/three/script/scriptDev";
 
 import {
@@ -37,7 +37,13 @@ import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import { CSS3DRenderer } from "three/addons/renderers/CSS3DRenderer.js";
-import { Curves, GLTF, ShaderPass } from "three/addons/Addons.js";
+import {
+  Curves,
+  GLTF,
+  HDRLoader,
+  ShaderPass,
+  TransformControls,
+} from "three/addons/Addons.js";
 import sceneUserData from "@/three/config/Three3dConfig";
 
 import { getObjectWorldPosition } from "@/three/utils/utils";
@@ -279,8 +285,14 @@ export class Three3d extends ThreeObj {
     this._renderer = this.initRenderer();
     this._controls = this.initControls();
     this._dispatchTourWindow = dispatchTourWindow;
-    this._labelRenderer2d = createLabelRenderer(divElement, "2d");
-    this._labelRenderer3d = createLabelRenderer(divElement, "3d");
+    this._labelRenderer2d = createLabelRenderer(
+      divElement,
+      new CSS2DRenderer()
+    ) as CSS2DRenderer;
+    this._labelRenderer3d = createLabelRenderer(
+      divElement,
+      new CSS3DRenderer()
+    );
 
     const { composer, outlinePass } = this.initPostProcessing();
     this._composer = composer;
@@ -506,7 +518,7 @@ export class Three3d extends ThreeObj {
     }
     //背景图HDR
     if (!isColor) {
-      const rgbeLoader = new RGBELoader();
+      const rgbeLoader = new HDRLoader();
       //const { backgroundHDR } = object.userData as SceneUserData;
 
       rgbeLoader.load(hdr[HDRName as HdrKey], (texture) => {
@@ -805,5 +817,29 @@ export class Three3d extends ThreeObj {
         }
       }
     });
+  }
+  /**
+   * 几何数据，材质，灯光等需要手动释放，防止占用内存造成卡顿
+   * @param scene
+   */
+  disposeObject3D(scene: Scene, disposeRenderer: boolean = false) {
+    scene.traverse((child) => {
+      if (child instanceof Mesh) {
+        child.geometry.dispose();
+        child.material.dispose();
+      }
+      if (child instanceof Light) {
+        child.dispose();
+      }
+      if (child instanceof TransformControls) {
+        child.dispose();
+      }
+    });
+    // 释放Renderer
+    if (this.renderer && disposeRenderer) {
+      console.log("释放Renderer");
+
+      this.renderer.dispose();
+    }
   }
 }

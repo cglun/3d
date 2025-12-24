@@ -154,7 +154,7 @@ export class LabelInfoPanelController {
         for (let i = 0; i < children.length; i++) {
           const child = children[i];
 
-          let label = new LabelInfo(
+          const label = new LabelInfo(
             child,
             userCssStyle.topCard,
             this.dispatchTourWindow

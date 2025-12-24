@@ -123,10 +123,8 @@ export function createCss2dLabel(name: string, logo: string) {
 
 export function createLabelRenderer(
   node: HTMLElement,
-  renderer: "2d" | "3d" = "2d"
+  labelRenderer: CSS2DRenderer | CSS3DRenderer
 ) {
-  const labelRenderer =
-    renderer === "2d" ? new CSS2DRenderer() : new CSS3DRenderer();
   labelRenderer.setSize(node.offsetWidth, node.offsetHeight);
 
   const renderDom = labelRenderer.domElement;

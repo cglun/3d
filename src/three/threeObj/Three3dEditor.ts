@@ -173,7 +173,7 @@ export class Three3dEditor extends Three3d {
       clearHistory: 116,
     };
     const sceneCopy = this.scene.clone();
-
+    this.disposeObject3D(sceneCopy, true);
     // this.destroyGUI();
     const helperGroup = sceneCopy.getObjectByName(GROUP.HELPER);
     if (helperGroup) {
@@ -244,6 +244,7 @@ export class Three3dEditor extends Three3d {
     // this.scene.add(this.MARK_LABEL_GROUP);
     // this.scene.add(this.LIGHT_GROUP);
     // this.scene.add(this.GEOMETRY);
+
     return JSON.stringify(result);
   }
 

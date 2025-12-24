@@ -69,6 +69,7 @@ function EditorViewer3d() {
         editor.resetScene();
         getProjectData(item.id)
           .then((data: string) => {
+            editor.disposeObject3D(editor.scene);
             // 假设 deserialize 是异步方法
             editor.deserialize(data, item);
 

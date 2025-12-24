@@ -18,7 +18,7 @@ const manualChunksConfig = {
   // bootstrap: ["bootstrap"],
   axios: ["axios"],
   // 将 monaco-editor 相关依赖打包到一个单独的 chunk 中
-  monaco: ["react-monaco-editor", "@monaco-editor/react"],
+  monaco: ["@monaco-editor/react"],
 };
 const excludeFile = [
   // "@react-monaco-editor",
@@ -67,8 +67,8 @@ export default defineConfig({
     modulePreload: true,
     copyPublicDir: true,
     target: "esnext",
-    // minify: true,
-    minify: false,
+    minify: true,
+    //  minify: false,
     cssCodeSplit: false,
     outDir: "../ArgDataV.Designer.V2.Vite/editor3d",
     // outDir: "dist/editor3d",

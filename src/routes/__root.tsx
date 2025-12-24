@@ -8,7 +8,7 @@ import Col from "react-bootstrap/esm/Col";
 import EditorBottom from "@/component/Editor/EditorBottom";
 import OutlineView from "@/component/Editor/OutlineView/Index";
 import EditorViewer3d from "@/component/Editor/EditorViewer3d";
-import _axios from "@/app/http";
+
 import {
   initEditorCamera,
   initEditorScene,

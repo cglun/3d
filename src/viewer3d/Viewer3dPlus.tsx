@@ -93,6 +93,9 @@ export default function Viewer3dPlus({
     return () => {
       const viewer = viewerInstance.getViewer();
       if (viewer) {
+        if (import.meta.env.PROD) {
+          viewer.disposeObject3D(viewer.scene, true);
+        }
         window.removeEventListener("resize", viewer.onWindowResize);
         viewer.divElement.removeEventListener("click", viewer.onPointerClick);
       }
@@ -104,6 +107,7 @@ export default function Viewer3dPlus({
     getProjectData(item.id).then((data: string) => {
       // console.log("loadScene,要清空原来的哦");
       const viewer = viewerInstance.getViewer();
+      viewer.disposeObject3D(viewer.scene);
       viewer.resetScene();
       viewer.deserialize(data, item);
 

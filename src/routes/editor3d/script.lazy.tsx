@@ -138,8 +138,8 @@ function RouteComponent() {
             show={showCustomInput}
             setShow={setShowCustomInput}
             callback={function (value): void {
-              ((getScene().userData.customInputList = value),
-                updateScene(scene));
+              getScene().userData.customInputList = value;
+              updateScene(scene);
             }}
           />
           <CodeEditor
@@ -150,8 +150,8 @@ function RouteComponent() {
             show={showCustomOutput}
             setShow={setShowCustomOutput}
             callback={function (value): void {
-              ((getScene().userData.customOutputList = value),
-                updateScene(scene));
+              getScene().userData.customOutputList = value;
+              updateScene(scene);
             }}
           />
 

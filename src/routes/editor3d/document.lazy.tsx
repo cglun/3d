@@ -24,12 +24,12 @@ function RouteComponent() {
       list: [
         {
           logoName: "bi bi-javascript",
-          position: "底部栏",
-          buttonName: "输入-输出",
-          des: "自定义输入-输出节点，二维可以调用 。",
+          position: "src",
+          buttonName: "场景",
+          des: "路径：src/three/threeObj/Three3d.ts   。 释放三维场景中的对象，减少内存占用。",
         },
       ],
-      updateTime: "2025年12月08",
+      updateTime: "2025年12月24",
     },
     {
       list: [
