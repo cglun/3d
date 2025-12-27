@@ -18,6 +18,7 @@ import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 import { errorMessage } from "@/app/utils";
 import Viewer3dPlus from "@/viewer3d/Viewer3dPlus";
 import getPageList from "@/app/httpRequest";
+import { getViewerInstance } from "@/three/utils/utils";
 
 export const Route = createLazyFileRoute("/editor3d/preView")({
   component: RouteComponent,
@@ -111,6 +112,10 @@ function RouteComponent() {
   }
 
   function handleClose() {
+    const { viewer, scene } = getViewerInstance();
+    if (viewer) {
+      viewer.disposeObject3D(scene, true);
+    }
     setShow(false);
   }
   const modalBody = useRef<HTMLDivElement>(null);

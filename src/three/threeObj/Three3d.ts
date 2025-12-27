@@ -662,10 +662,6 @@ export class Three3d extends ThreeObj {
     const cesiumTiles = this.cesiumTiles;
 
     if (this.timeS >= renderT) {
-      if (useTween) {
-        TWEEN.update();
-      }
-
       if (useKeyframe) {
         mixer.forEach((_mixer) => {
           _mixer.update(delta);
@@ -697,7 +693,12 @@ export class Three3d extends ThreeObj {
       } else {
         this.renderer.render(this.scene, this.camera);
       }
+
+      if (useTween) {
+        TWEEN.update();
+      }
       this.controls.update(delta); // 更新控制器的状态，传递 delta 参数
+
       this.timeS = 0;
     }
   }
@@ -838,8 +839,9 @@ export class Three3d extends ThreeObj {
     // 释放Renderer
     if (this.renderer && disposeRenderer) {
       console.log("释放Renderer");
-
       this.renderer.dispose();
     }
+    scene.clear();
+    console.log("释放场景");
   }
 }

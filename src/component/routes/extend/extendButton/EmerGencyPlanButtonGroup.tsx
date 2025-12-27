@@ -18,7 +18,7 @@ import { getEditorInstance } from "@/three/utils/utils";
 import emergencyPlanStepGui from "../emergencyPlanGui/emergencyPlanStepGui";
 
 import { SceneUserData } from "@/three/config/Three3dConfig";
-import { cameraTween } from "@/three/animate";
+import { cameraTween } from "@/three/animate/animate";
 import Toast3d from "@/component/common/Toast3d/Toast3d";
 import { APP_COLOR } from "@/app/type";
 

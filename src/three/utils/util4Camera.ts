@@ -1,7 +1,7 @@
-import { cameraTween } from "@/three/animate";
+import { Vector3 } from "three";
 import { Three3d } from "@/three/threeObj/Three3d";
 import { SceneUserData } from "@/three/config/Three3dConfig";
-import { Vector3 } from "three";
+import { cameraTween } from "@/three/animate/animate";
 
 export function cameraEnterAnimation(instance: Three3d) {
   const { camera, scene } = instance;

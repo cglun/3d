@@ -14,7 +14,7 @@ import Icon from "@/component/common/Icon";
 import { styleBody } from "@/component/Editor/OutlineView/fontColor";
 import { config3dInit, SceneUserData } from "@/three/config/Three3dConfig";
 import { getEditorInstance } from "@/three/utils/utils";
-import { cameraTween } from "@/three/animate";
+import { cameraTween } from "@/three/animate/animate";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import AlertBase from "@/component/common/AlertBase";
 import { Vector3 } from "three";

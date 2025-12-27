@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/esm/Modal";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import Button from "react-bootstrap/esm/Button";
-import Editor from "@monaco-editor/react";
+import /* @vite-ignore */ Editor from "@monaco-editor/react";
 import ModalConfirm3d from "@/component/common/ModalConfirm3d";
 import { useUpdateScene } from "@/app/hooks";
 import { APP_COLOR } from "@/app/type";

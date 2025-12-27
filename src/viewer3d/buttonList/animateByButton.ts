@@ -9,7 +9,6 @@ import {
 } from "three";
 import { GenerateButtonItemMap } from "@/app/type";
 import { GROUP } from "@/three/config/CONSTANT";
-import { cameraTween, meshTween } from "@/three/animate";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { getObjectWorldPosition, getViewerInstance } from "@/three/utils/utils";
 import {
@@ -19,6 +18,7 @@ import {
 
 import { ToggleButtonGroup } from "@/three/config/Three3dConfig";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
+import { cameraTween, meshTween } from "@/three/animate/animate";
 
 function _viewerInstance() {
   return viewerInstance.getViewer();
@@ -333,6 +333,7 @@ export function cameraBackHome(
   const { cameraPosition } = userData;
   cameraTween(camera, cameraPosition.end, animationTime)
     .start()
+
     .onComplete(() => {
       controls.target.set(0, 0, 0);
 
@@ -378,6 +379,7 @@ export function animateTOGGLE(
       if (model) {
         const { x, y, z } = getObjectWorldPosition(model);
         const camera = getCamera();
+        const controls = getControls();
         cameraTween(
           camera,
           new Vector3(
@@ -389,7 +391,6 @@ export function animateTOGGLE(
         )
           .start()
           .onComplete(() => {
-            const controls = getControls();
             controls.target.set(x, y, z);
             controls.update();
           });

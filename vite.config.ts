@@ -36,9 +36,9 @@ export default defineConfig({
       name: "remote_app",
       filename: "remoteEntry.js",
       exposes: {
-        "./Viewer3d": "./src/Viewer3d/Viewer3d.tsx",
-        "./Viewer3dPlus": "./src/Viewer3d/Viewer3dPlus.tsx",
-        "./sendTo3d": "./src/Viewer3d/sendTo3d.ts",
+        "./Viewer3d": "./src/viewer3d/Viewer3d.tsx",
+        "./Viewer3dPlus": "./src/viewer3d/Viewer3dPlus.tsx",
+        "./sendTo3d": "./src/viewer3d/sendTo3d.ts",
       },
       shared: {
         react: { singleton: true, requiredVersion: "^18.3.1" },

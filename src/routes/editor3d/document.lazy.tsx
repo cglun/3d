@@ -26,10 +26,10 @@ function RouteComponent() {
           logoName: "bi bi-javascript",
           position: "src",
           buttonName: "场景",
-          des: "路径：src/three/threeObj/Three3d.ts   。 释放三维场景中的对象，减少内存占用。",
+          des: "路径：src/three/threeObj/Three3d.ts   。 释放三维场景中的对象，减少内存占用。升级部分依赖包。",
         },
       ],
-      updateTime: "2025年12月24",
+      updateTime: "2025年12月23",
     },
     {
       list: [
