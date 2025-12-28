@@ -841,7 +841,7 @@ export class Three3d extends ThreeObj {
       console.log("释放Renderer");
       this.renderer.dispose();
     }
-    scene.clear();
+    //scene.clear();
     console.log("释放场景");
   }
 }

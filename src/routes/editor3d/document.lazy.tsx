@@ -29,7 +29,7 @@ function RouteComponent() {
           des: "路径：src/three/threeObj/Three3d.ts   。 释放三维场景中的对象，减少内存占用。升级部分依赖包。",
         },
       ],
-      updateTime: "2025年12月23",
+      updateTime: "2025年12月25",
     },
     {
       list: [
