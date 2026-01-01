@@ -24,20 +24,6 @@ export default function InputBase({
 
   return (
     <Container fluid>
-      <InputGroup size="sm">
-        <InputGroup.Text id="inputGroup-sizing-sm">类型</InputGroup.Text>
-        <Form.Control
-          aria-label="Small"
-          aria-describedby="inputGroup-sizing-sm"
-          placeholder={placeholder}
-          type="text"
-          disabled={true}
-          value={sceneDes}
-          onChange={(e) => {
-            setSceneDes(() => e.target.value);
-          }}
-        />
-      </InputGroup>
       <InputGroup size="sm" className="mt-2">
         <InputGroup.Text id="inputGroup-sizing-sm">名称</InputGroup.Text>
         <Form.Control
@@ -61,6 +47,20 @@ export default function InputBase({
           value={description}
           onChange={(e) => {
             setDescription(() => e.target.value);
+          }}
+        />
+      </InputGroup>
+      <InputGroup size="sm" className="mt-2">
+        <InputGroup.Text id="inputGroup-sizing-sm">类型</InputGroup.Text>
+        <Form.Control
+          aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm"
+          placeholder={placeholder}
+          type="text"
+          disabled={true}
+          value={sceneDes}
+          onChange={(e) => {
+            setSceneDes(() => e.target.value);
           }}
         />
       </InputGroup>

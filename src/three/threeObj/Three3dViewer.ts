@@ -1,9 +1,8 @@
 import { Object3D, Object3DEventMap, Raycaster, Vector2, Vector3 } from "three";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { TourWindow } from "@/app/MyContext";
-import { Three3d } from "./Three3d";
+import { Three3d } from "@/three/threeObj/Three3d";
 
-import mitt, { Emitter, EventType } from "mitt";
 import { GenerateButtonItemMap } from "@/app/type";
 
 /**
@@ -11,7 +10,6 @@ import { GenerateButtonItemMap } from "@/app/type";
  * 该类提供了设置场景用户数据的功能。
  */
 export class Three3dViewer extends Three3d {
-  mitt: Emitter<Record<EventType, unknown>>;
   getToggleButtonGroup: GenerateButtonItemMap[] = [];
   /**
    * 构造函数，初始化 Three3dViewer 实例。
@@ -28,7 +26,6 @@ export class Three3dViewer extends Three3d {
   ) {
     super(divElement, dispatchTourWindow);
     this.divElement = divElement;
-    this.mitt = mitt();
   }
 
   /**

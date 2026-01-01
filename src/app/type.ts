@@ -16,7 +16,7 @@ export enum DELAY {
   LONG = 3000,
 }
 
-export interface GlbModel {
+export interface ModelType {
   id: number;
   name: string;
   position: Vector3;
@@ -30,7 +30,7 @@ export interface GlbModel {
 }
 
 export enum UserDataType {
-  GlbModel = "GlbModel",
+  ModelType = "ModelType",
   TransformHelper = "TransformHelper",
   GridHelper = "GridHelper",
   BoxHelper = "BoxHelper",

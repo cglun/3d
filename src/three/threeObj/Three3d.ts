@@ -20,7 +20,7 @@ import {
 import TWEEN from "three/addons/libs/tween.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-import { GlbModel, RecordItem } from "@/app/type";
+import { ModelType, RecordItem } from "@/app/type";
 import { runScriptDev } from "@/three/script/scriptDev";
 
 import {
@@ -39,11 +39,14 @@ import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 import { CSS3DRenderer } from "three/addons/renderers/CSS3DRenderer.js";
 import {
   Curves,
-  GLTF,
+  FBXLoader,
   HDRLoader,
   ShaderPass,
   TransformControls,
+  GLTFLoader,
+  GLTF,
 } from "three/addons/Addons.js";
+
 import sceneUserData from "@/three/config/Three3dConfig";
 
 import { getObjectWorldPosition } from "@/three/utils/utils";
@@ -57,10 +60,13 @@ import {
 } from "@/three/utils/factory3d";
 import {
   clearOldLabel,
+  fbxLoader,
   getProjectData,
   glbLoader,
+  isFBX,
   manyou,
   setAnimateClip,
+  setFBXTransform,
   setGLTFTransform,
   strToJson,
 } from "@/three/utils/util4Scene";
@@ -76,8 +82,11 @@ import { testLabel } from "@/component/routes/effects/utils";
 import { TilesRenderer, GlobeControls } from "3d-tiles-renderer";
 import { EmergencyImage } from "@/viewer3d/label/EmergencyImage";
 import { emergencyButtonGroup } from "@/component/routes/extend/extendButton/EmergencyButtonType";
+import mittIns from "@/app/mittIns";
+import { Emitter, EventType } from "mitt";
 
 export class Three3d extends ThreeObj {
+  private _mitt: Emitter<Record<EventType, unknown>>;
   private _composer: EffectComposer;
   private _outlinePass: OutlinePass;
   private _scene: Scene;
@@ -102,6 +111,12 @@ export class Three3d extends ThreeObj {
   private _TEST_GROUP: Group = new Group();
   private _EMERGENCY_PLAN_GROUP: Group = new Group();
 
+  get mitt() {
+    return this._mitt;
+  }
+  set mitt(value) {
+    this._mitt = value;
+  }
   get EMERGENCY_PLAN_GROUP() {
     return this._EMERGENCY_PLAN_GROUP;
   }
@@ -259,6 +274,7 @@ export class Three3d extends ThreeObj {
   ) {
     super(divElement);
     this.divElement = divElement;
+    this._mitt = mittIns;
     this._scene = this.initScene();
     this.resetScene();
     this.MARK_LABEL_GROUP.name = GROUP.MARK_LABEL;
@@ -496,7 +512,7 @@ export class Three3d extends ThreeObj {
 
       return;
     }
-    models.forEach((model: GlbModel) => {
+    models.forEach((model: ModelType) => {
       this.extraParams.modelSize += model.userData.modelTotal;
       this.loadModelByUrl(model);
     });
@@ -545,8 +561,22 @@ export class Three3d extends ThreeObj {
 
   //加载模型后，要设置标签
   private setLabelGroup(labelGroup: Object3D, parentGroup: Group) {
-    labelGroup.children.forEach((item: Object3D) => {
-      parentGroup.add(this.getLabelByItem(item));
+    labelGroup.children.forEach((item: Group | Object3D) => {
+      if (item instanceof Group) {
+        const labelGroup = new Group();
+        labelGroup.name = item.name;
+        const { position, rotation, scale } = item;
+        labelGroup.position.set(position.x, position.y, position.z);
+        labelGroup.setRotationFromEuler(rotation);
+        labelGroup.scale.set(scale.x, scale.y, scale.z);
+
+        item.children.forEach((child) => {
+          labelGroup.add(this.getLabelByItem(child));
+        });
+        parentGroup.add(labelGroup);
+      } else {
+        parentGroup.add(this.getLabelByItem(item));
+      }
     });
     return parentGroup;
   }
@@ -564,24 +594,39 @@ export class Three3d extends ThreeObj {
     );
     const label = mark.css3DSprite;
     const { x, y, z } = item.position;
+    label.name = item.name;
     label.position.set(x, y, z);
     return label;
   }
 
   // 添加 private 修饰符
-  private loadModelByUrl(model: GlbModel) {
-    const loader = glbLoader();
+  private loadModelByUrl(model: ModelType) {
+    const isFbx = isFBX(model);
+
+    const loader = isFbx ? fbxLoader() : glbLoader();
 
     loader.load(
       model.userData.modelUrl + "?url",
-      (gltf: GLTF) => {
+      (gltf: GLTF | Group) => {
         //设置动画，设置模型组的位置，旋转和缩放
-        const group = setGLTFTransform(model, gltf);
+
+        let group = gltf;
+        if (loader instanceof GLTFLoader) {
+          group = setGLTFTransform(model, gltf as GLTF);
+        }
+        if (loader instanceof FBXLoader) {
+          group = setFBXTransform(model, group as Group);
+        }
         group.userData.isSelected = false; //重置选中
-        this.MODEL_GROUP.add(group);
+        this.MODEL_GROUP.add(group as Group);
         //设置动画
-        setAnimateClip(gltf, this.scene, group, this.extraParams);
-        this.enableShadow(group);
+        setAnimateClip(
+          gltf as GLTF,
+          this.scene,
+          group as Group,
+          this.extraParams
+        );
+        this.enableShadow(group as Group);
 
         this.extraParams.loadedModel += model.userData.modelTotal;
 
@@ -594,7 +639,7 @@ export class Three3d extends ThreeObj {
         model.userData.modelLoaded = xhr.loaded;
         let _loadedModel = 0,
           progress = 0;
-        this.extraParams.modelList.forEach((model: GlbModel) => {
+        this.extraParams.modelList.forEach((model: ModelType) => {
           const { modelLoaded } = model.userData;
           _loadedModel += modelLoaded;
 
@@ -617,15 +662,26 @@ export class Three3d extends ThreeObj {
 
   addOneModel(item: RecordItem) {
     getProjectData(item.id).then((res: string) => {
-      const model = JSON.parse(res) as GlbModel;
-      const loader = glbLoader();
+      const model = JSON.parse(res) as ModelType;
+      const isFbx = isFBX(model);
+
+      const loader = isFbx ? fbxLoader() : glbLoader();
+
       loader.load(
         model.userData.modelUrl + "?url",
-        (gltf: GLTF) => {
-          const group = setGLTFTransform(model, gltf);
-          this.enableShadow(group);
+        (gltf: GLTF | Group) => {
+          let group = gltf;
 
-          this.MODEL_GROUP.add(group);
+          if (loader instanceof GLTFLoader) {
+            group = setGLTFTransform(model, gltf as GLTF);
+          }
+          if (loader instanceof FBXLoader) {
+            group = setFBXTransform(model, group as Group);
+          }
+
+          this.enableShadow(group as Group);
+
+          this.MODEL_GROUP.add(group as Group);
           this.onLoadProgress(100);
           this.loadedModelsEnd();
         },

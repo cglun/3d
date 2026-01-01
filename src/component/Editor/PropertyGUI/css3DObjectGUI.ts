@@ -1,8 +1,8 @@
 import { CSS3DObject } from "three/addons/renderers/CSS3DRenderer.js";
 import positionGUI from "@/component/Editor/PropertyGUI/commonGUI/positionGUI";
 import { transformCMD } from "@/three/command/cmd";
-import rotationGUI from "./commonGUI/rotationGUI";
-import scaleGUI from "./commonGUI/scaleGUI";
+import rotationGUI from "@/component/Editor/PropertyGUI/commonGUI/rotationGUI";
+import scaleGUI from "@/component/Editor/PropertyGUI/commonGUI/scaleGUI";
 import { Scene } from "three";
 import { getEditorInstance } from "@/three/utils/utils";
 

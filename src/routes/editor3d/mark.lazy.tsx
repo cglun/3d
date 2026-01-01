@@ -4,11 +4,8 @@ import ListGroup from "react-bootstrap/esm/ListGroup";
 import Col from "react-bootstrap/esm/Col";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import Button from "react-bootstrap/esm/Button";
-import InputGroup from "react-bootstrap/esm/InputGroup";
-import Form from "react-bootstrap/esm/Form";
 import Card from "react-bootstrap/esm/Card";
 import { createLazyFileRoute } from "@tanstack/react-router";
-
 import { useContext, useEffect, useState } from "react";
 import { CSS3DSprite } from "three/addons/renderers/CSS3DRenderer.js";
 import Toast3d from "@/component/common/Toast3d/Toast3d";
@@ -18,17 +15,11 @@ import { APP_COLOR, MessageError, TourItem } from "@/app/type";
 import { useUpdateScene } from "@/app/hooks";
 import { ConfigCheck } from "@/component/common/ConfigCheck";
 import _axios from "@/app/http";
-
 import { MyContext } from "@/app/MyContext";
-
 import { MarkLabel } from "@/viewer3d/label/MarkLabel";
 import { SceneUserData, userCssStyle } from "@/three/config/Three3dConfig";
 import { editorInstance } from "@/three/instance/EditorInstance";
-import {
-  getButtonColor,
-  getThemeByScene,
-  setClassName,
-} from "@/three/utils/util4UI";
+import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import { clearOldLabel } from "@/three/utils/util4Scene";
 import { stopRoam } from "@/component/routes/effects/utils";
 import Icon from "@/component/common/Icon";
@@ -36,14 +27,14 @@ import { GROUP } from "@/three/config/CONSTANT";
 import { errorMessage } from "@/app/utils";
 import { getEditorInstance } from "@/three/utils/utils";
 import CodeEditor from "@/component/routes/script/CodeEditor";
+import { Group } from "three";
 
 export const Route = createLazyFileRoute("/editor3d/mark")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const [markName, setMarkName] = useState("mark");
-  const [logo, setLogo] = useState("geo-alt");
+  const [logo] = useState("geo-alt");
   const [listTour, setListTour] = useState([]);
   const { dispatchTourWindow } = useContext(MyContext);
   const { scene, updateScene } = useUpdateScene();
@@ -143,12 +134,27 @@ function RouteComponent() {
                   <Icon iconName="credit-card-2-front" gap={1} />
                   顶牌
                 </Button>
+                <Button
+                  variant={buttonColor}
+                  disabled={!config3d.css3d}
+                  onClick={() => {
+                    stopRoam();
+                    const { scene, editor } = getEditorInstance();
+                    const newGroup = new Group();
+                    newGroup.name = `标签组${editor.MARK_LABEL_GROUP.children.length + 1}`;
+                    editor.MARK_LABEL_GROUP.add(newGroup);
+                    updateScene(scene);
+                  }}
+                >
+                  <Icon iconName="plus" gap={1} />
+                  标签组
+                </Button>
               </ButtonGroup>
             </ListGroup.Item>
           </ListGroup>
         </Col>
       </Row>
-      <Row className="mt-2">
+      {/* <Row className="mt-2">
         <Col xl={8}>
           <InputGroup>
             <div className="d-flex ">
@@ -180,7 +186,7 @@ function RouteComponent() {
               }}
             />
             <ButtonGroup size="sm">
-              {/* <Button
+             <Button
                 variant={getButtonColor(themeColor)}
                 disabled={!config3d.css2d}
                 onClick={() => {
@@ -198,7 +204,7 @@ function RouteComponent() {
                 }}
               >
                 一键2d标记
-              </Button> */}
+              </Button>  
               <Button
                 variant={getButtonColor(themeColor)}
                 disabled={!config3d.css3d}
@@ -225,7 +231,7 @@ function RouteComponent() {
               >
                 添加3d标记
               </Button>
-              {/* <Button
+               <Button
                 variant={getButtonColor(themeColor)}
                 disabled={!config3d.css3d}
                 onClick={() => {
@@ -233,11 +239,11 @@ function RouteComponent() {
                 }}
               >
                 一键3d标记
-              </Button> */}
+              </Button> 
             </ButtonGroup>
           </InputGroup>
         </Col>
-      </Row>
+      </Row>*/}
       <Row>
         <Col className="d-flex   flex-wrap">
           {listTour &&

@@ -31,7 +31,7 @@ import {
   UpdateOnChangePlugin,
 } from "3d-tiles-renderer/plugins";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
-import { GROUP } from "../config/CONSTANT";
+import { GROUP } from "@/three/config/CONSTANT";
 
 export function createPerspectiveCamera(
   node: HTMLElement,

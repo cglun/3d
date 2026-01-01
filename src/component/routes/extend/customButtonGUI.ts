@@ -2,7 +2,7 @@ import { Scene } from "three";
 import { editorInstance } from "@/three/instance/EditorInstance";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 
-import buttonBaseGui from "./extendButtonGui/buttonBaseGui";
+import buttonBaseGui from "@/component/routes/extend/extendButtonGui/buttonBaseGui";
 export default function buttonGUI(
   updateScene: (scene: Scene) => void,
   groupIndex: number,

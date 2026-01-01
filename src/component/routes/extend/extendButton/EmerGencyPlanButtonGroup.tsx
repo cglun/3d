@@ -1,26 +1,25 @@
+import { Group } from "three";
 import { GROUP } from "@/three/config/CONSTANT";
 import { useEffect, useState } from "react";
 import { CSS3DObject } from "three/examples/jsm/Addons.js";
 import { Three3dViewer } from "@/three/threeObj/Three3dViewer";
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
-import { getButtonGroupItemStyle } from "../../effects/utils";
 import DragBarButton from "@/component/common/Button/DragBarButton";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { useUpdateScene } from "@/app/hooks";
 import { getThemeByScene } from "@/three/utils/util4UI";
 import Icon from "@/component/common/Icon";
-import { Group } from "three";
 import { updateEmergencyPlan } from "@/app/utils";
 import { transformCMD } from "@/three/command/cmd";
-import emergencyPlanGui from "../emergencyPlanGui/emergencyPlanGui";
-import { emergencyButton } from "./EmergencyButtonType";
+import emergencyPlanGui from "@/component/routes/extend/emergencyPlanGui/emergencyPlanGui";
+import { emergencyButton } from "@/component/routes/extend/extendButton/EmergencyButtonType";
 import { getEditorInstance } from "@/three/utils/utils";
-import emergencyPlanStepGui from "../emergencyPlanGui/emergencyPlanStepGui";
-
+import emergencyPlanStepGui from "@/component/routes/extend/emergencyPlanGui/emergencyPlanStepGui";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { cameraTween } from "@/three/animate/animate";
 import Toast3d from "@/component/common/Toast3d/Toast3d";
 import { APP_COLOR } from "@/app/type";
+import { getButtonGroupItemStyle } from "@/component/routes/effects/utils";
 
 export default function EmergencyPlanButtonGroup({
   instance,
@@ -137,68 +136,116 @@ export default function EmergencyPlanButtonGroup({
 
           return (
             <div key={item.uuid} className="super-press-btn-container">
-              <button
-                className="super-press-btn"
-                style={{ ...buttonStyle }}
-                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                  createRippleEffect(e);
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                <button
+                  className="super-press-btn"
+                  style={{ ...buttonStyle }}
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    createRippleEffect(e);
 
-                  emergencyPlan.traverse((child) => {
-                    if (child instanceof CSS3DObject) {
-                      child.visible = false;
-                    }
-                  });
+                    emergencyPlan.traverse((child) => {
+                      if (child instanceof CSS3DObject) {
+                        child.visible = false;
+                      }
+                    });
 
-                  // item.userData.showChildren = false;
+                    // item.userData.showChildren = false;
 
-                  // if (!item.userData.showChildren) {
-                  //   item.userData.showChildren = true;
-                  // }
-                  //如果已经显示子节点，则不把子节点隐藏
+                    // if (!item.userData.showChildren) {
+                    //   item.userData.showChildren = true;
+                    // }
+                    //如果已经显示子节点，则不把子节点隐藏
 
-                  if (item.userData.showChildren) {
-                    setShowChildrenButton(!showChildrenButton);
-                  } else {
-                    setShowChildrenButton(true);
-                  }
-
-                  emergencyPlan.children.forEach((_item) => {
-                    _item.userData.buttonBase.isClick = false;
-                    const { children } = _item;
-                    if (children) {
-                      children.forEach((_child) => {
-                        _child.userData.buttonBase.isClick = false;
-                      });
-                    }
-                  });
-                  item.userData.buttonBase.isClick = true;
-                  const { cameraViewer } = item.userData.buttonBase;
-
-                  if (cameraViewer) {
-                    cameraTween(instance.camera, cameraViewer, 1000).start();
-                  }
-
-                  if (isEditor) {
-                    instance.currentSelected3d = item;
-                    transformCMD(item, () =>
-                      emergencyPlanGui(item as Group, updateScene)
-                    );
-                    instance.transformControl.attach(item);
-                  }
-
-                  emergencyPlan.traverse((child) => {
-                    if (child.uuid === item.uuid) {
-                      child.userData.showChildren = true;
+                    if (item.userData.showChildren) {
+                      setShowChildrenButton(!showChildrenButton);
                     } else {
-                      child.userData.showChildren = false;
+                      setShowChildrenButton(true);
                     }
-                  });
-                  updateScene(instance.scene);
-                }}
-              >
-                {item.name}
-              </button>
 
+                    emergencyPlan.children.forEach((_item) => {
+                      _item.userData.buttonBase.isClick = false;
+                      const { children } = _item;
+                      if (children) {
+                        children.forEach((_child) => {
+                          _child.userData.buttonBase.isClick = false;
+                        });
+                      }
+                    });
+                    item.userData.buttonBase.isClick = true;
+                    const { cameraViewer } = item.userData.buttonBase;
+
+                    if (cameraViewer) {
+                      cameraTween(instance.camera, cameraViewer, 1000).start();
+                    }
+
+                    if (isEditor) {
+                      instance.currentSelected3d = item;
+                      transformCMD(item, () =>
+                        emergencyPlanGui(item as Group, updateScene)
+                      );
+                      instance.transformControl.attach(item);
+                    }
+
+                    emergencyPlan.traverse((child) => {
+                      if (child.uuid === item.uuid) {
+                        child.userData.showChildren = true;
+                      } else {
+                        child.userData.showChildren = false;
+                      }
+                    });
+                    updateScene(instance.scene);
+                  }}
+                >
+                  {item.name}
+                </button>
+                <div>
+                  {isEditor &&
+                    item.userData.showChildren &&
+                    showChildrenButton && (
+                      <ButtonGroup className="ms-1" size="sm">
+                        <Button
+                          variant={themeColor}
+                          onMouseEnter={() => {}}
+                          onClick={() => {
+                            const { editor } = getEditorInstance();
+                            const step = new Group();
+                            step.name = "步骤" + (item.children.length + 1);
+                            step.userData.buttonBase = {
+                              ...emergencyButton,
+                            };
+                            item.add(step);
+                            updateScene(editor.scene);
+                          }}
+                        >
+                          <Icon
+                            iconName="plus-square"
+                            fontSize={0.8}
+                            title="添加步骤"
+                          />
+                        </Button>
+                        <Button
+                          variant={themeColor}
+                          onMouseEnter={() => {}}
+                          onClick={() => {
+                            const { editor } = getEditorInstance();
+                            const { buttonBase } =
+                              editor.currentSelected3d.userData;
+                            buttonBase.cameraViewer =
+                              editor.camera.position.clone();
+                            Toast3d("视角已设置", "提示", APP_COLOR.Success);
+                            updateScene(editor.scene);
+                          }}
+                        >
+                          <Icon
+                            iconName="camera"
+                            fontSize={0.8}
+                            title={`${item.name}视角`}
+                          />
+                        </Button>
+                      </ButtonGroup>
+                    )}
+                </div>
+              </div>
               <div
                 style={{
                   display: "flex",
@@ -245,51 +292,6 @@ export default function EmergencyPlanButtonGroup({
                       </button>
                     );
                   })}
-                {isEditor &&
-                  item.userData.showChildren &&
-                  showChildrenButton && (
-                    <ButtonGroup size="sm">
-                      <Button
-                        variant={themeColor}
-                        onMouseEnter={() => {}}
-                        onClick={() => {
-                          const { editor } = getEditorInstance();
-                          const step = new Group();
-                          step.name = "步骤" + (item.children.length + 1);
-                          step.userData.buttonBase = {
-                            ...emergencyButton,
-                          };
-                          item.add(step);
-                          updateScene(editor.scene);
-                        }}
-                      >
-                        <Icon
-                          iconName="plus-square"
-                          fontSize={0.8}
-                          title="添加步骤"
-                        />
-                      </Button>
-                      <Button
-                        variant={themeColor}
-                        onMouseEnter={() => {}}
-                        onClick={() => {
-                          const { editor } = getEditorInstance();
-                          const { buttonBase } =
-                            editor.currentSelected3d.userData;
-                          buttonBase.cameraViewer =
-                            editor.camera.position.clone();
-                          Toast3d("视角已设置", "提示", APP_COLOR.Success);
-                          updateScene(editor.scene);
-                        }}
-                      >
-                        <Icon
-                          iconName="camera"
-                          fontSize={0.8}
-                          title={`${item.name}视角`}
-                        />
-                      </Button>
-                    </ButtonGroup>
-                  )}
               </div>
             </div>
           );

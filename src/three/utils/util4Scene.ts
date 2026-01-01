@@ -23,29 +23,39 @@ import {
   SceneUserData,
 } from "@/three/config/Three3dConfig";
 import { GROUP } from "@/three/config/CONSTANT";
-import { GlbModel, UserDataType } from "@/app/type";
+import { ModelType, UserDataType } from "@/app/type";
 import { editorInstance } from "@/three/instance/EditorInstance";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js";
 
-//设置物体的变换
-export function setGLTFTransform(model: GlbModel, gltf: GLTF) {
-  const scene = gltf.scene;
-
+function setTransform(model: ModelType, group: Group) {
   const { position, rotation, scale } = model;
-  const group = new Group();
+
   group.name = model.name;
-  group.add(...scene.children);
   group.userData = {
     ...model.userData,
-    type: UserDataType.GlbModel,
+    type: UserDataType.ModelType,
   };
   group.position.set(position.x, position.y, position.z);
-
   // group.rotation.set(rotation._x, rotation._y, rotation._z, "XYZ");
+
   group.setRotationFromEuler(rotation);
   group.scale.set(scale.x, scale.y, scale.z);
 
   return group;
 }
+
+//设置物体的变换
+export function setGLTFTransform(model: ModelType, gltf: GLTF) {
+  const scene = gltf.scene;
+  const group = new Group();
+  group.add(...scene.children);
+  return setTransform(model, group);
+}
+
+export function setFBXTransform(model: ModelType, _group: Group) {
+  return setTransform(model, _group);
+}
+
 //创建group,如果group不存在,则创建group
 export function createGroupIfNotExist_XX(
   contextScene: Object3D,
@@ -181,6 +191,13 @@ export function glbLoader() {
   dracoLoader.setDecoderPath(path);
   loader.setDRACOLoader(dracoLoader);
   return loader;
+}
+export function fbxLoader() {
+  const loader = new FBXLoader();
+  return loader;
+}
+export function isFBX(model: ModelType) {
+  return model.userData.modelUrl.toLowerCase().endsWith(".fbx");
 }
 
 export function removeCanvasChild(canvas3d: React.RefObject<HTMLDivElement>) {

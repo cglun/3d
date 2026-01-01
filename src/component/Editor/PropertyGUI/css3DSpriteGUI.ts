@@ -11,7 +11,7 @@ export default function css3DSpriteGUI(object: CSS3DSprite | CSS3DObject) {
   const folder = editor.createGUI("标签组").onFinishChange(() => {
     transformCMD(object, () => css3DSpriteGUI(object));
   });
-  folder.add(object, "name").name("标签名");
+  folder.add(object, "name").name("标签组名");
 
   positionGUI(folder, object, -50, 50, 0.01);
 

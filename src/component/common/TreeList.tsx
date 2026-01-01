@@ -39,6 +39,7 @@ import { removeRecursively } from "@/three/utils/util4Scene";
 import { loadAssets } from "@/app/http";
 import { navigateToUrl } from "@/app/utils";
 import { useNavigate } from "@tanstack/react-router";
+import markGroupGUI from "@/component/Editor/PropertyGUI/markGroupGUI";
 
 function TreeNode({
   node,
@@ -100,6 +101,7 @@ function TreeNode({
 
       return;
     }
+
     //步骤
     if (parentGroup?.parent?.name === GROUP.EMERGENCY_PLAN) {
       navigate({
@@ -128,6 +130,11 @@ function TreeNode({
     if (editorObject instanceof CSS3DSprite) {
       transformCMD(editorObject, () => css3DSpriteGUI(editorObject));
       editor.transformControl.attach(editorObject);
+      return;
+    }
+    if (parentGroup?.name === GROUP.MARK_LABEL) {
+      transformCMD(editorObject, () => markGroupGUI(editorObject as Group));
+      editor.transformControl.attach(editorObject as Group);
       return;
     }
 

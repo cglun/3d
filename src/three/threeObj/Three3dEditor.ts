@@ -26,7 +26,7 @@ import { BackgroundHDR, SceneUserData } from "@/three/config/Three3dConfig";
 import { addMonkey } from "@/three/utils/util4Scene";
 
 import { TourWindow } from "@/app/MyContext";
-import { GlbModel } from "@/app/type";
+import { ModelType } from "@/app/type";
 import {
   createDirectionalLight,
   createGridHelper,
@@ -189,7 +189,7 @@ export class Three3dEditor extends Three3d {
     }
 
     //sceneCopy.children = [];
-    const modelList: GlbModel[] = [];
+    const modelList: ModelType[] = [];
 
     // sceneCopy.add(this.MARK_LABEL_GROUP);
     // sceneCopy.add(this.LIGHT_GROUP);
@@ -198,8 +198,7 @@ export class Three3dEditor extends Three3d {
     this.MODEL_GROUP.children.forEach((child) => {
       const { id, name, position, rotation, scale } = child;
       const _userData = child.userData;
-
-      const model: GlbModel = {
+      const model: ModelType = {
         id,
         name,
         position,

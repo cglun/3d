@@ -3,7 +3,7 @@ import { Button, Container } from "react-bootstrap";
 import _axios from "@/app/http";
 import { ProjectType } from "@/app/httpRequest";
 import { useEffect, useState } from "react";
-import AlertBase from "./AlertBase";
+import AlertBase from "@/component/common/AlertBase";
 export default function UpdateDateBase() {
   const [pageList, setPageList] = useState<RecordItem[]>([]);
 

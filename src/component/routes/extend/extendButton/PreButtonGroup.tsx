@@ -1,3 +1,5 @@
+import Icon from "@/component/common/Icon";
+import Button from "react-bootstrap/esm/Button";
 import { useUpdateScene } from "@/app/hooks";
 import {
   customButtonGroupListInit,
@@ -11,16 +13,15 @@ import {
 } from "@/component/routes/effects/utils";
 
 import { memo, Suspense, useState } from "react";
-import generateButtonGUI from "../generateButtonGUI";
+import generateButtonGUI from "@/component/routes/extend/generateButtonGUI";
 import { editorInstance } from "@/three/instance/EditorInstance";
 
-import customButtonGUI from "../customButtonGUI";
-import CodeEditor from "../../script/CodeEditor";
+import customButtonGUI from "@/component/routes/extend/customButtonGUI";
+import CodeEditor from "@/component/routes/script/CodeEditor";
 import { getEditorInstance } from "@/three/utils/utils";
-import customButtonGroupGUI from "../customButtonGroupGUI";
-import Icon from "@/component/common/Icon";
-import Button from "react-bootstrap/esm/Button";
-import generateButtonGroupGUI from "../generateButtonGroupGUI";
+import customButtonGroupGUI from "@/component/routes/extend/customButtonGroupGUI";
+
+import generateButtonGroupGUI from "@/component/routes/extend/generateButtonGroupGUI";
 import { getThemeByScene } from "@/three/utils/util4UI";
 import AlertBase from "@/component/common/AlertBase";
 import { ButtonGroup, ListGroup, ListGroupItem } from "react-bootstrap";

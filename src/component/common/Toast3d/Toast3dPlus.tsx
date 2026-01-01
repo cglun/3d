@@ -3,7 +3,7 @@ import { APP_COLOR, DELAY } from "@/app/type";
 
 import Icon from "@/component/common/Icon";
 import ToastContainer from "react-bootstrap/esm/ToastContainer";
-import Toast3dBase from "./Toast3dBase";
+import Toast3dBase from "@/component/common/Toast3d/Toast3dBase";
 
 /**
  * 消息提示

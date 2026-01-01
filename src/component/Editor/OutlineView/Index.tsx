@@ -12,6 +12,7 @@ import Icon from "@/component/common/Icon";
 import { styleHeader } from "@/component/Editor/OutlineView/fontColor";
 import { GROUP } from "@/three/config/CONSTANT";
 import { APP_COLOR } from "@/app/type";
+
 // import { editor } from "monaco-editor";
 // import { editorInstance } from "@/three/EditorInstance";
 

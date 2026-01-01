@@ -23,6 +23,17 @@ function RouteComponent() {
     {
       list: [
         {
+          logoName: "bi bi-boxes",
+          position: "底部栏",
+          buttonName: "模型",
+          des: "增加fbx模型上传。",
+        },
+      ],
+      updateTime: "2025年12月31",
+    },
+    {
+      list: [
+        {
           logoName: "bi bi-javascript",
           position: "src",
           buttonName: "场景",

@@ -1,10 +1,3 @@
-import { CustomButtonItemMap, GenerateButtonItemMap } from "@/app/type";
-
-import {
-  getPanelControllerButtonGroup,
-  getRoamListByRoamButtonMap,
-  getToggleButtonGroup,
-} from "@/viewer3d/buttonList/buttonGroup";
 import {
   CatmullRomCurve3,
   Object3D,
@@ -12,9 +5,16 @@ import {
   Scene,
   Vector3,
 } from "three";
-import { editorInstance } from "../instance/EditorInstance";
-import { SceneUserData } from "../config/Three3dConfig";
-import { viewerInstance } from "../instance/ViewerInstance";
+import { CustomButtonItemMap, GenerateButtonItemMap } from "@/app/type";
+import {
+  getPanelControllerButtonGroup,
+  getRoamListByRoamButtonMap,
+  getToggleButtonGroup,
+} from "@/viewer3d/buttonList/buttonGroup";
+
+import { editorInstance } from "@/three/instance/EditorInstance";
+import { SceneUserData } from "@/three/config/Three3dConfig";
+import { viewerInstance } from "@/three/instance/ViewerInstance";
 
 export function hasValueString(
   item: Object3D<Object3DEventMap>,

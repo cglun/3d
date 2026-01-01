@@ -15,10 +15,11 @@ import { MyContext } from "@/app/MyContext";
 
 import { Three3dEditor } from "@/three/threeObj/Three3dEditor";
 import { errorMessage } from "@/app/utils";
-import TransformControl from "./TransformControl/TransformControl";
+import TransformControl from "@/component/Editor/TransformControl/TransformControl";
 import { SceneReload } from "@/app/customEvents/sceneEvent";
 
 import { getEditorInstance } from "@/three/utils/utils";
+import { MITT_EVENT } from "@/app/mittIns";
 
 function EditorViewer3d() {
   const editorCanvas: React.RefObject<HTMLDivElement> =
@@ -48,6 +49,10 @@ function EditorViewer3d() {
       updateScene(editor.scene);
       updateCamera(editor.camera);
       editorInstance.setEditor(editor);
+      editor.mitt.on(MITT_EVENT.UPDATE_SCENE, () => {
+        const { scene } = getEditorInstance();
+        updateScene(scene);
+      });
 
       // editor.controls.enabled = true;
 

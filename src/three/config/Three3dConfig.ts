@@ -5,7 +5,7 @@ import {
   APP_COLOR,
   CustomButtonItemMap,
   CustomButtonType,
-  GlbModel,
+  ModelType,
 } from "@/app/type";
 
 //import venice_sunset_1k from "@static/file3d/hdr/venice_sunset_1k.hdr?url";
@@ -250,7 +250,7 @@ export const customButtonGroupListInit: CustomButtonGroupList = {
 export interface ExtraParams {
   mixer: AnimationMixer[];
   selectedMesh: Mesh[];
-  modelList: GlbModel[];
+  modelList: ModelType[];
   modelSize: number;
   loadedModel: number;
   roamLine?: RoamLine;

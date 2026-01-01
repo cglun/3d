@@ -11,7 +11,7 @@
 // 为 Window 类型添加 ObjectEditor3d 属性声明
 declare global {
   interface Window {
-    ObjectEditor3d: any;
+    ObjectEditor3d: unknown;
   }
 }
 

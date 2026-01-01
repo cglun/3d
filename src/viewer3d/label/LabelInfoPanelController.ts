@@ -5,7 +5,7 @@ import { LabelInfo } from "@/viewer3d/label/LabelInfo";
 import { viewerInstance } from "@/three/instance/ViewerInstance";
 import { SceneUserData } from "@/three/config/Three3dConfig";
 import { getViewerInstance } from "@/three/utils/utils";
-import { isMoveCamera } from "../buttonList/animateByButton";
+import { isMoveCamera } from "@/viewer3d/buttonList/animateByButton";
 
 // 标签信息面板控制器
 export class LabelInfoPanelController {

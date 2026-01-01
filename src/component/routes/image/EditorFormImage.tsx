@@ -38,17 +38,6 @@ export default function EditorFormImage({
   return (
     <Container fluid>
       <InputGroup size="sm">
-        <InputGroup.Text id="inputGroup-sizing-sm">类型</InputGroup.Text>
-        <Form.Control
-          aria-label="Small"
-          aria-describedby="inputGroup-sizing-sm"
-          placeholder={itemDes.type}
-          type="text"
-          disabled={true}
-          value={itemDes.type}
-        />
-      </InputGroup>
-      <InputGroup size="sm" className="mt-2">
         <InputGroup.Text id="inputGroup-sizing-sm">名称</InputGroup.Text>
         <Form.Control
           aria-label="Small"
@@ -77,6 +66,17 @@ export default function EditorFormImage({
             };
             _setItem(item);
           }}
+        />
+      </InputGroup>
+      <InputGroup size="sm" className="mt-2">
+        <InputGroup.Text id="inputGroup-sizing-sm">类型</InputGroup.Text>
+        <Form.Control
+          aria-label="Small"
+          aria-describedby="inputGroup-sizing-sm"
+          placeholder={itemDes.type}
+          type="text"
+          disabled={true}
+          value={itemDes.type}
         />
       </InputGroup>
       <div className="mt-2 d-flex flex-column align-items-center ">

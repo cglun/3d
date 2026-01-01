@@ -1,5 +1,5 @@
 import { editorInstance } from "@/three/instance/EditorInstance";
-import buttonBaseGui from "./extendButtonGui/buttonBaseGui";
+import buttonBaseGui from "@/component/routes/extend/extendButtonGui/buttonBaseGui";
 import { Scene } from "three";
 import { ButtonItemBase, GenerateButtonItemMap } from "@/app/type";
 import { SceneUserData } from "@/three/config/Three3dConfig";

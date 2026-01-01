@@ -9,7 +9,7 @@ import { useRef, useState } from "react";
 import Toast3d from "@/component/common/Toast3d/Toast3d";
 import { getButtonColor, getThemeByScene } from "@/three/utils/util4UI";
 import axios from "@/app/http";
-import { APP_COLOR, GlbModel, MessageError } from "@/app/type";
+import { APP_COLOR, MessageError, ModelType } from "@/app/type";
 import { useUpdateScene } from "@/app/hooks";
 import Icon from "@/component/common/Icon";
 import { errorMessage } from "@/app/utils";
@@ -61,7 +61,7 @@ export function UploadModel({ updateList = () => {} }) {
     }
   }
 
-  function uploadModels(formData: FormData): Promise<GlbModel> {
+  function uploadModels(formData: FormData): Promise<ModelType> {
     return new Promise((resolve, reject) => {
       let modelTotal = 0;
       axios
@@ -87,7 +87,7 @@ export function UploadModel({ updateList = () => {} }) {
             return;
           }
 
-          const model: GlbModel = {
+          const model: ModelType = {
             id: res.data.result.id,
             name: curFile?.name || "模型名称",
             position: new Vector3(0, 0, 0),
@@ -135,7 +135,7 @@ export function UploadModel({ updateList = () => {} }) {
             style={{ display: "none", marginBottom: 0 }}
             type="file"
             ref={fileRef}
-            accept=".glb,.gltf"
+            accept=".glb,.gltf,.fbx"
             onChange={() => {
               // 检查 fileRef.current 是否存在
               if (
